@@ -119,11 +119,12 @@ Ré-exécuter le sourcing (idempotent) : éditer `scripts/images.manifest.json` 
 
 ## À compléter
 
-- **Recettes (v2)** : sourcer et vérifier les recettes de cuisine (actuellement quelques recettes
-  de départ ; les 14 nouvelles espèces n'ont pas encore de recettes).
+- **Recettes** : 17 recettes sourcées (Gallica/BnF + chefs cités) couvrant les principales espèces
+  (brochet, sandre, perche, carpe, tanche, anguille, alose, silure, truites/omble, petits blancs en
+  friture). Reste à étendre aux espèces plus rares.
 - **Espèces** : **83 fiches** (25 curées + 58 base générées) couvrant l'essentiel de l'inventaire d'eau douce métropolitain ; reste à enrichir les fiches base → curées (identification, technique, recettes).
-- **Photos de juvéniles** : quasi introuvables sans main sur Commons (seule la carpe est propre) —
-  à compléter plus tard (galerie multi-photos par espèce).
+- **Photos** : galerie multi-photos par espèce (adulte + juvénile) — 78/83 espèces ont ≥ 1 photo,
+  24 en ont plusieurs, 11 avec juvénile. Restent quelques espèces rares/cryptiques sans photo libre.
 - **Données réelles Hubeau / TAXREF / FishBase** : voir la stratégie dans le backlog.
 - **Icônes PWA** : PNG 192/512 maskables pour un rendu store (optionnel).
 
