@@ -59,7 +59,9 @@ const MEDIA_BY_KIND = {
  */
 export function Media({ kind, id, placeholder, dark }: MediaProps) {
   const [failed, setFailed] = useState(false);
-  const entry = MEDIA_BY_KIND[kind][id];
+  // Species now carry an array of photos (gallery); single-image contexts use the first.
+  const raw = MEDIA_BY_KIND[kind][id];
+  const entry = Array.isArray(raw) ? raw[0] : raw;
   if (entry && !failed) {
     return (
       <img
@@ -83,5 +85,6 @@ export function confusionMediaId(name: string): string | null {
 
 /** Whether a locally-embedded image exists for this id/kind (to prefer it). */
 export function hasMedia(kind: MediaProps["kind"], id: string): boolean {
-  return !!MEDIA_BY_KIND[kind][id];
+  const m = MEDIA_BY_KIND[kind][id];
+  return Array.isArray(m) ? m.length > 0 : !!m;
 }

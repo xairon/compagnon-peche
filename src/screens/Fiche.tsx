@@ -4,6 +4,7 @@ import { SPECIES } from "../data/species";
 import { DEPARTEMENTS } from "../data/regulation";
 import { Icon, ICONS, SEC_ICONS } from "../components/Icon";
 import { Media, confusionMediaId } from "../components/Media";
+import { Gallery } from "../components/Gallery";
 import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
@@ -433,7 +434,7 @@ export function Fiche() {
   return (
     <div className="screen" ref={scrollRef} style={{ display: "block" }}>
       <div className="hero">
-        <Media kind="species" id={sp.id} placeholder={`Photo réelle plein cadre — ${sp.name}`} dark />
+        <Gallery id={sp.id} placeholder={`Photo réelle plein cadre — ${sp.name}`} dark />
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>

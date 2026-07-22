@@ -19,10 +19,15 @@ function idFallback(id: string): string {
 
 export function Credits() {
   const { back } = useStore();
-  const speciesRows = Object.entries(SPECIES_MEDIA).map(([id, m]) => ({
-    name: nameForSpecies(id),
-    ...m,
-  }));
+  // One credit row per photo (species may have several: adult, juvenile…).
+  const speciesRows = Object.entries(SPECIES_MEDIA).flatMap(([id, photos]) =>
+    photos.map((m, i) => ({
+      name: nameForSpecies(id) + (m.caption ? ` (${m.caption})` : photos.length > 1 ? ` (${i + 1})` : ""),
+      author: m.author,
+      license: m.license,
+      sourceUrl: m.sourceUrl,
+    })),
+  );
   const knotRows = Object.entries(ALL_KNOT_MEDIA).map(([id, m]) => ({ name: nameForKnot(id), ...m }));
 
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (

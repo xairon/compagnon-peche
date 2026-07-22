@@ -7,375 +7,723 @@ export interface MediaEntry {
   author: string;
   license: string;
   sourceUrl: string;
+  caption?: string; // e.g. "Adulte" / "Juvénile" (shown in the species gallery)
 }
 
-export const SPECIES_MEDIA: Record<string, MediaEntry> = {
-  "sandre": {
-    "file": "assets/species/sandre.webp",
-    "author": "Tylwyth Eldar",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sandre_(Sander_lucioperca).jpg"
-  },
-  "brochet": {
-    "file": "assets/species/brochet.webp",
-    "author": "Gilles San Martin",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Esox_lucius_-_Brochet_-_Northern_pike.jpg"
-  },
-  "perche": {
-    "file": "assets/species/perche.webp",
-    "author": "Karelj",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Perca_fluviatilis_Prague_Vltava_2.jpg"
-  },
-  "black-bass": {
-    "file": "assets/species/black-bass.webp",
-    "author": "USFWS Mountain Prairie",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_(Micropterus_salmoides)_(53118577249)_(cropped).jpg"
-  },
-  "silure": {
-    "file": "assets/species/silure.webp",
-    "author": "Dieter Florian",
-    "license": "CC BY-SA 3.0 DE",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Silurus_glanis_02.jpg"
-  },
-  "gremille": {
-    "file": "assets/species/gremille.webp",
-    "author": "Tiit Hunt",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gymnocephalus_cernuus_P%C3%A4rnu_River_Estonia_2010-01-06.jpg"
-  },
-  "carpe": {
-    "file": "assets/species/carpe.webp",
-    "author": "Karelj",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caprinus_carpio_Prague_Vltava_1.jpg"
-  },
-  "gardon": {
-    "file": "assets/species/gardon.webp",
-    "author": "kallerna",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_Roach.JPG"
-  },
-  "barbeau": {
-    "file": "assets/species/barbeau.webp",
-    "author": "Pmau",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbus_barbus_img_33502.jpg"
-  },
-  "carassin": {
-    "file": "assets/species/carassin.webp",
-    "author": "U.S. Geological Survey",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_carassius.jpg"
-  },
-  "rotengle": {
-    "file": "assets/species/rotengle.webp",
-    "author": "Paul Korecky",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2017-07-02_AT_Wien_13_Hietzing,_Tiergarten_Sch%C3%B6nbrunn,_Scardinius_erythrophthalmus_(49897346508).jpg"
-  },
-  "truite-fario": {
-    "file": "assets/species/truite-fario.webp",
-    "author": "Gilles San Martin",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_fario_-_Truite_fario_-_Brown_trout.jpg"
-  },
-  "truite-arc-en-ciel": {
-    "file": "assets/species/truite-arc-en-ciel.webp",
-    "author": "Liquid Art",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rainbow_Trout_(Oncorhynchus_mykiss).jpg"
-  },
-  "perche-soleil": {
-    "file": "assets/species/perche-soleil.webp",
-    "author": "Cephas",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lepomis_gibbosus_PAQ.jpg"
-  },
-  "poisson-chat": {
-    "file": "assets/species/poisson-chat.webp",
-    "author": "George Chernilevsky",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ameiurus_melas_2021_G1.jpg"
-  },
-  "breme": {
-    "file": "assets/species/breme.webp",
-    "author": "Karelj",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Abramis_brama_Prague_Vltava_1.jpg"
-  },
-  "tanche": {
-    "file": "assets/species/tanche.webp",
-    "author": "Pavel Kotrc",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tinca_tinca.jpg"
-  },
-  "ablette": {
-    "file": "assets/species/ablette.webp",
-    "author": "David Perez (DPC)",
-    "license": "CC BY 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alburnus_alburnus_01_by-dpc.jpg"
-  },
-  "chevesne": {
-    "file": "assets/species/chevesne.webp",
-    "author": "Karelj",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Squalius_cephalus_Prague_Vltava_1.jpg"
-  },
-  "hotu": {
-    "file": "assets/species/hotu.webp",
-    "author": "André Karwath (Aka)",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chondrostoma_nasus_(aka).jpg"
-  },
-  "goujon": {
-    "file": "assets/species/goujon.webp",
-    "author": "Karelj",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gobio_gobio_Prague_Vltava_1.jpg"
-  },
-  "ombre": {
-    "file": "assets/species/ombre.webp",
-    "author": "High Plains Grifter",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grayling_Thymallus_thymallus.JPG"
-  },
-  "omble-fontaine": {
-    "file": "assets/species/omble-fontaine.webp",
-    "author": "Derek Ramsey (Ram-Man)",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brook_Trout_Salvelinus_fontinalis_2900px.jpg"
-  },
-  "anguille": {
-    "file": "assets/species/anguille.webp",
-    "author": "GerardM",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla.jpg"
-  },
-  "vandoise": {
-    "file": "assets/species/vandoise.webp",
-    "author": "Viridiflavus",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeuciscusLeuciscusSerpeling17.JPG"
-  },
-  "breme-bordeliere": {
-    "file": "assets/species/breme-bordeliere.webp",
-    "author": "Algirdas",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Blicca_bjoerkna.jpg"
-  },
-  "spirlin": {
-    "file": "assets/species/spirlin.webp",
-    "author": "Gilles San Martin",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alburnoides_bipunctatus.jpg"
-  },
-  "able-de-heckel": {
-    "file": "assets/species/able-de-heckel.webp",
-    "author": "Christian Fischer",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeucaspiusDelineatus1.jpg"
-  },
-  "ide-melanote": {
-    "file": "assets/species/ide-melanote.webp",
-    "author": "Piet Spaans",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeuciscusIdus.JPG"
-  },
-  "blageon": {
-    "file": "assets/species/blageon.webp",
-    "author": "Harka Akos",
-    "license": "CC BY 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Telestes_souffia.jpg"
-  },
-  "toxostome": {
-    "file": "assets/species/toxostome.webp",
-    "author": "Julien Renoult",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Parachondrostoma_toxostoma.jpg"
-  },
-  "barbeau-meridional": {
-    "file": "assets/species/barbeau-meridional.webp",
-    "author": "Wikiwiki",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbus_meridionalis.jpg"
-  },
-  "carassin-argente": {
-    "file": "assets/species/carassin-argente.webp",
-    "author": "George Chernilevsky",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_gibelio_2008_G2.jpg"
-  },
-  "poisson-rouge": {
-    "file": "assets/species/poisson-rouge.webp",
-    "author": "Alyssachanpc",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_0045-1.jpg"
-  },
-  "amour-blanc": {
-    "file": "assets/species/amour-blanc.webp",
-    "author": "Dezidor",
-    "license": "CC BY 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ctenopharyngodon_idella.jpg"
-  },
-  "pseudorasbora": {
-    "file": "assets/species/pseudorasbora.webp",
-    "author": "Piet Spaans",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:PseudorasboraParva2.JPG"
-  },
-  "vairon": {
-    "file": "assets/species/vairon.webp",
-    "author": "Pmau",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phoxinus_phoxinus_img_33481.jpg"
-  },
-  "omble-chevalier": {
-    "file": "assets/species/omble-chevalier.webp",
-    "author": "Saibling",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salvelinusalpinus.jpg"
-  },
-  "cristivomer": {
-    "file": "assets/species/cristivomer.webp",
-    "author": "NOAA / GLERL",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lake_Trout_GLERL.jpg"
-  },
-  "saumon-atlantique": {
-    "file": "assets/species/saumon-atlantique.webp",
-    "author": "NOAA / GLERL",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_salar_GLERL_1.jpg"
-  },
-  "coregone-lavaret": {
-    "file": "assets/species/coregone-lavaret.webp",
-    "author": "Apple2000",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coregonus_lavaretus_maraena_1.jpg"
-  },
-  "huchon": {
-    "file": "assets/species/huchon.webp",
-    "author": "Harald Peki",
-    "license": "Attribution (libre)",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hucho_hucho.jpg"
-  },
-  "truite-de-mer": {
-    "file": "assets/species/truite-de-mer.webp",
-    "author": "Anne Blindheim / Lars Olaf Simonsen",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_trutta_retouched.jpg"
-  },
-  "brochet-aquitain": {
-    "file": "assets/species/brochet-aquitain.webp",
-    "author": "MillaTom",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg"
-  },
-  "black-bass-petite-bouche": {
-    "file": "assets/species/black-bass-petite-bouche.webp",
-    "author": "Eric Engbretson (USFWS)",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Micropterus_dolomieu.jpg"
-  },
-  "aspe": {
-    "file": "assets/species/aspe.webp",
-    "author": "Jenny Glans",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aspius_aspius.jpg"
-  },
-  "grande-alose": {
-    "file": "assets/species/grande-alose.webp",
-    "author": "I. Cheret & L. Metral (Ifremer)",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alose_vraie_(Alosa_alosa)_(Ifremer_00680-79165).jpg"
-  },
-  "alose-feinte-atlantique": {
-    "file": "assets/species/alose-feinte-atlantique.webp",
-    "author": "Hans Hillewaert",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alosa_fallax.jpg"
-  },
-  "lamproie-marine": {
-    "file": "assets/species/lamproie-marine.webp",
-    "author": "Emery Lee (USFWS)",
-    "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sea_lamprey_petromyzon_marinus.jpg"
-  },
-  "lamproie-de-planer": {
-    "file": "assets/species/lamproie-de-planer.webp",
-    "author": "Julien Renoult",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lampetra_planeri.jpg"
-  },
-  "esturgeon-europeen": {
-    "file": "assets/species/esturgeon-europeen.webp",
-    "author": "Aah-Yeah",
-    "license": "CC BY 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:St%C3%B6r_Sturgeon.jpg"
-  },
-  "mulet-porc": {
-    "file": "assets/species/mulet-porc.webp",
-    "author": "etrusko25",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chelon_ramada_Italy.jpg"
-  },
-  "flet": {
-    "file": "assets/species/flet.webp",
-    "author": "Holger Krisp",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Flunder_Platichthys_flesus.jpg"
-  },
-  "epinoche": {
-    "file": "assets/species/epinoche.webp",
-    "author": "Gilles San Martin",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gasterosteus_aculeatus_-_Epinoche_-_Three-spined_stickleback.jpg"
-  },
-  "epinochette": {
-    "file": "assets/species/epinochette.webp",
-    "author": "Julien Renoult",
-    "license": "CC BY 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pungitius_laevis.jpg"
-  },
-  "loche-franche": {
-    "file": "assets/species/loche-franche.webp",
-    "author": "OpenCage",
-    "license": "CC BY-SA 2.5",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbatula_barbatula_by_OpenCage.jpg"
-  },
-  "loche-de-riviere": {
-    "file": "assets/species/loche-de-riviere.webp",
-    "author": "Ron Offermans",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cobitis_taenia.jpg"
-  },
-  "chabot-commun": {
-    "file": "assets/species/chabot-commun.webp",
-    "author": "\"D\" (de.wikipedia)",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cottus_gobio_-_Groppe_1.jpg"
-  },
-  "apron-du-rhone": {
-    "file": "assets/species/apron-du-rhone.webp",
-    "author": "Proche",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zingel_asper.JPG"
-  },
-  "bouviere": {
-    "file": "assets/species/bouviere.webp",
-    "author": "Viridiflavus",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rhodeus_amarus.jpg"
-  },
-  "gambusie": {
-    "file": "assets/species/gambusie.webp",
-    "author": "etrusko25",
-    "license": "CC BY-SA 2.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gambusia_holbrooki_1.jpg"
-  }
+// Species carry an ARRAY of photos (adult, juvenile…) for a gallery.
+export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
+  "sandre": [
+    {
+      "file": "assets/species/sandre.webp",
+      "author": "Tylwyth Eldar",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sandre_(Sander_lucioperca).jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/sandre-2.webp",
+      "author": "Lorenz Seebauer",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Juvenile_Zander.jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "brochet": [
+    {
+      "file": "assets/species/brochet.webp",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Esox_lucius_-_Brochet_-_Northern_pike.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/brochet-2.webp",
+      "author": "Nervurax Fishing",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Esox_lucius_juvenile.png",
+      "caption": "Juvénile"
+    }
+  ],
+  "perche": [
+    {
+      "file": "assets/species/perche.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Perca_fluviatilis_Prague_Vltava_2.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/perche-2.webp",
+      "author": "B. Schoenmakers",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Perca_fluviatilis_(Percidae)_-_(juvenile),_Elst_(Gld),_the_Netherlands.jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "black-bass": [
+    {
+      "file": "assets/species/black-bass.webp",
+      "author": "USFWS Mountain Prairie",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_(Micropterus_salmoides)_(53118577249)_(cropped).jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/black-bass-2.webp",
+      "author": "Sam Stukel (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_Fingerling_(9515420177).jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "silure": [
+    {
+      "file": "assets/species/silure.webp",
+      "author": "Dieter Florian",
+      "license": "CC BY-SA 3.0 DE",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Silurus_glanis_02.jpg"
+    }
+  ],
+  "gremille": [
+    {
+      "file": "assets/species/gremille.webp",
+      "author": "Tiit Hunt",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gymnocephalus_cernuus_P%C3%A4rnu_River_Estonia_2010-01-06.jpg"
+    }
+  ],
+  "carpe": [
+    {
+      "file": "assets/species/carpe.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caprinus_carpio_Prague_Vltava_1.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/carpe-2.webp",
+      "author": "Sam Stukel (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_Carp_(Cyprinus_carpio)-8_(51221817512).jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "gardon": [
+    {
+      "file": "assets/species/gardon.webp",
+      "author": "kallerna",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_Roach.JPG",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/gardon-2.webp",
+      "author": "B. Schoenmakers",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rutilus_rutilus_(Cyprinidae)_-_(juvenile),_Elst_(Gld),_the_Netherlands.jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "barbeau": [
+    {
+      "file": "assets/species/barbeau.webp",
+      "author": "Pmau",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbus_barbus_img_33502.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/barbeau-2.webp",
+      "author": "Sven.petersen",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbus_Barbus_(juvenile).JPG",
+      "caption": "Juvénile"
+    }
+  ],
+  "carassin": [
+    {
+      "file": "assets/species/carassin.webp",
+      "author": "U.S. Geological Survey",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_carassius.jpg"
+    }
+  ],
+  "rotengle": [
+    {
+      "file": "assets/species/rotengle.webp",
+      "author": "Paul Korecky",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:2017-07-02_AT_Wien_13_Hietzing,_Tiergarten_Sch%C3%B6nbrunn,_Scardinius_erythrophthalmus_(49897346508).jpg"
+    }
+  ],
+  "truite-fario": [
+    {
+      "file": "assets/species/truite-fario.webp",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_fario_-_Truite_fario_-_Brown_trout.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/truite-fario-2.webp",
+      "author": "Sam Stukel (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brown_Trout_Fingerling_(52979322720).jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "truite-arc-en-ciel": [
+    {
+      "file": "assets/species/truite-arc-en-ciel.webp",
+      "author": "Liquid Art",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rainbow_Trout_(Oncorhynchus_mykiss).jpg"
+    }
+  ],
+  "perche-soleil": [
+    {
+      "file": "assets/species/perche-soleil.webp",
+      "author": "Cephas",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lepomis_gibbosus_PAQ.jpg"
+    }
+  ],
+  "poisson-chat": [
+    {
+      "file": "assets/species/poisson-chat.webp",
+      "author": "George Chernilevsky",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ameiurus_melas_2021_G1.jpg"
+    }
+  ],
+  "breme": [
+    {
+      "file": "assets/species/breme.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Abramis_brama_Prague_Vltava_1.jpg"
+    }
+  ],
+  "tanche": [
+    {
+      "file": "assets/species/tanche.webp",
+      "author": "Pavel Kotrc",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tinca_tinca.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/tanche-2.webp",
+      "author": "B. Schoenmakers",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tinca_tinca_(Cyprinidae)_-_(juvenile),_Elst_(Gld),_the_Netherlands.jpg",
+      "caption": "Juvénile"
+    }
+  ],
+  "ablette": [
+    {
+      "file": "assets/species/ablette.webp",
+      "author": "David Perez (DPC)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alburnus_alburnus_01_by-dpc.jpg"
+    }
+  ],
+  "chevesne": [
+    {
+      "file": "assets/species/chevesne.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Squalius_cephalus_Prague_Vltava_1.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/chevesne-2.webp",
+      "author": "Piet Spaans",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeuciscusCephalusJuvenile.JPG",
+      "caption": "Juvénile"
+    }
+  ],
+  "hotu": [
+    {
+      "file": "assets/species/hotu.webp",
+      "author": "André Karwath (Aka)",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chondrostoma_nasus_(aka).jpg"
+    }
+  ],
+  "goujon": [
+    {
+      "file": "assets/species/goujon.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gobio_gobio_Prague_Vltava_1.jpg"
+    }
+  ],
+  "ombre": [
+    {
+      "file": "assets/species/ombre.webp",
+      "author": "High Plains Grifter",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grayling_Thymallus_thymallus.JPG"
+    }
+  ],
+  "omble-fontaine": [
+    {
+      "file": "assets/species/omble-fontaine.webp",
+      "author": "Derek Ramsey (Ram-Man)",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brook_Trout_Salvelinus_fontinalis_2900px.jpg"
+    }
+  ],
+  "anguille": [
+    {
+      "file": "assets/species/anguille.webp",
+      "author": "GerardM",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla.jpg",
+      "caption": "Adulte"
+    },
+    {
+      "file": "assets/species/anguille-2.webp",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla_glass_eel_France.jpg",
+      "caption": "Civelle (juvénile)"
+    }
+  ],
+  "vandoise": [
+    {
+      "file": "assets/species/vandoise.webp",
+      "author": "Viridiflavus",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeuciscusLeuciscusSerpeling17.JPG"
+    }
+  ],
+  "breme-bordeliere": [
+    {
+      "file": "assets/species/breme-bordeliere.webp",
+      "author": "Algirdas",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Blicca_bjoerkna.jpg"
+    }
+  ],
+  "spirlin": [
+    {
+      "file": "assets/species/spirlin.webp",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alburnoides_bipunctatus.jpg"
+    }
+  ],
+  "able-de-heckel": [
+    {
+      "file": "assets/species/able-de-heckel.webp",
+      "author": "Christian Fischer",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeucaspiusDelineatus1.jpg"
+    }
+  ],
+  "ide-melanote": [
+    {
+      "file": "assets/species/ide-melanote.webp",
+      "author": "Piet Spaans",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeuciscusIdus.JPG"
+    }
+  ],
+  "blageon": [
+    {
+      "file": "assets/species/blageon.webp",
+      "author": "Harka Akos",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Telestes_souffia.jpg"
+    }
+  ],
+  "toxostome": [
+    {
+      "file": "assets/species/toxostome.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Parachondrostoma_toxostoma.jpg"
+    }
+  ],
+  "barbeau-meridional": [
+    {
+      "file": "assets/species/barbeau-meridional.webp",
+      "author": "Wikiwiki",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbus_meridionalis.jpg"
+    }
+  ],
+  "carassin-argente": [
+    {
+      "file": "assets/species/carassin-argente.webp",
+      "author": "George Chernilevsky",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_gibelio_2008_G2.jpg"
+    }
+  ],
+  "poisson-rouge": [
+    {
+      "file": "assets/species/poisson-rouge.webp",
+      "author": "Alyssachanpc",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_0045-1.jpg"
+    }
+  ],
+  "amour-blanc": [
+    {
+      "file": "assets/species/amour-blanc.webp",
+      "author": "Dezidor",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ctenopharyngodon_idella.jpg"
+    }
+  ],
+  "pseudorasbora": [
+    {
+      "file": "assets/species/pseudorasbora.webp",
+      "author": "Piet Spaans",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:PseudorasboraParva2.JPG"
+    }
+  ],
+  "vairon": [
+    {
+      "file": "assets/species/vairon.webp",
+      "author": "Pmau",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phoxinus_phoxinus_img_33481.jpg"
+    }
+  ],
+  "omble-chevalier": [
+    {
+      "file": "assets/species/omble-chevalier.webp",
+      "author": "Saibling",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salvelinusalpinus.jpg"
+    }
+  ],
+  "cristivomer": [
+    {
+      "file": "assets/species/cristivomer.webp",
+      "author": "NOAA / GLERL",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lake_Trout_GLERL.jpg"
+    }
+  ],
+  "saumon-atlantique": [
+    {
+      "file": "assets/species/saumon-atlantique.webp",
+      "author": "NOAA / GLERL",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_salar_GLERL_1.jpg"
+    }
+  ],
+  "coregone-lavaret": [
+    {
+      "file": "assets/species/coregone-lavaret.webp",
+      "author": "Apple2000",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coregonus_lavaretus_maraena_1.jpg"
+    }
+  ],
+  "huchon": [
+    {
+      "file": "assets/species/huchon.webp",
+      "author": "Harald Peki",
+      "license": "Attribution (libre)",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hucho_hucho.jpg"
+    }
+  ],
+  "truite-de-mer": [
+    {
+      "file": "assets/species/truite-de-mer.webp",
+      "author": "Anne Blindheim / Lars Olaf Simonsen",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_trutta_retouched.jpg"
+    }
+  ],
+  "brochet-aquitain": [
+    {
+      "file": "assets/species/brochet-aquitain.webp",
+      "author": "MillaTom",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg"
+    }
+  ],
+  "black-bass-petite-bouche": [
+    {
+      "file": "assets/species/black-bass-petite-bouche.webp",
+      "author": "Eric Engbretson (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Micropterus_dolomieu.jpg"
+    }
+  ],
+  "aspe": [
+    {
+      "file": "assets/species/aspe.webp",
+      "author": "Jenny Glans",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aspius_aspius.jpg"
+    }
+  ],
+  "grande-alose": [
+    {
+      "file": "assets/species/grande-alose.webp",
+      "author": "I. Cheret & L. Metral (Ifremer)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alose_vraie_(Alosa_alosa)_(Ifremer_00680-79165).jpg"
+    }
+  ],
+  "alose-feinte-atlantique": [
+    {
+      "file": "assets/species/alose-feinte-atlantique.webp",
+      "author": "Hans Hillewaert",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alosa_fallax.jpg"
+    }
+  ],
+  "lamproie-marine": [
+    {
+      "file": "assets/species/lamproie-marine.webp",
+      "author": "Emery Lee (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sea_lamprey_petromyzon_marinus.jpg"
+    }
+  ],
+  "lamproie-de-planer": [
+    {
+      "file": "assets/species/lamproie-de-planer.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lampetra_planeri.jpg"
+    }
+  ],
+  "esturgeon-europeen": [
+    {
+      "file": "assets/species/esturgeon-europeen.webp",
+      "author": "Aah-Yeah",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:St%C3%B6r_Sturgeon.jpg"
+    }
+  ],
+  "mulet-porc": [
+    {
+      "file": "assets/species/mulet-porc.webp",
+      "author": "etrusko25",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chelon_ramada_Italy.jpg"
+    }
+  ],
+  "flet": [
+    {
+      "file": "assets/species/flet.webp",
+      "author": "Holger Krisp",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Flunder_Platichthys_flesus.jpg"
+    }
+  ],
+  "epinoche": [
+    {
+      "file": "assets/species/epinoche.webp",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gasterosteus_aculeatus_-_Epinoche_-_Three-spined_stickleback.jpg"
+    }
+  ],
+  "epinochette": [
+    {
+      "file": "assets/species/epinochette.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pungitius_laevis.jpg"
+    }
+  ],
+  "loche-franche": [
+    {
+      "file": "assets/species/loche-franche.webp",
+      "author": "OpenCage",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbatula_barbatula_by_OpenCage.jpg"
+    }
+  ],
+  "loche-de-riviere": [
+    {
+      "file": "assets/species/loche-de-riviere.webp",
+      "author": "Ron Offermans",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cobitis_taenia.jpg"
+    }
+  ],
+  "chabot-commun": [
+    {
+      "file": "assets/species/chabot-commun.webp",
+      "author": "\"D\" (de.wikipedia)",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cottus_gobio_-_Groppe_1.jpg"
+    }
+  ],
+  "apron-du-rhone": [
+    {
+      "file": "assets/species/apron-du-rhone.webp",
+      "author": "Proche",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zingel_asper.JPG"
+    }
+  ],
+  "bouviere": [
+    {
+      "file": "assets/species/bouviere.webp",
+      "author": "Viridiflavus",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rhodeus_amarus.jpg"
+    }
+  ],
+  "gambusie": [
+    {
+      "file": "assets/species/gambusie.webp",
+      "author": "etrusko25",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gambusia_holbrooki_1.jpg"
+    }
+  ],
+  "alose-feinte-mediterraneenne": [
+    {
+      "file": "assets/species/alose-feinte-mediterraneenne.webp",
+      "author": "emilvus",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alosa_agone_Garda_lake.jpg"
+    }
+  ],
+  "blennie-fluviatile": [
+    {
+      "file": "assets/species/blennie-fluviatile.webp",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salariopsis_fluviatilis_France.jpg"
+    }
+  ],
+  "carpe-argentee": [
+    {
+      "file": "assets/species/carpe-argentee.webp",
+      "author": "Sam Stukel (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Silver_Carp_Adult_(Hypophthalmichthys_molitrix).jpg"
+    }
+  ],
+  "chabot-fluviatile": [
+    {
+      "file": "assets/species/chabot-fluviatile.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cottus_perifretum.jpg"
+    }
+  ],
+  "chevesne-catalan": [
+    {
+      "file": "assets/species/chevesne-catalan.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Squalius_laietanus.jpg"
+    }
+  ],
+  "crapet-de-roche": [
+    {
+      "file": "assets/species/crapet-de-roche.webp",
+      "author": "Sam Stukel (USFWS)",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rock_Bass_(Ambloplites_rupestris).jpg"
+    }
+  ],
+  "eperlan": [
+    {
+      "file": "assets/species/eperlan.webp",
+      "author": "Thomas Pruss",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Osmerus_eperlanus.JPG"
+    }
+  ],
+  "lamproie-de-riviere": [
+    {
+      "file": "assets/species/lamproie-de-riviere.webp",
+      "author": "Andre Hosper",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lampetra_fluviatilis_26099057.jpg"
+    }
+  ],
+  "loche-d-etang": [
+    {
+      "file": "assets/species/loche-d-etang.webp",
+      "author": "George Chernilevsky",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Misgurnus_fossilis_2009_G1.jpg"
+    }
+  ],
+  "lote-de-riviere": [
+    {
+      "file": "assets/species/lote-de-riviere.webp",
+      "author": "Ákos Harka",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lota_lota_Hungary.jpg"
+    }
+  ],
+  "mulet-cabot": [
+    {
+      "file": "assets/species/mulet-cabot.webp",
+      "author": "Bikerhiker75",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gro%C3%9Fkopfmeer%C3%A4sche_(Mugil_cephalus).jpg"
+    }
+  ],
+  "mulet-dore": [
+    {
+      "file": "assets/species/mulet-dore.webp",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Galupe_(Chelon_auratus)"
+    }
+  ],
+  "mulet-lippu": [
+    {
+      "file": "assets/species/mulet-lippu.webp",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Muble_(Chelon_labrosus)"
+    }
+  ],
+  "goujon-ukraine": [
+    {
+      "file": "assets/species/goujon-ukraine.webp",
+      "author": "Yuriy Kvach",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Romanogobio_vladykovi.jpg"
+    }
+  ],
+  "vairon-basque": [
+    {
+      "file": "assets/species/vairon-basque.webp",
+      "author": "David Perez (DPC)",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phoxinus_bigerri_01_by-dpc.jpg"
+    }
+  ],
+  "vairon-du-languedoc": [
+    {
+      "file": "assets/species/vairon-du-languedoc.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phoxinus_septimaniae_519471402.jpg"
+    }
+  ],
+  "vimbe": [
+    {
+      "file": "assets/species/vimbe.webp",
+      "author": "Emőke Dénes",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cypriniformes_-_Vimba_vimba_-_1.jpg"
+    }
+  ]
 };
 
 export const KNOT_MEDIA: Record<string, MediaEntry> = {

@@ -89,7 +89,50 @@ async function processGroup(items, kind, subdir) {
   return media;
 }
 
-const speciesMedia = await processGroup(manifest.species || [], "species", "species");
+// Species support MULTIPLE photos (adult + juvenile…) for a gallery: each entry
+// may carry an `extra` array of {filename, author, license, file_page_url, caption}.
+// Files are <id>.webp, <id>-2.webp, … and SPECIES_MEDIA maps id -> MediaEntry[].
+async function processSpecies(items) {
+  const outDir = join(root, "public/assets/species");
+  await mkdir(outDir, { recursive: true });
+  const media = {};
+  for (const it of items) {
+    const photos = [
+      { filename: it.filename, author: it.author, license: it.license, file_page_url: it.file_page_url, caption: it.caption },
+      ...(it.extra || []),
+    ].filter((p) => p.filename);
+    const entries = [];
+    for (let i = 0; i < photos.length; i++) {
+      const p = photos[i];
+      const file = `assets/species/${it.id}${i === 0 ? "" : "-" + (i + 1)}.webp`;
+      const outPath = join(root, "public", file);
+      if (!existsSync(outPath)) {
+        try {
+          const buf = await download(p.filename, 960);
+          await sharp(buf, { density: 200 })
+            .rotate()
+            .resize({ width: 900, height: 648, fit: "cover", position: "centre" })
+            .webp({ quality: 84 })
+            .toFile(outPath);
+          console.log(`✓ species/${it.id}${i ? "-" + (i + 1) : ""}  (${p.license})`);
+          await sleep(3000);
+        } catch (e) {
+          console.error(`✗ species/${it.id}#${i + 1}: ${e.message}`);
+          continue;
+        }
+      } else {
+        console.log(`• species/${it.id}${i ? "-" + (i + 1) : ""}  (déjà présent)`);
+      }
+      const e = { file, author: p.author, license: p.license, sourceUrl: p.file_page_url };
+      if (p.caption) e.caption = p.caption;
+      entries.push(e);
+    }
+    if (entries.length) media[it.id] = entries;
+  }
+  return media;
+}
+
+const speciesMedia = await processSpecies(manifest.species || []);
 const knotMedia = await processGroup(manifest.knots || [], "knot", "knots");
 const recipeMedia = await processGroup(manifest.recipes || [], "recipe", "recipes");
 const techMedia = await processGroup(manifest.techniques || [], "technique", "techniques");
@@ -103,9 +146,11 @@ export interface MediaEntry {
   author: string;
   license: string;
   sourceUrl: string;
+  caption?: string; // e.g. "Adulte" / "Juvénile" (shown in the species gallery)
 }
 
-export const SPECIES_MEDIA: Record<string, MediaEntry> = ${JSON.stringify(speciesMedia, null, 2)};
+// Species carry an ARRAY of photos (adult, juvenile…) for a gallery.
+export const SPECIES_MEDIA: Record<string, MediaEntry[]> = ${JSON.stringify(speciesMedia, null, 2)};
 
 export const KNOT_MEDIA: Record<string, MediaEntry> = ${JSON.stringify(knotMedia, null, 2)};
 
