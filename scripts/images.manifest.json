@@ -2,12 +2,17 @@
   "species": [
     {
       "id": "sandre",
-      "filename": "File:Sandre (Sander lucioperca).jpg",
-      "author": "Tylwyth Eldar",
+      "filename": "File:Hal - Sander lucioperca - 1.jpg",
+      "author": "Emőke Dénes",
       "license": "CC BY-SA 4.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Sandre_(Sander_lucioperca).jpg",
-      "caption": "Adulte",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Hal_-_Sander_lucioperca_-_1.jpg",
       "extra": [
+        {
+          "filename": "File:Sander lucioperca (Czech Republic) 06.jpg",
+          "author": "Pohled 111",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Sander_lucioperca_(Czech_Republic)_06.jpg"
+        },
         {
           "filename": "File:Juvenile Zander.jpg",
           "author": "Lorenz Seebauer",
@@ -19,12 +24,17 @@
     },
     {
       "id": "brochet",
-      "filename": "File:Esox lucius - Brochet - Northern pike.jpg",
-      "author": "Gilles San Martin",
-      "license": "CC BY-SA 2.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Esox_lucius_-_Brochet_-_Northern_pike.jpg",
-      "caption": "Adulte",
+      "filename": "File:Esox lucius (no).JPG",
+      "author": "Arnstein Rønning",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Esox_lucius_(no).JPG",
       "extra": [
+        {
+          "filename": "File:Esox lucius Prague Vltava 2.jpg",
+          "author": "Karelj",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Esox_lucius_Prague_Vltava_2.jpg"
+        },
         {
           "filename": "File:Esox lucius juvenile.png",
           "author": "Nervurax Fishing",
@@ -36,11 +46,10 @@
     },
     {
       "id": "perche",
-      "filename": "File:Perca fluviatilis Prague Vltava 2.jpg",
-      "author": "Karelj",
-      "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Perca_fluviatilis_Prague_Vltava_2.jpg",
-      "caption": "Adulte",
+      "filename": "File:Egli (Perca fluviatilis) 001 (cropped).jpg",
+      "author": "Christa Rohrbach",
+      "license": "CC BY-SA 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Egli_(Perca_fluviatilis)_001_(cropped).jpg",
       "extra": [
         {
           "filename": "File:Perca fluviatilis (Percidae) - (juvenile), Elst (Gld), the Netherlands.jpg",
@@ -53,12 +62,17 @@
     },
     {
       "id": "black-bass",
-      "filename": "File:Largemouth Bass (Micropterus salmoides) (53118577249) (cropped).jpg",
-      "author": "USFWS Mountain Prairie",
+      "filename": "File:Largemouth Bass (Micropterus salmoides) (51327213074).jpg",
+      "author": "USFWS Mountain-Prairie",
       "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_(Micropterus_salmoides)_(53118577249)_(cropped).jpg",
-      "caption": "Adulte",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_(Micropterus_salmoides)_(51327213074).jpg",
       "extra": [
+        {
+          "filename": "File:Largemouth Bass (Micropterus salmoides) (53118787625).jpg",
+          "author": "USFWS Mountain-Prairie",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Largemouth_Bass_(Micropterus_salmoides)_(53118787625).jpg"
+        },
         {
           "filename": "File:Largemouth Bass Fingerling (9515420177).jpg",
           "author": "Sam Stukel (USFWS)",
@@ -70,26 +84,39 @@
     },
     {
       "id": "silure",
-      "filename": "File:Silurus glanis 02.jpg",
-      "author": "Dieter Florian",
-      "license": "CC BY-SA 3.0 DE",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Silurus_glanis_02.jpg"
+      "filename": "File:European Catfish (Silurus glanis) (13532617795).jpg",
+      "author": "Bernard Dupont",
+      "license": "CC BY-SA 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:European_Catfish_(Silurus_glanis)_(13532617795).jpg",
+      "extra": [
+        {
+          "filename": "File:Silurus glanis 02.jpg",
+          "author": "Dieter Florian",
+          "license": "CC BY-SA 3.0 de",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Silurus_glanis_02.jpg"
+        }
+      ]
     },
     {
       "id": "gremille",
-      "filename": "File:Gymnocephalus cernuus Pärnu River Estonia 2010-01-06.jpg",
-      "author": "Tiit Hunt",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gymnocephalus_cernuus_P%C3%A4rnu_River_Estonia_2010-01-06.jpg"
+      "filename": "File:Gymnocephalus cernua.jpg",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gymnocephalus_cernua.jpg"
     },
     {
       "id": "carpe",
-      "filename": "File:Caprinus carpio Prague Vltava 1.jpg",
-      "author": "Karelj",
-      "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Caprinus_carpio_Prague_Vltava_1.jpg",
-      "caption": "Adulte",
+      "filename": "File:Carp (Cyprinus carpio) in aquarium.JPG",
+      "author": "Reaperman",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Carp_(Cyprinus_carpio)_in_aquarium.JPG",
       "extra": [
+        {
+          "filename": "File:(1)Carp Centennial Park.jpg",
+          "author": "Sardaka",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:(1)Carp_Centennial_Park.jpg"
+        },
         {
           "filename": "File:Common Carp (Cyprinus carpio)-8 (51221817512).jpg",
           "author": "Sam Stukel (USFWS)",
@@ -101,11 +128,10 @@
     },
     {
       "id": "gardon",
-      "filename": "File:Common Roach.JPG",
-      "author": "kallerna",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Common_Roach.JPG",
-      "caption": "Adulte",
+      "filename": "File:Blankvoorn gevangen met een hengel kan wel 50cm lang worden.jpg",
+      "author": "Peter van der Sluijs",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Blankvoorn_gevangen_met_een_hengel_kan_wel_50cm_lang_worden.jpg",
       "extra": [
         {
           "filename": "File:Rutilus rutilus (Cyprinidae) - (juvenile), Elst (Gld), the Netherlands.jpg",
@@ -118,12 +144,17 @@
     },
     {
       "id": "barbeau",
-      "filename": "File:Barbus barbus img 33502.jpg",
-      "author": "Pmau",
-      "license": "CC BY-SA 4.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Barbus_barbus_img_33502.jpg",
-      "caption": "Adulte",
+      "filename": "File:Barbe Tiergarten Schoenbrunn.jpg",
+      "author": "Linie29",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Barbe_Tiergarten_Schoenbrunn.jpg",
       "extra": [
+        {
+          "filename": "File:Barbel. Barbus barbus (32518550835).jpg",
+          "author": "gailhampshire",
+          "license": "CC BY 2.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Barbel._Barbus_barbus_(32518550835).jpg"
+        },
         {
           "filename": "File:Barbus Barbus (juvenile).JPG",
           "author": "Sven.petersen",
@@ -135,26 +166,47 @@
     },
     {
       "id": "carassin",
-      "filename": "File:Carassius carassius.jpg",
-      "author": "U.S. Geological Survey",
-      "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Carassius_carassius.jpg"
+      "filename": "File:CarassiusCarassius7.jpg",
+      "author": "Viridiflavus",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:CarassiusCarassius7.jpg",
+      "extra": [
+        {
+          "filename": "File:CarassiusCarassius8.JPG",
+          "author": "Viridiflavus",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:CarassiusCarassius8.JPG"
+        }
+      ]
     },
     {
       "id": "rotengle",
-      "filename": "File:2017-07-02 AT Wien 13 Hietzing, Tiergarten Schönbrunn, Scardinius erythrophthalmus (49897346508).jpg",
-      "author": "Paul Korecky",
-      "license": "CC BY-SA 2.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:2017-07-02_AT_Wien_13_Hietzing,_Tiergarten_Sch%C3%B6nbrunn,_Scardinius_erythrophthalmus_(49897346508).jpg"
+      "filename": "File:De ruisvoorn goede sportvis.jpg",
+      "author": "Peter van der Sluijs",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:De_ruisvoorn_goede_sportvis.jpg",
+      "extra": [
+        {
+          "filename": "File:Hal - Scardinius erythrophthalmus - 1.jpg",
+          "author": "Emőke Dénes",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Hal_-_Scardinius_erythrophthalmus_-_1.jpg"
+        }
+      ]
     },
     {
       "id": "truite-fario",
-      "filename": "File:Salmo trutta fario - Truite fario - Brown trout.jpg",
-      "author": "Gilles San Martin",
-      "license": "CC BY-SA 2.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_fario_-_Truite_fario_-_Brown_trout.jpg",
-      "caption": "Adulte",
+      "filename": "File:Brown Trout (Salmo trutta) (53678765394).jpg",
+      "author": "USFWS Mountain-Prairie",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Brown_Trout_(Salmo_trutta)_(53678765394).jpg",
       "extra": [
+        {
+          "filename": "File:95cs2032 (49699975643) (cropped).jpg",
+          "author": "USDAgov",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:95cs2032_(49699975643)_(cropped).jpg"
+        },
         {
           "filename": "File:Brown Trout Fingerling (52979322720).jpg",
           "author": "Sam Stukel (USFWS)",
@@ -166,40 +218,77 @@
     },
     {
       "id": "truite-arc-en-ciel",
-      "filename": "File:Rainbow Trout (Oncorhynchus mykiss).jpg",
-      "author": "Liquid Art",
-      "license": "CC BY-SA 4.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Rainbow_Trout_(Oncorhynchus_mykiss).jpg"
+      "filename": "File:Regenbogenforelle (Oncorhynchus mykiss) Seitenansicht 1.jpg",
+      "author": "USFWS Mountain-Prairie",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Regenbogenforelle_(Oncorhynchus_mykiss)_Seitenansicht_1.jpg",
+      "extra": [
+        {
+          "filename": "File:Close up of rainbow trout fish underwater oncorhynchus mykiss.jpg",
+          "author": "Eric Engbretson (USFWS)",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Close_up_of_rainbow_trout_fish_underwater_oncorhynchus_mykiss.jpg"
+        }
+      ]
     },
     {
       "id": "perche-soleil",
-      "filename": "File:Lepomis gibbosus PAQ.jpg",
-      "author": "Cephas",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Lepomis_gibbosus_PAQ.jpg"
+      "filename": "File:Lepomis gibbosus (S0167) (12597958823).jpg",
+      "author": "Smithsonian Environmental Research Center",
+      "license": "CC BY 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Lepomis_gibbosus_(S0167)_(12597958823).jpg",
+      "extra": [
+        {
+          "filename": "File:Hal - Lepomis gibbosus - 4.jpg",
+          "author": "Emőke Dénes",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Hal_-_Lepomis_gibbosus_-_4.jpg"
+        }
+      ]
     },
     {
       "id": "poisson-chat",
       "filename": "File:Ameiurus melas 2021 G1.jpg",
       "author": "George Chernilevsky",
       "license": "CC BY-SA 4.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Ameiurus_melas_2021_G1.jpg"
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Ameiurus_melas_2021_G1.jpg",
+      "extra": [
+        {
+          "filename": "File:Hal - Ameiurus melas - 4.jpg",
+          "author": "Emőke Dénes",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Hal_-_Ameiurus_melas_-_4.jpg"
+        }
+      ]
     },
     {
       "id": "breme",
-      "filename": "File:Abramis brama Prague Vltava 1.jpg",
+      "filename": "File:Abramis brama Prague Vltava 1 (cropped).jpg",
       "author": "Karelj",
       "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Abramis_brama_Prague_Vltava_1.jpg"
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Abramis_brama_Prague_Vltava_1_(cropped).jpg",
+      "extra": [
+        {
+          "filename": "File:Abramis brama - 2010-09-24 HBP.jpg",
+          "author": "Grand-Duc",
+          "license": "CC BY-SA 3.0 de",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Abramis_brama_-_2010-09-24_HBP.jpg"
+        }
+      ]
     },
     {
       "id": "tanche",
-      "filename": "File:Tinca tinca.jpg",
-      "author": "Pavel Kotrc",
-      "license": "CC BY-SA 2.5",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Tinca_tinca.jpg",
-      "caption": "Adulte",
+      "filename": "File:Tinca tinca Prague Vltava 2.jpg",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Tinca_tinca_Prague_Vltava_2.jpg",
       "extra": [
+        {
+          "filename": "File:Tinca tinca.jpeg",
+          "author": "Dezidor",
+          "license": "CC BY 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Tinca_tinca.jpeg"
+        },
         {
           "filename": "File:Tinca tinca (Cyprinidae) - (juvenile), Elst (Gld), the Netherlands.jpg",
           "author": "B. Schoenmakers",
@@ -212,18 +301,31 @@
     {
       "id": "ablette",
       "filename": "File:Alburnus alburnus 01 by-dpc.jpg",
-      "author": "David Perez (DPC)",
+      "author": "David Perez",
       "license": "CC BY 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Alburnus_alburnus_01_by-dpc.jpg"
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Alburnus_alburnus_01_by-dpc.jpg",
+      "extra": [
+        {
+          "filename": "File:Alburnus alburnus cropped.jpg",
+          "author": "Viridiflavus",
+          "license": "CC BY 2.5",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Alburnus_alburnus_cropped.jpg"
+        }
+      ]
     },
     {
       "id": "chevesne",
-      "filename": "File:Squalius cephalus Prague Vltava 1.jpg",
-      "author": "Karelj",
-      "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Squalius_cephalus_Prague_Vltava_1.jpg",
-      "caption": "Adulte",
+      "filename": "File:Hal - Squalius cephalus - 3.jpg",
+      "author": "Emőke Dénes",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Hal_-_Squalius_cephalus_-_3.jpg",
       "extra": [
+        {
+          "filename": "File:Oniria - Squalius cephalus 03 (cropped).jpg",
+          "author": "Tylwyth Eldar",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Oniria_-_Squalius_cephalus_03_(cropped).jpg"
+        },
         {
           "filename": "File:LeuciscusCephalusJuvenile.JPG",
           "author": "Piet Spaans",
@@ -235,40 +337,77 @@
     },
     {
       "id": "hotu",
-      "filename": "File:Chondrostoma nasus (aka).jpg",
+      "filename": "File:Chondrostoma nasus (aka) (cropped).jpg",
       "author": "André Karwath (Aka)",
       "license": "CC BY-SA 2.5",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Chondrostoma_nasus_(aka).jpg"
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Chondrostoma_nasus_(aka)_(cropped).jpg",
+      "extra": [
+        {
+          "filename": "File:Cyprinidae Chondrostoma nasus 1.jpg",
+          "author": "NasserHalaweh",
+          "license": "CC BY-SA 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Cyprinidae_Chondrostoma_nasus_1.jpg"
+        }
+      ]
     },
     {
       "id": "goujon",
-      "filename": "File:Gobio gobio Prague Vltava 1.jpg",
-      "author": "Karelj",
-      "license": "Domaine public",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gobio_gobio_Prague_Vltava_1.jpg"
+      "filename": "File:Gobio gobio2.jpg",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gobio_gobio2.jpg",
+      "extra": [
+        {
+          "filename": "File:Gobio gobio Prague Vltava 2 (cropped).jpg",
+          "author": "Karelj",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Gobio_gobio_Prague_Vltava_2_(cropped).jpg"
+        }
+      ]
     },
     {
       "id": "ombre",
-      "filename": "File:Grayling Thymallus thymallus.JPG",
-      "author": "High Plains Grifter",
-      "license": "CC BY-SA 4.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Grayling_Thymallus_thymallus.JPG"
+      "filename": "File:Thymallus thymallus2.jpg",
+      "author": "Gilles San Martin",
+      "license": "CC BY-SA 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Thymallus_thymallus2.jpg",
+      "extra": [
+        {
+          "filename": "File:Thymallus thymallus acqMilano.jpg",
+          "author": "Marrabbio2",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Thymallus_thymallus_acqMilano.jpg"
+        }
+      ]
     },
     {
       "id": "omble-fontaine",
-      "filename": "File:Brook Trout Salvelinus fontinalis 2900px.jpg",
-      "author": "Derek Ramsey (Ram-Man)",
-      "license": "CC BY-SA 2.5",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Brook_Trout_Salvelinus_fontinalis_2900px.jpg"
+      "filename": "File:Brook trout 01 (cropped).jpg",
+      "author": "USFWS",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Brook_trout_01_(cropped).jpg",
+      "extra": [
+        {
+          "filename": "File:95cs2171 (49700508431).jpg",
+          "author": "USDAgov",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:95cs2171_(49700508431).jpg"
+        }
+      ]
     },
     {
       "id": "anguille",
-      "filename": "File:Anguilla anguilla.jpg",
-      "author": "GerardM",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla.jpg",
-      "caption": "Adulte",
+      "filename": "File:Anguilla anguilla Belgium.jpg",
+      "author": "Vranken Martin",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla_Belgium.jpg",
       "extra": [
+        {
+          "filename": "File:Anguilla anguilla France (cropped).jpg",
+          "author": "jujurenoult",
+          "license": "CC BY 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Anguilla_anguilla_France_(cropped).jpg"
+        },
         {
           "filename": "File:Anguilla anguilla glass eel France.jpg",
           "author": "jujurenoult",
@@ -427,10 +566,25 @@
     },
     {
       "id": "aspe",
-      "filename": "File:Aspius aspius.jpg",
-      "author": "Jenny Glans",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Aspius_aspius.jpg"
+      "filename": "File:Aspius aspius snelle jager roofblei.jpg",
+      "author": "Peter van der Sluijs",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Aspius_aspius_snelle_jager_roofblei.jpg",
+      "extra": [
+        {
+          "filename": "File:Aspius aspius Prague Vltava 3.jpg",
+          "author": "Karelj",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Aspius_aspius_Prague_Vltava_3.jpg"
+        },
+        {
+          "filename": "File:Leuciscus aspius juvenile.jpg",
+          "author": "jujurenoult",
+          "license": "CC BY 4.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Leuciscus_aspius_juvenile.jpg",
+          "caption": "Juvénile"
+        }
+      ]
     },
     {
       "id": "grande-alose",
