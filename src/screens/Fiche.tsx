@@ -10,6 +10,7 @@ import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
 import { ratingFg, repere } from "../lib/helpers";
 import { EDIBILITY } from "../data/edibility";
+import { IDENT } from "../data/identification";
 import { recipesForSpecies } from "../lib/recipes";
 import { SPECIES_ENRICHMENT } from "../data/species-enrichment";
 
@@ -102,21 +103,24 @@ export function Fiche() {
     render: () => React.ReactNode;
   }[] = [];
 
-  if (sp.ident) {
+  // Curated ident (species.ts) takes precedence; else the sourced overlay for
+  // base species (identification.ts).
+  const ident = sp.ident || IDENT[sp.id];
+  if (ident) {
     sections.push({
       id: "ident",
       title: "Identification & confusions",
       sub: "Ne pas la confondre",
       render: () => (
         <>
-          <p>{sp.ident!.summary}</p>
-          {sp.ident!.traits.map((t, i) => (
+          <p>{ident.summary}</p>
+          {ident.traits.map((t, i) => (
             <div key={i} className="li">
               <span className="b">—</span>
               <span>{t}</span>
             </div>
           ))}
-          {sp.ident!.conf.map((c, i) => {
+          {ident.conf.map((c, i) => {
             const confId = confusionMediaId(c.n);
             return (
               <div key={i} className="confusion">
