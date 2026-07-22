@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-ssr/
+.superpowers/
+*.local
+.DS_Store
+.vite/
+# TS project-reference build artifacts (composite build)
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
