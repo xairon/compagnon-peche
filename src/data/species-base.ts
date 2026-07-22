@@ -1258,6 +1258,65 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "crapet-de-roche",
+    "name": "Crapet de roche",
+    "latin": "Ambloplites rupestris",
+    "group": "autres",
+    "family": "Centrarchidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Centrarchidae"
+        ],
+        [
+          "Remarque",
+          "Centrarchidé nord-américain introduit, présence localisée en France."
+        ]
+      ]
+    }
+  },
+  {
     "id": "cristivomer",
     "name": "Cristivomer (touladi)",
     "latin": "Salvelinus namaycush",
@@ -1317,6 +1376,66 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Introduit (Amérique du Nord) ; grands lacs alpins (2ᵉ cat.) : la fermeture 1ʳᵉ catégorie ne s'applique pas ; période fixée par arrêté préfectoral. Maille nationale 0,35 m (R436-18)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "eperlan",
+    "name": "Éperlan",
+    "latin": "Osmerus eperlanus",
+    "group": "migrateurs",
+    "family": "Osmeridae",
+    "cdNom": "67749",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
+        ],
+        [
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Osmeridae"
+        ],
+        [
+          "Remarque",
+          "Petit migrateur amphihalin des estuaires et grands cours d'eau du Nord ; odeur caractéristique de concombre. Populations en fort déclin."
         ]
       ]
     }
@@ -2366,6 +2485,66 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "lote-de-riviere",
+    "name": "Lote de rivière",
+    "latin": "Lota lota",
+    "group": "autres",
+    "family": "Lotidae",
+    "cdNom": "68336",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Lotidae"
+        ],
+        [
+          "Remarque",
+          "Seul gadidé d'eau douce ; nocturne, en régression — protégée par arrêté préfectoral dans plusieurs départements (vérifier localement)."
+        ]
+      ]
+    }
+  },
+  {
     "id": "mulet-cabot",
     "name": "Mulet cabot",
     "latin": "Mugil cephalus",
@@ -3220,6 +3399,67 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "vandoise-du-bearn",
+    "name": "Vandoise du Béarn",
+    "latin": "Leuciscus bearnensis",
+    "group": "cyprinides",
+    "family": "Leuciscidae",
+    "cdNom": "347978",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Endémique du Sud-Ouest (bassin de l'Adour) ; espèce protégée — remise à l'eau obligatoire."
+        ]
+      ]
+    }
+  },
+  {
     "id": "vandoise-rostree",
     "name": "Vandoise rostrée",
     "latin": "Leuciscus burdigalensis",
@@ -3276,6 +3516,69 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Décrite par scission de la vandoise ; considérée protégée par extension (à vérifier). Bassins atlantiques SW + Méditerranée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "vimbe",
+    "name": "Vimbe",
+    "latin": "Vimba vimba",
+    "group": "cyprinides",
+    "family": "Leuciscidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Cyprinidé fouisseur de fond, présent surtout dans le nord-est de la France."
         ]
       ]
     }

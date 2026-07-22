@@ -67,7 +67,7 @@ référence (types d'appâts, tailles d'hameçons, familles de leurres, fils). S
   données + images → fonctionne sans réseau une fois installée).
 - **Carnet** : `idb-keyval` (IndexedDB). 100 % local, rien n'est transmis.
 
-### Couverture des espèces — profondeur graduée (78 espèces)
+### Couverture des espèces — profondeur graduée (83 espèces)
 
 Le référentiel combine deux niveaux, fusionnés dans `src/data/species.ts` :
 - **Fiches curées** (~25) : identification, confusions, technique, recettes, santé — écrites et
@@ -121,7 +121,7 @@ Ré-exécuter le sourcing (idempotent) : éditer `scripts/images.manifest.json` 
 
 - **Recettes (v2)** : sourcer et vérifier les recettes de cuisine (actuellement quelques recettes
   de départ ; les 14 nouvelles espèces n'ont pas encore de recettes).
-- **Espèces** : **25 espèces** aujourd'hui ; modèle prêt pour étendre vers l'inventaire ~80.
+- **Espèces** : **83 fiches** (25 curées + 58 base générées) couvrant l'essentiel de l'inventaire d'eau douce métropolitain ; reste à enrichir les fiches base → curées (identification, technique, recettes).
 - **Photos de juvéniles** : quasi introuvables sans main sur Commons (seule la carpe est propre) —
   à compléter plus tard (galerie multi-photos par espèce).
 - **Données réelles Hubeau / TAXREF / FishBase** : voir la stratégie dans le backlog.

@@ -301,6 +301,7 @@ export const EDIBILITY: Record<string, Edible> = {
   // ── Protégées / no-take (comestible = non, fait légal) ───────
   vandoise: { status: "non", prep: RELACHE, source: A1988 },
   "vandoise-rostree": { status: "non", prep: RELACHE, source: A1988 },
+  "vandoise-du-bearn": { status: "non", prep: RELACHE, source: A1988 },
   "ide-melanote": { status: "non", prep: RELACHE, source: A1988 },
   "barbeau-meridional": { status: "non", prep: RELACHE, source: A1988 },
   bouviere: { status: "non", prep: RELACHE, source: A1988 },

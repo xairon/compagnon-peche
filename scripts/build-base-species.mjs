@@ -131,7 +131,9 @@ function toBase(s) {
 }
 
 const dir = join(root, "scripts/species-list");
-const files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
+// Only species-list arrays are inputs. Files prefixed "_" are reference data
+// (verified rosters / edibility) — objects, not arrays — so they are skipped.
+const files = (await readdir(dir)).filter((f) => f.endsWith(".json") && !f.startsWith("_"));
 const seen = new Set();
 const seenIds = new Set();
 const base = [];
