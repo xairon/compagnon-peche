@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useStore } from "../store";
 import { SPECIES } from "../data/species";
-import { DEPARTEMENTS } from "../data/regulation";
+import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
@@ -23,6 +23,7 @@ import { quotaToday } from "../lib/helpers";
 import { hhmm, ago } from "../lib/geo";
 import { season } from "../lib/season";
 import { locate, locateMessage } from "../lib/locate";
+import { deptFromCoords } from "../lib/sandre";
 import type { Screen } from "../store";
 
 // Default "home water" until GPS refines it (Blois / Loire).
@@ -59,7 +60,7 @@ async function loadWater(lat: number, lon: number): Promise<Water> {
 }
 
 export function Accueil() {
-  const { state, nav, goTab, openSp, startPrise } = useStore();
+  const { state, set, nav, goTab, openSp, startPrise } = useStore();
   const p = state.profile;
   const avatar = usePhotoUrl(p.avatar);
   const deptName = DEPARTEMENTS[state.dept].name;
@@ -115,6 +116,14 @@ export function Accueil() {
         setPt({ lat, lon });
         setLocated(true);
         setGpsMsg(null);
+        // Auto-set the active department from the GPS position (supported: 23/36/41).
+        deptFromCoords(lat, lon).then((d) => {
+          if (d && d in DEPARTEMENTS && d !== state.dept) {
+            set({ dept: d as DeptId });
+            setGpsMsg(`Département : ${DEPARTEMENTS[d as DeptId].name}`);
+            setTimeout(() => setGpsMsg((m) => (m?.startsWith("Département") ? null : m)), 3500);
+          }
+        });
       })
       .catch((e) => setGpsMsg(locateMessage(e)));
   };

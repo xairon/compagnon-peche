@@ -109,6 +109,29 @@ export async function geocode(q: string, signal?: AbortSignal): Promise<Place[]>
     }));
 }
 
+/** Département number (e.g. "41") at a point, via the IGN reverse geocoder, or
+ *  null. Used to set the active department from the user's GPS position. */
+export async function deptFromCoords(
+  lat: number,
+  lon: number,
+  signal?: AbortSignal,
+): Promise<string | null> {
+  try {
+    const r = await fetch(
+      `https://data.geopf.fr/geocodage/reverse?lon=${lon.toFixed(5)}&lat=${lat.toFixed(5)}&index=address&limit=1`,
+      { signal },
+    );
+    if (!r.ok) return null;
+    const j = await r.json();
+    const p = (j.features || [])[0]?.properties as { citycode?: string; context?: string } | undefined;
+    if (p?.citycode && p.citycode.length >= 2) return p.citycode.slice(0, 2);
+    const m = p?.context?.match(/^(\d{2,3})/); // context = "41, Loir-et-Cher, …"
+    return m ? m[1] : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Clean a Sandre watercourse label ("fleuve la loire" → "La Loire"). */
 export function riverName(props: Record<string, unknown>): string {
   const raw = String(props.NomEntiteHydrographique || "").trim();
