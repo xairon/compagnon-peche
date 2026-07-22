@@ -4,6 +4,7 @@ import { SPECIES } from "../data/species";
 import { DEPARTEMENTS } from "../data/regulation";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
+import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
 import { usePhotoUrl } from "../lib/photos";
 import { fetchMeteo, weatherLabel, type Meteo, type MeteoHour } from "../lib/meteo";
@@ -176,16 +177,42 @@ export function Accueil() {
 
               {n && (
                 <div className="dash-metrics">
-                  <Metric k="Vent" v={`${Math.round(n.wind)}`} s={`km/h ${n.windCompass}`} />
-                  <Metric k="Rafales" v={`${Math.round(n.gust)}`} s="km/h" />
-                  <Metric k="Humidité" v={`${Math.round(n.humidity)}`} s="%" />
+                  <Metric
+                    k="Vent"
+                    v={`${Math.round(n.wind)}`}
+                    s={`km/h ${n.windCompass}`}
+                    tip="Vent moyen à 10 m du sol, avec sa direction. Source : Open-Meteo (modèle météo)."
+                  />
+                  <Metric
+                    k="Rafales"
+                    v={`${Math.round(n.gust)}`}
+                    s="km/h"
+                    tip="Rafales de vent maximales. Source : Open-Meteo."
+                  />
+                  <Metric
+                    k="Humidité"
+                    v={`${Math.round(n.humidity)}`}
+                    s="%"
+                    tip="Humidité relative de l'air. Source : Open-Meteo."
+                  />
                   <Metric
                     k="Pression"
                     v={`${Math.round(n.pressure)}`}
                     s={`hPa ${trendArrow(meteo!.pressureTrend)}`}
+                    tip="Pression atmosphérique au niveau de la mer, avec la tendance sur 3 h (↑ hausse, ↓ baisse). Une pression qui chute annonce souvent une meilleure activité. Source : Open-Meteo."
                   />
-                  <Metric k="Couvert" v={`${Math.round(n.cloud)}`} s="% ciel" />
-                  <Metric k="Pluie" v={`${n.precip.toFixed(1)}`} s="mm/h" />
+                  <Metric
+                    k="Couvert"
+                    v={`${Math.round(n.cloud)}`}
+                    s="% ciel"
+                    tip="Part du ciel couverte par les nuages. Source : Open-Meteo."
+                  />
+                  <Metric
+                    k="Pluie"
+                    v={`${n.precip.toFixed(1)}`}
+                    s="mm/h"
+                    tip="Précipitations sur l'heure en cours. Source : Open-Meteo."
+                  />
                 </div>
               )}
             </>
@@ -212,19 +239,40 @@ export function Accueil() {
               unit={water?.flow ? "m³/s" : water?.level ? "m" : ""}
               trend={water?.flow?.trend || water?.level?.trend}
               when={water?.flow?.date || water?.level?.date}
+              tip="Débit (m³/s) ou hauteur d'eau à l'échelle (m) du cours d'eau, avec la tendance. Une crue trouble l'eau et disperse le poisson ; un étiage le concentre. Source : Hub'Eau / OFB (station hydrométrique la plus proche)."
             />
-            <WaterTile
-              k="Température"
-              val={water?.temp ? `${water.temp.value.toFixed(1)}` : "—"}
-              unit={water?.temp ? "°C" : ""}
-              when={water?.temp?.date}
-              stale={water?.temp ? isStaleWaterTemp(water.temp.date) : false}
-              sub={water && !water.temp ? "pas de mesure" : undefined}
-            />
+            {(() => {
+              // French river thermometry is sparse/campaign-based: the freshest
+              // real reading can be months old. Beyond ~30 days it is not a
+              // "current condition" — show "pas de relevé récent" instead of a
+              // stale number (the old value stays in the water briefing on tap).
+              const t = water?.temp;
+              const tooOld = t ? Date.now() - new Date(t.date).getTime() > 30 * 86400000 : false;
+              return (
+                <WaterTile
+                  k="Temp. eau"
+                  val={t && !tooOld ? `${t.value.toFixed(1)}` : "—"}
+                  unit={t && !tooOld ? "°C" : ""}
+                  tip="Température de l'eau. Elle règle l'activité des poissons. Source : Hub'Eau (réseau thermie + physico-chimie). La mesure est rare et par campagnes en France : souvent pas de relevé récent — on n'affiche jamais une valeur estimée."
+                  when={t && !tooOld ? t.date : undefined}
+                  stale={t && !tooOld ? isStaleWaterTemp(t.date) : false}
+                  sub={
+                    !water
+                      ? undefined
+                      : !t
+                        ? "pas de mesure"
+                        : tooOld
+                          ? `dernier relevé ${ago(t.date)}`
+                          : undefined
+                  }
+                />
+              );
+            })()}
             <WaterTile
               k="Écoulement"
               val={onde ? ondeShort(onde.code) : "—"}
               unit=""
+              tip="État d'écoulement du cours d'eau : en eau, écoulement faible, ou à sec (assec). Observations ONDE de l'OFB, relevées par campagnes (≈ mensuelles l'été, dormantes l'hiver) — ce n'est pas du temps réel. Source : Hub'Eau / ONDE."
               // ONDE is campaign-based (roughly monthly in summer, dormant in
               // winter): surface the reading's age so a months-old state isn't
               // read as current. Age first so it's never ellipsed away.
@@ -314,10 +362,10 @@ export function Accueil() {
   );
 }
 
-function Metric({ k, v, s }: { k: string; v: string; s: string }) {
+function Metric({ k, v, s, tip }: { k: string; v: string; s: string; tip?: string }) {
   return (
     <div className="dash-metric">
-      <div className="k">{k}</div>
+      <div className="k">{tip ? <Tip text={tip}>{k}</Tip> : k}</div>
       <div className="v">{v}</div>
       <div className="s">{s}</div>
     </div>
@@ -332,6 +380,7 @@ function WaterTile({
   when,
   sub,
   stale,
+  tip,
 }: {
   k: string;
   val: string;
@@ -340,10 +389,11 @@ function WaterTile({
   when?: string;
   sub?: string;
   stale?: boolean;
+  tip?: string;
 }) {
   return (
     <div className="dash-wtile">
-      <div className="k">{k}</div>
+      <div className="k">{tip ? <Tip text={tip}>{k}</Tip> : k}</div>
       <div className="v">
         {val}
         {unit && <span className="u"> {unit}</span>}

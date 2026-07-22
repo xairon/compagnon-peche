@@ -4508,8 +4508,18 @@ button.card-row {
   border: 1px solid #dfeaef;
   border-radius: 13px;
   padding: 11px;
+  min-width: 0; /* let the grid cell shrink below its longest word (no overflow) */
 }
-.dash-wtile .k { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: #6e8894; font-weight: 600; }
+.dash-wtile .k {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #6e8894;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .dash-wtile .v { font-size: 20px; font-weight: 700; color: #14303b; margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
 .dash-wtile .v .u { font-size: 12px; font-weight: 600; color: #6e8894; }
 .dash-wtile .v .tr { font-size: 15px; margin-left: 1px; }
