@@ -2075,6 +2075,37 @@ a:hover {
   line-height: 1.5;
   margin-bottom: 12px;
 }
+/* Comestibilité section */
+.edible-status {
+  display: inline-block;
+  border-radius: 100px;
+  padding: 6px 13px;
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 10px;
+}
+.edible-status.oui {
+  background: #e9f2ec;
+  color: #1d6e42;
+}
+.edible-status.réglementé {
+  background: #f6efe0;
+  color: #8a6a1e;
+}
+.edible-status.non {
+  background: #f7ecea;
+  color: #8a3125;
+}
+.edible-anses {
+  background: #f6efe0;
+  border: 1px solid #e7d8b6;
+  color: #6a531a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
 
 /* Carnet: delete a catch */
 .catch-trash {

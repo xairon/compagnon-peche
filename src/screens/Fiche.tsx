@@ -8,6 +8,7 @@ import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
 import { ratingFg, repere } from "../lib/helpers";
+import { EDIBILITY } from "../data/edibility";
 import { recipesForSpecies } from "../lib/recipes";
 import { SPECIES_ENRICHMENT } from "../data/species-enrichment";
 
@@ -184,6 +185,48 @@ export function Fiche() {
     });
   }
   const recipes = recipesForSpecies(sp.id);
+  const ed = EDIBILITY[sp.id];
+  if (ed) {
+    const STATUS: Record<typeof ed.status, string> = {
+      oui: "Comestible",
+      réglementé: "Comestible — sous réglementation",
+      non: "À ne pas consommer",
+    };
+    sections.push({
+      id: "comestibilite",
+      title: "Comestibilité",
+      sub:
+        ed.status === "non"
+          ? "Espèce protégée"
+          : ed.status === "réglementé"
+            ? "Selon la réglementation"
+            : ed.bones
+              ? `Arêtes : ${ed.bones}`
+              : "Détails de préparation",
+      render: () => (
+        <>
+          <div className={"edible-status " + ed.status}>{STATUS[ed.status]}</div>
+          {ed.taste && <p>{ed.taste}</p>}
+          {ed.bones && (
+            <div className="li">
+              <span className="b">—</span>
+              <span>
+                Arêtes intramusculaires : <b>{ed.bones}</b>
+              </span>
+            </div>
+          )}
+          {ed.prep && (
+            <div className="li">
+              <span className="b">—</span>
+              <span>{ed.prep}</span>
+            </div>
+          )}
+          {ed.anses && <div className="edible-anses">⚠️ {ed.anses}</div>}
+          <div className="source">Source : {ed.source}</div>
+        </>
+      ),
+    });
+  }
   if (sp.cook || recipes.length) {
     sections.push({
       id: "cuisine",
