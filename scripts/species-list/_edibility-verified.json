@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "purpose": "Sourced edibility (comestibilité) + health data per species, for enriching fiches. Verified 2026-07-22.",
+    "fields": {
+      "edible": "true | false (no-take/protected) | 'réglementé' (fishable only under strict/local rules)",
+      "bones": "peu | moyen | beaucoup (intermuscular bones)",
+      "contaminant_advisory": "ANSES restricted-consumption advice for strong bioaccumulators, or null",
+      "prep_note": "handling/prep note incl. toxicity warnings"
+    },
+    "anses_bioaccumulators": ["anguille (très fort)", "barbeau fluviatile", "brème commune", "carpe", "silure glane"],
+    "anses_advice": "Fortement bioaccumulateurs (PCB/dioxines) : limiter à 2x/mois (population générale), 1x/2 mois pour publics sensibles (femmes enceintes/allaitantes, enfants <3 ans, filles/adolescentes). Avis ANSES 2011/2015.",
+    "sources": ["Arrêté 8 déc. 1988 (Légifrance)", "ANSES avis PCB 2011/2015", "Arrêté 25 janv. 1982 (esturgeon)", "SFMU/Astrium (choléra des barbeaux)", "Arrêté 14 fév. 2018 (EEE écrevisses)", "DORIS-FFESSM, Fishipedia"]
+  },
+  "species": [
+    {"name_fr":"brochet","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Nombreuses arêtes en 'Y' à retirer ; œufs (rogue) réputés indigestes/purgatifs, surtout en fraie.","taste":"Chair blanche fine et maigre, très appréciée (quenelles, beurre blanc) ; peut être vaseux selon le milieu."},
+    {"name_fr":"sandre","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"Se lève facilement en filets ; rayons épineux de la dorsale.","taste":"Chair blanche fine et ferme, sans goût de vase — l'un des meilleurs d'eau douce."},
+    {"name_fr":"perche","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"Écailles très adhérentes ; on lève les filets plutôt qu'écailler.","taste":"Chair fine, ferme et délicate, très recherchée."},
+    {"name_fr":"black-bass","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"Souvent taille/quota locaux ; pratiqué en no-kill par culture halieutique.","taste":"Chair blanche correcte ; espèce sportive relâchée le plus souvent."},
+    {"name_fr":"truite fario","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Pêche autorisée sous réglementation 1re catégorie (taille/quota/période).","taste":"Chair fine, savoureuse, rosée à blanche — excellente."},
+    {"name_fr":"truite arc-en-ciel","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"Espèce non indigène, surtout d'élevage/lâchers.","taste":"Chair fine, qualité régulière."},
+    {"name_fr":"omble chevalier","edible":"réglementé","bones":"peu","contaminant_advisory":null,"prep_note":"Protégé (arrêté 1988) : pêche seulement dans certains lacs, réglementation stricte.","taste":"Chair fine, fondante — poisson noble des lacs alpins."},
+    {"name_fr":"omble de fontaine","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Nord-américain introduit ; réglementation salmonicole (non protégé).","taste":"Chair fine, proche de la truite — excellente."},
+    {"name_fr":"corégone","edible":"réglementé","bones":"moyen","contaminant_advisory":null,"prep_note":"Genre protégé (arrêté 1988) ; pêche réglementée en grands lacs.","taste":"Chair blanche fine et délicate, très recherchée."},
+    {"name_fr":"ombre commun","edible":"réglementé","bones":"moyen","contaminant_advisory":null,"prep_note":"Protégé (arrêté 1988) : très réglementé, souvent no-kill.","taste":"Chair fine ; légère odeur de thym à la capture."},
+    {"name_fr":"carpe","edible":true,"bones":"beaucoup","contaminant_advisory":"Fortement bioaccumulatrice (PCB/dioxines) : ANSES 2x/mois max (population générale), 1x/2 mois publics sensibles.","prep_note":"Dévasage recommandé ; nombreuses arêtes ; très majoritairement no-kill en France.","taste":"Chair correcte, parfois grasse/vaseuse selon le milieu."},
+    {"name_fr":"tanche","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Dévasage recommandé ; œufs indigestes en fraie.","taste":"Chair fine et blanche, mais goût de vase fréquent."},
+    {"name_fr":"brème","edible":true,"bones":"beaucoup","contaminant_advisory":"Fortement bioaccumulatrice (PCB/dioxines) : ANSES 2x/mois max, 1x/2 mois publics sensibles.","prep_note":"Très nombreuses petites arêtes.","taste":"Chair molle, fade et souvent vaseuse — médiocre."},
+    {"name_fr":"gardon","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Nombreuses petites arêtes ; NON classé bioaccumulateur fort par l'ANSES.","taste":"Chair correcte mais fade, surtout en friture."},
+    {"name_fr":"rotengle","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Nombreuses petites arêtes.","taste":"Proche du gardon, fade, en friture."},
+    {"name_fr":"chevesne","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Très nombreuses arêtes ; à consommer très frais.","taste":"Chair blanche fade, molle, peu intéressante."},
+    {"name_fr":"vandoise","edible":false,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"ESPÈCE PROTÉGÉE (arrêté 1988) : capture/détention/consommation interdites — remettre à l'eau.","taste":"Non pertinent (protégée)."},
+    {"name_fr":"barbeau","edible":true,"bones":"beaucoup","contaminant_advisory":"Fortement bioaccumulateur (PCB/dioxines) : ANSES 2x/mois max, 1x/2 mois publics sensibles.","prep_note":"ŒUFS (ROGUE) TOXIQUES — ne JAMAIS consommer ('choléra des barbeaux') ; écarter la chair ventrale en fraie (mai-juillet).","taste":"Chair blanche correcte mais fade et bourrée d'arêtes."},
+    {"name_fr":"goujon","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Consommé entier en friture.","taste":"Chair fine et délicate — excellent en friture."},
+    {"name_fr":"ablette","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Petit poisson entier en friture.","taste":"Chair fine, savoureuse — classique de la friture."},
+    {"name_fr":"hotu","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Retirer le péritoine noir ; NE PAS confondre avec le toxostome (protégé).","taste":"Chair blanche fade et très bourrée d'arêtes."},
+    {"name_fr":"silure","edible":true,"bones":"peu","contaminant_advisory":"Fortement bioaccumulateur (PCB/dioxines) : ANSES 2x/mois max, 1x/2 mois publics sensibles ; éviter les très gros individus.","prep_note":"Privilégier les sujets moyens ; retirer la peau (pas d'écailles).","taste":"Chair blanche ferme sans arêtes ; plus grasse/forte sur gros sujets."},
+    {"name_fr":"anguille","edible":"réglementé","bones":"peu","contaminant_advisory":"TRÈS fortement bioaccumulatrice (la plus concernée) : ANSES 2x/mois max, 1x/2 mois publics sensibles.","prep_note":"En danger critique : pêche strictement encadrée (règlement européen anguille) — ne prélever que là où c'est légal.","taste":"Chair grasse et fine (matelote, fumée)."},
+    {"name_fr":"alose","edible":"réglementé","bones":"beaucoup","contaminant_advisory":null,"prep_note":"Protégée (arrêté 1988) ; moratoires sur plusieurs bassins — ne consommer que si capture légale.","taste":"Chair fine et savoureuse mais extrêmement riche en arêtes (grillée à l'oseille)."},
+    {"name_fr":"lamproie","edible":"réglementé","bones":"peu","contaminant_advisory":null,"prep_note":"Protégée (arrêté 1988) ; moratoires récents — ne consommer que si légal. La lamproie de Planer est strictement protégée.","taste":"Chair grasse, dense, sans arêtes (lamproie à la bordelaise)."},
+    {"name_fr":"mulet","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Euryhalin (estuaires) ; meilleure qualité en eaux propres ; œufs séchés = poutargue.","taste":"Chair blanche correcte ; goût vaseux/estuarien selon le milieu."},
+    {"name_fr":"perche-soleil","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"EEE : remise à l'eau vivante interdite dans de nombreux départements — ne pas relâcher vivante. Rendement dérisoire (très petit).","taste":"Chair fine mais poisson minuscule."},
+    {"name_fr":"poisson-chat","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"EEE : remise à l'eau vivante interdite (à détruire). ATTENTION rayons épineux qui piquent ; retirer la peau.","taste":"Chair blanche correcte, sans arêtes."},
+    {"name_fr":"ecrevisse-signal","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"EEE : transport/remise à l'eau vivants interdits (arrêté 2018) — consommer après destruction. Ne pas confondre avec l'écrevisse à pattes blanches (protégée).","taste":"Chair fine et savoureuse."},
+    {"name_fr":"ecrevisse-louisiane","edible":true,"bones":"peu","contaminant_advisory":null,"prep_note":"EEE : transport/remise à l'eau vivants interdits — consommer après destruction. Peut accumuler métaux/toxines en eaux polluées : privilégier eaux saines.","taste":"Chair appréciée (étouffée cajun)."},
+    {"name_fr":"gremille","edible":true,"bones":"moyen","contaminant_advisory":null,"prep_note":"Rayons épineux ; mucus abondant à rincer.","taste":"Chair fine réputée mais poisson minuscule et épineux."},
+    {"name_fr":"aspe","edible":true,"bones":"beaucoup","contaminant_advisory":null,"prep_note":"Non indigène (canaux) ; non protégé ; nombreuses arêtes.","taste":"Chair blanche correcte mais riche en arêtes."},
+    {"name_fr":"brochet-aquitain","edible":"réglementé","bones":"beaucoup","contaminant_advisory":null,"prep_note":"Endémique Sud-Ouest à fort enjeu de conservation : relâche recommandée ; réglementation brochet.","taste":"Chair blanche fine comparable au brochet ; arêtes en 'Y'."},
+    {"name_fr":"esturgeon","edible":false,"bones":"peu","contaminant_advisory":null,"prep_note":"STRICTEMENT PROTÉGÉ (Acipenser sturio, arrêté 1982 ; CR) : pêche/détention/transport/vente INTERDITS — relâcher toute capture accidentelle.","taste":"Non pertinent (protégé)."}
+  ]
+}
