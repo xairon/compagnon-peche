@@ -7,6 +7,7 @@
 // honestly as field-indistinguishable from their common relative.
 
 import type { Confusion } from "../types";
+import { IDENT_GEN } from "./identification.gen";
 
 export interface IdentInfo {
   summary: string;
@@ -19,7 +20,9 @@ const CRYPTIC = (common: string, extra: string): Confusion => ({
   how: `Indissociable de ${common.toLowerCase()} à l'œil sur le terrain — ${extra}`,
 });
 
-export const IDENT: Record<string, IdentInfo> = {
+// Hand-written cryptic/regional lineages (agents can't add field keys that don't
+// exist). Merged with the generated, sourced set (IDENT_GEN wins on any overlap).
+const CRYPTIC_IDENT: Record<string, IdentInfo> = {
   // ── Espèces cryptiques (lignées régionales récemment séparées) ──────────────
   "goujon-occitan": {
     summary:
@@ -66,18 +69,6 @@ export const IDENT: Record<string, IdentInfo> = {
     ],
     conf: [CRYPTIC("Chevesne", "distinction par la répartition (Roussillon) et la génétique.")],
   },
-  vairon: {
-    summary:
-      "Petit cyprinidé grégaire des eaux vives et fraîches (< 12 cm), au corps fuselé marqué d'une bande sombre et de taches ; robe nuptiale du mâle très colorée.",
-    traits: [
-      "Petite taille (5–10 cm), corps fuselé, petites écailles peu visibles",
-      "Bande longitudinale sombre et série de taches sur le flanc",
-      "Mâle en fraie : gorge rouge, flancs verts et dorés",
-    ],
-    conf: [
-      { n: "Goujon", how: "Le vairon n'a PAS de barbillons ; le goujon en a une paire aux coins de la bouche." },
-    ],
-  },
   "vairon-basque": {
     summary: "Vairon endémique du Sud-Ouest (bassin de l'Adour), quasi identique au vairon commun.",
     traits: ["Petit cyprinidé fuselé sans barbillons", "Bande et taches sombres sur le flanc", "Distinction géographique (Adour) et génétique"],
@@ -119,3 +110,7 @@ export const IDENT: Record<string, IdentInfo> = {
     conf: [CRYPTIC("Vandoise", "distinction par la répartition et la génétique. Protégée dans tous les cas.")],
   },
 };
+
+// Merge: the generated sourced set overrides the hand-written cryptic set on any
+// shared id (none overlap today, but keep gen authoritative).
+export const IDENT: Record<string, IdentInfo> = { ...CRYPTIC_IDENT, ...IDENT_GEN };
