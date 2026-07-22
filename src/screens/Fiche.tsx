@@ -407,11 +407,23 @@ export function Fiche() {
     }, 60);
   };
 
+  // Comestible verdict: prefer a curated rating; else fall back to the sourced
+  // edibility status so base species show a real verdict, not "à documenter".
+  const edVerdict = ed
+    ? { oui: "Comestible", réglementé: "Réglementé", non: "Ne pas consommer" }[ed.status]
+    : null;
+  const edFg = ed
+    ? ed.status === "non"
+      ? "#B33A2E"
+      : ed.status === "réglementé"
+        ? "#9A6A12"
+        : "#1D6E42"
+    : "#8A8676";
   const verdict: { k: string; v: string; fg: string; sub: string | null }[] = [
     {
       k: "Comestible",
-      v: sp.rating || "à documenter",
-      fg: sp.ratingCls ? ratingFg(sp.ratingCls) : "#8A8676",
+      v: sp.rating || edVerdict || "à documenter",
+      fg: sp.ratingCls ? ratingFg(sp.ratingCls) : edFg,
       sub: null,
     },
     { k: "Maille", v: sp.maille, fg: "#1A201C", sub: sp.mailleSub },
