@@ -290,7 +290,11 @@ export function Accueil() {
           <div className="dash-moon">
             <div className="disc">{MOON_EMOJI[Math.round(moon.phase * 8) % 8]}</div>
             <div className="mtx">
-              <div className="ph">{moonPhaseName(moon.phase)}</div>
+              <div className="ph">
+                <Tip text="Phase de la lune et part du disque éclairé. Repère traditionnel des pêcheurs (indicatif, non prouvé scientifiquement). Calcul d'éphéméride local — fonctionne hors-ligne.">
+                  {moonPhaseName(moon.phase)}
+                </Tip>
+              </div>
               <div className="il">{Math.round(moon.fraction * 100)} % éclairée</div>
             </div>
           </div>
@@ -300,7 +304,10 @@ export function Accueil() {
         <div className="dash-quota">
           <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={15} stroke="#726e62" width={1.6} />
           <span className="q">
-            Quota du jour : <b>{qt.c}/3 carnassiers · {qt.b}/2 brochets</b>
+            <Tip text="Limite légale nationale : 3 carnassiers (sandre, brochet, black-bass) par jour et par pêcheur, dont 2 brochets maximum — art. R436-21. Décompté depuis votre carnet du jour. Un arrêté préfectoral peut être plus strict.">
+              Quota du jour
+            </Tip>{" "}
+            : <b>{qt.c}/3 carnassiers · {qt.b}/2 brochets</b>
           </span>
           <button className="carnet-link" onClick={() => goTab("carnet")}>
             Carnet ›
@@ -517,7 +524,11 @@ function SunArc({ sun }: { sun: SunTimes }) {
         <div>
           <span className="ic">☀︎</span> Lever <b>{hhmm(sun.sunrise)}</b>
         </div>
-        <div className="mid">{daytime ? "Jour" : "Nuit"}</div>
+        <div className="mid">
+          <Tip text="Lever et coucher du soleil (éphéméride locale, hors-ligne). Pêche autorisée d'une demi-heure avant le lever à une demi-heure après le coucher.">
+            {daytime ? "Jour" : "Nuit"}
+          </Tip>
+        </div>
         <div>
           Coucher <b>{hhmm(sun.sunset)}</b> <span className="ic">☾</span>
         </div>
