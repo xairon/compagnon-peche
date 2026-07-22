@@ -2168,6 +2168,27 @@ a:hover {
   line-height: 1.5;
   margin-top: 10px;
 }
+/* Departmental regulation block */
+.dept-badge {
+  display: inline-block;
+  background: #16281e;
+  color: #fbfaf7;
+  font-size: 12px;
+  font-weight: 650;
+  border-radius: 100px;
+  padding: 5px 12px;
+  margin-bottom: 8px;
+}
+.dept-sub {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b675c;
+  font-weight: 650;
+  margin: 16px 0 6px;
+  padding-top: 12px;
+  border-top: 1px solid #ece8dd;
+}
 
 /* Carnet: delete a catch */
 .catch-trash {

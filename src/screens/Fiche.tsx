@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useStore } from "../store";
 import { SPECIES } from "../data/species";
-import { DEPARTEMENTS } from "../data/regulation";
+import { DEPARTEMENTS, DEPT_REG, localRegRows } from "../data/regulation";
 import { Icon, ICONS, SEC_ICONS } from "../components/Icon";
 import { Media, confusionMediaId } from "../components/Media";
 import { Gallery } from "../components/Gallery";
@@ -152,12 +152,37 @@ export function Fiche() {
     });
   }
   if (sp.reg) {
+    const localRows = localRegRows(state.dept, sp.id);
+    const dr = DEPT_REG[state.dept];
     sections.push({
       id: "regle",
       title: "Réglementation locale",
-      sub: `${deptName} · 2ᵉ catégorie`,
+      sub: deptName,
       render: () => (
         <>
+          {localRows.length > 0 ? (
+            <>
+              <div className="dept-badge">Spécificités {deptName}</div>
+              {localRows.map(([k, v], i) => (
+                <div key={i} className="kv">
+                  <span className="k">{k}</span>
+                  <span className="v">{v}</span>
+                </div>
+              ))}
+              {dr.notes.slice(0, 2).map((n, i) => (
+                <div key={i} className="note">
+                  {n}
+                </div>
+              ))}
+              <div className="source">Source : {dr.source}</div>
+            </>
+          ) : (
+            <div className="note">
+              Pas de spécificité départementale connue pour cette espèce dans le {deptName} — le socle
+              national ci-dessous s'applique. Vérifiez l'arrêté préfectoral en vigueur.
+            </div>
+          )}
+          <div className="dept-sub">Socle national</div>
           {sp.reg!.rows.map(([k, v], i) => (
             <div key={i} className="kv">
               <span className="k">{k}</span>
