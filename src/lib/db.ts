@@ -11,41 +11,20 @@ const RECIPES_KEY = "carnet:recipes";
 
 const EMPTY_PROFILE: Profile = { name: "", bio: "", region: "" };
 
-const SEED: Catch[] = [
-  {
-    slot: "seed1",
-    sp: "Sandre",
-    spid: "sandre",
-    iso: "2026-07-12",
-    size: "52 cm",
-    n: 52,
-    date: "12 juil. 2026",
-    place: "Loire, Blois",
-    kept: true,
-  },
-  {
-    slot: "seed2",
-    sp: "Brochet",
-    spid: "brochet",
-    iso: "2026-07-05",
-    size: "48 cm",
-    n: 48,
-    date: "5 juil. 2026",
-    place: "Étang de Sudais",
-    kept: false,
-  },
-];
+// Slots of the old demo catches that used to ship with the app. Cleaned out of
+// existing installs on load so the notebook is empty ("vanilla") for everyone.
+const DEMO_SLOTS = new Set(["seed1", "seed2"]);
 
 export async function loadCatches(): Promise<Catch[]> {
   try {
     const stored = await get<Catch[]>(KEY);
-    if (stored === undefined) {
-      await set(KEY, SEED);
-      return SEED;
-    }
-    return stored;
+    if (stored === undefined) return []; // fresh install: empty notebook, no demo data
+    // One-time cleanup of the retired demo catches (keeps the user's own entries).
+    const cleaned = stored.filter((c) => !DEMO_SLOTS.has(c.slot));
+    if (cleaned.length !== stored.length) await set(KEY, cleaned);
+    return cleaned;
   } catch {
-    return SEED;
+    return [];
   }
 }
 
