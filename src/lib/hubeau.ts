@@ -53,14 +53,17 @@ export async function stationsInBbox(
     }));
 }
 
-/** Species recorded at a station, aggregated across surveys (most abundant first). */
+/** Species recorded at a station, aggregated across ALL surveys (most abundant
+ *  first). size=20000 (the API max) so heavily-surveyed stations aren't truncated
+ *  — some have thousands of lots (e.g. La Ferté-St-Cyr ≈ 2600); sort=desc keeps
+ *  the most recent first as a safety if a station ever exceeds one page. */
 export async function speciesAtStation(
   code: string,
   signal?: AbortSignal,
 ): Promise<StationSpecies[]> {
   const url =
     `${BASE}/observations?code_station=${encodeURIComponent(code)}` +
-    `&size=500&fields=nom_commun_taxon,nom_latin_taxon,effectif_lot`;
+    `&size=20000&sort=desc&fields=nom_commun_taxon,nom_latin_taxon,effectif_lot`;
   const r = await fetchT(url, { signal });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
