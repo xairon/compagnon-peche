@@ -3,9 +3,12 @@ import { useState, useEffect, useRef, useId, type ReactNode } from "react";
 /**
  * Tap-to-reveal explanation bubble. Works on touch (no hover needed): tap the
  * trigger to toggle, tap anywhere else — or press Escape — to dismiss. The bubble
- * is linked to the trigger (aria-describedby) and flips to the right edge when the
- * trigger sits in the right half, so it never gets clipped.
+ * is linked to the trigger (aria-describedby) and shifted horizontally so it
+ * always stays fully within the viewport (clamped on both edges), never clipped —
+ * including for grid tiles whose trigger sits near the centre.
  */
+const BUBBLE_MAX = 250; // keep in sync with .tip-bubble width in styles.css
+const EDGE_MARGIN = 8;
 export function Tip({
   children,
   text,
@@ -16,7 +19,7 @@ export function Tip({
   icon?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [right, setRight] = useState(false);
+  const [left, setLeft] = useState(0); // px offset of the bubble from the trigger
   const ref = useRef<HTMLSpanElement>(null);
   const id = useId();
 
@@ -38,7 +41,15 @@ export function Tip({
 
   const openNow = () => {
     const r = ref.current?.getBoundingClientRect();
-    if (r) setRight(r.left + r.width / 2 > window.innerWidth / 2);
+    if (r) {
+      // Clamp the bubble fully inside the viewport (both edges), then express the
+      // result as an offset from the trigger — robust for any trigger position,
+      // unlike a binary left/right flip which overflows for near-centre triggers.
+      const margin = EDGE_MARGIN;
+      const bw = Math.min(BUBBLE_MAX, window.innerWidth * 0.74);
+      const vpLeft = Math.max(margin, Math.min(r.left, window.innerWidth - bw - margin));
+      setLeft(vpLeft - r.left);
+    }
     setOpen((o) => !o);
   };
 
@@ -64,7 +75,7 @@ export function Tip({
         )}
       </button>
       {open && (
-        <span id={id} className={"tip-bubble" + (right ? " right" : "")} role="tooltip">
+        <span id={id} className="tip-bubble" style={{ left }} role="tooltip">
           {text}
         </span>
       )}
