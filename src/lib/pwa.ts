@@ -38,7 +38,24 @@ export function initPwa() {
 }
 
 export function applyUpdate() {
-  updateSW(true);
+  // updateSW(true) asks the waiting SW to skipWaiting and reloads on the
+  // `controllerchange` event. On some Android / installed-PWA setups that event
+  // doesn't fire, so the button appears to "do nothing". Belt-and-suspenders:
+  // reload on controllerchange AND on a short fallback timer (by then the new SW
+  // has usually activated, so the reload picks up the new version).
+  let done = false;
+  const reload = () => {
+    if (done) return;
+    done = true;
+    window.location.reload();
+  };
+  try {
+    navigator.serviceWorker?.addEventListener("controllerchange", reload, { once: true });
+  } catch {
+    /* SW API unavailable — the fallback timer still reloads */
+  }
+  Promise.resolve(updateSW(true)).catch(() => {});
+  setTimeout(reload, 1500);
 }
 
 export async function promptInstall(): Promise<boolean> {
