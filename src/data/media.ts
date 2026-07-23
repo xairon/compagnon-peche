@@ -482,9 +482,9 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
   "poisson-rouge": [
     {
       "file": "assets/species/poisson-rouge.webp",
-      "author": "Alyssachanpc",
-      "license": "CC BY-SA 2.5",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_0045-1.jpg"
+      "author": "George Chernilevsky",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_wild_golden_fish_2013_G1.jpg"
     }
   ],
   "amour-blanc": [
@@ -695,9 +695,9 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
   "apron-du-rhone": [
     {
       "file": "assets/species/apron-du-rhone.webp",
-      "author": "Proche",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zingel_asper.JPG"
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/7718639"
     }
   ],
   "bouviere": [

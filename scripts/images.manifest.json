@@ -482,10 +482,11 @@
     },
     {
       "id": "poisson-rouge",
-      "filename": "File:Carassius auratus 0045-1.jpg",
-      "author": "Alyssachanpc",
-      "license": "CC BY-SA 2.5",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_0045-1.jpg"
+      "filename": "File:Carassius wild golden fish 2013 G1.jpg",
+      "author": "George Chernilevsky",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Carassius_wild_golden_fish_2013_G1.jpg",
+      "replace": true
     },
     {
       "id": "amour-blanc",
@@ -673,10 +674,11 @@
     },
     {
       "id": "apron-du-rhone",
-      "filename": "File:Zingel asper.JPG",
-      "author": "Proche",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Zingel_asper.JPG"
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/7718639",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/10123027/large.jpeg",
+      "replace": true
     },
     {
       "id": "bouviere",
