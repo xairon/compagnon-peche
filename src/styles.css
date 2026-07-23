@@ -1644,6 +1644,16 @@ a:hover {
   color: #6b675c;
   margin-top: 1px;
 }
+.sheet-code {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.sheet-code a {
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: underline;
+}
 .sheet-x {
   border: none;
   background: transparent;

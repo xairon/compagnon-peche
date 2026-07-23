@@ -48,6 +48,7 @@ const esc = (v: unknown): string =>
   );
 
 type Sheet = {
+  code: string;
   name: string;
   cours: string;
   loading: boolean;
@@ -404,15 +405,15 @@ export function Carte() {
 
   const openStation = async (code: string, nom: string, cours: string) => {
     closeAllPanels();
-    setSheet({ name: nom, cours, loading: true, species: [] });
+    setSheet({ code, name: nom, cours, loading: true, species: [] });
     speciesAbort.current?.abort();
     speciesAbort.current = new AbortController();
     try {
       const species = await speciesAtStation(code, speciesAbort.current.signal);
-      setSheet({ name: nom, cours, loading: false, species });
+      setSheet({ code, name: nom, cours, loading: false, species });
     } catch (e) {
       if ((e as Error).name === "AbortError") return;
-      setSheet({ name: nom, cours, loading: false, species: [], error: true });
+      setSheet({ code, name: nom, cours, loading: false, species: [], error: true });
     }
   };
 
@@ -917,6 +918,18 @@ export function Carte() {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="sheet-title">{sheet.name}</div>
               {sheet.cours && <div className="sheet-sub">{sheet.cours}</div>}
+              {sheet.code && (
+                <div className="sheet-code">
+                  Station {sheet.code} ·{" "}
+                  <a
+                    href={`https://hubeau.eaufrance.fr/api/v1/etat_piscicole/observations?code_station=${encodeURIComponent(sheet.code)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    relevés Hub'Eau
+                  </a>
+                </div>
+              )}
             </div>
             <button
               className="sheet-x"
