@@ -564,8 +564,7 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "file": "assets/species/brochet-aquitain.webp",
       "author": "MillaTom",
       "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg",
-      "caption": "Brochet commun (illustration — quasi identique à l'aquitain)"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg"
     }
   ],
   "black-bass-petite-bouche": [
@@ -688,9 +687,9 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
   "chabot-commun": [
     {
       "file": "assets/species/chabot-commun.webp",
-      "author": "\"D\" (de.wikipedia)",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cottus_gobio_-_Groppe_1.jpg"
+      "author": "mnauky (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/91735607"
     }
   ],
   "apron-du-rhone": [
@@ -851,6 +850,46 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "author": "Emőke Dénes",
       "license": "CC BY-SA 4.0",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cypriniformes_-_Vimba_vimba_-_1.jpg"
+    }
+  ],
+  "goujon-occitan": [
+    {
+      "file": "assets/species/goujon-occitan.webp",
+      "author": "Zakqary Roy (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/193088388"
+    }
+  ],
+  "vairon-de-garonne": [
+    {
+      "file": "assets/species/vairon-de-garonne.webp",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/15443574"
+    }
+  ],
+  "vairon-du-danube": [
+    {
+      "file": "assets/species/vairon-du-danube.webp",
+      "author": "Adi Peter (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/306268854"
+    }
+  ],
+  "goujon-auvergne": [
+    {
+      "file": "assets/species/goujon-auvergne.webp",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/126253900"
+    }
+  ],
+  "vandoise-du-bearn": [
+    {
+      "file": "assets/species/vandoise-du-bearn.webp",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://www.inaturalist.org/observations/307110637"
     }
   ]
 };

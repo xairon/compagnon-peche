@@ -45,6 +45,17 @@ async function download(filename, width) {
   return Buffer.from(await res.arrayBuffer());
 }
 
+// A photo source is either a Wikimedia Commons `filename` (thumbnailed via the
+// CDN) or a direct `url` (iNaturalist, MNHN/GBIF…) — the latter for endemic
+// species Commons doesn't cover. sharp resizes both to the same output.
+async function sourceBuffer(p, width) {
+  if (p.url) {
+    const res = await get(p.url);
+    return Buffer.from(await res.arrayBuffer());
+  }
+  return download(p.filename, width);
+}
+
 async function processGroup(items, kind, subdir) {
   const outDir = join(root, "public/assets", subdir);
   await mkdir(outDir, { recursive: true });
@@ -98,17 +109,18 @@ async function processSpecies(items) {
   const media = {};
   for (const it of items) {
     const photos = [
-      { filename: it.filename, author: it.author, license: it.license, file_page_url: it.file_page_url, caption: it.caption },
+      { filename: it.filename, url: it.url, author: it.author, license: it.license, file_page_url: it.file_page_url, caption: it.caption, replace: it.replace },
       ...(it.extra || []),
-    ].filter((p) => p.filename);
+    ].filter((p) => p.filename || p.url);
     const entries = [];
     for (let i = 0; i < photos.length; i++) {
       const p = photos[i];
       const file = `assets/species/${it.id}${i === 0 ? "" : "-" + (i + 1)}.webp`;
       const outPath = join(root, "public", file);
-      if (!existsSync(outPath)) {
+      // `replace: true` forces a re-fetch even if the webp exists (for upgrades).
+      if (!existsSync(outPath) || p.replace) {
         try {
-          const buf = await download(p.filename, 960);
+          const buf = await sourceBuffer(p, 960);
           await sharp(buf, { density: 200 })
             .rotate()
             .resize({ width: 900, height: 648, fit: "cover", position: "centre" })

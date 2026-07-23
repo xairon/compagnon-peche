@@ -665,10 +665,11 @@
     },
     {
       "id": "chabot-commun",
-      "filename": "File:Cottus gobio - Groppe 1.jpg",
-      "author": "\"D\" (de.wikipedia)",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:Cottus_gobio_-_Groppe_1.jpg"
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/151788386/large.jpg",
+      "author": "mnauky (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/91735607",
+      "replace": true
     },
     {
       "id": "apron-du-rhone",
@@ -809,6 +810,43 @@
       "author": "Emőke Dénes",
       "license": "CC BY-SA 4.0",
       "file_page_url": "https://commons.wikimedia.org/wiki/File:Cypriniformes_-_Vimba_vimba_-_1.jpg"
+    },
+    {
+      "id": "goujon-occitan",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/339123477/large.jpeg",
+      "author": "Zakqary Roy (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/193088388",
+      "replace": true
+    },
+    {
+      "id": "vairon-de-garonne",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/23165260/large.jpeg",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/15443574"
+    },
+    {
+      "id": "vairon-du-danube",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/552296865/large.jpg",
+      "author": "Adi Peter (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/306268854",
+      "replace": true
+    },
+    {
+      "id": "goujon-auvergne",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/214195952/large.jpeg",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/126253900"
+    },
+    {
+      "id": "vandoise-du-bearn",
+      "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/553890164/large.jpg",
+      "author": "Julien Renoult (iNaturalist)",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://www.inaturalist.org/observations/307110637"
     }
   ],
   "knots": [
