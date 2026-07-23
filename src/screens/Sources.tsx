@@ -24,8 +24,10 @@ export function Sources() {
           Aucune donnée réglementaire ou sanitaire n'est inventée : tout est sourcé ou marqué « à
           vérifier ». Votre carnet, vos photos et votre profil restent 100 % sur votre appareil —
           jamais transmis, pas de tracking. En revanche, la carte et la météo envoient votre position
-          aux API publiques ci-dessus (IGN, Hub'Eau, Open-Meteo, OSM, GBIF) pour charger les données
-          du lieu.
+          (ou la zone affichée) aux API publiques pour charger les données du lieu : IGN, Hub'Eau,
+          Open-Meteo, OpenStreetMap/Overpass, GBIF et Sandre (Eaufrance). Si vous ouvrez la carte
+          « Officielle », celle-ci est fournie par Géopêche (FNPF) et reçoit alors votre adresse IP et
+          la zone consultée.
         </div>
       </div>
     </div>

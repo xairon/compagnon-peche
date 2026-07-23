@@ -1,5 +1,6 @@
 // Federation-published fishing parcours for departments WITHOUT open GIS data
-// (unlike Loir-et-Cher 41, which is served live by Pilote41 in lib/parcours41.ts).
+// (unlike Loir-et-Cher 41, which ships as a bundled offline snapshot generated
+// from Pilote41 — see data/parcours41-snapshot.ts, used directly by Carte.tsx).
 //
 // These facts (names, rivers, communes, categories, and — where the federation
 // publishes them — GPS coordinates) come from the fédérations' OWN public

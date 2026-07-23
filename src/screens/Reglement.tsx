@@ -78,9 +78,11 @@ export function Reglement() {
                 onClick={() => set({ dept: id })}
                 style={{
                   flex: 1,
-                  height: 44,
+                  minHeight: 44,
+                  padding: "4px 6px",
                   borderRadius: 12,
-                  fontSize: 13.5,
+                  fontSize: 12.5,
+                  lineHeight: 1.15,
                   fontWeight: 600,
                   border: `1.5px solid ${active ? "#16281E" : "#E6E2D8"}`,
                   background: active ? "#16281E" : "#FFFFFF",

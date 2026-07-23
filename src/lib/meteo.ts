@@ -68,7 +68,7 @@ export async function fetchMeteo(lat: number, lon: number, signal?: AbortSignal)
     windDir: c.wind_direction_10m,
     windCompass: compass(c.wind_direction_10m),
     gust: c.wind_gusts_10m,
-    precip: c.precipitation,
+    precip: typeof c.precipitation === "number" ? c.precipitation : 0, // may be null in partial responses
     cloud: c.cloud_cover,
     pressure: c.surface_pressure,
     code: c.weather_code,
@@ -110,11 +110,15 @@ export async function fetchMeteo(lat: number, lon: number, signal?: AbortSignal)
   const hours: MeteoHour[] = [];
   for (let i = 0; i < times.length; i++) {
     if (times[i].slice(0, 10) !== todayStr) continue;
+    // Skip hours whose temperature is missing/null so the curve never sees NaN
+    // (Open-Meteo can return null temps in partial model responses).
+    const t = temps[i];
+    if (typeof t !== "number" || !Number.isFinite(t)) continue;
     const hr = new Date(times[i]).getHours();
     hours.push({
       time: times[i],
       hour: hr,
-      temp: temps[i],
+      temp: t,
       precipProb: pprob[i] ?? 0,
       past: hr < nowHour,
     });

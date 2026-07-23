@@ -81,7 +81,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "toujours",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -94,7 +97,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -102,17 +105,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -124,7 +127,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats ; pêche très restreinte selon bassin — à vérifier."
+          "Œufs et frayères protégés + Directive Habitats ; pêche de l'adulte très restreinte selon bassin — ne conserver que si autorisé, à vérifier."
         ]
       ]
     }
@@ -142,7 +145,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "toujours",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -155,7 +161,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -163,17 +169,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -185,7 +191,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Forme méditerranéenne (bassin rhodanien), Directive Habitats ; pêche restreinte — à vérifier."
+          "Forme méditerranéenne (bassin rhodanien), Directive Habitats ; pêche restreinte — ne conserver que si autorisé, à vérifier."
         ]
       ]
     }
@@ -1946,7 +1952,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "toujours",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -1959,7 +1968,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -1967,17 +1976,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -1989,7 +1998,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés (arrêté 8 déc. 1988) + Directive Habitats ; pêche sous moratoire sur plusieurs bassins — remise à l'eau, à vérifier localement."
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) + Directive Habitats ; adultes pêchés sous moratoire/quota selon le bassin (Garonne-Dordogne fermé) — ne conserver que si l'arrêté l'autorise, sinon remise à l'eau."
         ]
       ]
     }
@@ -2193,7 +2202,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "toujours",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -2206,7 +2218,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -2214,17 +2226,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -2236,7 +2248,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats ; migratrice parasite en déclin."
+          "Œufs et frayères protégés + Directive Habitats ; migratrice parasite réglementée par bassin, en déclin — ne conserver que si autorisé."
         ]
       ]
     }
@@ -2254,7 +2266,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "toujours",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -2267,7 +2282,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -2275,17 +2290,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -2297,7 +2312,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats ; pêche traditionnelle réglementée par bassin, en déclin."
+          "Œufs et frayères protégés + Directive Habitats ; pêche traditionnelle réglementée par bassin (souvent sous moratoire), en déclin — ne conserver que si autorisé."
         ]
       ]
     }

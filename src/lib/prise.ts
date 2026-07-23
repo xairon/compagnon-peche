@@ -119,6 +119,14 @@ export function priseView(
       openParas.push(
         "⚠️ Vrai en 2ᵉ catégorie. En 1ʳᵉ catégorie (eaux à truite/salmonidés), toute pêche suit les dates truite : du 2ᵉ samedi de mars au 3ᵉ dimanche de septembre. Vérifiez la catégorie du cours d'eau.",
       );
+    // The brochet verdict uses the national 2nd-category dates. In 1st-category it
+    // follows the trout opening, and several départements set their own brochet
+    // dates (sometimes closed in January) — flag it so we never imply "open" where
+    // it is locally closed.
+    else if (sp.season === "brochet")
+      openParas.push(
+        "⚠️ Dates de 2ᵉ catégorie. En 1ʳᵉ catégorie, le brochet suit l'ouverture truite (2ᵉ samedi de mars), et certains arrêtés départementaux fixent des dates propres (parfois fermé en janvier). Vérifiez la catégorie et l'arrêté local.",
+      );
     return {
       ...V,
       tone: "good",
@@ -171,7 +179,7 @@ export function priseView(
         kicker,
         title: "Où en êtes-vous du quota ?",
         paras: [
-          "Rappel : 3 carnassiers par jour et par pêcheur (sandre + brochet + black-bass), dont 2 brochets maximum (art. R436-21).",
+          "Rappel : 3 carnassiers par jour et par pêcheur (sandre + brochet + black-bass), dont 2 brochets maximum (art. R436-21). Ce cumul vaut en 2ᵉ catégorie ; en 1ʳᵉ catégorie, seul le plafond de 2 brochets/jour s'applique.",
           "D'après votre carnet aujourd'hui : " +
             quota.c +
             " / 3 carnassiers gardés, dont " +

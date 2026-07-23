@@ -1,9 +1,11 @@
 // Fishing reserves & parcours. There is NO national open dataset — the only
 // authoritative national source is the fédérations' Géopêche map, which is not
 // an open API. A handful of départements publish their reserves/parcours as open
-// WMS on data.gouv.fr (today: Maine-et-Loire, 49). We overlay those as raster
-// tiles (transparent outside their extent, so they can be added unconditionally)
-// and link out to Géopêche everywhere else. Nothing is invented.
+// WMS on data.gouv.fr (see PARCOURS_WMS below: Maine-et-Loire 49 and
+// Tarn-et-Garonne 82; plus the catégorie-piscicole layers in CATEGORIE_WMS for
+// several more). We overlay those as raster tiles (transparent outside their
+// extent, so they can be added unconditionally) and link out to Géopêche
+// everywhere else. Nothing is invented.
 
 // Official national interactive map (opens and geolocates the angler).
 export const GEOPECHE_URL = "https://map.geopeche.com";

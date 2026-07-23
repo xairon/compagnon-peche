@@ -564,7 +564,8 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "file": "assets/species/brochet-aquitain.webp",
       "author": "MillaTom",
       "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hecht.jpg",
+      "caption": "Brochet commun (illustration — quasi identique à l'aquitain)"
     }
   ],
   "black-bass-petite-bouche": [
@@ -809,7 +810,7 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "file": "assets/species/mulet-dore.webp",
       "author": "Diego Delso",
       "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Galupe_(Chelon_auratus)"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Galupe_(Chelon_auratus),_Parque_natural_de_la_Arr%C3%A1bida,_Portugal,_2021-09-09,_DD_21.jpg"
     }
   ],
   "mulet-lippu": [
@@ -817,7 +818,7 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "file": "assets/species/mulet-lippu.webp",
       "author": "Diego Delso",
       "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Muble_(Chelon_labrosus)"
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Muble_(Chelon_labrosus),_isla_de_Mouro,_Santander,_Espa%C3%B1a,_2019-08-15,_DD_88.jpg"
     }
   ],
   "goujon-ukraine": [

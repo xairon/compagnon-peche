@@ -38,6 +38,15 @@ const HYDRO_MINZOOM = 9;
 const ACCESS_MINZOOM = 12;
 const GBIF_MINZOOM = 10;
 
+// HTML-escape any value interpolated into a MapLibre popup (setHTML = innerHTML).
+// Popup fields come from third-party feeds (OSM/Overpass, GBIF, Sandre) that are
+// publicly editable, so they must never be trusted as markup. See Popup.setHTML below.
+const esc = (v: unknown): string =>
+  String(v ?? "").replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
+  );
+
 type Sheet = {
   name: string;
   cours: string;
@@ -302,6 +311,9 @@ export function Carte() {
   const loadData = async () => {
     const m = map.current;
     if (!m || !ready.current) return;
+    // Cancel any still-in-flight load first, so a fast zoom-out (which early-returns
+    // below) can't let a previous zoomed-in fetch resolve and repaint stale data.
+    dataAbort.current?.abort();
     if (m.getZoom() < HYDRO_MINZOOM) {
       dataRef.current = { ...dataRef.current, rivers: empty(), bodies: empty(), stations: empty(), obstacles: empty(), access: empty(), gbif: empty(), parcours41: empty() };
       applyData(m);
@@ -310,7 +322,6 @@ export function Carte() {
     }
     const b = m.getBounds();
     const [w, s, e, n] = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
-    dataAbort.current?.abort();
     dataAbort.current = new AbortController();
     const signal = dataAbort.current.signal;
     const L = layersRef.current;
@@ -434,22 +445,22 @@ export function Carte() {
       if (placingRef.current) return;
       const p = ev.features?.[0]?.properties as Record<string, string> | undefined;
       if (!p) return;
-      const bits = [p.type, p.categ, p.rive].filter(Boolean).join(" · ");
+      const bits = [p.type, p.categ, p.rive].filter(Boolean).map(esc).join(" · ");
       const nuit = p.nuit === "oui" ? '<br><b style="color:#1D6E42">🌙 Pêche de nuit autorisée</b>' : "";
-      const acces = p.acces ? `<br><span style="color:#6b7168">Accès : ${p.acces}</span>` : "";
+      const acces = p.acces ? `<br><span style="color:#6b7168">Accès : ${esc(p.acces)}</span>` : "";
       officialPopup(
         ev.lngLat,
-        `<b>${p.nom}</b>${bits ? "<br>" + bits : ""}${nuit}${acces}<br><span style="color:#948f81;font-size:11px">Source : Pilote41 / Fédération 41</span>`,
+        `<b>${esc(p.nom)}</b>${bits ? "<br>" + bits : ""}${nuit}${acces}<br><span style="color:#948f81;font-size:11px">Source : Pilote41 / Fédération 41</span>`,
       );
     });
     m.on("click", "reserve41-line", (ev) => {
       if (placingRef.current) return;
       const p = ev.features?.[0]?.properties as Record<string, string> | undefined;
       if (!p) return;
-      const lim = [p.amont, p.aval].filter(Boolean).join(" → ");
+      const lim = [p.amont, p.aval].filter(Boolean).map(esc).join(" → ");
       officialPopup(
         ev.lngLat,
-        `<b style="color:#B33A2E">⛔ ${p.nom}</b>${lim ? "<br>" + lim : ""}<br><span style="color:#948f81;font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
+        `<b style="color:#B33A2E">⛔ ${esc(p.nom)}</b>${lim ? "<br>" + lim : ""}<br><span style="color:#948f81;font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
       );
     });
 
@@ -474,19 +485,21 @@ export function Carte() {
         p.posts ? `${p.posts} postes` : "",
       ]
         .filter(Boolean)
+        .map(esc)
         .join(" · ");
-      const tech = p.techniques ? `<br>${p.techniques}` : "";
-      const note = p.note ? `<br><span style="color:#6b675c">${p.note}</span>` : "";
+      const tech = p.techniques ? `<br>${esc(p.techniques)}` : "";
+      const note = p.note ? `<br><span style="color:#6b675c">${esc(p.note)}</span>` : "";
       const approx =
         p.precision === "commune"
           ? `<br><b style="color:#b06e14">⚠️ Emplacement approximatif (commune, pas le parcours exact)</b>`
           : "";
-      const src = p.source
-        ? `<br><a href="${p.source}" target="_blank" rel="noopener" style="color:#1D6E42;font-size:11px">Source : fédération de pêche ↗</a>`
-        : "";
+      const src =
+        typeof p.source === "string" && /^https?:\/\//.test(p.source)
+          ? `<br><a href="${esc(p.source)}" target="_blank" rel="noopener noreferrer" style="color:#1D6E42;font-size:11px">Source : fédération de pêche ↗</a>`
+          : "";
       officialPopup(
         ev.lngLat,
-        `<b>${p.name}</b> <span style="color:#6b675c;font-size:11px">${kind}</span>${bits ? "<br>" + bits : ""}${tech}${note}${approx}${src}`,
+        `<b>${esc(p.name)}</b> <span style="color:#6b675c;font-size:11px">${esc(kind)}</span>${bits ? "<br>" + bits : ""}${tech}${note}${approx}${src}`,
       );
     });
 
@@ -517,7 +530,7 @@ export function Carte() {
       popup.current
         ?.setLngLat(ev.lngLat)
         .setHTML(
-          `<b>${o.name}</b><br>${o.type}${o.height ? " · " + o.height : ""}<br>${o.pass ? "Passe : " + o.pass : "Pas de passe à poissons"}`,
+          `<b>${esc(o.name)}</b><br>${esc(o.type)}${o.height ? " · " + esc(o.height) : ""}<br>${o.pass ? "Passe : " + esc(o.pass) : "Pas de passe à poissons"}`,
         )
         .addTo(m);
     });
@@ -528,7 +541,7 @@ export function Carte() {
       if (!p) return;
       popup.current
         ?.setLngLat(ev.lngLat)
-        .setHTML(`<b>${accessIcon(p.kind as never)} ${p.name}</b><br>${accessLabel(p.kind as never)}`)
+        .setHTML(`<b>${accessIcon(p.kind as never)} ${esc(p.name)}</b><br>${accessLabel(p.kind as never)}`)
         .addTo(m);
     });
 
@@ -539,7 +552,7 @@ export function Carte() {
       const d = p.date ? String(p.date).slice(0, 10) : "date inconnue";
       popup.current
         ?.setLngLat(ev.lngLat)
-        .setHTML(`<b>${p.crayfish ? "🦞 " : "🐟 "}${p.sci}</b><br>Observé le ${d}<br><span style="color:#948f81">Source : GBIF.org</span>`)
+        .setHTML(`<b>${p.crayfish ? "🦞 " : "🐟 "}${esc(p.sci)}</b><br>Observé le ${esc(d)}<br><span style="color:#948f81">Source : GBIF.org</span>`)
         .addTo(m);
     });
 
@@ -650,10 +663,15 @@ export function Carte() {
       map.current?.flyTo({ center: [sp.lon, sp.lat], zoom: 14 });
       closeAllPanels();
       setViewId(sp.id);
+      set({ focusSpot: null });
+    } else if (state.hydrated) {
+      // Spots are fully loaded and the target still isn't there → drop the stale
+      // deep-link. If they haven't hydrated yet, keep it so this effect retries
+      // once loadSpots() resolves (otherwise the fly-to is silently lost).
+      set({ focusSpot: null });
     }
-    set({ focusSpot: null });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.focusSpot, mapReady, spots]);
+  }, [state.focusSpot, mapReady, spots, state.hydrated]);
 
   // ---- Place search (IGN geocoder) ----
   // Remember the label we just picked, so writing it into the input doesn't
@@ -826,6 +844,9 @@ export function Carte() {
               title="Carte officielle Géopêche (FNPF)"
               className="official-frame"
               referrerPolicy="no-referrer"
+              // Sandbox a third-party origin we don't control: allow the map to run
+              // but withhold allow-top-navigation so it can't frame-bust the app.
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
             />
           ) : (
             <div className="official-offline">

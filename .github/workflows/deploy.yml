@@ -13,10 +13,12 @@ permissions:
   pages: write
   id-token: write
 
-# One deploy at a time; cancel superseded runs.
+# One deploy at a time. Do NOT cancel a run mid-deploy (GitHub's recommended
+# Pages config): let an in-flight deployment finish rather than risk an
+# interrupted/incomplete publish; the next push re-deploys the latest artifact.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:

@@ -4,7 +4,6 @@ import {
   useEffect,
   useMemo,
   useReducer,
-  useRef,
   type ReactNode,
 } from "react";
 import type { Catch, Species, Spot, GearItem, Profile, PersonalRecipe } from "./types";
@@ -172,11 +171,6 @@ const Ctx = createContext<Store | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const started = useRef(false);
-  const spotsStarted = useRef(false);
-  const gearStarted = useRef(false);
-  const profileStarted = useRef(false);
-  const recipesStarted = useRef(false);
 
   // Hydrate the notebook + spots + gear + profile + recipes from IndexedDB once.
   useEffect(() => {
@@ -202,52 +196,33 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Persist the notebook after hydration whenever it changes.
+  // Persist after hydration whenever the data changes. We intentionally do NOT
+  // skip the first post-hydration save: if the user logged an entry before
+  // IndexedDB finished loading, the hydration effect merges it in, and that merged
+  // state is exactly what the first save must persist (skipping it lost the write).
+  // The one redundant write of just-loaded data on mount is harmless.
   useEffect(() => {
     if (!state.hydrated) return;
-    if (!started.current) {
-      started.current = true;
-      return;
-    }
     saveCatches(state.catches);
   }, [state.catches, state.hydrated]);
 
-  // Persist spots the same way.
   useEffect(() => {
     if (!state.hydrated) return;
-    if (!spotsStarted.current) {
-      spotsStarted.current = true;
-      return;
-    }
     saveSpots(state.spots);
   }, [state.spots, state.hydrated]);
 
-  // Persist gear and profile the same way.
   useEffect(() => {
     if (!state.hydrated) return;
-    if (!gearStarted.current) {
-      gearStarted.current = true;
-      return;
-    }
     saveGear(state.gear);
   }, [state.gear, state.hydrated]);
 
   useEffect(() => {
     if (!state.hydrated) return;
-    if (!profileStarted.current) {
-      profileStarted.current = true;
-      return;
-    }
     saveProfile(state.profile);
   }, [state.profile, state.hydrated]);
 
-  // Persist personal recipes the same way.
   useEffect(() => {
     if (!state.hydrated) return;
-    if (!recipesStarted.current) {
-      recipesStarted.current = true;
-      return;
-    }
     saveRecipes(state.recipes);
   }, [state.recipes, state.hydrated]);
 

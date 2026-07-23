@@ -90,11 +90,23 @@ function toBase(s) {
   // The arrêté du 8 déc. 1988 protects eggs/spawning grounds, not adult capture —
   // and not every protected species is on it (some are Habitats/CITES). Keep the
   // status honest and general; the per-species `note` carries the exact instrument.
+  // `moratoire` = amphihaline migrator whose ADULTS are legally fished under
+  // moratorium/quota by basin (aloses, lamproies marine/rivière): not a blanket
+  // no-take, so it must NOT get the strict "protégée — remise à l'eau" treatment
+  // (which would contradict the "réglementé" comestibilité panel on the same fiche).
   const statut = s.protected
     ? "Espèce protégée / menacée — remise à l'eau"
-    : s.invasive
-      ? "Susceptible de déséquilibres (R432-5)"
-      : "Aucun statut national particulier";
+    : s.moratoire
+      ? "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
+      : s.invasive
+        ? "Susceptible de déséquilibres (R432-5)"
+        : "Aucun statut national particulier";
+  const alert = s.moratoire
+    ? {
+        title: "Migrateur réglementé",
+        text: "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée.",
+      }
+    : undefined;
   return {
     id: s.id,
     name: s.name,
@@ -110,6 +122,7 @@ function toBase(s) {
     depth: "base",
     protected: s.protected || undefined,
     invasive: s.invasive || undefined,
+    alert,
     reg: {
       rows: [
         ["Maille", mailleDesc],
@@ -123,7 +136,8 @@ function toBase(s) {
       note: "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
       src:
         "Legifrance R436-18 · R436-21" +
-        (s.protected ? " · statut de protection (voir remarque)" : ""),
+        (s.protected ? " · statut de protection (voir remarque)" : "") +
+        (s.moratoire ? " · statut migrateur (voir remarque)" : ""),
     },
     fish: { rows: s.protected ? FISH_PROTECTED : FISH_BY_GROUP[s.group] || FISH_BY_GROUP.autres },
     bio: { rows: [["Famille", s.family || "—"], ["Remarque", s.note || "—"]] },

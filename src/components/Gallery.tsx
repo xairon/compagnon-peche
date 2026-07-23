@@ -9,15 +9,18 @@ import { SPECIES_MEDIA } from "../data/media";
 export function Gallery({ id, placeholder, dark }: { id: string; placeholder: string; dark?: boolean }) {
   const photos = SPECIES_MEDIA[id] || [];
   const [i, setI] = useState(0);
-  const [broken, setBroken] = useState<Record<number, boolean>>({});
+  const [broken, setBroken] = useState<Record<string, boolean>>({});
   const startX = useRef(0);
 
-  const usable = photos.filter((_, k) => !broken[k]);
+  // Navigate only among photos that loaded — a single 404 is dropped from the
+  // rotation (keyed by file path so indices stay stable as usable shrinks),
+  // and the placeholder shows only when every photo is broken.
+  const usable = photos.filter((p) => !broken[p.file]);
   if (!usable.length) return <div className={"img-slot" + (dark ? " dark" : "")}>{placeholder}</div>;
 
-  const n = photos.length;
+  const n = usable.length;
   const idx = ((i % n) + n) % n;
-  const cur = photos[idx];
+  const cur = usable[idx];
   const go = (d: number) => setI((v) => v + d);
 
   return (
@@ -35,7 +38,7 @@ export function Gallery({ id, placeholder, dark }: { id: string; placeholder: st
         alt={cur.caption ? `${placeholder} — ${cur.caption}` : placeholder}
         loading="lazy"
         decoding="async"
-        onError={() => setBroken((b) => ({ ...b, [idx]: true }))}
+        onError={() => setBroken((b) => ({ ...b, [cur.file]: true }))}
       />
       {cur.caption && <span className="gallery-cap">{cur.caption}</span>}
       {n > 1 && (
@@ -47,8 +50,8 @@ export function Gallery({ id, placeholder, dark }: { id: string; placeholder: st
             ›
           </button>
           <div className="gallery-dots" aria-hidden="true">
-            {photos.map((_, k) => (
-              <span key={k} className={"dot" + (k === idx ? " on" : "")} />
+            {usable.map((p, k) => (
+              <span key={p.file} className={"dot" + (k === idx ? " on" : "")} />
             ))}
           </div>
         </>

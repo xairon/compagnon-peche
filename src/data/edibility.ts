@@ -22,6 +22,10 @@ export interface Edible {
 const CULINARY = "Fédérations de pêche · références culinaires";
 const ANSES = "ANSES (avis PCB 2011/2015)";
 const A1988 = "Arrêté du 8 décembre 1988 (espèces protégées)";
+// Amphihaline migrators: the 1988 arrêté protects only eggs/spawning grounds, not
+// the adults — whose take is governed by basin moratoria/arrêtés. Cite both honestly.
+const MIGRATEUR =
+  "Arrêté 8 déc. 1988 (œufs/frayères) · moratoires & arrêtés de bassin (pêche de l'adulte)";
 const ANSES_TXT =
   "Espèce fortement bioaccumulatrice (PCB/dioxines) : l'ANSES recommande de limiter à 2 fois/mois (population générale) et 1 fois tous les 2 mois pour les publics sensibles (femmes enceintes/allaitantes, enfants < 3 ans, filles et adolescentes).";
 const ANSES_ANGUILLE =
@@ -240,36 +244,36 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "réglementé",
     bones: "beaucoup",
     taste: "Chair fine et savoureuse mais extrêmement riche en arêtes (grillée à l'oseille).",
-    prep: "Protégée (arrêté 1988) ; moratoires sur plusieurs bassins — ne consommer que si la capture est légale.",
-    source: A1988,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte pêché sous moratoire/quota selon le bassin — ne consommer que si la capture est légale.",
+    source: MIGRATEUR,
   },
   "alose-feinte-atlantique": {
     status: "réglementé",
     bones: "beaucoup",
     taste: "Comme la grande alose : savoureuse mais très riche en arêtes.",
-    prep: "Protégée (arrêté 1988) ; moratoires locaux — ne consommer que si légal.",
-    source: A1988,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous moratoires/quotas locaux — ne consommer que si légal.",
+    source: MIGRATEUR,
   },
   "alose-feinte-mediterraneenne": {
     status: "réglementé",
     bones: "beaucoup",
     taste: "Savoureuse mais très riche en arêtes.",
-    prep: "Protégée (arrêté 1988) ; moratoires locaux — ne consommer que si légal.",
-    source: A1988,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous restrictions locales — ne consommer que si légal.",
+    source: MIGRATEUR,
   },
   "lamproie-marine": {
     status: "réglementé",
     bones: "peu",
     taste: "Chair grasse, dense et charnue, sans arêtes (mets recherché : lamproie à la bordelaise).",
-    prep: "Protégée (arrêté 1988) ; moratoires récents (Gironde 2023) — ne consommer que si légal.",
-    source: A1988,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous moratoires récents (Gironde 2023) — ne consommer que si légal.",
+    source: MIGRATEUR,
   },
   "lamproie-de-riviere": {
     status: "réglementé",
     bones: "peu",
     taste: "Chair grasse et dense, sans arêtes.",
-    prep: "Protégée (arrêté 1988) ; moratoires locaux — ne consommer que si légal.",
-    source: A1988,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous restrictions de bassin — ne consommer que si légal.",
+    source: MIGRATEUR,
   },
   "mulet-porc": {
     status: "oui",
@@ -300,7 +304,11 @@ export const EDIBILITY: Record<string, Edible> = {
 
   // ── Protégées / no-take (comestible = non, fait légal) ───────
   vandoise: { status: "non", prep: RELACHE, source: A1988 },
-  "vandoise-rostree": { status: "non", prep: RELACHE, source: A1988 },
+  "vandoise-rostree": {
+    status: "non",
+    prep: "Protection présumée par extension du genre Leuciscus (à confirmer) — dans le doute, remise à l'eau.",
+    source: "Statut de protection à confirmer (voir remarque biologie)",
+  },
   "vandoise-du-bearn": { status: "non", prep: RELACHE, source: A1988 },
   "ide-melanote": { status: "non", prep: RELACHE, source: A1988 },
   "barbeau-meridional": { status: "non", prep: RELACHE, source: A1988 },

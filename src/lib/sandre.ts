@@ -124,7 +124,11 @@ export async function deptFromCoords(
     if (!r.ok) return null;
     const j = await r.json();
     const p = (j.features || [])[0]?.properties as { citycode?: string; context?: string } | undefined;
-    if (p?.citycode && p.citycode.length >= 2) return p.citycode.slice(0, 2);
+    if (p?.citycode && p.citycode.length >= 2) {
+      const cc = p.citycode;
+      // Métropole = 2 digits (Corse "2A/2B" included); Outre-mer = 3 ("971"–"976").
+      return cc.startsWith("97") || cc.startsWith("98") ? cc.slice(0, 3) : cc.slice(0, 2);
+    }
     const m = p?.context?.match(/^(\d{2,3})/); // context = "41, Loir-et-Cher, …"
     return m ? m[1] : null;
   } catch {

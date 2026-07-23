@@ -377,8 +377,8 @@ a:hover {
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
   background: rgba(15, 31, 22, 0.42);
@@ -440,7 +440,8 @@ a:hover {
   right: 14px;
   background: rgba(251, 250, 247, 0.92);
   backdrop-filter: blur(6px);
-  padding: 6px 12px;
+  padding: 8px 13px;
+  min-height: 36px;
   border-radius: 100px;
   border: none;
   font-size: 11.5px;
@@ -4631,8 +4632,8 @@ button.card-row {
   color: #6e8894;
   font-weight: 600;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* No overflow:hidden here — these labels are short and fixed, and clipping
+     would swallow the info-tooltip bubble that opens below the label (.tip). */
 }
 .dash-wtile .v { font-size: 20px; font-weight: 700; color: #14303b; margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
 .dash-wtile .v .u { font-size: 12px; font-weight: 600; color: #6e8894; }

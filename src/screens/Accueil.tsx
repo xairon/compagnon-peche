@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store";
 import { SPECIES } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
@@ -109,23 +109,34 @@ export function Accueil() {
     [],
   );
 
+  // Guard the async GPS chain so its callbacks don't setState (or silently flip the
+  // active department) after the user has left the dashboard.
+  const mounted = useRef(true);
+  useEffect(() => () => void (mounted.current = false), []);
+
   const useGps = () => {
     setGpsMsg("Localisation…");
     locate()
       .then(({ lat, lon }) => {
+        if (!mounted.current) return;
         setPt({ lat, lon });
         setLocated(true);
         setGpsMsg(null);
         // Auto-set the active department from the GPS position (supported: 23/36/41).
         deptFromCoords(lat, lon).then((d) => {
+          if (!mounted.current) return;
           if (d && d in DEPARTEMENTS && d !== state.dept) {
             set({ dept: d as DeptId });
             setGpsMsg(`Département : ${DEPARTEMENTS[d as DeptId].name}`);
-            setTimeout(() => setGpsMsg((m) => (m?.startsWith("Département") ? null : m)), 3500);
+            setTimeout(() => {
+              if (mounted.current) setGpsMsg((m) => (m?.startsWith("Département") ? null : m));
+            }, 3500);
           }
         });
       })
-      .catch((e) => setGpsMsg(locateMessage(e)));
+      .catch((e) => {
+        if (mounted.current) setGpsMsg(locateMessage(e));
+      });
   };
 
   const wl = meteo ? weatherLabel(meteo.now.code) : null;

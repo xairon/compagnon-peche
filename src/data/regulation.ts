@@ -4,7 +4,7 @@ import type { SourceEntry } from "../types";
 export const NATIONAL_SIZES: [string, string][] = [
   ["Brochet", "50 cm"],
   ["Sandre (2ᵉ cat.)", "40 cm"],
-  ["Black-bass", "30 cm"],
+  ["Black-bass (2ᵉ cat.)", "30 cm"],
   ["Truites", "23 cm"],
   ["Ombre commun", "30 cm"],
   ["Huchon", "70 cm"],
@@ -73,7 +73,7 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     sandreMaille: "50 cm (2ᵉ cat.)",
     blackbassMaille: "30 cm (2ᵉ cat.)",
     salmonideQuota: "6 salmonidés/jour (ombre inclus) dont 3 truites fario max",
-    carnassierQuota: "3 carnassiers/jour dont 2 brochets max",
+    carnassierQuota: "2ᵉ cat. : 3 carnassiers/jour dont 2 brochets ; 1ʳᵉ cat. : 2 brochets/jour",
     notes: [
       "Fenêtre brochet expérimentale sur les lacs de Vassivière et St-Marc : remise à l'eau des brochets < 60 cm ou > 80 cm.",
       "Écrevisses à pattes blanches/rouges protégées ; seules américaine/signal/Louisiane pêchables (transport vivant interdit).",
@@ -89,8 +89,8 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
     blackbassMaille: "30 cm (2ᵉ cat.)",
-    salmonideQuota: "6 salmonidés/jour dont 2 truites fario max",
-    carnassierQuota: "3 carnassiers/jour dont 2 brochets max",
+    salmonideQuota: "6 salmonidés/jour (sous-limite truite fario à confirmer sur l'arrêté)",
+    carnassierQuota: "2ᵉ cat. : 3 carnassiers/jour dont 2 brochets ; 1ʳᵉ cat. : 2 brochets/jour",
     notes: [
       "Brochet no-kill : tout brochet capturé du 14/03 au 24/04 doit être remis à l'eau.",
       "Black-bass no-kill sur les retenues d'Eguzon, Roche-au-Moine et Roche-Bat-l'Aigue.",
@@ -118,16 +118,19 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
   },
 };
 
+// True 1ʳᵉ-catégorie (trout-stream) salmonids that follow the departmental
+// truite open/close dates. Deliberately EXCLUDES:
+//  · omble-chevalier / coregone-lavaret / cristivomer — high-lake fish fished
+//    year-round in 2ᵉ catégorie (season "toujours"); the 1ʳᵉ-cat closed season
+//    does not apply, so applying it here contradicted their own national row.
+//  · saumon-atlantique — protected migrator with its own regime; R436-21 excludes
+//    "le saumon" from the salmonid keep-quota. It must not show a 6/jour quota.
 const SALMONIDES_CAT1 = new Set([
   "truite-fario",
   "truite-arc-en-ciel",
   "omble-fontaine",
-  "omble-chevalier",
   "ombre",
-  "coregone-lavaret",
-  "cristivomer",
   "huchon",
-  "saumon-atlantique",
 ]);
 const BROCHETS = new Set(["brochet", "brochet-aquitain"]);
 const BLACKBASS = new Set(["black-bass", "black-bass-petite-bouche"]);
