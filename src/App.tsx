@@ -22,8 +22,9 @@ import { Credits } from "./screens/Credits";
 import { Cuisine } from "./screens/Cuisine";
 import { Stockage } from "./screens/Stockage";
 import { Onboarding } from "./components/Onboarding";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
-import { requestPersist } from "./lib/storage";
+import { requestPersist, onPersistError } from "./lib/storage";
 
 // Heavier / non-startup screens are code-split (Carte pulls in MapLibre GL).
 const Carte = lazy(() => import("./screens/Carte").then((m) => ({ default: m.Carte })));
@@ -49,6 +50,11 @@ export function App() {
     }
   });
   const { needRefresh, applyUpdate } = usePwa();
+  const [persistMsg, setPersistMsg] = useState<string | null>(null);
+
+  // Surface silent IndexedDB write failures (quota, private mode) so a catch is
+  // never implied "saved ✓" when it wasn't persisted.
+  useEffect(() => onPersistError(setPersistMsg), []);
 
   useEffect(() => {
     const on = () => setOffline(false);
@@ -94,6 +100,9 @@ export function App() {
 
   return (
     <div className="app-frame" data-big={state.bigUI ? "1" : undefined}>
+      {/* Per-screen boundary (keyed by screen so it resets on navigation): a
+          render error in one screen shows recovery there while nav/chrome survive. */}
+      <ErrorBoundary key={s}>
       <Suspense fallback={<div className="screen-loading">Chargement…</div>}>
         {s === "accueil" && <Accueil />}
         {s === "especes" && <Especes />}
@@ -121,9 +130,17 @@ export function App() {
         {s === "techniques" && <Techniques />}
         {s === "technique" && <TechniqueDetail />}
       </Suspense>
+      </ErrorBoundary>
 
       {offline && showNav && (
         <div className="offline">Hors-ligne — toutes les fiches restent disponibles</div>
+      )}
+
+      {persistMsg && (
+        <div className="persist-warn" role="alert">
+          <span>{persistMsg}</span>
+          <button onClick={() => set({ screen: "stockage" })}>Gérer</button>
+        </div>
       )}
 
       {needRefresh && (

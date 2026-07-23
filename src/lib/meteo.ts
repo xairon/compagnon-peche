@@ -3,6 +3,7 @@
 // locally from the hourly pressure series (deterministic, not invented).
 
 import { compass } from "./geo";
+import { fetchT } from "./net";
 
 const BASE = "https://api.open-meteo.com/v1/forecast";
 
@@ -50,12 +51,14 @@ export interface Meteo {
 
 export async function fetchMeteo(lat: number, lon: number, signal?: AbortSignal): Promise<Meteo> {
   const params =
-    `latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}` +
+    // 3 decimals (~110 m) is plenty for a local forecast and avoids sending the
+    // user's precise fishing spot to a third party (see privacy note on Sources).
+    `latitude=${lat.toFixed(3)}&longitude=${lon.toFixed(3)}` +
     `&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m,surface_pressure,weather_code` +
     `&hourly=temperature_2m,precipitation_probability,surface_pressure&past_days=1` + // past_days so the 3h trend works before 03:00 local
     `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
     `&forecast_days=7&timezone=auto`;
-  const r = await fetch(`${BASE}?${params}`, { signal });
+  const r = await fetchT(`${BASE}?${params}`, { signal });
   if (!r.ok) throw new Error("Open-Meteo " + r.status);
   const j = await r.json();
 

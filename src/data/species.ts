@@ -996,7 +996,7 @@ const CURATED: Species[] = [
     season: "cat1",
     alert: {
       title: "Espèce fragile, souvent réglementée",
-      text: "Populations sensibles : le préfet peut relever la maille (jusqu'à 35 cm) ou fermer / limiter la pêche. Vérifiez l'arrêté préfectoral du département.",
+      text: "Populations sensibles : le préfet peut fixer une ouverture spécifique (souvent plus tardive que la truite, parfois mi-mai), relever la maille (jusqu'à 35 cm) ou fermer / limiter la pêche. Ne vous fiez pas aux dates truite — vérifiez l'arrêté préfectoral du département.",
     },
     ident: {
       summary:
@@ -1016,7 +1016,7 @@ const CURATED: Species[] = [
         ["Taille minimale", "30 cm (national, R436-18)"],
         ["Maille relevée", "Jusqu'à 35 cm possible par arrêté (R436-19)"],
         ["Catégorie", "Généralement 1ʳᵉ catégorie (eaux à salmonidés)"],
-        ["Période", "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"],
+        ["Période", "Ouverture souvent plus tardive que la truite (parfois mi-mai) — vérifier l'arrêté"],
       ],
       note: "Espèce patrimoniale fragile : réglementation locale souvent plus stricte (maille, no-kill, fermeture).",
       src: "Legifrance R436-18 · R436-19",
@@ -1156,7 +1156,7 @@ const CURATED: Species[] = [
     mailleSub: "réglementation spéciale",
     quota: "Déclarer",
     quotaSub: "capture à déclarer sous 24 h",
-    season: "toujours",
+    season: "special",
     alert: {
       title: "Réglementation lourde + espèce menacée",
       text: "Anguille en danger critique (règlement CE 1100/2007, plan de gestion). La civelle est interdite aux amateurs ; périodes et fermetures varient par bassin et les captures d'anguille jaune se déclarent sous 24 h. Vérifiez l'arrêté préfectoral et l'AAPPMA.",

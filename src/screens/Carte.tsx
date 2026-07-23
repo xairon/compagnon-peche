@@ -450,7 +450,7 @@ export function Carte() {
       const acces = p.acces ? `<br><span style="color:#6b7168">Accès : ${esc(p.acces)}</span>` : "";
       officialPopup(
         ev.lngLat,
-        `<b>${esc(p.nom)}</b>${bits ? "<br>" + bits : ""}${nuit}${acces}<br><span style="color:#948f81;font-size:11px">Source : Pilote41 / Fédération 41</span>`,
+        `<b>${esc(p.nom)}</b>${bits ? "<br>" + bits : ""}${nuit}${acces}<br><span style="color:var(--muted);font-size:11px">Source : Pilote41 / Fédération 41</span>`,
       );
     });
     m.on("click", "reserve41-line", (ev) => {
@@ -460,7 +460,7 @@ export function Carte() {
       const lim = [p.amont, p.aval].filter(Boolean).map(esc).join(" → ");
       officialPopup(
         ev.lngLat,
-        `<b style="color:#B33A2E">⛔ ${esc(p.nom)}</b>${lim ? "<br>" + lim : ""}<br><span style="color:#948f81;font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
+        `<b style="color:#B33A2E">⛔ ${esc(p.nom)}</b>${lim ? "<br>" + lim : ""}<br><span style="color:var(--muted);font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
       );
     });
 
@@ -552,7 +552,7 @@ export function Carte() {
       const d = p.date ? String(p.date).slice(0, 10) : "date inconnue";
       popup.current
         ?.setLngLat(ev.lngLat)
-        .setHTML(`<b>${p.crayfish ? "🦞 " : "🐟 "}${esc(p.sci)}</b><br>Observé le ${esc(d)}<br><span style="color:#948f81">Source : GBIF.org</span>`)
+        .setHTML(`<b>${p.crayfish ? "🦞 " : "🐟 "}${esc(p.sci)}</b><br>Observé le ${esc(d)}<br><span style="color:var(--muted)">Source : GBIF.org</span>`)
         .addTo(m);
     });
 

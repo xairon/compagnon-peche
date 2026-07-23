@@ -181,9 +181,9 @@ a:hover {
   border: none;
   background: var(--line);
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 13px;
+  width: 36px; /* was 24 — hard to hit with gloves/wet hands */
+  height: 36px;
+  font-size: 15px;
   color: #6b675c;
   line-height: 1;
 }
@@ -250,8 +250,8 @@ a:hover {
 }
 .chip {
   flex-shrink: 0;
-  height: 38px;
-  padding: 0 15px;
+  height: 44px; /* min touch target (WCAG 2.5.5) — reachable with wet/gloved hands */
+  padding: 0 16px;
   border-radius: 100px;
   font-size: 13.5px;
   font-weight: 550;
@@ -260,8 +260,8 @@ a:hover {
   color: var(--body);
 }
 .chip-sm {
-  height: 36px;
-  padding: 0 13px;
+  height: 44px;
+  padding: 0 14px;
   font-size: 13px;
 }
 
@@ -1415,6 +1415,35 @@ a:hover {
   box-shadow: 0 6px 20px rgba(20, 30, 25, 0.25);
 }
 
+/* Persistence-failure banner (IndexedDB write failed — data at risk). */
+.persist-warn {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 84px;
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--red, #b33a2e);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.35);
+}
+.persist-warn button {
+  flex: 0 0 auto;
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  color: #b33a2e;
+  border-radius: 100px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 /* ---- Carte (map + Hub'Eau) ---- */
 .carte-screen {
   flex: 1;
@@ -2472,8 +2501,8 @@ a:hover {
   position: absolute;
   right: 8px;
   top: 8px;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
   background: rgba(20, 30, 25, 0.72);
@@ -2995,6 +3024,15 @@ a:hover {
   .onb2-sheet > * {
     animation: none;
   }
+  /* Global: neutralize all motion for users who ask for it (WCAG 2.3.3/2.2.2). */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .onb2-kicker {
@@ -3107,6 +3145,13 @@ a:hover {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
+  text-align: center;
+  margin: 0 0 18px;
+}
+.onb2-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
   text-align: center;
   margin: 0 0 18px;
 }
@@ -3821,7 +3866,7 @@ a:hover {
 }
 .cell-i,
 .season-i {
-  color: #8a8676 !important;
+  color: var(--muted) !important;
 }
 .sheet-sp:disabled {
   opacity: 0.72;
@@ -3846,11 +3891,11 @@ a:hover {
 
 /* ---- Gloves / big-UI mode: enlarge key targets app-wide (audit) ---- */
 .app-frame[data-big] .chip {
-  height: 46px;
+  height: 50px;
   font-size: 15px;
 }
 .app-frame[data-big] .chip-sm {
-  height: 44px;
+  height: 48px;
   font-size: 14px;
 }
 .app-frame[data-big] .sm-chip {

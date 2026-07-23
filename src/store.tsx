@@ -4,6 +4,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   type ReactNode,
 } from "react";
 import type { Catch, Species, Spot, GearItem, Profile, PersonalRecipe } from "./types";
@@ -19,8 +20,10 @@ import {
   saveProfile,
   loadRecipes,
   saveRecipes,
+  runMigrations,
 } from "./lib/db";
 import { deletePhoto } from "./lib/photos";
+import { reportReadError } from "./lib/storage";
 import { frDate, isoDay, uid } from "./lib/helpers";
 
 export type Screen =
@@ -103,6 +106,7 @@ export interface AppState {
   focusSpot: string | null; // spot id to fly to & open when the Carte mounts (from Carnet)
   catchSlot: string | null; // slot of the catch shown on the prise-detail screen
   hydrated: boolean;
+  loadOk: boolean; // false if reading stored data failed — persistence is suspended
 }
 
 const TABS: Tab[] = ["accueil", "especes", "carte", "carnet"];
@@ -136,6 +140,7 @@ const initialState: AppState = {
   focusSpot: null,
   catchSlot: null,
   hydrated: false,
+  loadOk: true,
 };
 
 type Patch = Partial<AppState> | ((s: AppState) => Partial<AppState>);
@@ -167,30 +172,65 @@ interface Store {
   removeRecipe: (id: string) => void;
 }
 
-const Ctx = createContext<Store | null>(null);
+/** Actions are the store minus its state — a referentially STABLE object. */
+export type Actions = Omit<Store, "state">;
+
+// Split contexts: state changes on every dispatch, actions never do. Components
+// that only fire actions (useActions) don't re-render on state changes, and the
+// action references are stable so child memoization and effect deps hold.
+const StateCtx = createContext<AppState | null>(null);
+const ActionsCtx = createContext<Actions | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // Latest state for actions that need to read it (removeCatch/removeRecipe),
+  // without making the action object depend on state (keeps it stable).
+  const stateRef = useRef(state);
+  // Keep the ref current after each commit. removeCatch/removeRecipe read it on
+  // user events, which always fire after the latest render has committed.
+  useEffect(() => {
+    stateRef.current = state;
+  });
 
   // Hydrate the notebook + spots + gear + profile + recipes from IndexedDB once.
+  // Each load is guarded independently: a read error yields the default AND flips
+  // loadOk to false, which suspends persistence so a transient read failure can't
+  // overwrite still-present data with empty arrays.
   useEffect(() => {
     let alive = true;
-    Promise.all([loadCatches(), loadSpots(), loadGear(), loadProfile(), loadRecipes()]).then(
-      ([catches, spots, gear, profile, recipes]) => {
-        // Merge, don't replace: if the user logged a catch/spot before IndexedDB
-        // finished loading, prepend it rather than dropping it (state starts empty,
-        // so normally this is just the loaded data).
-        if (alive)
-          dispatch((s) => ({
-            catches: [...s.catches, ...catches],
-            spots: [...s.spots, ...spots],
-            gear,
-            profile,
-            recipes: [...s.recipes, ...recipes],
-            hydrated: true,
-          }));
-      },
-    );
+    (async () => {
+      await runMigrations();
+      let ok = true;
+      const safe = async <T,>(p: Promise<T>, d: T): Promise<T> => {
+        try {
+          return await p;
+        } catch {
+          ok = false;
+          return d;
+        }
+      };
+      const [catches, spots, gear, profile, recipes] = await Promise.all([
+        safe(loadCatches(), [] as Catch[]),
+        safe(loadSpots(), [] as Spot[]),
+        safe(loadGear(), [] as GearItem[]),
+        safe(loadProfile(), { name: "", bio: "", region: "" } as Profile),
+        safe(loadRecipes(), [] as PersonalRecipe[]),
+      ]);
+      if (!alive) return;
+      // Merge, don't replace: if the user logged a catch/spot before IndexedDB
+      // finished loading, prepend it rather than dropping it (state starts empty,
+      // so normally this is just the loaded data).
+      dispatch((s) => ({
+        catches: [...s.catches, ...catches],
+        spots: [...s.spots, ...spots],
+        gear,
+        profile,
+        recipes: [...s.recipes, ...recipes],
+        hydrated: true,
+        loadOk: ok,
+      }));
+      if (!ok) reportReadError();
+    })();
     return () => {
       alive = false;
     };
@@ -202,31 +242,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // state is exactly what the first save must persist (skipping it lost the write).
   // The one redundant write of just-loaded data on mount is harmless.
   useEffect(() => {
-    if (!state.hydrated) return;
+    if (!state.hydrated || !state.loadOk) return;
     saveCatches(state.catches);
-  }, [state.catches, state.hydrated]);
+  }, [state.catches, state.hydrated, state.loadOk]);
 
   useEffect(() => {
-    if (!state.hydrated) return;
+    if (!state.hydrated || !state.loadOk) return;
     saveSpots(state.spots);
-  }, [state.spots, state.hydrated]);
+  }, [state.spots, state.hydrated, state.loadOk]);
 
   useEffect(() => {
-    if (!state.hydrated) return;
+    if (!state.hydrated || !state.loadOk) return;
     saveGear(state.gear);
-  }, [state.gear, state.hydrated]);
+  }, [state.gear, state.hydrated, state.loadOk]);
 
   useEffect(() => {
-    if (!state.hydrated) return;
+    if (!state.hydrated || !state.loadOk) return;
     saveProfile(state.profile);
-  }, [state.profile, state.hydrated]);
+  }, [state.profile, state.hydrated, state.loadOk]);
 
   useEffect(() => {
-    if (!state.hydrated) return;
+    if (!state.hydrated || !state.loadOk) return;
     saveRecipes(state.recipes);
-  }, [state.recipes, state.hydrated]);
+  }, [state.recipes, state.hydrated, state.loadOk]);
 
-  const store = useMemo<Store>(() => {
+  const actions = useMemo<Actions>(() => {
     const set = (patch: Patch) => dispatch(patch);
     const nav: Store["nav"] = (screen, extra) =>
       dispatch((s) => ({ stack: [...s.stack, s.screen], screen, ...(extra || {}) }));
@@ -293,7 +333,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     // Delete a logged catch (mis-tap, wrong species/size). Persisted. Also frees
     // its photo blob so no orphan is left in IndexedDB, whatever the caller.
     const removeCatch: Store["removeCatch"] = (slot) => {
-      const photo = state.catches.find((c) => c.slot === slot)?.photo;
+      const photo = stateRef.current.catches.find((c) => c.slot === slot)?.photo;
       if (photo) deletePhoto(photo);
       dispatch((s) => ({
         catches: s.catches.filter((c) => c.slot !== slot),
@@ -317,12 +357,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const updateRecipe: Store["updateRecipe"] = (id, patch) =>
       dispatch((s) => ({ recipes: s.recipes.map((r) => (r.id === id ? { ...r, ...patch } : r)) }));
     const removeRecipe: Store["removeRecipe"] = (id) => {
-      const photo = state.recipes.find((r) => r.id === id)?.photo;
+      const photo = stateRef.current.recipes.find((r) => r.id === id)?.photo;
       if (photo) deletePhoto(photo);
       dispatch((s) => ({ recipes: s.recipes.filter((r) => r.id !== id) }));
     };
     return {
-      state,
       set,
       nav,
       back,
@@ -342,13 +381,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updateRecipe,
       removeRecipe,
     };
-  }, [state]);
+    // Actions are built once and stay stable (they use dispatch + stateRef).
+  }, []);
 
-  return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
+  return (
+    <ActionsCtx.Provider value={actions}>
+      <StateCtx.Provider value={state}>{children}</StateCtx.Provider>
+    </ActionsCtx.Provider>
+  );
 }
 
+/** Full store (state + actions). Re-renders on every state change. */
 export function useStore(): Store {
-  const s = useContext(Ctx);
-  if (!s) throw new Error("useStore must be used within StoreProvider");
-  return s;
+  const state = useContext(StateCtx);
+  const actions = useContext(ActionsCtx);
+  if (!state || !actions) throw new Error("useStore must be used within StoreProvider");
+  return { state, ...actions };
+}
+
+/** Actions only — never re-renders on state changes (stable references). Use in
+ *  components that fire actions but don't read state. */
+export function useActions(): Actions {
+  const actions = useContext(ActionsCtx);
+  if (!actions) throw new Error("useActions must be used within StoreProvider");
+  return actions;
 }

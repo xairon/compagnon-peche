@@ -1330,7 +1330,7 @@ export const BASE_SPECIES: Species[] = [
     "family": "Salmonidae",
     "cdNom": "67819",
     "maille": "35 cm",
-    "mailleSub": "national (R436-18)",
+    "mailleSub": "grands lacs — voir arrêté",
     "quota": "—",
     "quotaSub": "—",
     "season": "toujours",
@@ -1339,7 +1339,7 @@ export const BASE_SPECIES: Species[] = [
       "rows": [
         [
           "Maille",
-          "35 cm (national, R436-18)"
+          "35 cm en usage (grands lacs) — base légale à confirmer, voir arrêté préfectoral"
         ],
         [
           "Quota",
@@ -2875,6 +2875,8 @@ export const BASE_SPECIES: Species[] = [
     "quota": "—",
     "quotaSub": "—",
     "season": "toujours",
+    "invasive": true,
+    "invasiveBasis": "règl. UE 1143/2014 · arrêté 14 fév. 2018",
     "depth": "base",
     "reg": {
       "rows": [
@@ -2888,7 +2890,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Aucun statut national particulier"
+          "Espèce exotique envahissante (règl. UE 1143/2014) : remise à l'eau vivante interdite"
         ],
         [
           "Période",

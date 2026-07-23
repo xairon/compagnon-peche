@@ -1,6 +1,39 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+
+// Content-Security-Policy (defense-in-depth). Injected only in the built HTML —
+// NOT in dev, where Vite's HMR needs inline/eval and a ws: connection. Scripts are
+// restricted to 'self' (no inline script ships in prod); connect/img/frame are
+// whitelisted to the exact third parties the app talks to. `data:`/`blob:` are
+// needed for photo blobs and the backup import (fetch on a data: URL).
+const CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
+  "img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com https://data.geopf.fr",
+  "worker-src 'self' blob:",
+  "connect-src 'self' data: blob: https://hubeau.eaufrance.fr https://services.sandre.eaufrance.fr https://data.geopf.fr https://api.open-meteo.com https://api.gbif.org https://overpass-api.de https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com",
+  "frame-src https://map.geopeche.com",
+  "manifest-src 'self'",
+].join("; ");
+
+const cspPlugin: Plugin = {
+  name: "inject-csp",
+  apply: "build",
+  transformIndexHtml() {
+    return [
+      {
+        tag: "meta",
+        attrs: { "http-equiv": "Content-Security-Policy", content: CSP },
+        injectTo: "head-prepend",
+      },
+    ];
+  },
+};
 
 // Offline-first PWA. Everything the app needs is precached so it runs with
 // zero network once installed — the core requirement for use at the water's edge.
@@ -11,6 +44,7 @@ export default defineConfig({
     rollupOptions: { output: { manualChunks: { maplibre: ["maplibre-gl"] } } },
   },
   plugins: [
+    cspPlugin,
     react(),
     VitePWA({
       // Prompt mode: we surface a "new version" toast instead of a silent reload.

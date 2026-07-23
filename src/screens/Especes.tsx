@@ -70,7 +70,7 @@ export function Especes() {
         <div className="h-sub">Eau douce · France — dépt. actif : {deptName}</div>
 
         <div className="search">
-          <Icon d={ICONS.search} size={19} stroke="#948F81" width={1.6} />
+          <Icon d={ICONS.search} size={19} stroke="var(--muted)" width={1.6} />
           <input
             value={state.q}
             onChange={(e) => set({ q: e.target.value })}
@@ -83,7 +83,7 @@ export function Especes() {
           )}
           {micAvail && (
             <button className="icon-btn" onClick={startVoice} aria-label="Recherche vocale">
-              <Icon d={ICONS.mic} size={20} stroke={state.listening ? "#B33A2E" : "#948F81"} width={1.6} />
+              <Icon d={ICONS.mic} size={20} stroke={state.listening ? "#B33A2E" : "var(--muted)"} width={1.6} />
             </button>
           )}
         </div>
@@ -180,7 +180,7 @@ export function Especes() {
       </div>
 
       {list.length === 0 && (
-        <div style={{ padding: "10px 18px 30px", textAlign: "center", color: "#948F81", fontSize: 14 }}>
+        <div style={{ padding: "10px 18px 30px", textAlign: "center", color: "var(--muted)", fontSize: 14 }}>
           Aucune espèce ne correspond à « {state.q} ».
           <br />
           Essayez l'

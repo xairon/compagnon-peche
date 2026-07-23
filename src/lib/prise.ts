@@ -77,11 +77,16 @@ export function priseView(
         titleFg: "#B33A2E",
         tone: "bad",
         banner: "NE PAS RELÂCHER VIVANT",
-        kicker: "Statut légal — R432-5",
+        kicker: "Statut légal — " + (sp.invasiveBasis ?? "R432-5"),
         title: "Interdit de la remettre vivante à l'eau",
         paras: [
-          sp.name +
-            " est classée susceptible de provoquer des déséquilibres biologiques. La remise à l'eau vivante et le transport vivant sont interdits : la capture doit être mise à mort.",
+          sp.invasiveBasis
+            ? sp.name +
+              " est une espèce exotique envahissante réglementée (" +
+              sp.invasiveBasis +
+              ") : sa réintroduction / remise à l'eau vivante dans le milieu naturel est interdite — la capture ne doit pas être relâchée vivante."
+            : sp.name +
+              " est classée susceptible de provoquer des déséquilibres biologiques. La remise à l'eau vivante et le transport vivant sont interdits : la capture doit être mise à mort.",
         ],
         actions: [
           btn("Comment la mettre à mort proprement", "kill", "danger"),
@@ -104,6 +109,28 @@ export function priseView(
             " est fermée à cette date. Remise à l'eau immédiate et soignée.",
         ],
         actions: [btn("Gestes pour bien relâcher", "release", "primary")],
+      };
+    // Special regulatory status (eel): no simple national period — declaration +
+    // basin-specific closures. Never show a plain green "open" verdict here.
+    if (sp.season === "special")
+      return {
+        ...V,
+        bd: "#B8860B",
+        kickFg: "#8A6D0B",
+        titleFg: "#5C4708",
+        tone: "warn",
+        banner: "RÉGLEMENTATION SPÉCIALE",
+        kicker: "Statut légal",
+        title: "Pêche réglementée — vérifiez l'arrêté",
+        paras: [
+          sp.name +
+            " relève d'une réglementation spéciale : les périodes d'ouverture et de fermeture varient selon le bassin et l'arrêté préfectoral, et la capture peut devoir être déclarée. Ne considérez pas la pêche comme ouverte par défaut — vérifiez l'arrêté en vigueur avant de conserver.",
+        ],
+        note: sp.reg && sp.reg.note ? sp.reg.note : null,
+        actions: [
+          btn("J'ai vérifié — continuer", "maille", "primary"),
+          btn("Gestes pour bien relâcher", "release"),
+        ],
       };
     const openParas = [
       "Aucune interdiction nationale pour " +

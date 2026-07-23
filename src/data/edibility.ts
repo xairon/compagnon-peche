@@ -22,6 +22,10 @@ export interface Edible {
 const CULINARY = "Fédérations de pêche · références culinaires";
 const ANSES = "ANSES (avis PCB 2011/2015)";
 const A1988 = "Arrêté du 8 décembre 1988 (espèces protégées)";
+// Fished salmonids (ombre, omble chevalier, corégone): NOT on the 1988 protected
+// list — they have a legal size + local quota. Cite the salmonid regulation, not
+// "protégé 1988", which contradicts their pêchable status in regulation/species.
+const SALMO = "Réglementation salmonicole (R436-18/19 · arrêtés préfectoraux)";
 // Amphihaline migrators: the 1988 arrêté protects only eggs/spawning grounds, not
 // the adults — whose take is governed by basin moratoria/arrêtés. Cite both honestly.
 const MIGRATEUR =
@@ -124,22 +128,22 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "réglementé",
     bones: "peu",
     taste: "Chair fine, fondante et délicate — poisson noble des lacs alpins.",
-    prep: "Protégé (arrêté 1988) : pêche seulement dans certains lacs, réglementation stricte (taille, quota).",
-    source: A1988,
+    prep: "Salmonidé pêché des lacs alpins, non protégé par l'arrêté 1988 : réglementation stricte (taille, quota, souvent no-kill). Vérifiez l'arrêté du lac.",
+    source: SALMO,
   },
   "coregone-lavaret": {
     status: "réglementé",
     bones: "moyen",
     taste: "Chair blanche fine et délicate, très recherchée en cuisine lacustre.",
-    prep: "Genre protégé (arrêté 1988) ; pêche réglementée dans les grands lacs.",
-    source: A1988,
+    prep: "Salmonidé lacustre pêché, non protégé par l'arrêté 1988 : pêche réglementée dans les grands lacs (taille, quota).",
+    source: SALMO,
   },
   ombre: {
     status: "réglementé",
     bones: "moyen",
     taste: "Chair fine et délicate ; légère odeur de thym à la capture.",
-    prep: "Protégé (arrêté 1988) : très réglementé, taille élevée, souvent pratiqué en no-kill.",
-    source: A1988,
+    prep: "Salmonidé pêché, non protégé par l'arrêté 1988 : très réglementé (maille élevée, ouverture spécifique possible, souvent no-kill).",
+    source: SALMO,
   },
 
   // ── Cyprinidés & apparentés ──────────────────────────────────

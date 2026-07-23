@@ -3,6 +3,7 @@
 // OSM contributors — uneven by region, so absence ≠ "nothing there".
 
 import { distKm } from "./geo";
+import { fetchT } from "./net";
 
 const ENDPOINT = "https://overpass-api.de/api/interpreter";
 
@@ -47,7 +48,7 @@ export async function fetchAccess(
     `nwr["man_made"="pier"]${bb};` +
     `);out center tags 200;`;
   // GET (not POST) so the service worker can cache the response for offline use.
-  const r = await fetch(`${ENDPOINT}?data=${encodeURIComponent(q)}`, { signal });
+  const r = await fetchT(`${ENDPOINT}?data=${encodeURIComponent(q)}`, { signal });
   if (!r.ok) throw new Error("Overpass " + r.status);
   const j = await r.json();
   const out: AccessPoint[] = [];

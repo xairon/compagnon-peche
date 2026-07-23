@@ -5,6 +5,8 @@
 //
 // taxonKeys resolved once via /species/match and baked here (no runtime lookups).
 
+import { fetchT } from "./net";
+
 const API = "https://api.gbif.org/v1";
 
 interface Taxon {
@@ -79,7 +81,7 @@ export async function occurrencesInBbox(
     `&decimalLongitude=${w.toFixed(4)},${e.toFixed(4)}` +
     tk +
     `&limit=300`;
-  const r = await fetch(url, { signal });
+  const r = await fetchT(url, { signal });
   if (!r.ok) throw new Error("GBIF " + r.status);
   const j = await r.json();
   const out: Occurrence[] = [];

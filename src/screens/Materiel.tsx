@@ -241,7 +241,7 @@ export function Materiel() {
                     >
                       <span className={"pick-box" + (on ? " on" : "")}>{on ? "✓" : ""}</span>
                       <span style={{ flex: 1 }}>{g.name}</span>
-                      <span style={{ fontSize: 11, color: "#948F81" }}>{CAT_LABEL[g.cat]}</span>
+                      <span style={{ fontSize: 11, color: "var(--muted)" }}>{CAT_LABEL[g.cat]}</span>
                     </button>
                   );
                 })}
@@ -279,11 +279,11 @@ export function Materiel() {
                   .map((g) => (
                     <div key={g!.id} className="bundle-item">
                       <span style={{ color: "#1D6E42" }}>—</span> {g!.name}
-                      <span style={{ color: "#948F81", fontSize: 12 }}> · {CAT_LABEL[g!.cat]}</span>
+                      <span style={{ color: "var(--muted)", fontSize: 12 }}> · {CAT_LABEL[g!.cat]}</span>
                     </div>
                   ))}
                 {b.itemIds.length === 0 && (
-                  <div style={{ fontSize: 13, color: "#948F81" }}>Aucun matériel associé.</div>
+                  <div style={{ fontSize: 13, color: "var(--muted)" }}>Aucun matériel associé.</div>
                 )}
               </div>
             </div>

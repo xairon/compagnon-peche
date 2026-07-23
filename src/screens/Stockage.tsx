@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
 import {
   storageInfo,
   requestPersist,
   exportData,
+  importData,
   wipeAll,
   fmtBytes,
   type StorageInfo,
@@ -15,6 +16,9 @@ export function Stockage() {
   const [busy, setBusy] = useState(false);
   const [arm, setArm] = useState(false);
   const [exported, setExported] = useState(false);
+  const [importMsg, setImportMsg] = useState<string | null>(null);
+  const [importErr, setImportErr] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = () => storageInfo().then(setInfo);
   useEffect(() => {
@@ -32,6 +36,34 @@ export function Stockage() {
     await exportData();
     setExported(true);
     setTimeout(() => setExported(false), 3000);
+  };
+
+  const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-picking the same file
+    if (!file) return;
+    setImportMsg(null);
+    setImportErr(false);
+    try {
+      const r = await importData(file);
+      const total = r.catches + r.spots + r.gear + r.recipes + r.photos;
+      if (total === 0) {
+        setImportMsg("Sauvegarde lue : tout y était déjà présent (rien à ajouter).");
+      } else {
+        const parts = [
+          r.catches && `${r.catches} prise${r.catches > 1 ? "s" : ""}`,
+          r.spots && `${r.spots} spot${r.spots > 1 ? "s" : ""}`,
+          r.gear && `${r.gear} matériel`,
+          r.recipes && `${r.recipes} recette${r.recipes > 1 ? "s" : ""}`,
+          r.photos && `${r.photos} photo${r.photos > 1 ? "s" : ""}`,
+        ].filter(Boolean);
+        setImportMsg(`Restauré : ${parts.join(", ")}. Rechargement…`);
+        setTimeout(() => window.location.reload(), 1400);
+      }
+    } catch (err) {
+      setImportErr(true);
+      setImportMsg(err instanceof Error ? err.message : "Import impossible.");
+    }
   };
 
   const doWipe = async () => {
@@ -107,8 +139,29 @@ export function Stockage() {
           {exported ? "✓ Sauvegarde téléchargée" : "⤓ Exporter mes données (JSON)"}
         </button>
         <div className="stg-note">
-          Sauvegarde locale du carnet, des spots, du matériel et du profil. Les photos ne sont pas
-          incluses (elles restent sur l'appareil).
+          Sauvegarde locale complète : carnet, spots, matériel, profil, recettes <b>et photos</b>.
+          Conservez ce fichier ailleurs (cloud, ordinateur) — c'est votre seul filet en cas de perte
+          d'appareil.
+        </div>
+
+        {/* Import / restore */}
+        <input
+          ref={fileRef}
+          type="file"
+          accept="application/json,.json"
+          onChange={onPickFile}
+          style={{ display: "none" }}
+        />
+        <button className="stg-btn" onClick={() => fileRef.current?.click()} style={{ marginTop: 10 }}>
+          ⤒ Importer une sauvegarde
+        </button>
+        {importMsg && (
+          <div className="stg-note" style={{ color: importErr ? "var(--red)" : "var(--green)" }}>
+            {importMsg}
+          </div>
+        )}
+        <div className="stg-note">
+          La restauration <b>complète</b> vos données sans écraser ce qui existe déjà (aucun doublon).
         </div>
 
         {/* Wipe */}

@@ -56,7 +56,7 @@ export function Statistiques() {
             Statistiques
           </div>
           {total > 0 && (
-            <div style={{ fontSize: 12, color: "#948f81", marginTop: 1 }}>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
               Depuis vos {total} prise{total > 1 ? "s" : ""}
             </div>
           )}

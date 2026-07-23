@@ -44,6 +44,10 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
 
         <div className="onb2-rule" />
         <p className="onb2-foot">Sans compte · Carnet 100 % local · Fiches hors-ligne</p>
+        <p className="onb2-hint">
+          Mains mouillées ou gantées ? Le bouton gant, en bas à droite, agrandit toutes les
+          commandes d'un seul geste.
+        </p>
 
         <button className="onb2-cta" onClick={onDone}>
           Ouvrir le carnet

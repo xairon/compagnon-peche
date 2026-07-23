@@ -34,6 +34,11 @@ export function season(sp: Species, now: Date = new Date()): SeasonState {
 
   if (sp.invasive) return { open: true, label: "Capture toute l'année" };
 
+  // No simple national period (eel): periods & closures vary by basin/arrêté and
+  // the catch is declarable. We don't claim "closed" (it isn't, at all dates) but
+  // priseView intercepts this rule so it never shows a plain green "open" verdict.
+  if (sp.season === "special") return { open: true, label: "Réglementation spéciale — vérifier l'arrêté" };
+
   if (sp.season === "cat1") {
     const o = nth(y, 2, 6, 2); // 2nd Saturday of March
     const c = nth(y, 8, 0, 3); // 3rd Sunday of September

@@ -30,19 +30,27 @@ export function OutilsTerrain() {
   const { state, back } = useStore();
   const deptName = DEPARTEMENTS[state.dept].name;
 
+  // A ticking clock so the "opens/closes in X h" countdown actually advances
+  // while the screen stays open (was computed once at mount and frozen).
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 30000);
+    return () => clearInterval(id);
+  }, []);
+
   const legal = useMemo(() => {
-    const t = sunTimes(new Date(), HOME.lat, HOME.lon);
+    const t = sunTimes(new Date(nowMs), HOME.lat, HOME.lon);
     if (!t.sunrise || !t.sunset) return null;
     const open = new Date(t.sunrise.getTime() - 30 * 60000);
     const close = new Date(t.sunset.getTime() + 30 * 60000);
-    const now = Date.now();
+    const now = nowMs;
     const isOpen = now >= open.getTime() && now <= close.getTime();
     const beforeOpen = now < open.getTime();
     const remainMs = isOpen ? close.getTime() - now : beforeOpen ? open.getTime() - now : 0;
     const h = Math.floor(remainMs / 3600000);
     const m = Math.floor((remainMs % 3600000) / 60000);
     return { open, close, isOpen, beforeOpen, remain: `${h} h ${String(m).padStart(2, "0")}` };
-  }, []);
+  }, [nowMs]);
 
   // A single active countdown at a time.
   const [active, setActive] = useState<string | null>(null);
@@ -92,7 +100,7 @@ export function OutilsTerrain() {
         </button>
         <div style={{ flex: 1 }}>
           <div className="topbar-title">Outils de terrain</div>
-          <div style={{ fontSize: 12, color: "#948f81", marginTop: 1 }}>Chronos & repères réglementaires</div>
+          <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>Chronos & repères réglementaires</div>
         </div>
       </div>
 

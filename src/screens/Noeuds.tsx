@@ -34,7 +34,7 @@ export function Noeuds() {
                 <Icon d={ICONS.knot} size={21} stroke="#4A5D52" />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14.5, fontWeight: 600 }}>{k.name}</div>
-                  <div style={{ fontSize: 12, color: "#948F81", marginTop: 1 }}>{k.use}</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{k.use}</div>
                 </div>
                 <span style={{ color: "#C9C3B4" }}>›</span>
               </button>

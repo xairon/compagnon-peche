@@ -83,7 +83,7 @@ export function Prise() {
       {choosing && (
         <div style={{ padding: "4px 18px 24px" }}>
           <div className="search" style={{ marginTop: 6 }}>
-            <Icon d={ICONS.search} size={18} stroke="#948F81" />
+            <Icon d={ICONS.search} size={18} stroke="var(--muted)" />
             <input
               value={pq}
               onChange={(e) => setPq(e.target.value)}
@@ -146,7 +146,7 @@ export function Prise() {
             <button className="round-btn" onClick={goBack} aria-label="Étape précédente">
               ‹
             </button>
-            <div style={{ fontSize: 13, color: "#948F81" }}>
+            <div style={{ fontSize: 13, color: "var(--muted)" }}>
               {sp?.name}
               {!isShortcutStep && ` · étape ${STEP_ORDER[step as string] || 1} / 5`}
             </div>
@@ -157,7 +157,7 @@ export function Prise() {
                 border: "none",
                 background: "transparent",
                 fontSize: 12.5,
-                color: "#948F81",
+                color: "var(--muted)",
                 textDecoration: "underline",
               }}
             >

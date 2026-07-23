@@ -2,6 +2,8 @@
 // time-serie-explo app), fetched directly from the browser (CORS allowed).
 // Rivers = CoursEau1 (named watercourses), water bodies = PlanEau (lakes/ponds).
 
+import { fetchT } from "./net";
+
 const WFS = "https://services.sandre.eaufrance.fr/geo/zonage";
 const OBS = "https://services.sandre.eaufrance.fr/geo/obs";
 const OUTPUT = "application/json; subtype=geojson";
@@ -34,7 +36,7 @@ async function wfs(
     `${base}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature` +
     `&OUTPUTFORMAT=${encodeURIComponent(OUTPUT)}&TYPENAMES=${typename}` +
     `&BBOX=${bbox(w, s, e, n)}&COUNT=${count}`;
-  const r = await fetch(url, { signal });
+  const r = await fetchT(url, { signal });
   if (!r.ok) throw new Error("Sandre " + r.status);
   return r.json();
 }
@@ -91,7 +93,7 @@ export interface Place {
 
 /** Place / commune search via the IGN Géoplateforme geocoder (CORS allowed). */
 export async function geocode(q: string, signal?: AbortSignal): Promise<Place[]> {
-  const r = await fetch(
+  const r = await fetchT(
     `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&limit=6`,
     { signal },
   );
@@ -117,8 +119,10 @@ export async function deptFromCoords(
   signal?: AbortSignal,
 ): Promise<string | null> {
   try {
-    const r = await fetch(
-      `https://data.geopf.fr/geocodage/reverse?lon=${lon.toFixed(5)}&lat=${lat.toFixed(5)}&index=address&limit=1`,
+    // 3 decimals (~110 m) resolves the département reliably without handing the
+    // user's precise position to the IGN geocoder (privacy — see Sources screen).
+    const r = await fetchT(
+      `https://data.geopf.fr/geocodage/reverse?lon=${lon.toFixed(3)}&lat=${lat.toFixed(3)}&index=address&limit=1`,
       { signal },
     );
     if (!r.ok) return null;

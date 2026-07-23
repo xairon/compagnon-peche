@@ -3,12 +3,15 @@
 
 import { get, set, del } from "idb-keyval";
 import { useEffect, useState } from "react";
+import { reportPersistError, clearPersistError } from "./storage";
 
 export async function savePhoto(key: string, blob: Blob): Promise<void> {
   try {
     await set(key, blob);
-  } catch {
-    /* storage unavailable / quota — photo simply not saved */
+    clearPersistError();
+  } catch (e) {
+    // Photos are the likeliest to blow the quota — never fail silently.
+    reportPersistError(e);
   }
 }
 

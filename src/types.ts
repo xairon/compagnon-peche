@@ -12,8 +12,10 @@ export type SpeciesGroup =
 export type Rating = "Excellent" | "Bon" | "Médiocre" | "Déconseillé" | "Interdit";
 export type RatingClass = "good" | "warn" | "bad";
 
-/** How the open/closed season is computed for a species. */
-export type SeasonRule = "toujours" | "cat1" | "brochet" | "invasive-year";
+/** How the open/closed season is computed for a species.
+ *  "special" = no simple national period (e.g. eel): declaration + basin-specific
+ *  closures — the UI must NOT show a plain green "open" verdict. */
+export type SeasonRule = "toujours" | "cat1" | "brochet" | "invasive-year" | "special";
 
 export interface Confusion {
   n: string; // name of the confusable species
@@ -89,6 +91,9 @@ export interface Species {
   protected?: boolean;
   /** Invasive / "susceptible de déséquilibres" — must not be released alive (R432-5). */
   invasive?: boolean;
+  /** Legal basis for the no-release rule when it isn't R432-5 (e.g. EU 1143/2014
+   *  for pseudorasbora). Shown in the verdict kicker; defaults to "R432-5". */
+  invasiveBasis?: string;
   alert?: Alert;
   ident?: {
     summary: string;

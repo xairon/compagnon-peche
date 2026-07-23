@@ -33,7 +33,7 @@ export function Credits() {
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (
     <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid #ECE8DD" }}>
       <div style={{ fontSize: 14, fontWeight: 600 }}>{r.name}</div>
-      <div style={{ fontSize: 12.5, color: "#948F81", marginTop: 2, lineHeight: 1.5 }}>
+      <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
         {r.author} — {r.license}
         {r.sourceUrl && (
           <>
@@ -80,7 +80,7 @@ export function Credits() {
         )}
 
         {speciesRows.length === 0 && knotRows.length === 0 && (
-          <div style={{ color: "#948F81", fontSize: 14 }}>
+          <div style={{ color: "var(--muted)", fontSize: 14 }}>
             Les images seront créditées ici une fois embarquées.
           </div>
         )}

@@ -45,17 +45,17 @@ interface Water {
   temp?: WaterTemp | null;
 }
 
-async function loadWater(lat: number, lon: number): Promise<Water> {
-  const st = await nearestHydroStation(lat, lon).catch(() => null);
+async function loadWater(lat: number, lon: number, signal?: AbortSignal): Promise<Water> {
+  const st = await nearestHydroStation(lat, lon, signal).catch(() => null);
   let flow: HydroReading | null = null;
   let level: HydroReading | null = null;
   if (st) {
-    flow = await latestHydro(st.code, "Q").catch(() => null);
-    if (!flow) level = await latestHydro(st.code, "H").catch(() => null);
+    flow = await latestHydro(st.code, "Q", signal).catch(() => null);
+    if (!flow) level = await latestHydro(st.code, "H", signal).catch(() => null);
   }
   // Freshest real reading across both Hub'Eau networks — always shown WITH its
   // date (no French river has continuous coverage), so it's never faked as "live".
-  const temp = await waterTemp(lat, lon).catch(() => null);
+  const temp = await waterTemp(lat, lon, signal).catch(() => null);
   return { station: st?.nom, flow, level, temp };
 }
 
@@ -76,12 +76,13 @@ export function Accueil() {
 
   useEffect(() => {
     let alive = true;
+    const ac = new AbortController();
     setLoading(true);
     setErr(false);
     setWater(null);
     Promise.all([
-      fetchMeteo(pt.lat, pt.lon).catch(() => null),
-      nearestOnde(pt.lat, pt.lon).catch(() => null),
+      fetchMeteo(pt.lat, pt.lon, ac.signal).catch(() => null),
+      nearestOnde(pt.lat, pt.lon, ac.signal).catch(() => null),
     ]).then(([m, o]) => {
       if (!alive) return;
       setMeteo(m);
@@ -89,9 +90,10 @@ export function Accueil() {
       setLoading(false);
       setErr(!m);
     });
-    loadWater(pt.lat, pt.lon).then((w) => alive && setWater(w));
+    loadWater(pt.lat, pt.lon, ac.signal).then((w) => alive && setWater(w));
     return () => {
       alive = false;
+      ac.abort(); // cancel in-flight weather/onde/water requests on unmount/dep change
     };
   }, [pt.lat, pt.lon]);
 
