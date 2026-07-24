@@ -208,12 +208,19 @@ function CatchTile({ c, onOpen }: { c: Catch; onOpen: () => void }) {
 
 function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void }) {
   const [open, setOpen] = useState(false);
+  const [arm, setArm] = useState(false);
   const total = tallyTotal(s.tally);
   const duree = s.fin ? fmtDuration((s.fin - s.debut) / 1000) : null;
 
   return (
     <div className="ecr-row">
-      <button className="ecr-row-head" onClick={() => setOpen((o) => !o)}>
+      <button
+        className="ecr-row-head"
+        onClick={() => {
+          setOpen((o) => !o);
+          setArm(false);
+        }}
+      >
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="nm">
             {s.lieu} · {s.date}
@@ -236,9 +243,15 @@ function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void 
             </div>
           ))}
           {s.note && <div className="ecr-row-note">{s.note}</div>}
-          <button className="btn-light" onClick={onDelete}>
-            Supprimer cette séance
-          </button>
+          {arm ? (
+            <button className="btn-danger" onClick={onDelete}>
+              Confirmer la suppression
+            </button>
+          ) : (
+            <button className="btn-danger-ghost" onClick={() => setArm(true)}>
+              Supprimer cette séance
+            </button>
+          )}
         </div>
       )}
     </div>
