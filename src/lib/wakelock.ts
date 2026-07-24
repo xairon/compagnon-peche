@@ -3,7 +3,9 @@
 // The system releases the lock whenever the page is hidden, so we re-acquire it
 // on the way back — otherwise the lock silently dies on the first screen-off.
 
-type Lock = { release: () => void };
+// Loosely typed: the real WakeLockSentinel supports `addEventListener`, but
+// the test stub and older engines may not — every call to it is guarded.
+type Lock = { release: () => void; addEventListener?: (type: "release", cb: () => void) => void };
 interface WakeNav {
   wakeLock?: { request: (t: string) => Promise<Lock> };
 }
@@ -11,6 +13,11 @@ interface WakeNav {
 let lock: Lock | null = null;
 let wanted = false;
 let listening = false;
+// A request is async: two acquire() calls that both fire before the first
+// resolves (visibility flicker, two consumers calling requestWake() back to
+// back) would otherwise each issue a request, with the second sentinel
+// clobbering `lock` and leaking the first past releaseWake().
+let acquiring = false;
 // Two independent consumers can hold the wake lock at once (cook mode, the
 // crayfish session screen). Reference-count so the first one to release
 // doesn't kill the other's screen-on guarantee.
@@ -20,10 +27,12 @@ function acquire() {
   try {
     const nav = navigator as unknown as WakeNav;
     if (!nav.wakeLock) return;
-    if (lock) return; // already held — don't issue a redundant request
+    if (lock || acquiring) return; // already held, or a request is already in flight
+    acquiring = true;
     nav.wakeLock
       .request("screen")
       .then((l) => {
+        acquiring = false;
         if (!wanted) {
           // nobody wants the lock anymore by the time this resolved —
           // release it immediately instead of storing it.
@@ -35,10 +44,27 @@ function acquire() {
           return;
         }
         lock = l;
+        // The platform releases the sentinel by itself whenever the document
+        // is hidden — that's the whole reason onVisibility exists. Without
+        // this listener, `lock` keeps pointing at the now-dead sentinel and
+        // the next visibilitychange short-circuits on `if (lock) return`,
+        // silently losing the wake lock for the rest of the session. Only
+        // clear `lock` if it's still the sentinel we're tracking — an
+        // explicit releaseWake() may have already replaced or nulled it.
+        try {
+          l.addEventListener?.("release", () => {
+            if (lock === l) lock = null;
+          });
+        } catch {
+          /* ignore */
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        acquiring = false;
+      });
   } catch {
-    /* not supported — ignore */
+    acquiring = false;
+    /* not supported, or request() threw synchronously — ignore */
   }
 }
 
