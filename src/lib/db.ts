@@ -1,5 +1,5 @@
 import { get, set } from "idb-keyval";
-import type { Catch, Spot, GearItem, Profile, PersonalRecipe } from "../types";
+import type { Catch, Spot, GearItem, Profile, PersonalRecipe, CrayfishSession } from "../types";
 import { reportPersistError, clearPersistError } from "./storage";
 
 // The catch notebook lives 100% on the device (IndexedDB). Nothing is ever
@@ -9,6 +9,7 @@ const SPOTS_KEY = "carnet:spots";
 const GEAR_KEY = "fish-gear"; // shared with the Materiel screen (single source of truth)
 const PROFILE_KEY = "carnet:profile";
 const RECIPES_KEY = "carnet:recipes";
+const CRAYFISH_KEY = "carnet:crayfish";
 
 const EMPTY_PROFILE: Profile = { name: "", bio: "", region: "" };
 
@@ -105,6 +106,20 @@ export async function loadProfile(): Promise<Profile> {
 export async function saveProfile(profile: Profile): Promise<void> {
   try {
     await set(PROFILE_KEY, profile);
+    clearPersistError();
+  } catch (e) {
+    reportPersistError(e); // keep working in memory, but warn the user
+  }
+}
+
+// Crayfish sessions — device-only, same guarantees as the rest of the notebook.
+export async function loadCrayfish(): Promise<CrayfishSession[]> {
+  return (await get<CrayfishSession[]>(CRAYFISH_KEY)) ?? [];
+}
+
+export async function saveCrayfish(sessions: CrayfishSession[]): Promise<void> {
+  try {
+    await set(CRAYFISH_KEY, sessions);
     clearPersistError();
   } catch (e) {
     reportPersistError(e); // keep working in memory, but warn the user

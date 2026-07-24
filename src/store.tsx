@@ -7,7 +7,7 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import type { Catch, Species, Spot, GearItem, Profile, PersonalRecipe } from "./types";
+import type { Catch, Species, Spot, GearItem, Profile, PersonalRecipe, CrayfishSession } from "./types";
 import type { DeptId } from "./data/regulation";
 import {
   loadCatches,
@@ -20,6 +20,8 @@ import {
   saveProfile,
   loadRecipes,
   saveRecipes,
+  loadCrayfish,
+  saveCrayfish,
   runMigrations,
 } from "./lib/db";
 import { deletePhoto } from "./lib/photos";
@@ -51,7 +53,8 @@ export type Screen =
   | "prise-detail"
   | "outils-terrain"
   | "mes-recettes"
-  | "stockage";
+  | "stockage"
+  | "ecrevisses";
 
 // "prise" is not a tab — it's the central action button (a full flow), not a destination.
 // v2 nav: Accueil · Espèces · Prise(central) · Carte · Carnet. "Outils" is no
@@ -96,6 +99,7 @@ export interface AppState {
   gear: GearItem[];
   profile: Profile;
   recipes: PersonalRecipe[];
+  crayfish: CrayfishSession[];
   formOpen: boolean;
   f: CatchForm;
   dept: DeptId;
@@ -130,6 +134,7 @@ const initialState: AppState = {
   gear: [],
   profile: { name: "", bio: "", region: "" },
   recipes: [],
+  crayfish: [],
   formOpen: false,
   f: { sp: "sandre", taille: "", lieu: "", garde: false },
   dept: "41",
@@ -170,6 +175,9 @@ interface Store {
   addRecipe: (recipe: PersonalRecipe) => void;
   updateRecipe: (id: string, patch: Partial<PersonalRecipe>) => void;
   removeRecipe: (id: string) => void;
+  addCrayfishSession: (session: CrayfishSession) => void;
+  saveCrayfishSession: (session: CrayfishSession) => void;
+  removeCrayfishSession: (id: string) => void;
 }
 
 /** Actions are the store minus its state — a referentially STABLE object. */
@@ -209,12 +217,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           return d;
         }
       };
-      const [catches, spots, gear, profile, recipes] = await Promise.all([
+      const [catches, spots, gear, profile, recipes, crayfish] = await Promise.all([
         safe(loadCatches(), [] as Catch[]),
         safe(loadSpots(), [] as Spot[]),
         safe(loadGear(), [] as GearItem[]),
         safe(loadProfile(), { name: "", bio: "", region: "" } as Profile),
         safe(loadRecipes(), [] as PersonalRecipe[]),
+        safe(loadCrayfish(), [] as CrayfishSession[]),
       ]);
       if (!alive) return;
       // Merge, don't replace: if the user logged a catch/spot before IndexedDB
@@ -226,6 +235,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         gear,
         profile,
         recipes: [...s.recipes, ...recipes],
+        crayfish: [...s.crayfish, ...crayfish],
         hydrated: true,
         loadOk: ok,
       }));
@@ -265,6 +275,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!state.hydrated || !state.loadOk) return;
     saveRecipes(state.recipes);
   }, [state.recipes, state.hydrated, state.loadOk]);
+
+  useEffect(() => {
+    if (!state.hydrated || !state.loadOk) return;
+    saveCrayfish(state.crayfish);
+  }, [state.crayfish, state.hydrated, state.loadOk]);
 
   const actions = useMemo<Actions>(() => {
     const set = (patch: Patch) => dispatch(patch);
@@ -361,6 +376,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (photo) deletePhoto(photo);
       dispatch((s) => ({ recipes: s.recipes.filter((r) => r.id !== id) }));
     };
+    // Crayfish sessions. The screen computes the next session with the pure
+    // helpers of lib/ecrevisses and hands the whole object back — the store is
+    // deliberately thin glue here, so all the logic stays testable.
+    const addCrayfishSession: Store["addCrayfishSession"] = (session) =>
+      dispatch((s) => ({ crayfish: [session, ...s.crayfish] }));
+    const saveCrayfishSession: Store["saveCrayfishSession"] = (session) =>
+      dispatch((s) => ({ crayfish: s.crayfish.map((c) => (c.id === session.id ? session : c)) }));
+    const removeCrayfishSession: Store["removeCrayfishSession"] = (id) =>
+      dispatch((s) => ({ crayfish: s.crayfish.filter((c) => c.id !== id) }));
     return {
       set,
       nav,
@@ -380,6 +404,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addRecipe,
       updateRecipe,
       removeRecipe,
+      addCrayfishSession,
+      saveCrayfishSession,
+      removeCrayfishSession,
     };
     // Actions are built once and stay stable (they use dispatch + stateRef).
   }, []);
