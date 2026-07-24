@@ -1,5 +1,6 @@
 import { useStore } from "../store";
 import { NATIONAL_SIZES, DEPARTEMENTS, type DeptId } from "../data/regulation";
+import { MAILLE_NOTE } from "../data/ecrevisses";
 
 export function Reglement() {
   const { state, set, back } = useStore();
@@ -24,6 +25,9 @@ export function Reglement() {
               <span style={{ fontWeight: 650 }}>{v}</span>
             </div>
           ))}
+          {/* La ligne « 9 cm » ne doit jamais se lire comme une autorisation :
+              même mise en garde que sur l'écran Écrevisses, même source. */}
+          <div className="reg-note">{MAILLE_NOTE}</div>
           <div className="reg-note">
             Art. R436-18 du Code de l'environnement. Le préfet peut modifier ces tailles localement
             (R436-19/20) — le national est un socle, pas une constante.
