@@ -9,6 +9,7 @@ import {
   markNotified,
   setWake,
   addSession,
+  reconcileSessions,
   sortBalances,
   nextDue,
   makeBalances,
@@ -224,6 +225,16 @@ describe("updateBalance / removeBalance / addBalance", () => {
     expect(next.balances.map((b) => b.n)).toEqual([1, 2]);
   });
 
+  it("removeBalance refuse de retirer la dernière balance", () => {
+    const s = createSession({ count: 1, intervalMin: 30, lieu: "Étang", now: T0 });
+    expect(removeBalance(s, s.balances[0].id)).toEqual(s);
+  });
+
+  it("removeBalance laisse la séance intacte quand l'identifiant est inconnu", () => {
+    const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
+    expect(removeBalance(s, "inexistante").balances).toHaveLength(2);
+  });
+
   it("addBalance ajoute une balance vide numérotée à la suite", () => {
     const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
     const next = addBalance(s);
@@ -364,5 +375,57 @@ describe("addSession", () => {
     const list = [{ ...createSession({ count: 1, intervalMin: 30, lieu: "A", now: T0 }), fin: T0 }];
     addSession(list, createSession({ count: 1, intervalMin: 30, lieu: "B", now: T0 }));
     expect(list).toHaveLength(1);
+  });
+});
+
+describe("reconcileSessions", () => {
+  const open = (lieu: string, debut: number) =>
+    createSession({ count: 2, intervalMin: 30, lieu, now: debut });
+
+  it("laisse la liste intacte quand une seule séance est ouverte", () => {
+    const list = [
+      { ...open("A", T0), fin: T0 + 60 * MIN },
+      open("B", T0 + 120 * MIN),
+    ];
+    expect(reconcileSessions(list)).toEqual(list);
+  });
+
+  it("ne garde ouverte que la séance démarrée en dernier", () => {
+    const vieille = open("A", T0);
+    const recente = open("B", T0 + 120 * MIN);
+    const list = reconcileSessions([vieille, recente]);
+    expect(currentSession(list)?.id).toBe(recente.id);
+    expect(list.filter((s) => s.fin === null)).toHaveLength(1);
+  });
+
+  it("ne supprime aucune séance et garde l'ordre reçu", () => {
+    const list = reconcileSessions([open("A", T0), open("B", T0 + MIN), open("C", T0 + 2 * MIN)]);
+    expect(list.map((s) => s.lieu)).toEqual(["A", "B", "C"]);
+  });
+
+  it("clôt la séance shadowée à sa dernière pose de balance connue", () => {
+    let vieille = open("A", T0);
+    vieille = poseBalance(vieille, vieille.balances[0].id, T0 + 5 * MIN);
+    vieille = poseBalance(vieille, vieille.balances[1].id, T0 + 8 * MIN);
+    const list = reconcileSessions([vieille, open("B", T0 + 120 * MIN)]);
+    expect(list[0].fin).toBe(T0 + 8 * MIN);
+  });
+
+  it("à défaut de toute activité, la clôt sur son propre début", () => {
+    const vieille = open("A", T0);
+    const list = reconcileSessions([vieille, open("B", T0 + 120 * MIN)]);
+    expect(list[0].fin).toBe(T0);
+  });
+
+  it("n'invente jamais une fin antérieure au début", () => {
+    const vieille = open("A", T0);
+    const list = reconcileSessions([vieille, open("B", T0 + 120 * MIN)]);
+    expect(list[0].fin).toBeGreaterThanOrEqual(list[0].debut);
+  });
+
+  it("ne mute ni la liste ni les séances reçues", () => {
+    const vieille = open("A", T0);
+    reconcileSessions([vieille, open("B", T0 + 120 * MIN)]);
+    expect(vieille.fin).toBeNull();
   });
 });

@@ -82,6 +82,28 @@ export function addSession(sessions: CrayfishSession[], s: CrayfishSession): Cra
   return [s, ...sessions];
 }
 
+/** Last instant we can PROVE the angler touched this session: its most recent
+ *  balance drop, or, if none was ever dropped, its start. Never a made-up now. */
+export function lastActivity(s: CrayfishSession): number {
+  return s.balances.reduce((last, b) => (b.poseeA !== null && b.poseeA > last ? b.poseeA : last), s.debut);
+}
+
+/** Bring a list back to the "one open session at a time" invariant, whatever the
+ *  route it took to get here (addSession guards creation, this guards the merge of
+ *  the hydrated list with what's already in state). The most recently started open
+ *  session stays open — it is the one the angler is looking at; every other one is
+ *  closed on its last known activity. Nothing is deleted, no timestamp is invented:
+ *  a shadowed session would otherwise stay "en cours" forever, unreachable through
+ *  currentSession() and thus impossible to close or to give a bilan. */
+export function reconcileSessions(sessions: CrayfishSession[]): CrayfishSession[] {
+  const open = sessions.filter((s) => s.fin === null);
+  if (open.length <= 1) return sessions;
+  const keep = open.reduce((a, b) => (b.debut > a.debut ? b : a));
+  return sessions.map((s) =>
+    s.fin === null && s.id !== keep.id ? { ...s, fin: lastActivity(s) } : s,
+  );
+}
+
 /** Display order: overdue first (longest overdue on top), then soaking (closest
  *  to due first), then empty ones by number. Never mutates the input. */
 export function sortBalances(balances: Balance[], now: number): Balance[] {
@@ -177,8 +199,11 @@ export function updateBalance(
   return mapBalances(s, (b) => (b.id === id ? { ...b, ...patch } : b));
 }
 
-/** Remove a balance and renumber the rest so the displayed numbers stay 1…N. */
+/** Remove a balance and renumber the rest so the displayed numbers stay 1…N.
+ *  Refuses to remove the last one: a session without balances is a state nextDue,
+ *  sortBalances and the header were never meant to describe. */
 export function removeBalance(s: CrayfishSession, id: string): CrayfishSession {
+  if (s.balances.length <= 1) return s;
   const kept = s.balances.filter((b) => b.id !== id);
   return { ...s, balances: kept.map((b, i) => ({ ...b, n: i + 1 })) };
 }

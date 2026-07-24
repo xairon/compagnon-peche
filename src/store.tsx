@@ -27,7 +27,7 @@ import {
 import { deletePhoto } from "./lib/photos";
 import { reportReadError } from "./lib/storage";
 import { frDate, isoDay, uid } from "./lib/helpers";
-import { addSession } from "./lib/ecrevisses";
+import { addSession, reconcileSessions } from "./lib/ecrevisses";
 
 export type Screen =
   | "accueil"
@@ -115,6 +115,7 @@ export interface AppState {
   justAdded: string | null; // slot of the catch just logged (for a brief confirmation)
   focusSpot: string | null; // spot id to fly to & open when the Carte mounts (from Carnet)
   catchSlot: string | null; // slot of the catch shown on the prise-detail screen
+  bilanSession: string | null; // crayfish session whose bilan the Écrevisses screen shows (from Carnet, to correct a closed one)
   hydrated: boolean;
   loadOk: boolean; // false if reading stored data failed — persistence is suspended
 }
@@ -151,6 +152,7 @@ const initialState: AppState = {
   justAdded: null,
   focusSpot: null,
   catchSlot: null,
+  bilanSession: null,
   hydrated: false,
   loadOk: true,
 };
@@ -184,6 +186,7 @@ interface Store {
   removeRecipe: (id: string) => void;
   addCrayfishSession: (session: CrayfishSession) => void;
   saveCrayfishSession: (session: CrayfishSession) => void;
+  updateCrayfishSession: (id: string, updater: (s: CrayfishSession) => CrayfishSession) => void;
   removeCrayfishSession: (id: string) => void;
 }
 
@@ -235,14 +238,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (!alive) return;
       // Merge, don't replace: if the user logged a catch/spot before IndexedDB
       // finished loading, prepend it rather than dropping it (state starts empty,
-      // so normally this is just the loaded data).
+      // so normally this is just the loaded data). The crayfish merge is the one
+      // place two open sessions could meet, so it goes through reconcileSessions:
+      // the invariant holds structurally, not by a UI guard.
       dispatch((s) => ({
         catches: [...s.catches, ...catches],
         spots: [...s.spots, ...spots],
         gear,
         profile,
         recipes: [...s.recipes, ...recipes],
-        crayfish: [...s.crayfish, ...crayfish],
+        crayfish: reconcileSessions([...s.crayfish, ...crayfish]),
         hydrated: true,
         loadOk: ok,
       }));
@@ -290,8 +295,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const actions = useMemo<Actions>(() => {
     const set = (patch: Patch) => dispatch(patch);
+    // `bilanSession` is reset by default: navigating INTO the écrevisses module
+    // means "show me the session", never "re-open the bilan I left by the tab bar".
+    // The Carnet's "Corriger le bilan" passes it explicitly, and `extra` wins.
     const nav: Store["nav"] = (screen, extra) =>
-      dispatch((s) => ({ stack: [...s.stack, s.screen], screen, ...(extra || {}) }));
+      dispatch((s) => ({ stack: [...s.stack, s.screen], screen, bilanSession: null, ...(extra || {}) }));
     const back: Store["back"] = () =>
       dispatch((s) => {
         const st = [...s.stack];
@@ -395,6 +403,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           ? s.crayfish.map((c) => (c.id === session.id ? session : c))
           : [session, ...s.crayfish],
       }));
+    // Same, but applied to the CURRENT session in state instead of a snapshot the
+    // caller is holding: a background tick (the alert loop) can no longer revert an
+    // edit committed in between, nor resurrect a session deleted meanwhile — unlike
+    // saveCrayfishSession, an unknown id is a no-op, never an insert.
+    const updateCrayfishSession: Store["updateCrayfishSession"] = (id, updater) =>
+      dispatch((s) => ({
+        crayfish: s.crayfish.some((c) => c.id === id)
+          ? s.crayfish.map((c) => (c.id === id ? updater(c) : c))
+          : s.crayfish,
+      }));
     const removeCrayfishSession: Store["removeCrayfishSession"] = (id) =>
       dispatch((s) => ({ crayfish: s.crayfish.filter((c) => c.id !== id) }));
     return {
@@ -418,6 +436,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeRecipe,
       addCrayfishSession,
       saveCrayfishSession,
+      updateCrayfishSession,
       removeCrayfishSession,
     };
     // Actions are built once and stay stable (they use dispatch + stateRef).

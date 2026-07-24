@@ -18,12 +18,15 @@ import type { Balance } from "../types";
 const inFlightKey = (b: Balance) => b.id + ":" + dueAt(b);
 
 export function useCrayfishAlerts(): void {
-  const { state, saveCrayfishSession } = useStore();
+  const { state, updateCrayfishSession } = useStore();
   const session = currentSession(state.crayfish);
   const running = session !== null;
 
   // Latest session for the interval callback, without restarting the interval
-  // on every save (the session object is new after each edit).
+  // on every save (the session object is new after each edit). Only ever READ
+  // from — the mark is written back through updateCrayfishSession, which applies
+  // it to the session in state, so a tick landing between an edit and the next
+  // flush of this ref can't revert that edit (nor revive a deleted session).
   const sessionRef = useRef(session);
   useEffect(() => {
     sessionRef.current = session;
@@ -43,7 +46,8 @@ export function useCrayfishAlerts(): void {
       const due = dueBalances(s.balances, now).filter((b) => !firing.current.has(inFlightKey(b)));
       if (due.length === 0) return;
       for (const b of due) firing.current.add(inFlightKey(b));
-      saveCrayfishSession(markNotified(s, due.map((b) => b.id)));
+      const ids = due.map((b) => b.id);
+      updateCrayfishSession(s.id, (cur) => markNotified(cur, ids));
       for (const b of due) notifyBalance(b.n, b.label, -(remainingSec(b, now) as number), b.id);
     };
     check(); // a balance may already be overdue on mount
@@ -56,7 +60,7 @@ export function useCrayfishAlerts(): void {
       document.removeEventListener("visibilitychange", check);
       window.removeEventListener("focus", check);
     };
-  }, [running, saveCrayfishSession]);
+  }, [running, updateCrayfishSession]);
 
   // The wake lock follows the intent stored on the session, not a screen's
   // local state: one requestWake, one releaseWake, released when it ends.
