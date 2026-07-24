@@ -54,10 +54,14 @@ export function Ecrevisses() {
     };
   }, []);
 
-  const [bilan, setBilan] = useState(false);
+  // Snapshot the session id when the bilan opens, and resolve it against the
+  // full list rather than currentSession(): finish() stamps `fin`, which would
+  // otherwise make currentSession() return null and the bilan vanish mid-edit.
+  const [bilanId, setBilanId] = useState<string | null>(null);
+  const bilanSession = bilanId ? state.crayfish.find((c) => c.id === bilanId) ?? null : null;
 
-  if (bilan && session) {
-    return <BilanEcrevisses session={session} onClose={() => setBilan(false)} />;
+  if (bilanSession) {
+    return <BilanEcrevisses session={bilanSession} onClose={() => setBilanId(null)} />;
   }
 
   return session ? (
@@ -65,7 +69,7 @@ export function Ecrevisses() {
       session={session}
       now={now}
       onSave={saveCrayfishSession}
-      onFinish={() => setBilan(true)}
+      onFinish={() => setBilanId(session.id)}
       onBack={back}
     />
   ) : (

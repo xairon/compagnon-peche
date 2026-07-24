@@ -5261,3 +5261,81 @@ button.card-row {
   font-weight: 700;
   margin-top: 4px;
 }
+
+/* ---- Écrevisses : bilan ---- */
+.ecr-total {
+  background: var(--green-tint);
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-size: 14.5px;
+  color: var(--green-dark);
+  margin-bottom: 14px;
+}
+.ecr-total b {
+  font-size: 20px;
+}
+.ecr-sp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 13px 14px;
+  margin-bottom: 10px;
+}
+.ecr-sp.protegee {
+  border-color: var(--red);
+  background: #fdf3f1;
+}
+.ecr-sp-tx {
+  flex: 1;
+  min-width: 0;
+}
+.ecr-sp-tx .n {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ecr-sp-tx .l {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.ecr-sp-tx .w {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--body);
+  margin-top: 5px;
+}
+.ecr-sp.protegee .w {
+  color: #8c2f24;
+  font-weight: 600;
+}
+.ecr-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.ecr-step button {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--sand);
+  font-size: 20px;
+  color: var(--fir);
+}
+.ecr-step span {
+  min-width: 30px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ecr-more {
+  width: 100%;
+  margin-top: 4px;
+}
