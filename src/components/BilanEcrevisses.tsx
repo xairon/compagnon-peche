@@ -29,6 +29,14 @@ export function BilanEcrevisses({
 
   const shown = showAll ? ECREVISSES : PECHABLES;
   const countOf = (id: string) => tally.find((t) => t.spId === id)?.count ?? 0;
+  // The bilan can run against a still-open session (the Terminer flow opens it
+  // before `fin` is stamped), so useCrayfishAlerts is writing the SAME session
+  // concurrently. Both go through updateCrayfishSession (functional, in-order
+  // against current state), and stay safe only because they touch DISJOINT
+  // fields: the bilan writes tally/note/fin, the alert loop writes
+  // balances[].notifiedFor. Do not write balances from here, or a due-balance
+  // notification landing in the same tick would clobber it (and vice-versa).
+  //
   // The count > 0 filter belongs to the clôture, NOT here: a species stepped down
   // to zero must stay visible at its 0 instead of vanishing under the finger.
   const bump = (id: string, d: number) =>
