@@ -5210,7 +5210,9 @@ button.card-row {
   color: #a8a495;
 }
 .ecr-sheet {
-  position: fixed;
+  /* absolute, like .carte-sheet : la feuille reste dans le cadre 390×820 au
+     lieu de recouvrir toute la fenêtre au-dessus du point de rupture 460 px. */
+  position: absolute;
   inset: 0;
   background: rgba(20, 26, 22, 0.42);
   display: flex;

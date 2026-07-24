@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStore } from "../store";
-import { ECREVISSES, crayfishById } from "../data/ecrevisses";
+import { ECREVISSES, PECHABLES, crayfishById } from "../data/ecrevisses";
 import { addTally, tallyTotal } from "../lib/ecrevisses";
 import type { CrayfishSession } from "../types";
 
@@ -21,7 +21,7 @@ export function BilanEcrevisses({
   const [note, setNote] = useState(session.note || "");
   const [showAll, setShowAll] = useState(session.tally.some((t) => !crayfishById(t.spId)?.pechable));
 
-  const shown = showAll ? ECREVISSES : ECREVISSES.filter((e) => e.pechable);
+  const shown = showAll ? ECREVISSES : PECHABLES;
   const countOf = (id: string) => tally.find((t) => t.spId === id)?.count ?? 0;
   const bump = (id: string, d: number) => setTally((t) => addTally(t, id, d));
 
@@ -32,7 +32,8 @@ export function BilanEcrevisses({
       note: note.trim() || undefined,
       fin: Date.now(),
     });
-    set({ screen: "carnet", tab: "carnet", stack: [] });
+    // Land on the Écrevisses segment, so the session just closed is in view.
+    set({ screen: "carnet", tab: "carnet", stack: [], carnetSeg: "ecrevisses" });
   };
 
   return (

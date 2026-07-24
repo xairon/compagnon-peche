@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useStore } from "../store";
+import { useStore, type CarnetSeg } from "../store";
 import { SPECIES } from "../data/species";
 import { Media } from "../components/Media";
 import { ProfileHeader } from "../components/ProfileHeader";
 import { CatchEditor } from "../components/CatchEditor";
 import { usePhotoUrl } from "../lib/photos";
 import { uid } from "../lib/helpers";
-import { tallyTotal, fmtDuration } from "../lib/ecrevisses";
+import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
 import type { Catch, CrayfishSession } from "../types";
 
@@ -21,7 +21,9 @@ export function Carnet() {
 
   const [adding, setAdding] = useState(false);
   const [sort, setSort] = useState<Sort>("recent");
-  const [seg, setSeg] = useState<"prises" | "spots" | "ecrevisses">("prises");
+  // The segment lives in the store: closing a bilan lands here on « Écrevisses ».
+  const seg = state.carnetSeg;
+  const setSeg = (v: CarnetSeg) => set({ carnetSeg: v });
 
   const added = catches.find((c) => c.slot === state.justAdded);
   const total = catches.length;
@@ -171,7 +173,7 @@ export function Carnet() {
             <button className="pill-btn" onClick={() => nav("ecrevisses")}>
               + Séance
             </button>
-            {sessions.length === 0 && (
+            {state.hydrated && sessions.length === 0 && (
               <div className="empty-note">
                 Aucune séance. Démarrez-en une avec « + Séance » : balances chronométrées, alertes,
                 bilan par espèce.
@@ -210,7 +212,8 @@ function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void 
   const [open, setOpen] = useState(false);
   const [arm, setArm] = useState(false);
   const total = tallyTotal(s.tally);
-  const duree = s.fin ? fmtDuration((s.fin - s.debut) / 1000) : null;
+  // Durée écoulée, pas un compte à rebours : « 3 h 24 », jamais « 3:24:07 ».
+  const duree = s.fin ? fmtElapsed((s.fin - s.debut) / 1000) : null;
 
   return (
     <div className="ecr-row">
