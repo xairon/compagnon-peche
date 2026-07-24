@@ -127,13 +127,14 @@ Gestes :
   `poseeA`). Balance en trempe : le tap n'agit pas directement — il déplie la carte et
   propose « relever maintenant », pour qu'un tap malheureux ne remette pas un compte à
   rebours à zéro.
-- **Appui long** — feuille d'options : laisser vide après relève, changer l'intervalle de
-  cette balance, la renommer, la retirer de la séance.
+- **Bouton `⋯` sur la carte** — feuille d'options : relever en laissant vide, changer
+  l'intervalle de cette balance, la renommer, la retirer de la séance. Une cible visible
+  plutôt qu'un appui long : le geste caché ne se découvre pas, et `HoldButton` est un
+  maintien-pour-confirmer destructif, pas un ouvre-menu.
 - **« Poser toutes »** — bouton large, pose d'un coup toutes les balances vides.
+- **« + Balance »** — ajoute une balance en cours de séance, dans la limite du plafond.
 - **Interrupteur « garder l'écran allumé »** — voir Alertes.
 - **« Terminer la séance »** — ouvre le bilan.
-
-Le composant `HoldButton` existant sert de base à l'appui long.
 
 ### Bilan
 
