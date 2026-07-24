@@ -4,8 +4,11 @@ import {
   balanceState,
   remainingSec,
   fmtDuration,
-  notifKey,
+  fmtElapsed,
   dueBalances,
+  markNotified,
+  setWake,
+  addSession,
   sortBalances,
   nextDue,
   makeBalances,
@@ -79,6 +82,28 @@ describe("fmtDuration", () => {
 
   it("ignore le signe (le retard est affiché avec son propre libellé)", () => {
     expect(fmtDuration(-125)).toBe("2:05");
+  });
+});
+
+describe("fmtElapsed", () => {
+  it("rend une durée écoulée lisible, distincte d'un compte à rebours", () => {
+    expect(fmtElapsed(3 * 3600 + 24 * 60 + 7)).toBe("3 h 24");
+  });
+
+  it("sous l'heure, compte en minutes", () => {
+    expect(fmtElapsed(24 * 60 + 7)).toBe("24 min");
+  });
+
+  it("une séance qui vient de démarrer affiche 0 min", () => {
+    expect(fmtElapsed(0)).toBe("0 min");
+  });
+
+  it("garde les minutes sur deux chiffres au-delà de l'heure", () => {
+    expect(fmtElapsed(3600 + 5 * 60)).toBe("1 h 05");
+  });
+
+  it("ne peut pas être confondu avec fmtDuration", () => {
+    expect(fmtElapsed(3725)).not.toBe(fmtDuration(3725));
   });
 });
 
@@ -264,19 +289,80 @@ describe("currentSession / isStaleSession", () => {
   });
 });
 
-describe("dueBalances / notifKey", () => {
+describe("dueBalances / markNotified", () => {
   it("ne rend que les balances échues non encore notifiées", () => {
     const a = bal({ id: "a", poseeA: T0 });
     const b = bal({ id: "b", poseeA: T0 + 10 * MIN });
     const now = T0 + 35 * MIN; // a est échue, b non
-    expect(dueBalances([a, b], now, new Set()).map((x) => x.id)).toEqual(["a"]);
-    expect(dueBalances([a, b], now, new Set([notifKey(a)]))).toEqual([]);
+    expect(dueBalances([a, b], now).map((x) => x.id)).toEqual(["a"]);
+    expect(dueBalances([{ ...a, notifiedFor: T0 + 30 * MIN }, b], now)).toEqual([]);
   });
 
-  it("une balance reposée redevient notifiable (la clé suit l'échéance)", () => {
-    const a = bal({ id: "a", poseeA: T0 });
-    const notified = new Set([notifKey(a)]);
+  it("une balance reposée redevient notifiable (la marque suit l'échéance)", () => {
+    const a = bal({ id: "a", poseeA: T0, notifiedFor: T0 + 30 * MIN });
     const reposee = { ...a, poseeA: T0 + 31 * MIN };
-    expect(dueBalances([reposee], T0 + 62 * MIN, notified).map((x) => x.id)).toEqual(["a"]);
+    expect(dueBalances([reposee], T0 + 62 * MIN).map((x) => x.id)).toEqual(["a"]);
+  });
+
+  it("markNotified inscrit l'échéance notifiée dans la séance elle-même", () => {
+    const s = poseAll(createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 }), T0);
+    const now = T0 + 31 * MIN;
+    const due = dueBalances(s.balances, now);
+    expect(due).toHaveLength(2);
+    const next = markNotified(s, [due[0].id]);
+    expect(next.balances[0].notifiedFor).toBe(T0 + 30 * MIN);
+    expect(next.balances[1].notifiedFor).toBeUndefined();
+  });
+
+  it("la même échéance n'est plus à notifier après markNotified (survit au démontage)", () => {
+    const s = poseAll(createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 }), T0);
+    const now = T0 + 31 * MIN;
+    const marked = markNotified(s, dueBalances(s.balances, now).map((b) => b.id));
+    expect(dueBalances(marked.balances, now)).toEqual([]);
+    // et une heure plus tard, toujours rien : le pêcheur a déjà été prévenu
+    expect(dueBalances(marked.balances, now + 60 * MIN)).toEqual([]);
+  });
+
+  it("markNotified ne mute pas la séance reçue", () => {
+    const s = poseAll(createSession({ count: 1, intervalMin: 30, lieu: "Étang", now: T0 }), T0);
+    markNotified(s, [s.balances[0].id]);
+    expect(s.balances[0].notifiedFor).toBeUndefined();
+  });
+});
+
+describe("setWake", () => {
+  it("mémorise l'intention de garder l'écran allumé dans la séance", () => {
+    const s = createSession({ count: 1, intervalMin: 30, lieu: "Étang", now: T0 });
+    expect(s.wake).toBeUndefined();
+    expect(setWake(s, true).wake).toBe(true);
+    expect(setWake(setWake(s, true), false).wake).toBe(false);
+  });
+
+  it("ne mute pas la séance reçue", () => {
+    const s = createSession({ count: 1, intervalMin: 30, lieu: "Étang", now: T0 });
+    setWake(s, true);
+    expect(s.wake).toBeUndefined();
+  });
+});
+
+describe("addSession", () => {
+  it("ajoute la séance en tête quand aucune n'est en cours", () => {
+    const finie = { ...createSession({ count: 1, intervalMin: 30, lieu: "A", now: T0 }), fin: T0 };
+    const neuve = createSession({ count: 1, intervalMin: 30, lieu: "B", now: T0 + MIN });
+    expect(addSession([finie], neuve).map((s) => s.id)).toEqual([neuve.id, finie.id]);
+  });
+
+  it("refuse une seconde séance ouverte — une seule en cours à la fois", () => {
+    const ouverte = createSession({ count: 1, intervalMin: 30, lieu: "A", now: T0 });
+    const neuve = createSession({ count: 1, intervalMin: 30, lieu: "B", now: T0 + MIN });
+    const list = addSession([ouverte], neuve);
+    expect(list).toEqual([ouverte]);
+    expect(currentSession(list)?.id).toBe(ouverte.id);
+  });
+
+  it("ne mute pas la liste reçue", () => {
+    const list = [{ ...createSession({ count: 1, intervalMin: 30, lieu: "A", now: T0 }), fin: T0 }];
+    addSession(list, createSession({ count: 1, intervalMin: 30, lieu: "B", now: T0 }));
+    expect(list).toHaveLength(1);
   });
 });

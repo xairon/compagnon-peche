@@ -224,6 +224,9 @@ export interface Balance {
   intervalMin: number; // soak time for THIS balance (seeded from the session default)
   poseeA: number | null; // ms timestamp of the drop; null = not in the water yet
   releves: number; // how many times it has been lifted (shown on the card)
+  /** Due date already notified. Persisted, so a remount or a reload never
+   *  re-alerts for a balance the angler has already been told about. */
+  notifiedFor?: number;
 }
 
 /** Total capturé pour une espèce, saisi au bilan de fin de séance. */
@@ -245,4 +248,7 @@ export interface CrayfishSession {
   balances: Balance[];
   tally: CrayfishTally[]; // filled in at the bilan
   note?: string;
+  /** "garder l'écran allumé" asked by the angler. Carried by the session so the
+   *  intent survives navigation and reload, not just the screen being mounted. */
+  wake?: boolean;
 }

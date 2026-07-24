@@ -44,14 +44,42 @@ export function fmtDuration(sec: number): string {
   return `${m}:${String(r).padStart(2, "0")}`;
 }
 
-/** Notification identity: balance + its CURRENT due date, so a balance that has
- *  been lifted and dropped again becomes notifiable anew. */
-export function notifKey(b: Balance): string {
-  return b.id + ":" + (dueAt(b) ?? 0);
+/** A whole session's elapsed time — deliberately NOT shaped like a countdown, so
+ *  "3 h 24" can never be read as "3:24:07 left". */
+export function fmtElapsed(sec: number): string {
+  const s = Math.abs(Math.round(sec));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h > 0) return `${h} h ${String(m).padStart(2, "0")}`;
+  return `${m} min`;
 }
 
-export function dueBalances(balances: Balance[], now: number, notified: Set<string>): Balance[] {
-  return balances.filter((b) => balanceState(b, now) === "echue" && !notified.has(notifKey(b)));
+/** Balances that came due and haven't been notified for THIS due date yet.
+ *  The mark lives on the balance (`notifiedFor`), so it persists: a remount, a
+ *  navigation or a reload never replays an alert the angler already got, and a
+ *  balance dropped again becomes notifiable anew (its due date moved). */
+export function dueBalances(balances: Balance[], now: number): Balance[] {
+  return balances.filter((b) => balanceState(b, now) === "echue" && b.notifiedFor !== dueAt(b));
+}
+
+/** Stamp the current due date on the given balances — "these have been alerted". */
+export function markNotified(s: CrayfishSession, ids: string[]): CrayfishSession {
+  return mapBalances(s, (b) =>
+    ids.includes(b.id) ? { ...b, notifiedFor: dueAt(b) ?? undefined } : b,
+  );
+}
+
+/** Remember whether the angler asked for the screen to stay on. */
+export function setWake(s: CrayfishSession, on: boolean): CrayfishSession {
+  return { ...s, wake: on };
+}
+
+/** Add a session, enforcing the "one open session at a time" invariant: while
+ *  one is still running, a new one is refused rather than shadowing it (a second
+ *  open session would be unreachable through currentSession, hence unclosable). */
+export function addSession(sessions: CrayfishSession[], s: CrayfishSession): CrayfishSession[] {
+  if (currentSession(sessions)) return sessions;
+  return [s, ...sessions];
 }
 
 /** Display order: overdue first (longest overdue on top), then soaking (closest

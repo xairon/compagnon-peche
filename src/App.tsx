@@ -25,6 +25,7 @@ import { Stockage } from "./screens/Stockage";
 import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
+import { useCrayfishAlerts } from "./lib/crayfish-alerts";
 import { requestPersist, onPersistError } from "./lib/storage";
 
 // Heavier / non-startup screens are code-split (Carte pulls in MapLibre GL).
@@ -52,6 +53,10 @@ export function App() {
   });
   const { needRefresh, applyUpdate } = usePwa();
   const [persistMsg, setPersistMsg] = useState<string | null>(null);
+
+  // Balance alerts live here, not in the Écrevisses screen: one tap on the nav
+  // must not tear down the only thing that tells the angler to go pull a net.
+  useCrayfishAlerts();
 
   // Surface silent IndexedDB write failures (quota, private mode) so a catch is
   // never implied "saved ✓" when it wasn't persisted.

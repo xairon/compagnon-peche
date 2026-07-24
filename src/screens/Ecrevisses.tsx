@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useStore } from "../store";
 import { BalanceCard } from "../components/BalanceCard";
 import { BilanEcrevisses } from "../components/BilanEcrevisses";
 import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";
-import { requestWake, releaseWake, wakeSupported } from "../lib/wakelock";
-import { askNotifyPermission, notifyPermission, notifyBalance } from "../lib/notify";
+import { wakeSupported } from "../lib/wakelock";
+import { askNotifyPermission, notifyPermission } from "../lib/notify";
 import {
   DEFAULT_BALANCES,
   DEFAULT_INTERVAL_MIN,
@@ -20,10 +20,9 @@ import {
   addBalance,
   sortBalances,
   nextDue,
-  dueBalances,
-  notifKey,
+  setWake,
   fmtDuration,
-  remainingSec,
+  fmtElapsed,
 } from "../lib/ecrevisses";
 import type { CrayfishSession, Spot } from "../types";
 
@@ -33,8 +32,10 @@ export function Ecrevisses() {
   const { state, back, addCrayfishSession, saveCrayfishSession } = useStore();
   const session = currentSession(state.crayfish);
 
-  // One tick per second while a session is running: every displayed state is
-  // recomputed from `now`, so nothing drifts and nothing is stored as a counter.
+  // One tick per second while a session is running, for the DISPLAY only: every
+  // shown state is recomputed from `now`, so nothing drifts and nothing is stored
+  // as a counter. Alerting has its own clock in useCrayfishAlerts(), at the App
+  // level, so it keeps running when this screen is not mounted.
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (!session) return;
@@ -64,17 +65,24 @@ export function Ecrevisses() {
     return <BilanEcrevisses session={bilanSession} onClose={() => setBilanId(null)} />;
   }
 
-  return session ? (
-    <SessionEnCours
-      session={session}
-      now={now}
-      onSave={saveCrayfishSession}
-      onFinish={() => setBilanId(session.id)}
-      onBack={back}
-    />
-  ) : (
-    <Preparation onBack={back} onStart={(s) => addCrayfishSession(s)} spots={state.spots} />
-  );
+  if (session) {
+    return (
+      <SessionEnCours
+        session={session}
+        now={now}
+        onSave={saveCrayfishSession}
+        onFinish={() => setBilanId(session.id)}
+        onBack={back}
+      />
+    );
+  }
+
+  // Never offer to start before IndexedDB has answered: a session created while
+  // state.crayfish is still empty would end up alongside the loaded one, and the
+  // loaded one — "en cours" forever, with no path to a bilan — would be shadowed.
+  if (!state.hydrated) return <div className="screen-loading">Chargement…</div>;
+
+  return <Preparation onBack={back} onStart={(s) => addCrayfishSession(s)} spots={state.spots} />;
 }
 
 /* ---------------- Préparation ---------------- */
@@ -214,27 +222,12 @@ function SessionEnCours({
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [options, setOptions] = useState<string | null>(null);
-  const [wake, setWake] = useState(false);
-  const notified = useRef<Set<string>>(new Set());
 
-  // Fire one notification per balance that just came due. The key embeds the due
-  // date, so a balance dropped again becomes notifiable anew (see notifKey).
-  useEffect(() => {
-    for (const b of dueBalances(session.balances, now, notified.current)) {
-      notified.current.add(notifKey(b));
-      notifyBalance(b.n, b.label, -(remainingSec(b, now) as number), b.id);
-    }
-  }, [session, now]);
-
-  useEffect(() => {
-    if (wake) requestWake();
-    else releaseWake();
-    return () => releaseWake();
-  }, [wake]);
-
+  // Alerting and the wake lock are driven by useCrayfishAlerts() at the App
+  // level — this screen only displays the session.
   const sorted = useMemo(() => sortBalances(session.balances, now), [session, now]);
   const next = nextDue(session.balances, now);
-  const elapsed = fmtDuration((now - session.debut) / 1000);
+  const elapsed = fmtElapsed((now - session.debut) / 1000);
   const perm = notifyPermission();
   const opt = options ? session.balances.find((b) => b.id === options) : null;
 
@@ -301,7 +294,11 @@ function SessionEnCours({
 
         {wakeSupported() && (
           <label className="ecr-wake">
-            <input type="checkbox" checked={wake} onChange={(e) => setWake(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={session.wake === true}
+              onChange={(e) => onSave(setWake(session, e.target.checked))}
+            />
             <span>
               Garder l'écran allumé
               <em>alerte à l'heure garantie — consomme la batterie</em>

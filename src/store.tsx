@@ -27,6 +27,7 @@ import {
 import { deletePhoto } from "./lib/photos";
 import { reportReadError } from "./lib/storage";
 import { frDate, isoDay, uid } from "./lib/helpers";
+import { addSession } from "./lib/ecrevisses";
 
 export type Screen =
   | "accueil"
@@ -61,6 +62,10 @@ export type Screen =
 // longer a tab — reached from the Accueil toolbox instead.
 export type Tab = "accueil" | "especes" | "carte" | "carnet";
 
+// Segment shown by the Carnet. In the store, not in the screen: closing a bilan
+// has to land on "Écrevisses", otherwise the session just closed isn't visible.
+export type CarnetSeg = "prises" | "spots" | "ecrevisses";
+
 export type PriseStep =
   | "statut"
   | "maille"
@@ -83,6 +88,7 @@ export interface CatchForm {
 export interface AppState {
   screen: Screen;
   tab: Tab;
+  carnetSeg: CarnetSeg;
   stack: Screen[];
   q: string;
   filter: string;
@@ -118,6 +124,7 @@ const TABS: Tab[] = ["accueil", "especes", "carte", "carnet"];
 const initialState: AppState = {
   screen: "accueil",
   tab: "accueil",
+  carnetSeg: "prises",
   stack: [],
   q: "",
   filter: "tous",
@@ -378,9 +385,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
     // Crayfish sessions. The screen computes the next session with the pure
     // helpers of lib/ecrevisses and hands the whole object back — the store is
-    // deliberately thin glue here, so all the logic stays testable. saveCrayfishSession upserts by id.
+    // deliberately thin glue here, so all the logic stays testable.
+    // addSession enforces the "one open session at a time" invariant; saveCrayfishSession upserts by id.
     const addCrayfishSession: Store["addCrayfishSession"] = (session) =>
-      dispatch((s) => ({ crayfish: [session, ...s.crayfish] }));
+      dispatch((s) => ({ crayfish: addSession(s.crayfish, session) }));
     const saveCrayfishSession: Store["saveCrayfishSession"] = (session) =>
       dispatch((s) => ({
         crayfish: s.crayfish.some((c) => c.id === session.id)
