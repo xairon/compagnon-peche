@@ -213,3 +213,36 @@ export interface SourceEntry {
   t: string;
   d: string;
 }
+
+/** Une balance à écrevisses dans une séance, persistée en IndexedDB.
+ *  `poseeA` est un horodatage ABSOLU : l'état se recalcule à l'affichage, il
+ *  n'est jamais décrémenté — la séance survit donc au gel de l'app. */
+export interface Balance {
+  id: string; // stable local id
+  n: number; // displayed number (1…N)
+  label?: string; // free label ("sous le saule")
+  intervalMin: number; // soak time for THIS balance (seeded from the session default)
+  poseeA: number | null; // ms timestamp of the drop; null = not in the water yet
+  releves: number; // how many times it has been lifted (shown on the card)
+}
+
+/** Total capturé pour une espèce, saisi au bilan de fin de séance. */
+export interface CrayfishTally {
+  spId: string; // id in data/ecrevisses.ts
+  count: number;
+}
+
+/** Une séance de pêche aux écrevisses. Une seule "en cours" (fin === null) à la fois. */
+export interface CrayfishSession {
+  id: string;
+  iso: string; // yyyy-mm-dd
+  date: string; // display date (frDate)
+  debut: number; // ms timestamp
+  fin: number | null; // null while the session is running
+  lieu: string;
+  spotId?: string; // linked personal spot
+  intervalMin: number; // session default soak time
+  balances: Balance[];
+  tally: CrayfishTally[]; // filled in at the bilan
+  note?: string;
+}
