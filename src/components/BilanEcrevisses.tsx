@@ -8,6 +8,11 @@ import type { CrayfishSession } from "../types";
  * End-of-session tally. Steppers only — big targets, one hand, wet fingers.
  * The fishable species are offered first; declaring a protected one swaps the
  * counter for the release warning, because that is the decision that matters.
+ *
+ * Nothing is held in a local draft: every step and every keystroke is written
+ * through to the session, so leaving with "‹", a reload or Android killing the
+ * page can't lose a count of 40 écrevisses made with wet hands. The screen also
+ * serves to CORRECT a closed session, opened from the carnet.
  */
 export function BilanEcrevisses({
   session,
@@ -16,36 +21,45 @@ export function BilanEcrevisses({
   session: CrayfishSession;
   onClose: () => void;
 }) {
-  const { set, saveCrayfishSession } = useStore();
-  const [tally, setTally] = useState(session.tally);
-  const [note, setNote] = useState(session.note || "");
+  const { set, updateCrayfishSession } = useStore();
+  const closed = session.fin !== null;
+  const tally = session.tally;
+  const note = session.note ?? "";
   const [showAll, setShowAll] = useState(session.tally.some((t) => !crayfishById(t.spId)?.pechable));
 
   const shown = showAll ? ECREVISSES : PECHABLES;
   const countOf = (id: string) => tally.find((t) => t.spId === id)?.count ?? 0;
-  const bump = (id: string, d: number) => setTally((t) => addTally(t, id, d));
+  // The count > 0 filter belongs to the clôture, NOT here: a species stepped down
+  // to zero must stay visible at its 0 instead of vanishing under the finger.
+  const bump = (id: string, d: number) =>
+    updateCrayfishSession(session.id, (s) => ({ ...s, tally: addTally(s.tally, id, d) }));
+  const setNote = (v: string) => updateCrayfishSession(session.id, (s) => ({ ...s, note: v }));
 
   const finish = () => {
-    saveCrayfishSession({
-      ...session,
-      tally: tally.filter((t) => t.count > 0),
-      note: note.trim() || undefined,
-      fin: Date.now(),
-    });
+    updateCrayfishSession(session.id, (s) => ({
+      ...s,
+      tally: s.tally.filter((t) => t.count > 0),
+      note: (s.note ?? "").trim() || undefined,
+      // Re-closing an already closed session keeps its original end: correcting a
+      // total must not stretch the session's duration to today.
+      fin: s.fin ?? Date.now(),
+    }));
     // Land on the Écrevisses segment, so the session just closed is in view.
-    set({ screen: "carnet", tab: "carnet", stack: [], carnetSeg: "ecrevisses" });
+    set({ screen: "carnet", tab: "carnet", stack: [], carnetSeg: "ecrevisses", bilanSession: null });
   };
 
   return (
     <div className="screen">
       <div className="topbar">
-        <button className="back" onClick={onClose} aria-label="Retour à la séance">
+        <button className="back" onClick={onClose} aria-label={closed ? "Retour au carnet" : "Retour à la séance"}>
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">Bilan de séance</div>
+          <div className="topbar-title">{closed ? "Corriger le bilan" : "Bilan de séance"}</div>
           <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
-            {session.lieu} · {session.balances.length} balance
+            {session.lieu} · {closed ? session.date : null}
+            {closed ? " · " : null}
+            {session.balances.length} balance
             {session.balances.length > 1 ? "s" : ""}
           </div>
         </div>
@@ -93,7 +107,7 @@ export function BilanEcrevisses({
         />
 
         <button className="ecr-start" onClick={finish}>
-          Enregistrer et clôturer
+          {closed ? "Enregistrer la correction" : "Enregistrer et clôturer"}
         </button>
       </div>
     </div>

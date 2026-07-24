@@ -180,7 +180,12 @@ export function Carnet() {
               </div>
             )}
             {sessions.map((s) => (
-              <SessionRow key={s.id} s={s} onDelete={() => removeCrayfishSession(s.id)} />
+              <SessionRow
+                key={s.id}
+                s={s}
+                onDelete={() => removeCrayfishSession(s.id)}
+                onCorriger={() => nav("ecrevisses", { bilanSession: s.id })}
+              />
             ))}
           </div>
         )}
@@ -208,7 +213,15 @@ function CatchTile({ c, onOpen }: { c: Catch; onOpen: () => void }) {
   );
 }
 
-function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void }) {
+function SessionRow({
+  s,
+  onDelete,
+  onCorriger,
+}: {
+  s: CrayfishSession;
+  onDelete: () => void;
+  onCorriger: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const [arm, setArm] = useState(false);
   const total = tallyTotal(s.tally);
@@ -246,6 +259,12 @@ function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void 
             </div>
           ))}
           {s.note && <div className="ecr-row-note">{s.note}</div>}
+          {/* Une séance terminée reste modifiable : un total oublié se rattrape. */}
+          {s.fin !== null && (
+            <button className="btn-light" onClick={onCorriger}>
+              Corriger le bilan
+            </button>
+          )}
           {arm ? (
             <button className="btn-danger" onClick={onDelete}>
               Confirmer la suppression

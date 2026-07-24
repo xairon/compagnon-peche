@@ -5390,6 +5390,18 @@ button.card-row {
   line-height: 1.5;
   margin-top: 4px;
 }
+.ecr-row-body .btn-light {
+  margin-top: 8px;
+  align-self: flex-start;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  color: #22271f;
+  font-size: 13.5px;
+  font-weight: 600;
+}
 .ecr-row-body .btn-danger-ghost {
   margin-top: 8px;
   align-self: flex-start;

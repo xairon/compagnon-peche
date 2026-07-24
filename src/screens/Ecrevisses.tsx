@@ -29,7 +29,7 @@ import type { CrayfishSession, Spot } from "../types";
 const INTERVALS = [25, 30, 45, 60];
 
 export function Ecrevisses() {
-  const { state, back, addCrayfishSession, saveCrayfishSession } = useStore();
+  const { state, set, back, addCrayfishSession, saveCrayfishSession } = useStore();
   const session = currentSession(state.crayfish);
 
   // One tick per second while a session is running, for the DISPLAY only: every
@@ -55,14 +55,27 @@ export function Ecrevisses() {
     };
   }, []);
 
-  // Snapshot the session id when the bilan opens, and resolve it against the
-  // full list rather than currentSession(): finish() stamps `fin`, which would
-  // otherwise make currentSession() return null and the bilan vanish mid-edit.
-  const [bilanId, setBilanId] = useState<string | null>(null);
-  const bilanSession = bilanId ? state.crayfish.find((c) => c.id === bilanId) ?? null : null;
+  // The bilan being edited is designated by its id in the store, and resolved
+  // against the full list rather than currentSession(): finish() stamps `fin`,
+  // which would otherwise make currentSession() return null and the bilan vanish
+  // mid-edit. In the store rather than in a local state so the Carnet can ask for
+  // the bilan of an ALREADY CLOSED session, to correct a forgotten total.
+  const bilan = state.bilanSession
+    ? state.crayfish.find((c) => c.id === state.bilanSession) ?? null
+    : null;
 
-  if (bilanSession) {
-    return <BilanEcrevisses session={bilanSession} onClose={() => setBilanId(null)} />;
+  if (bilan) {
+    return (
+      <BilanEcrevisses
+        session={bilan}
+        onClose={() => {
+          set({ bilanSession: null });
+          // Correcting a closed session: "‹" goes back where it was asked from
+          // (the Carnet), not to the preparation screen of a brand new session.
+          if (bilan.fin !== null) back();
+        }}
+      />
+    );
   }
 
   if (session) {
@@ -71,7 +84,7 @@ export function Ecrevisses() {
         session={session}
         now={now}
         onSave={saveCrayfishSession}
-        onFinish={() => setBilanId(session.id)}
+        onFinish={() => set({ bilanSession: session.id })}
         onBack={back}
       />
     );
@@ -359,15 +372,19 @@ function SessionEnCours({
               </button>
             )}
 
-            <button
-              className="btn-light"
-              onClick={() => {
-                onSave(removeBalance(session, opt.id));
-                setOptions(null);
-              }}
-            >
-              Retirer cette balance
-            </button>
+            {/* Hidden on the last balance: removeBalance refuses it, and an option
+                that does nothing is worse than no option at all. */}
+            {session.balances.length > 1 && (
+              <button
+                className="btn-light"
+                onClick={() => {
+                  onSave(removeBalance(session, opt.id));
+                  setOptions(null);
+                }}
+              >
+                Retirer cette balance
+              </button>
+            )}
 
             <button className="ecr-sheet-close" onClick={() => setOptions(null)}>
               Fermer
