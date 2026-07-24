@@ -44,7 +44,8 @@ le publie sur Pages. Réglage unique : **Settings → Pages → Source : GitHub 
 Espèces (recherche + grille + identification guidée) · Fiche espèce (verdict + info-bulles,
 sections dépliables, glossaire cliquable, confusions) · **Carte** (MapLibre GL + géoloc + présence
 réelle Hub'Eau) · **Ma prise** (parcours garder/relâcher, route les protégées/invasives) · Règle à
-l'écran · Carnet de captures (IndexedDB) · **Matériel** (inventaire + ensembles + guide
+l'écran · Carnet de captures (IndexedDB) · **Écrevisses** (séance de balances : chrono par balance,
+alertes, bilan par espèce) · **Matériel** (inventaire + ensembles + guide
 appâts/hameçons) · Nœuds & montages · Recette + **mode cuisine** · Réglementation · Sources ·
 Crédits.
 

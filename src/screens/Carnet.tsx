@@ -6,19 +6,22 @@ import { ProfileHeader } from "../components/ProfileHeader";
 import { CatchEditor } from "../components/CatchEditor";
 import { usePhotoUrl } from "../lib/photos";
 import { uid } from "../lib/helpers";
-import type { Catch } from "../types";
+import { tallyTotal, fmtDuration } from "../lib/ecrevisses";
+import { crayfishById } from "../data/ecrevisses";
+import type { Catch, CrayfishSession } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
 type Sort = "recent" | "size" | "species";
 
 export function Carnet() {
-  const { state, set, nav, addCatchFull } = useStore();
+  const { state, set, nav, addCatchFull, removeCrayfishSession } = useStore();
   const catches = state.catches;
   const spots = state.spots;
+  const sessions = [...state.crayfish].sort((a, b) => b.debut - a.debut);
 
   const [adding, setAdding] = useState(false);
   const [sort, setSort] = useState<Sort>("recent");
-  const [seg, setSeg] = useState<"prises" | "spots">("prises");
+  const [seg, setSeg] = useState<"prises" | "spots" | "ecrevisses">("prises");
 
   const added = catches.find((c) => c.slot === state.justAdded);
   const total = catches.length;
@@ -99,6 +102,9 @@ export function Carnet() {
           <button className={seg === "spots" ? "on" : ""} onClick={() => setSeg("spots")}>
             Spots · {spots.length}
           </button>
+          <button className={seg === "ecrevisses" ? "on" : ""} onClick={() => setSeg("ecrevisses")}>
+            Écrevisses · {sessions.length}
+          </button>
           <button onClick={() => nav("statistiques")}>Statistiques ›</button>
         </div>
 
@@ -160,6 +166,23 @@ export function Carnet() {
           </div>
         )}
 
+        {seg === "ecrevisses" && (
+          <div style={{ marginTop: 14 }}>
+            <button className="pill-btn" onClick={() => nav("ecrevisses")}>
+              + Séance
+            </button>
+            {sessions.length === 0 && (
+              <div className="empty-note">
+                Aucune séance. Démarrez-en une avec « + Séance » : balances chronométrées, alertes,
+                bilan par espèce.
+              </div>
+            )}
+            {sessions.map((s) => (
+              <SessionRow key={s.id} s={s} onDelete={() => removeCrayfishSession(s.id)} />
+            ))}
+          </div>
+        )}
+
         <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 16, lineHeight: 1.5 }}>
           100 % local sur votre appareil. Aucune donnée n'est transmise.
         </div>
@@ -180,5 +203,44 @@ function CatchTile({ c, onOpen }: { c: Catch; onOpen: () => void }) {
         <b>{c.sp}</b> · {c.size}
       </div>
     </button>
+  );
+}
+
+function SessionRow({ s, onDelete }: { s: CrayfishSession; onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+  const total = tallyTotal(s.tally);
+  const duree = s.fin ? fmtDuration((s.fin - s.debut) / 1000) : null;
+
+  return (
+    <div className="ecr-row">
+      <button className="ecr-row-head" onClick={() => setOpen((o) => !o)}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="nm">
+            {s.lieu} · {s.date}
+          </div>
+          <div className="sub">
+            {s.balances.length} balance{s.balances.length > 1 ? "s" : ""}
+            {duree ? ` · ${duree}` : " · en cours"}
+            {total > 0 ? ` · ${total} écrevisse${total > 1 ? "s" : ""}` : ""}
+          </div>
+        </div>
+        <span className="go">{open ? "⌄" : "›"}</span>
+      </button>
+
+      {open && (
+        <div className="ecr-row-body">
+          {s.tally.length === 0 && <div className="sub">Aucune capture enregistrée.</div>}
+          {s.tally.map((t) => (
+            <div key={t.spId} className="sub">
+              {crayfishById(t.spId)?.name ?? t.spId} — <b>{t.count}</b>
+            </div>
+          ))}
+          {s.note && <div className="ecr-row-note">{s.note}</div>}
+          <button className="btn-light" onClick={onDelete}>
+            Supprimer cette séance
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
