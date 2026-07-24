@@ -378,11 +378,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
     // Crayfish sessions. The screen computes the next session with the pure
     // helpers of lib/ecrevisses and hands the whole object back — the store is
-    // deliberately thin glue here, so all the logic stays testable.
+    // deliberately thin glue here, so all the logic stays testable. saveCrayfishSession upserts by id.
     const addCrayfishSession: Store["addCrayfishSession"] = (session) =>
       dispatch((s) => ({ crayfish: [session, ...s.crayfish] }));
     const saveCrayfishSession: Store["saveCrayfishSession"] = (session) =>
-      dispatch((s) => ({ crayfish: s.crayfish.map((c) => (c.id === session.id ? session : c)) }));
+      dispatch((s) => ({
+        crayfish: s.crayfish.some((c) => c.id === session.id)
+          ? s.crayfish.map((c) => (c.id === session.id ? session : c))
+          : [session, ...s.crayfish],
+      }));
     const removeCrayfishSession: Store["removeCrayfishSession"] = (id) =>
       dispatch((s) => ({ crayfish: s.crayfish.filter((c) => c.id !== id) }));
     return {
