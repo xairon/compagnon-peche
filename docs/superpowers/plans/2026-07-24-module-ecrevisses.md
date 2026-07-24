@@ -1683,7 +1683,7 @@ function SessionEnCours({
 
 - [ ] **Step 2: Créer un `BilanEcrevisses` provisoire pour que l'écran compile**
 
-Créer `src/components/BilanEcrevisses.tsx` — version minimale, remplacée intégralement en Task 7 :
+Créer `src/components/BilanEcrevisses.tsx` — échafaudage **délibéré et temporaire** : l'écran de séance a besoin de ce composant pour compiler et être testable dès cette tâche, et la Task 7 le remplace intégralement par le vrai bilan. Ne pas l'étoffer ici.
 
 ```tsx
 import type { CrayfishSession } from "../types";
