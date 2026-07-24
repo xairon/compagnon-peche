@@ -35,6 +35,7 @@ const TOOLS: { icon: string; label: string; to: Screen }[] = [
   { icon: "M3 9h18v6H3zM7 9v3M11 9v4M15 9v3M19 9v4", label: "Règle", to: "regle" },
   { icon: "M4 12c3-5 6-5 8 0s5 5 8 0M7 9l3 6M14 9l3 6", label: "Nœuds", to: "noeuds" },
   { icon: "M16 3a2 2 0 1 1 0 4v6a5 5 0 0 1-10 0v-2m0 0-2.2 2.2M6 11l2.2 2.2", label: "Matériel", to: "materiel" },
+  { icon: "M6 14a6 6 0 0 1 12 0v3H6zM8 14 4 9M16 14l4-5M9 20v-3M15 20v-3", label: "Écrevisses", to: "ecrevisses" },
   { icon: "M12 4v17M5 6h14M7 6l-3 7a3.5 3.5 0 0 0 6 0zM17 6l-3 7a3.5 3.5 0 0 0 6 0z", label: "Réglementation", to: "reglement" },
 ];
 

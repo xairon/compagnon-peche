@@ -13,6 +13,7 @@ import { PriseDetail } from "./screens/PriseDetail";
 import { Statistiques } from "./screens/Statistiques";
 import { Outils } from "./screens/Outils";
 import { OutilsTerrain } from "./screens/OutilsTerrain";
+import { Ecrevisses } from "./screens/Ecrevisses";
 import { MesRecettes } from "./screens/MesRecettes";
 import { Noeuds, KnotDetail } from "./screens/Noeuds";
 import { Recette } from "./screens/Recette";
@@ -116,6 +117,7 @@ export function App() {
         {s === "stockage" && <Stockage />}
         {s === "outils" && <Outils />}
         {s === "outils-terrain" && <OutilsTerrain />}
+        {s === "ecrevisses" && <Ecrevisses />}
         {s === "mes-recettes" && <MesRecettes />}
         {s === "noeuds" && <Noeuds />}
         {s === "knot" && <KnotDetail />}

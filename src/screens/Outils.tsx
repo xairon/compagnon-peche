@@ -10,6 +10,7 @@ export function Outils() {
     { title: "Mon matériel", sub: "Équipement, ensembles, guide appâts/hameçons", icon: ICONS.peche, to: "materiel" },
     { title: "Techniques & gestes", sub: "Ikejime, désarêtage, garum… + sécurité sanitaire", icon: ICONS.cuisine, to: "techniques" },
     { title: "Outils de terrain", sub: "Horaires légaux du jour + chronos (balances, saignée…)", icon: ICONS.regle, to: "outils-terrain" },
+    { title: "Écrevisses", sub: "Séance de balances : chronos individuels, alertes, bilan", icon: ICONS.regle, to: "ecrevisses" },
     { title: "Mes recettes", sub: "Vos recettes perso, liées à une espèce — 100 % local", icon: ICONS.cuisine, to: "mes-recettes" },
     { title: "Nœuds & montages", sub: "Guides pas-à-pas, hors-ligne", icon: ICONS.knot, to: "noeuds" },
     { title: "Réglementation générale", sub: "Socle national + " + deptName, icon: ICONS.regle, to: "reglement" },

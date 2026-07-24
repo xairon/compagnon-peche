@@ -5082,3 +5082,182 @@ button.card-row {
   line-height: 1;
   padding: 4px 8px;
 }
+
+/* ---- Écrevisses : écran de séance ---- */
+.ecr-count {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ecr-count button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  font-size: 22px;
+  color: var(--fir);
+}
+.ecr-count span {
+  font-size: 28px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.ecr-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ecr-chips button {
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  border-radius: 999px;
+  padding: 9px 15px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--body);
+}
+.ecr-chips button.on {
+  background: var(--fir);
+  border-color: var(--fir);
+  color: #fbfaf7;
+}
+.ecr-input {
+  width: 100%;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 15px;
+  background: #fff;
+  color: var(--ink);
+}
+.ecr-start,
+.ecr-poseall,
+.ecr-finish {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 15px;
+  font-size: 15.5px;
+  font-weight: 700;
+  background: var(--fir);
+  color: #fbfaf7;
+  margin-top: 22px;
+}
+.ecr-poseall {
+  margin-top: 14px;
+  background: var(--green);
+}
+.ecr-finish {
+  margin-top: 0;
+  flex: 1;
+}
+.ecr-next {
+  background: var(--sand);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  color: var(--body);
+}
+.ecr-warn {
+  margin-top: 10px;
+  background: var(--amber-bg);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6d4d0d;
+}
+.ecr-wake {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  font-size: 13.5px;
+  color: var(--body);
+}
+.ecr-wake em {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.ecr-foot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+.ecr-reg {
+  margin-top: 24px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.ecr-reg-note {
+  margin-top: 8px;
+  color: #6d4d0d;
+  background: var(--amber-bg);
+  border-radius: 10px;
+  padding: 9px 11px;
+}
+.ecr-reg-src {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #a8a495;
+}
+.ecr-sheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 26, 22, 0.42);
+  display: flex;
+  align-items: flex-end;
+  z-index: 60;
+}
+.ecr-sheet-in {
+  width: 100%;
+  background: var(--paper);
+  border-radius: 20px 20px 0 0;
+  padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ecr-sheet-t {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.ecr-sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--body);
+}
+.ecr-sheet-row span {
+  width: 110px;
+  flex: none;
+}
+.ecr-sheet-row input {
+  flex: 1;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-size: 14.5px;
+  background: #fff;
+  color: var(--ink);
+}
+.ecr-sheet-close {
+  border: none;
+  background: var(--fir);
+  color: #fbfaf7;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 4px;
+}

@@ -11,7 +11,6 @@ const HOME = { lat: 47.586, lon: 1.336 };
 const CLOCK = "M12 8v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z";
 
 const PRESETS: { id: string; label: string; sub: string; min: number }[] = [
-  { id: "balances", label: "Relève des balances", sub: "Écrevisses — relever régulièrement", min: 30 },
   { id: "saignee", label: "Saignée & glace", sub: "Ikejime — exsanguination à froid", min: 10 },
   { id: "marinade", label: "Marinade / salage", sub: "Avant cuisson ou fumage", min: 30 },
   { id: "degorgeage", label: "Dégorgeage", sub: "Purge en eau claire", min: 120 },
@@ -27,7 +26,7 @@ function fmt(sec: number): string {
 }
 
 export function OutilsTerrain() {
-  const { state, back } = useStore();
+  const { state, back, nav } = useStore();
   const deptName = DEPARTEMENTS[state.dept].name;
 
   // A ticking clock so the "opens/closes in X h" countdown actually advances
@@ -155,6 +154,16 @@ export function OutilsTerrain() {
         <div className="label" style={{ margin: "20px 0 10px" }}>
           Chronos
         </div>
+        <button className="ot-timer" onClick={() => nav("ecrevisses")}>
+          <div className="ic">
+            <Icon d={CLOCK} size={22} stroke="#b08a3e" width={1.6} />
+          </div>
+          <div className="tx">
+            <div className="t">Séance écrevisses</div>
+            <div className="s">Balances chronométrées individuellement</div>
+          </div>
+          <span className="dur">›</span>
+        </button>
         <div className="ot-timers">
           {PRESETS.map((p) => (
             <button key={p.id} className="ot-timer" onClick={() => start(p)}>
