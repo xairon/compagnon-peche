@@ -11,14 +11,29 @@ interface WakeNav {
 let lock: Lock | null = null;
 let wanted = false;
 let listening = false;
+// Two independent consumers can hold the wake lock at once (cook mode, the
+// crayfish session screen). Reference-count so the first one to release
+// doesn't kill the other's screen-on guarantee.
+let refCount = 0;
 
 function acquire() {
   try {
     const nav = navigator as unknown as WakeNav;
     if (!nav.wakeLock) return;
+    if (lock) return; // already held — don't issue a redundant request
     nav.wakeLock
       .request("screen")
       .then((l) => {
+        if (!wanted) {
+          // nobody wants the lock anymore by the time this resolved —
+          // release it immediately instead of storing it.
+          try {
+            l.release();
+          } catch {
+            /* ignore */
+          }
+          return;
+        }
         lock = l;
       })
       .catch(() => {});
@@ -31,8 +46,10 @@ function onVisibility() {
   if (wanted && document.visibilityState === "visible") acquire();
 }
 
-/** Ask for the screen to stay on. Idempotent. */
+/** Ask for the screen to stay on. Idempotent per-consumer via a reference
+ *  count — pair every call with a `releaseWake()`. */
 export function requestWake(): void {
+  refCount += 1;
   wanted = true;
   if (!listening) {
     document.addEventListener("visibilitychange", onVisibility);
@@ -41,8 +58,13 @@ export function requestWake(): void {
   acquire();
 }
 
-/** Release the lock and stop re-acquiring it. Idempotent. */
+/** Release this consumer's hold on the lock. Only tears down the underlying
+ *  wake lock once every `requestWake()` call has been matched. Idempotent —
+ *  calling it more times than `requestWake()` is a no-op past zero. */
 export function releaseWake(): void {
+  if (refCount > 0) refCount -= 1;
+  if (refCount > 0) return;
+
   wanted = false;
   if (listening) {
     document.removeEventListener("visibilitychange", onVisibility);

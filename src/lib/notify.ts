@@ -28,6 +28,18 @@ export async function askNotifyPermission(): Promise<boolean> {
   }
 }
 
+/** Pure wording for how late a balance is. No browser API involved. */
+export function lateBody(lateSec: number): string {
+  const late = Math.max(0, Math.round(lateSec / 60));
+  return late > 0 ? `À relever depuis ${late} min` : "À relever maintenant";
+}
+
+/** Resolves with `undefined` after `ms` — used to bound a promise that may
+ *  never settle on its own (see notifyBalance below). */
+function timeout(ms: number): Promise<undefined> {
+  return new Promise((resolve) => setTimeout(() => resolve(undefined), ms));
+}
+
 /** Notify that a balance is due. `tag` makes a balance's notifications replace
  *  each other instead of stacking. Falls back to vibration alone. */
 export async function notifyBalance(
@@ -38,10 +50,13 @@ export async function notifyBalance(
 ): Promise<void> {
   navigator.vibrate?.([200, 120, 200]);
   if (!notifySupported() || Notification.permission !== "granted") return;
-  const late = Math.max(0, Math.round(lateSec / 60));
-  const body = late > 0 ? `À relever depuis ${late} min` : "À relever maintenant";
+  const body = lateBody(lateSec);
   try {
-    const reg = await navigator.serviceWorker.ready;
+    // navigator.serviceWorker.ready never settles if no SW ever activates
+    // (registration failure, first-launch race, a platform that blocks SW
+    // install) — race it so the function always settles.
+    const reg = await Promise.race([navigator.serviceWorker.ready, timeout(3000)]);
+    if (!reg) return; // timed out — vibration already fired, nothing more to do
     await reg.showNotification(`Balance ${n}${label ? " · " + label : ""}`, {
       body,
       tag,
