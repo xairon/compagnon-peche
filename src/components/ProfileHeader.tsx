@@ -142,7 +142,8 @@ export function ProfileHeader() {
       {cardStatus === "perimee" && (
         <div className="ph-card-alert ph-card-danger" role="alert">
           <b>Carte de pêche {p.carteAnnee} périmée</b> depuis le 1ᵉʳ janvier — pêcher sans carte valide
-          expose à une amende jusqu'à 450 €.{" "}
+          expose à une amende pouvant aller jusqu'à 450 € (contravention de 4ᵉ classe, art. L436-16 du code de
+          l'environnement).{" "}
           <a href={CARTE_PECHE_URL} target="_blank" rel="noopener noreferrer">
             Renouveler sur cartedepeche.fr ↗
           </a>
