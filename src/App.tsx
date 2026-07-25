@@ -22,6 +22,7 @@ import { Sources } from "./screens/Sources";
 import { Credits } from "./screens/Credits";
 import { Cuisine } from "./screens/Cuisine";
 import { Stockage } from "./screens/Stockage";
+import { CrayfishBar } from "./components/CrayfishBar";
 import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
@@ -103,6 +104,9 @@ export function App() {
   // Detail screens (fiche) are nav-less with their own sticky action (v2).
   const showNav = s !== "cuisine" && s !== "fiche";
   const showFab = showNav && s !== "carte";
+  // The "session running" pill follows the nav chrome, minus the screens that
+  // are the session itself (already there) or its bilan.
+  const showCrayfishPill = showNav && s !== "ecrevisses";
 
   return (
     <div className="app-frame" data-big={state.bigUI ? "1" : undefined}>
@@ -169,6 +173,8 @@ export function App() {
           <Icon d={ICONS.gloves} size={24} stroke={state.bigUI ? "#FBFAF7" : "#4A5D52"} width={1.6} />
         </button>
       )}
+
+      {showCrayfishPill && <CrayfishBar raised={offline} />}
 
       {showNav && <BottomNav />}
     </div>

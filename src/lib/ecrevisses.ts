@@ -130,6 +130,18 @@ export function nextDue(balances: Balance[], now: number): { balance: Balance; i
   return best;
 }
 
+/** What the app-wide "session running" pill needs to say, at a given instant:
+ *  how many balances are waiting to be lifted, and how long until the next one
+ *  comes due. Pure — the pill just formats this. */
+export function barStatus(
+  session: CrayfishSession | null,
+  now: number,
+): { due: number; nextSec: number | null } {
+  if (!session) return { due: 0, nextSec: null };
+  const due = session.balances.filter((b) => balanceState(b, now) === "echue").length;
+  return { due, nextSec: nextDue(session.balances, now)?.inSec ?? null };
+}
+
 export function makeBalances(count: number, intervalMin: number): Balance[] {
   const n = Math.max(1, Math.min(MAX_BALANCES, Math.floor(count) || 1));
   return Array.from({ length: n }, (_, i) => ({

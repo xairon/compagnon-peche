@@ -5465,3 +5465,60 @@ button.card-row {
   font-size: 13.5px;
   font-weight: 600;
 }
+
+/* ---- Écrevisses : pastille « séance en cours » (toute l'app) ---- */
+/* Bottom-left, mirroring the gloves FAB on the right so the two never collide;
+   z-index sits below the offline banner (30) and beside the FAB (20). */
+.cf-pill {
+  position: absolute;
+  left: 14px;
+  bottom: 88px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 62%;
+  padding: 9px 14px 9px 11px;
+  border-radius: 999px;
+  border: 1.5px solid var(--fir);
+  background: var(--fir);
+  color: #fbfaf7;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(20, 30, 25, 0.22);
+}
+/* Clears the offline banner (bottom 84px, ~36px tall), which shares this corner
+   and sits above in the stack. */
+.cf-pill.raised {
+  bottom: 132px;
+}
+.cf-pill.due {
+  border-color: var(--red);
+  background: var(--red);
+  animation: cf-pulse 1.6s ease-in-out infinite;
+}
+.cf-pill-ic {
+  font-size: 15px;
+  line-height: 1;
+}
+.cf-pill-tx {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@keyframes cf-pulse {
+  0%,
+  100% {
+    box-shadow: 0 4px 14px rgba(179, 58, 46, 0.35);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(179, 58, 46, 0.75);
+  }
+}
+/* Respect the reduced-motion preference: keep the colour, drop the pulsing. */
+@media (prefers-reduced-motion: reduce) {
+  .cf-pill.due {
+    animation: none;
+  }
+}

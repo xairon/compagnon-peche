@@ -24,14 +24,19 @@ import {
   tallyTotal,
   currentSession,
   isStaleSession,
+  barStatus,
 } from "./ecrevisses";
-import type { Balance } from "../types";
+import type { Balance, CrayfishSession } from "../types";
 
 const T0 = 1_700_000_000_000; // instant de référence arbitraire
 const MIN = 60_000;
 
 function bal(over: Partial<Balance> = {}): Balance {
   return { id: "b1", n: 1, intervalMin: 30, poseeA: null, releves: 0, ...over };
+}
+
+function sess(balances: Balance[]): CrayfishSession {
+  return { ...createSession({ count: 1, intervalMin: 30, lieu: "x", now: T0 }), balances };
 }
 
 describe("balanceState", () => {
@@ -427,5 +432,45 @@ describe("reconcileSessions", () => {
     const vieille = open("A", T0);
     reconcileSessions([vieille, open("B", T0 + 120 * MIN)]);
     expect(vieille.fin).toBeNull();
+  });
+});
+
+describe("barStatus", () => {
+  it("compte les balances échues", () => {
+    const s = sess([
+      bal({ id: "a", n: 1, poseeA: T0 }),
+      bal({ id: "b", n: 2, poseeA: T0 + 10 * MIN }),
+    ]);
+    // à T0+35min : "a" est échue (30 min), "b" ne l'est pas encore
+    expect(barStatus(s, T0 + 35 * MIN)).toEqual({ due: 1, nextSec: 5 * 60 });
+  });
+
+  it("plusieurs échues, plus aucune en trempe → nextSec null", () => {
+    const s = sess([
+      bal({ id: "a", n: 1, poseeA: T0 }),
+      bal({ id: "b", n: 2, poseeA: T0 }),
+    ]);
+    expect(barStatus(s, T0 + 40 * MIN)).toEqual({ due: 2, nextSec: null });
+  });
+
+  it("aucune échue → rend la prochaine échéance", () => {
+    const s = sess([bal({ poseeA: T0 })]);
+    expect(barStatus(s, T0 + 10 * MIN)).toEqual({ due: 0, nextSec: 20 * 60 });
+  });
+
+  it("toutes les balances hors de l'eau → rien à signaler", () => {
+    expect(barStatus(sess([bal(), bal({ id: "b", n: 2 })]), T0)).toEqual({ due: 0, nextSec: null });
+  });
+
+  it("séance absente → rien à afficher", () => {
+    expect(barStatus(null, T0)).toEqual({ due: 0, nextSec: null });
+  });
+
+  it("l'échéance rendue est la plus proche, pas la première venue", () => {
+    const s = sess([
+      bal({ id: "loin", n: 1, poseeA: T0 + 20 * MIN }),
+      bal({ id: "proche", n: 2, poseeA: T0 }),
+    ]);
+    expect(barStatus(s, T0 + 25 * MIN).nextSec).toBe(5 * 60);
   });
 });
