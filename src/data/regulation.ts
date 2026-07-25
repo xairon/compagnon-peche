@@ -51,8 +51,6 @@ export const DEPARTEMENTS: Record<DeptId, DeptInfo> = {
 // ── Réglementation DÉPARTEMENTALE (arrêtés préfectoraux 2026) ────────────────
 // Valeurs réelles vérifiées (fédérations/préfectures) qui RAFFINENT le national.
 export interface DeptReg {
-  cat1Ouverture: string;
-  cat1Fermeture: string;
   truiteMaille: string;
   brochetMaille: string;
   sandreMaille: string;
@@ -66,8 +64,6 @@ export interface DeptReg {
 
 export const DEPT_REG: Record<DeptId, DeptReg> = {
   "23": {
-    cat1Ouverture: "14 mars 2026",
-    cat1Fermeture: "20 septembre 2026",
     truiteMaille: "20 cm (cours listés : Thaurion, Maulde, Creuse, Beauze, Rozeille…) sinon 23 cm",
     brochetMaille: "60 cm",
     sandreMaille: "50 cm (2ᵉ cat.)",
@@ -83,8 +79,6 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     url: "https://fdpeche23.wixsite.com/peche23/reglementation",
   },
   "36": {
-    cat1Ouverture: "14 mars 2026",
-    cat1Fermeture: "20 septembre 2026",
     truiteMaille: "23 cm (truite/ombre)",
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
@@ -100,8 +94,6 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     url: "https://www.peche36.fr/667-taille-minimale-de-capture.htm",
   },
   "41": {
-    cat1Ouverture: "14 mars 2026",
-    cat1Fermeture: "20 septembre 2026",
     truiteMaille: "25 cm (fario et arc-en-ciel) — relevée au-dessus du national",
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
@@ -135,14 +127,65 @@ const SALMONIDES_CAT1 = new Set([
 const BROCHETS = new Set(["brochet", "brochet-aquitain"]);
 const BLACKBASS = new Set(["black-bass", "black-bass-petite-bouche"]);
 
+// The 1ʳᵉ-catégorie opening/closing dates are set by NATIONAL rule (identical
+// for all three departments) — the same 2ᵉ-samedi-de-mars / 3ᵉ-dimanche-de-
+// septembre rule that src/lib/season.ts already uses to decide whether a cat1
+// species is in season. They used to be hard-coded strings here ("14 mars
+// 2026") that silently went stale every year; computing them on demand fixes
+// that for good. The tiny nth-weekday routine is duplicated rather than
+// imported from src/lib/season.ts — src/data/* stays a lib-free data module,
+// and src/data/maille.test.ts cross-checks the two never diverge.
+function nthWeekdayOfMonth(year: number, month: number, dow: number, n: number): Date {
+  const d = new Date(year, month, 1);
+  let count = 0;
+  for (;;) {
+    if (d.getDay() === dow) {
+      count++;
+      if (count === n) return new Date(d);
+    }
+    d.setDate(d.getDate() + 1);
+  }
+}
+
+const MOIS_FR = [
+  "janvier", "février", "mars", "avril", "mai", "juin",
+  "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+];
+
+function formatFrDate(d: Date): string {
+  return `${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/** 1ʳᵉ-catégorie opening/closing dates for a given year — 2ᵉ samedi de mars →
+ *  3ᵉ dimanche de septembre. Computed on demand (never hard-code a year). */
+export function cat1Season(year: number): { open: Date; close: Date } {
+  return {
+    open: nthWeekdayOfMonth(year, 2, 6, 2), // 2nd Saturday of March
+    close: nthWeekdayOfMonth(year, 8, 0, 3), // 3rd Sunday of September
+  };
+}
+
+export function cat1OuvertureLabel(year: number): string {
+  return formatFrDate(cat1Season(year).open);
+}
+
+export function cat1FermetureLabel(year: number): string {
+  return formatFrDate(cat1Season(year).close);
+}
+
 /** Department-specific regulation rows relevant to a given species, or null when
- *  the department has no known specificity for it (→ national baseline applies). */
-export function localRegRows(dept: DeptId, spId: string): [string, string][] {
+ *  the department has no known specificity for it (→ national baseline applies).
+ *  `year` defaults to the current year so callers rarely need to pass it. */
+export function localRegRows(
+  dept: DeptId,
+  spId: string,
+  year: number = new Date().getFullYear(),
+): [string, string][] {
   const d = DEPT_REG[dept];
   const rows: [string, string][] = [];
   if (SALMONIDES_CAT1.has(spId)) {
-    rows.push(["Ouverture (1ʳᵉ cat.)", d.cat1Ouverture]);
-    rows.push(["Fermeture (1ʳᵉ cat.)", d.cat1Fermeture]);
+    rows.push(["Ouverture (1ʳᵉ cat.)", cat1OuvertureLabel(year)]);
+    rows.push(["Fermeture (1ʳᵉ cat.)", cat1FermetureLabel(year)]);
     if (spId === "truite-fario" || spId === "truite-arc-en-ciel") rows.push(["Maille truite", d.truiteMaille]);
     rows.push(["Quota salmonidés", d.salmonideQuota]);
   }

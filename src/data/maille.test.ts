@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { strictestCm, localMaille } from "./regulation";
+import { strictestCm, localMaille, cat1Season, cat1OuvertureLabel, cat1FermetureLabel, localRegRows } from "./regulation";
 
 describe("strictestCm", () => {
   it("lit une taille simple", () => {
@@ -61,5 +61,52 @@ describe("localMaille", () => {
   it("rend null pour une espèce sans spécificité départementale", () => {
     expect(localMaille("41", "carpe-commune")).toBeNull();
     expect(localMaille("41", "gardon")).toBeNull();
+  });
+});
+
+// Les dates d'ouverture/fermeture de la 1ʳᵉ catégorie ne doivent JAMAIS être
+// recopiées en dur (elles périment chaque année) : elles doivent être calculées
+// à la demande, comme le fait déjà src/lib/season.ts (2ᵉ samedi de mars → 3ᵉ
+// dimanche de septembre). Ces tests échouent si quelqu'un les remplace par une
+// constante figée du type "14 mars 2026".
+describe("cat1Season (dates dérivées, pas codées en dur)", () => {
+  it("2027 : l'ouverture tombe un samedi de mars", () => {
+    const { open } = cat1Season(2027);
+    expect(open.getDay()).toBe(6); // samedi
+    expect(open.getMonth()).toBe(2); // mars (0-indexé)
+    expect(open.getFullYear()).toBe(2027);
+  });
+
+  it("2027 : la fermeture tombe un dimanche de septembre", () => {
+    const { close } = cat1Season(2027);
+    expect(close.getDay()).toBe(0); // dimanche
+    expect(close.getMonth()).toBe(8); // septembre
+    expect(close.getFullYear()).toBe(2027);
+  });
+
+  it("2028 : la même règle s'applique, avec une date différente de 2027", () => {
+    const { open: open2027 } = cat1Season(2027);
+    const { open: open2028, close: close2028 } = cat1Season(2028);
+    expect(open2028.getDay()).toBe(6);
+    expect(open2028.getMonth()).toBe(2);
+    expect(open2028.getFullYear()).toBe(2028);
+    expect(close2028.getDay()).toBe(0);
+    expect(close2028.getMonth()).toBe(8);
+    expect(open2028.getTime()).not.toBe(open2027.getTime());
+  });
+
+  it("les libellés reflètent l'année demandée, jamais 2026 en dur", () => {
+    expect(cat1OuvertureLabel(2027)).toContain("2027");
+    expect(cat1OuvertureLabel(2027)).not.toContain("2026");
+    expect(cat1FermetureLabel(2028)).toContain("2028");
+    expect(cat1FermetureLabel(2028)).not.toContain("2026");
+  });
+
+  it("localRegRows relaie les dates calculées pour l'année demandée", () => {
+    const rows = localRegRows("41", "truite-fario", 2027);
+    const ouverture = rows.find(([k]) => k === "Ouverture (1ʳᵉ cat.)");
+    const fermeture = rows.find(([k]) => k === "Fermeture (1ʳᵉ cat.)");
+    expect(ouverture?.[1]).toBe(cat1OuvertureLabel(2027));
+    expect(fermeture?.[1]).toBe(cat1FermetureLabel(2027));
   });
 });
