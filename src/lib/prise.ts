@@ -4,6 +4,7 @@ import { season } from "./season";
 import { QUOTA_CARNASSIERS } from "./helpers";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { effectiveMaille } from "./maille";
+import { effectiveQuota } from "./quota";
 
 export type ActKind = "primary" | "danger" | "default";
 export interface PriseAction {
@@ -215,7 +216,12 @@ export function priseView(
     // their own quota field; eels are a declaration obligation, not a quota.
     const isCarnassier = QUOTA_CARNASSIERS.includes(sp.id);
     const declare = sp.quota === "Déclarer";
-    const otherQuota = !isCarnassier && !declare && sp.quota !== "—";
+    // The arrêté can set a quota where the national text sets none: a truite
+    // fario has sp.quota === "—", yet Loir-et-Cher caps it at 6/jour. Reading
+    // sp.quota alone announced "pas de quota national" — the opposite of what
+    // binds the angler — while the fiche screen showed the real figure.
+    const q = effectiveQuota(sp, dept);
+    const otherQuota = !isCarnassier && !declare && q.text !== null;
 
     if (isCarnassier) {
       return {
@@ -255,10 +261,12 @@ export function priseView(
         title: "Quota spécifique",
         paras: [
           "Quota pour cette espèce : " +
-            sp.quota +
-            (sp.quotaSub && sp.quotaSub !== "—" ? " (" + sp.quotaSub + ")" : "") +
+            q.text +
+            (!q.local && sp.quotaSub && sp.quotaSub !== "—" ? " (" + sp.quotaSub + ")" : "") +
             ".",
-          "Un arrêté préfectoral peut préciser ou restreindre ce quota.",
+          q.local && dept
+            ? `Fixé par l'arrêté de ${DEPARTEMENTS[dept].name}. Vérifiez le texte en vigueur.`
+            : "Un arrêté préfectoral peut préciser ou restreindre ce quota.",
         ],
         actions: [btn("Continuer", "choix", "primary")],
       };

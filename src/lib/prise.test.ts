@@ -85,3 +85,43 @@ describe("priseView — maille (arrêté départemental)", () => {
     expect(v?.title).toContain("30 cm");
   });
 });
+
+describe("priseView — quota (arrêté départemental)", () => {
+  // Le cas relevé en revue : sp.quota vaut "—" pour la truite fario, mais le
+  // Loir-et-Cher plafonne à 6/jour. L'app annonçait « pas de quota national »,
+  // soit l'inverse de ce qui lie le pêcheur.
+  it("la truite fario en 41 affiche le quota départemental, pas « aucun quota »", () => {
+    const v = priseView(
+      sp({ id: "truite-fario", name: "Truite fario", season: "cat1", quota: "—" }),
+      "quota",
+      Q,
+      "41",
+    );
+    expect(v?.title).not.toMatch(/pas de quota national/i);
+    expect(v?.paras.join(" ")).toMatch(/6 truites/i);
+  });
+
+  it("cite le département qui fixe le quota", () => {
+    const v = priseView(
+      sp({ id: "truite-fario", name: "Truite fario", season: "cat1", quota: "—" }),
+      "quota",
+      Q,
+      "41",
+    );
+    expect(v?.paras.join(" ")).toMatch(/Loir-et-Cher/);
+  });
+
+  it("sans département, retombe sur le comportement national", () => {
+    const v = priseView(
+      sp({ id: "truite-fario", name: "Truite fario", season: "cat1", quota: "—" }),
+      "quota",
+      Q,
+    );
+    expect(v?.title).toMatch(/pas de quota national/i);
+  });
+
+  it("le cumul carnassiers R436-21 reste inchangé", () => {
+    const v = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet" }), "quota", Q, "41");
+    expect(v?.paras.join(" ")).toMatch(/R436-21/);
+  });
+});
