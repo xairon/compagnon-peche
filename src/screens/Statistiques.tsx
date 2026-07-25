@@ -1,6 +1,7 @@
 import { useStore } from "../store";
 import { SPECIES } from "../data/species";
 import { DAY_PARTS, dayPart, type DayPart } from "../lib/helpers";
+import { analysePrises, silenceMessage, BIAS_NOTE } from "../lib/analysePrises";
 
 const MONTHS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 const HAS_FICHE = new Set(SPECIES.map((s) => s.id));
@@ -44,6 +45,12 @@ export function Statistiques() {
   const partMax = Math.max(1, ...Object.values(byPart));
 
   const relPct = total ? Math.round(((total - kept) / total) * 100) : 0;
+
+  // Conditions × prises: pure analysis, see lib/analysePrises. Draws only on
+  // catches carrying a conditions snapshot (new ones only — see CatchEditor),
+  // never a retrofit of older entries.
+  const cond = analysePrises(catches);
+  const plural = (n: number) => (n > 1 ? "s" : "");
 
   return (
     <div className="screen">
@@ -148,6 +155,46 @@ export function Statistiques() {
                     <span className="st-part-n">{byPart[p]}</span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Conditions × prises — see lib/analysePrises for the honesty rules
+                (seuil de silence, ne montrer que ce qui se détache, biais nommé). */}
+            <div className="st-h">Conditions de vos prises</div>
+            {cond.documented === 0 ? (
+              <div className="st-note">
+                Aucune prise documentée avec ses conditions pour l'instant : les nouvelles prises
+                enregistrent pression, lune, température et débit de l'eau quand un relevé récent est
+                disponible. {silenceMessage(cond.missing)}
+              </div>
+            ) : !cond.ready ? (
+              <div className="st-note">
+                {cond.documented} prise{plural(cond.documented)} documentée{plural(cond.documented)} sur{" "}
+                {cond.totalCatches} au total. {silenceMessage(cond.missing)}
+              </div>
+            ) : cond.insights.length === 0 ? (
+              <div className="st-note">
+                {cond.documented} prise{plural(cond.documented)} documentée{plural(cond.documented)} sur{" "}
+                {cond.totalCatches} au total : rien ne s'en détache nettement pour l'instant.
+              </div>
+            ) : (
+              <div className="st-cond-list">
+                {cond.insights.map((ins) => (
+                  <div className="st-cond-row" key={ins.key}>
+                    <div className="st-cond-t">{ins.title}</div>
+                    <div className="st-cond-s">
+                      {ins.sentence}
+                      {ins.key === "moonPhase" && (
+                        <span className="st-cond-trad"> (repère traditionnel, non prouvé scientifiquement)</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {cond.ready && (
+              <div className="st-note" style={{ marginTop: 8 }}>
+                {BIAS_NOTE}
               </div>
             )}
 
