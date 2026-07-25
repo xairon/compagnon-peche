@@ -199,7 +199,7 @@ export function Statistiques() {
             )}
 
             <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 18, lineHeight: 1.5 }}>
-              Calculé depuis vos {total} prise(s), 100 % sur votre appareil.
+              Calculé depuis vos {total} prise{total > 1 ? "s" : ""}, 100 % sur votre appareil.
             </div>
           </>
         )}

@@ -25,6 +25,8 @@ import { hhmm, ago } from "../lib/geo";
 import { season } from "../lib/season";
 import { locate, locateMessage } from "../lib/locate";
 import { deptFromCoords } from "../lib/sandre";
+import { setConditions } from "../lib/conditionsCache";
+import { useNow, isStale } from "../lib/now";
 import { effectiveMaille } from "../lib/maille";
 import type { Screen } from "../store";
 
@@ -76,6 +78,8 @@ export function Accueil() {
   const [water, setWater] = useState<Water | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
+  // Freshness is judged in days here, so a per-minute clock is ample.
+  const now = useNow();
 
   useEffect(() => {
     let alive = true;
@@ -102,6 +106,22 @@ export function Accueil() {
 
   const sun = useMemo(() => sunTimes(new Date(), pt.lat, pt.lon), [pt.lat, pt.lon]);
   const moon = useMemo(() => moonIllumination(new Date()), []);
+
+  // Feed the conditions cache: a catch logged from anywhere in the app picks the
+  // snapshot up from here. Only what is actually known goes in — the cache has
+  // its own freshness guard, and a partial reading beats an invented one.
+  useEffect(() => {
+    if (!meteo && !water) return;
+    setConditions({
+      pressure: meteo?.now.pressure,
+      pressureTrend: meteo?.pressureTrend,
+      moonPhase: moon.phase,
+      waterTemp: water?.temp?.value,
+      flow: water?.flow?.value ?? water?.level?.value,
+      flowUnit: water?.flow ? "m³/s" : water?.level ? "m" : undefined,
+      flowTrend: water?.flow?.trend ?? water?.level?.trend,
+    });
+  }, [meteo, water, moon.phase]);
   const qt = quotaToday(state.catches);
 
   const today = useMemo(() => {
@@ -293,7 +313,7 @@ export function Accueil() {
               // "current condition" — show "pas de relevé récent" instead of a
               // stale number (the old value stays in the water briefing on tap).
               const t = water?.temp;
-              const tooOld = t ? Date.now() - new Date(t.date).getTime() > 30 * 86400000 : false;
+              const tooOld = isStale(t?.date, now, 30 * 86400000);
               return (
                 <WaterTile
                   k="Temp. eau"

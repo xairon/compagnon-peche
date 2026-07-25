@@ -12,6 +12,7 @@ import {
   type Trend,
 } from "../lib/hubeau";
 import { assessCrue, crueLabel } from "../lib/crue";
+import { useNow } from "../lib/now";
 import {
   classeO2,
   classeSaturationO2,
@@ -112,9 +113,13 @@ export function Briefing({
   // ---- Flood-rise heuristic (see lib/crue.ts) — derived from the SAME hydro
   // readings above, recomputed whenever they're refreshed. No banner at all
   // when nothing is happening: staying quiet at "aucune" IS the discreet state.
+  // `now` comes from the clock hook, so the freshness guard inside assessCrue is
+  // re-evaluated as time passes. Memoised on Date.now() it stayed frozen at the
+  // moment of the fetch — a page left open kept reusing that verdict for hours.
+  const now = useNow();
   const crue = useMemo(
-    () => (water.data ? assessCrue(water.data.h, water.data.q, Date.now()) : null),
-    [water.data],
+    () => (water.data ? assessCrue(water.data.h, water.data.q, now) : null),
+    [water.data, now],
   );
 
   // ---- Water quality verdict (see lib/qualiteEau.ts) — worst-of the three
