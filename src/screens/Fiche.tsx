@@ -8,6 +8,8 @@ import { Gallery } from "../components/Gallery";
 import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
+import { effectiveMaille } from "../lib/maille";
+import { effectiveQuota } from "../lib/quota";
 import { ratingFg, repere } from "../lib/helpers";
 import { EDIBILITY } from "../data/edibility";
 import { IDENT } from "../data/identification";
@@ -414,7 +416,11 @@ export function Fiche() {
     });
   }
 
-  const mailleCm = parseInt(sp.maille) || 0;
+  // Same resolution as « Ma prise », la règle et les grilles : une seule maille
+  // dans toute l'app, celle de l'arrêté quand il est plus strict.
+  const eff = effectiveMaille(sp, state.dept);
+  const effQuota = effectiveQuota(sp, state.dept);
+  const mailleCm = eff.cm;
   const seasonFg = seas.open ? "#1D6E42" : "#B33A2E";
   const seasonDot = seas.open ? "#2E9E5B" : "#B33A2E";
 
@@ -456,8 +462,18 @@ export function Fiche() {
       fg: sp.ratingCls ? ratingFg(sp.ratingCls) : edFg,
       sub: null,
     },
-    { k: "Maille", v: sp.maille, fg: "#1A201C", sub: sp.mailleSub },
-    { k: "Quota", v: sp.quota, fg: sp.quota === "—" ? "#1A201C" : "#9A6A12", sub: sp.quotaSub },
+    {
+      k: "Maille",
+      v: eff.cm > 0 ? eff.cm + " cm" : "—",
+      fg: "#1A201C",
+      sub: eff.aboveNational ? `arrêté ${state.dept} — national ${sp.maille}` : sp.mailleSub,
+    },
+    {
+      k: "Quota",
+      v: effQuota.text ?? "—",
+      fg: effQuota.text ? "#9A6A12" : "#1A201C",
+      sub: effQuota.local ? `arrêté ${state.dept}` : sp.quotaSub,
+    },
   ];
 
   return (
@@ -568,7 +584,7 @@ export function Fiche() {
           <div className="repere">
             <Icon d={ICONS.ruler} size={18} stroke="#4A5D52" />
             <div className="txt">
-              Maille {sp.maille} — repère : {repere(mailleCm)}
+              Maille {mailleCm} cm — repère : {repere(mailleCm)}
             </div>
             <button className="link" onClick={() => nav("regle")}>
               Règle

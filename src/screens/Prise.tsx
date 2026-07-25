@@ -217,7 +217,7 @@ export function Prise() {
             {pv.note && <div className="note" style={{ marginTop: 14 }}>{pv.note}</div>}
           </div>
 
-          {state.prise.step === "maille" && sp && sp.maille !== "—" && (
+          {state.prise.step === "maille" && sp && effectiveMaille(sp, state.dept).cm > 0 && (
             <div className="field" style={{ marginTop: 14 }}>
               <label>Taille mesurée (cm) — facultatif, pré-remplira le carnet</label>
               <input

@@ -5,6 +5,7 @@ import { Icon, ICONS } from "../components/Icon";
 import { Media } from "../components/Media";
 import { norm, ratingFg } from "../lib/helpers";
 import { season } from "../lib/season";
+import { effectiveMaille } from "../lib/maille";
 import type { Species } from "../types";
 
 // Web Speech API: still absent from TypeScript's DOM lib, and prefixed on WebKit.
@@ -190,7 +191,12 @@ export function Especes() {
                   const st = statusPill(sp);
                   return <span className={"sp-pill " + st.cls}>{st.label}</span>;
                 })()}
-                <span className="sp-pill neutral">{sp.maille !== "—" ? sp.maille : "Pas de maille"}</span>
+                <span className="sp-pill neutral">
+                  {(() => {
+                    const cm = effectiveMaille(sp, state.dept).cm;
+                    return cm > 0 ? cm + " cm" : "Pas de maille";
+                  })()}
+                </span>
               </div>
             </button>
           );

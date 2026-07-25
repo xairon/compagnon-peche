@@ -25,6 +25,7 @@ import { hhmm, ago } from "../lib/geo";
 import { season } from "../lib/season";
 import { locate, locateMessage } from "../lib/locate";
 import { deptFromCoords } from "../lib/sandre";
+import { effectiveMaille } from "../lib/maille";
 import type { Screen } from "../store";
 
 // Default "home water" until GPS refines it (Blois / Loire).
@@ -380,7 +381,9 @@ export function Accueil() {
             <button key={sp.id} className="ac-spcard" onClick={() => openSp(sp.id)}>
               <div className="img">
                 <Media kind="species" id={sp.id} placeholder={sp.name} />
-                {sp.maille !== "—" && <span className="maille">Maille {sp.maille}</span>}
+                {effectiveMaille(sp, state.dept).cm > 0 && (
+                  <span className="maille">Maille {effectiveMaille(sp, state.dept).cm} cm</span>
+                )}
               </div>
               <div className="body">
                 <div className="nm">{sp.name}</div>
