@@ -464,7 +464,7 @@ export function Fiche() {
     },
     {
       k: "Maille",
-      v: eff.cm > 0 ? eff.cm + " cm" : "—",
+      v: eff.label ?? "—",
       fg: "#1A201C",
       sub: eff.aboveNational ? `arrêté ${state.dept} — national ${sp.maille}` : sp.mailleSub,
     },

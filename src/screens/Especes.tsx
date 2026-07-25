@@ -4,7 +4,7 @@ import { DEPARTEMENTS } from "../data/regulation";
 import { Icon, ICONS } from "../components/Icon";
 import { Media } from "../components/Media";
 import { norm, ratingFg } from "../lib/helpers";
-import { season } from "../lib/season";
+import { speciesStatus } from "../lib/statut";
 import { effectiveMaille } from "../lib/maille";
 import type { Species } from "../types";
 
@@ -28,11 +28,10 @@ function speechCtor(): SpeechRecognitionCtor | undefined {
   return w.SpeechRecognition || w.webkitSpeechRecognition;
 }
 
-function statusPill(sp: Species): { label: string; cls: string } {
-  if (sp.protected || sp.invasive) return { label: "À relâcher", cls: "bad" };
-  if (!season(sp).open) return { label: "● Fermée", cls: "bad" };
-  return { label: "● Ouverte", cls: "good" };
-}
+// Le statut vient de lib/statut, partagé avec l'accueil et la fiche : la
+// pastille ne peut plus dire « ouverte » là où le parcours dit « vérifiez
+// l'arrêté ».
+const statusPill = (sp: Species) => speciesStatus(sp);
 
 const GROUPS: [string, string][] = [
   ["tous", "Toutes"],
@@ -192,10 +191,7 @@ export function Especes() {
                   return <span className={"sp-pill " + st.cls}>{st.label}</span>;
                 })()}
                 <span className="sp-pill neutral">
-                  {(() => {
-                    const cm = effectiveMaille(sp, state.dept).cm;
-                    return cm > 0 ? cm + " cm" : "Pas de maille";
-                  })()}
+                  {effectiveMaille(sp, state.dept).label ?? "Pas de maille"}
                 </span>
               </div>
             </button>

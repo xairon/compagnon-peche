@@ -57,3 +57,30 @@ describe("effectiveMaille", () => {
     expect(m.text).toMatch(/cours listés/i);
   });
 });
+
+/**
+ * Réduire toute maille à un entier effaçait les formulations non numériques :
+ * l'esturgeon européen, protégé en tout point du territoire, passait de
+ * « Interdit » à « Pas de maille » — strictement plus permissif que la loi.
+ */
+describe("effectiveMaille — mailles non numériques", () => {
+  it("conserve « Interdit » pour l'esturgeon européen", () => {
+    const m = effectiveMaille(sp("esturgeon-europeen"), "41");
+    expect(m.cm).toBe(0);
+    expect(m.label).toBe("Interdit");
+  });
+
+  it("conserve la formulation du saumon plutôt que de l'effacer", () => {
+    const m = effectiveMaille(sp("saumon-atlantique"), "41");
+    expect(m.label).not.toBeNull();
+    expect(m.label).not.toBe("0 cm");
+  });
+
+  it("une espèce sans maille du tout ne porte pas de libellé", () => {
+    expect(effectiveMaille(sp("gardon"), "41").label).toBeNull();
+  });
+
+  it("une maille numérique s'affiche en centimètres", () => {
+    expect(effectiveMaille(sp("brochet"), "41").label).toBe("60 cm");
+  });
+});

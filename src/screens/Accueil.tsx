@@ -22,7 +22,7 @@ import {
 import { sunTimes, moonIllumination, moonPhaseName, type SunTimes } from "../lib/astro";
 import { quotaToday } from "../lib/helpers";
 import { hhmm, ago } from "../lib/geo";
-import { season } from "../lib/season";
+import { isPlainlyOpen } from "../lib/statut";
 import { locate, locateMessage } from "../lib/locate";
 import { deptFromCoords } from "../lib/sandre";
 import { setConditions } from "../lib/conditionsCache";
@@ -130,7 +130,7 @@ export function Accueil() {
   }, []);
 
   const openSpecies = useMemo(
-    () => SPECIES.filter((s) => s.depth !== "base" && season(s).open && !s.protected).slice(0, 10),
+    () => SPECIES.filter((s) => s.depth !== "base" && isPlainlyOpen(s)).slice(0, 10),
     [],
   );
 
@@ -401,8 +401,8 @@ export function Accueil() {
             <button key={sp.id} className="ac-spcard" onClick={() => openSp(sp.id)}>
               <div className="img">
                 <Media kind="species" id={sp.id} placeholder={sp.name} />
-                {effectiveMaille(sp, state.dept).cm > 0 && (
-                  <span className="maille">Maille {effectiveMaille(sp, state.dept).cm} cm</span>
+                {effectiveMaille(sp, state.dept).label && (
+                  <span className="maille">Maille {effectiveMaille(sp, state.dept).label}</span>
                 )}
               </div>
               <div className="body">

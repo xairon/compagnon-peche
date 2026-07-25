@@ -51,3 +51,34 @@ describe("cohérence réglementaire dans l'interface", () => {
     }
   });
 });
+
+/**
+ * La première version de cette garde ne cherchait que `{sp.maille}` en JSX —
+ * elle n'a rien vu quand la grille d'espèces a transformé « Interdit » en
+ * « Pas de maille », ni quand elle a affiché une pastille verte pour un
+ * migrateur sous moratoire. On teste désormais le RÉSULTAT, pas la syntaxe.
+ */
+describe("cohérence des verdicts entre écrans", () => {
+  it("aucune espèce n'est verte dans la grille et « à vérifier » dans le parcours", async () => {
+    const { SPECIES } = await import("../data/species");
+    const { speciesStatus } = await import("./statut");
+    const { priseView } = await import("./prise");
+    const desaccords = SPECIES.filter((sp) => {
+      const vert = speciesStatus(sp).cls === "good";
+      const v = priseView(sp, "statut", { c: 0, b: 0 }, "41");
+      return vert && v?.tone !== "good";
+    }).map((sp) => sp.id);
+    expect(desaccords).toEqual([]);
+  });
+
+  it("aucune espèce à maille non numérique n'est annoncée « sans maille »", async () => {
+    const { SPECIES } = await import("../data/species");
+    const { effectiveMaille } = await import("./maille");
+    const perdues = SPECIES.filter((sp) => {
+      const brut = (sp.maille || "").trim();
+      const aUneRegle = brut !== "" && brut !== "—";
+      return aUneRegle && effectiveMaille(sp, "41").label === null;
+    }).map((sp) => sp.id);
+    expect(perdues).toEqual([]);
+  });
+});
