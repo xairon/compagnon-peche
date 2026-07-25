@@ -1,10 +1,12 @@
 // Sourced edibility (comestibilité) + health overlay, keyed by species id.
 // Verified 2026-07-22 — see scripts/species-list/_edibility-verified.json.
 // Nothing is invented: species with no sourced data simply have no entry (the
-// fiche shows nothing rather than a guess). "non" = protected / no-take (a
-// verified legal fact), never a taste judgement.
+// fiche shows nothing rather than a guess). "non" = a national text forbids
+// KEEPING the animal (verified legal fact), never a taste judgement — see the
+// audit of 2026-07: the arrêté du 8 déc. 1988 is not such a text, it protects
+// eggs and spawning grounds. Species listed there are "réglementé".
 //
-// Sources: Arrêté du 8 déc. 1988 & 25 janv. 1982 (Légifrance) · ANSES avis PCB
+// Sources: Arrêté du 8 déc. 1988 & 20 déc. 2004 (Légifrance) · ANSES avis PCB
 // 2011/2015 (bioaccumulateurs) · arrêté 14 fév. 2018 (EEE) · SFMU (choléra des
 // barbeaux) · fédérations de pêche & références culinaires (DORIS, Fishipedia) ·
 // de Haro L., « Intoxications par organismes aquatiques », Médecine Tropicale
@@ -25,7 +27,7 @@ export interface Edible {
 
 const CULINARY = "Fédérations de pêche · références culinaires";
 const ANSES = "ANSES (avis PCB 2011/2015)";
-const A1988 = "Arrêté du 8 décembre 1988 (espèces protégées)";
+const A1988 = "Arrêté du 8 décembre 1988, art. 1er (œufs et frayères) · arrêtés préfectoraux";
 // Fished salmonids (ombre, omble chevalier, corégone): NOT on the 1988 protected
 // list — they have a legal size + local quota. Cite the salmonid regulation, not
 // "protégé 1988", which contradicts their pêchable status in regulation/species.
@@ -38,7 +40,13 @@ const ANSES_TXT =
   "Espèce fortement bioaccumulatrice (PCB/dioxines) : l'ANSES recommande de limiter à 2 fois/mois (population générale) et 1 fois tous les 2 mois pour les publics sensibles (femmes enceintes/allaitantes, enfants < 3 ans, filles et adolescentes).";
 const ANSES_ANGUILLE =
   "Espèce TRÈS fortement bioaccumulatrice — la plus concernée par les PCB/dioxines : ANSES 2 fois/mois max (population générale), 1 fois tous les 2 mois pour les publics sensibles.";
-const RELACHE = "Espèce protégée — capture interdite, remise à l'eau immédiate et soignée.";
+// The arrêté du 8 déc. 1988 protects eggs and spawning grounds; it never
+// forbids keeping the adult (the pike and the trout are on the same list).
+// Saying "capture interdite" here contradicted the law and the fiche.
+const A1988_TXT =
+  "L'arrêté du 8 décembre 1988 protège ses œufs et ses frayères, pas l'adulte : la conserver n'est pas interdit au niveau national. Espèce peu recherchée et souvent rare — remise à l'eau conseillée, et vérifiez l'arrêté préfectoral, qui peut restreindre le prélèvement ou l'usage comme vif.";
+const HABITATS_TXT =
+  "Espèce d'intérêt communautaire (Directive Habitats an. II) que l'arrêté du 8 décembre 1988 ne vise pas : aucune interdiction nationale de la conserver. Espèce rare — remise à l'eau conseillée, et vérifiez l'arrêté préfectoral.";
 // SFMU + littérature médicale (de Haro 2008) nomment explicitement B. barbus ET
 // B. meridionalis parmi les barbeaux européens responsables du « choléra des
 // barbeaux » (ichtyootoxisme par les œufs) — donc pas une extrapolation.
@@ -323,31 +331,49 @@ export const EDIBILITY: Record<string, Edible> = {
   },
 
   // ── Protégées / no-take (comestible = non, fait légal) ───────
-  vandoise: { status: "non", prep: RELACHE, source: A1988 },
+  vandoise: { status: "réglementé", prep: A1988_TXT, source: A1988 },
   "vandoise-rostree": {
-    status: "non",
-    prep: "Protection présumée par extension du genre Leuciscus (à confirmer) — dans le doute, remise à l'eau.",
-    source: "Statut de protection à confirmer (voir remarque biologie)",
+    status: "réglementé",
+    // No longer "à confirmer": the AFB/OFB note of 22 Feb. 2019 (Poulet, rev.
+    // Denys) says a taxon split off after 1988 inherits the listed species'
+    // status — so this one carries Leuciscus leuciscus's, eggs and spawning
+    // grounds included, and nothing more.
+    prep: A1988_TXT,
+    source: A1988 + " (statut hérité de Leuciscus leuciscus, note OFB 22 fév. 2019)",
   },
-  "vandoise-du-bearn": { status: "non", prep: RELACHE, source: A1988 },
-  "ide-melanote": { status: "non", prep: RELACHE, source: A1988 },
+  "vandoise-du-bearn": {
+    status: "réglementé",
+    prep: A1988_TXT,
+    source: A1988 + " (statut hérité de Leuciscus leuciscus, note OFB 22 fév. 2019)",
+  },
+  "ide-melanote": { status: "réglementé", prep: A1988_TXT, source: A1988 },
   "barbeau-meridional": {
-    status: "non",
+    status: "réglementé",
     prep:
-      RELACHE +
+      A1988_TXT +
       " Comme chez le barbeau fluviatile, ses œufs (rogue) sont toxiques (« choléra des barbeaux » : douleurs abdominales, diarrhées, vomissements) — à ne jamais consommer, y compris en cas de confusion entre les deux espèces.",
     source: A1988 + " · " + SFMU_BARBEAU,
   },
-  bouviere: { status: "non", prep: RELACHE, source: A1988 },
-  "apron-du-rhone": { status: "non", prep: RELACHE, source: A1988 },
-  toxostome: { status: "non", prep: "Espèce protégée (Directive Habitats) — remise à l'eau. Souvent confondue avec le hotu.", source: "Directive Habitats / protection nationale" },
-  "blennie-fluviatile": { status: "non", prep: RELACHE, source: A1988 },
-  "lamproie-de-planer": { status: "non", prep: RELACHE, source: A1988 },
-  "loche-d-etang": { status: "non", prep: RELACHE, source: A1988 },
-  "loche-de-riviere": { status: "non", prep: RELACHE, source: A1988 },
+  bouviere: { status: "réglementé", prep: A1988_TXT, source: A1988 },
+  "apron-du-rhone": {
+    status: "non",
+    prep: "Protection stricte (Directive Habitats an. IV : capture intentionnelle interdite ; Berne an. II) et danger critique d'extinction — remise à l'eau immédiate de toute capture accidentelle.",
+    source: "Directive Habitats an. IV · convention de Berne an. II · " + A1988,
+  },
+  toxostome: {
+    status: "réglementé",
+    prep: HABITATS_TXT + " Souvent confondu avec le hotu.",
+    source: "Directive Habitats an. II et V",
+  },
+  "blennie-fluviatile": { status: "réglementé", prep: A1988_TXT, source: A1988 },
+  "lamproie-de-planer": { status: "réglementé", prep: A1988_TXT, source: A1988 },
+  "loche-d-etang": { status: "réglementé", prep: A1988_TXT, source: A1988 },
+  "loche-de-riviere": { status: "réglementé", prep: A1988_TXT, source: A1988 },
   "esturgeon-europeen": {
     status: "non",
-    prep: "STRICTEMENT PROTÉGÉ (Acipenser sturio, en danger critique) : pêche, détention, transport et vente interdits — relâcher toute capture accidentelle.",
-    source: "Arrêté du 25 janvier 1982",
+    prep: "STRICTEMENT PROTÉGÉ (Acipenser sturio, en danger critique) : capture, détention, transport et vente interdits — relâcher immédiatement toute capture accidentelle.",
+    // The arrêté du 25 janv. 1982 previously cited here has been abrogated
+    // since 2005-01-07; the text in force is the arrêté du 20 déc. 2004.
+    source: "Arrêté du 20 décembre 2004 (JORFTEXT000000259841)",
   },
 };
