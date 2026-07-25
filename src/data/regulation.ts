@@ -94,14 +94,18 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     url: "https://www.peche36.fr/667-taille-minimale-de-capture.htm",
   },
   "41": {
-    truiteMaille:
-      "25 cm (fario et arc-en-ciel) — relevée au-dessus du national ; valeur à reconfirmer sur l'arrêté 2026 (source peche41.fr inaccessible lors de la dernière vérification, juillet 2026 — deux agrégateurs tiers indépendants indiquent 23 cm, sans confirmer la source primaire)",
+    // La valeur reste courte : elle s'affiche telle quelle dans le parcours et
+    // sur la fiche. Le détail de l'incertitude vit dans `notes` ci-dessous, que
+    // l'écran Réglementation déploie — un champ de valeur n'est pas un endroit
+    // pour un paragraphe.
+    truiteMaille: "25 cm (fario et arc-en-ciel) — à reconfirmer sur l'arrêté 2026",
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
     blackbassMaille: "30 cm (2ᵉ cat.)",
     salmonideQuota: "6 truites/jour",
     carnassierQuota: "2ᵉ cat. : 3 carnassiers/jour dont 2 brochets ; 1ʳᵉ cat. : 2 brochets/jour",
     notes: [
+      "Maille truite : l'app retient 25 cm, la valeur la plus protectrice. Elle n'a pas pu être reconfirmée en juillet 2026 (site de la fédération inaccessible) et deux agrégateurs tiers indiquent 23 cm sans citer l'arrêté. Vérifiez l'arrêté préfectoral avant de conserver une truite entre 23 et 25 cm.",
       "Plafond global toutes catégories : 6 truites et 2 brochets max/jour/pêcheur.",
       "Interdiction de transporter les carpes vivantes de plus de 60 cm.",
       "Carpe de nuit au Plan d'eau de la Coudraie, sur réservation (peche41.fr).",
