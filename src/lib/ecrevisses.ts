@@ -10,7 +10,7 @@ import { uid, isoDay, frDate } from "./helpers";
 /** National rule: 6 balances per angler, up to 10 in some départements. */
 export const DEFAULT_BALANCES = 6;
 export const MAX_BALANCES = 10;
-export const DEFAULT_INTERVAL_MIN = 30;
+export const DEFAULT_INTERVAL_MIN = 20;
 /** Past this, a still-open session is treated as forgotten (banner, no auto-close). */
 export const STALE_SESSION_MS = 12 * 3600_000;
 

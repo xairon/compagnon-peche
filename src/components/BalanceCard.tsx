@@ -12,18 +12,22 @@ export function BalanceCard({
   b,
   now,
   expanded,
+  canRemove,
   onToggle,
   onPose,
   onReleve,
   onOptions,
+  onRemove,
 }: {
   b: Balance;
   now: number;
   expanded: boolean;
+  canRemove: boolean;
   onToggle: () => void;
   onPose: () => void;
   onReleve: () => void;
   onOptions: () => void;
+  onRemove: () => void;
 }) {
   const st = balanceState(b, now);
   const rem = remainingSec(b, now);
@@ -69,11 +73,21 @@ export function BalanceCard({
         </div>
       )}
 
-      {st !== "trempe" && (
-        <button className="bal-opt" onClick={onOptions} aria-label={`Options de la balance ${b.n}`}>
-          ⋯
-        </button>
-      )}
+      {/* Corner controls: options (⋯) for non-soaking cards, and a direct − to
+          remove this balance — hidden when it's the last one (removeBalance floors
+          the session at one). */}
+      <div className="bal-corner">
+        {st !== "trempe" && (
+          <button className="bal-opt" onClick={onOptions} aria-label={`Options de la balance ${b.n}`}>
+            ⋯
+          </button>
+        )}
+        {canRemove && (
+          <button className="bal-rm" onClick={onRemove} aria-label={`Retirer la balance ${b.n}`}>
+            −
+          </button>
+        )}
+      </div>
     </div>
   );
 }

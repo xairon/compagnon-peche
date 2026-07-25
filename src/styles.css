@@ -5071,10 +5071,15 @@ button.card-row {
   font-size: 12.5px;
   padding: 8px 4px;
 }
-.bal-opt {
+.bal-corner {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.bal-opt {
   border: none;
   background: transparent;
   color: var(--muted);
@@ -5082,29 +5087,46 @@ button.card-row {
   line-height: 1;
   padding: 4px 8px;
 }
-
-/* ---- Écrevisses : écran de séance ---- */
-.ecr-count {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.bal-rm {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  padding: 2px 9px;
+  border-radius: 8px;
 }
-.ecr-count button {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: 1.5px solid var(--line-strong);
-  background: #fff;
-  font-size: 22px;
+.bal-rm:hover,
+.bal-rm:focus-visible {
+  color: var(--red);
+  background: #fdf3f1;
+}
+/* The "add a balance" tile lives in the grid, same footprint as a card, so the
+   battery visibly grows one net at a time. */
+.bal-add {
+  border: 1.5px dashed #cfc9ba;
+  background: transparent;
+  border-radius: 16px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   color: var(--fir);
 }
-.ecr-count span {
-  font-size: 28px;
+.bal-add-plus {
+  font-size: 30px;
   font-weight: 700;
-  min-width: 40px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
+.bal-add-lbl {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ---- Écrevisses : écran de séance ---- */
 .ecr-chips {
   display: flex;
   gap: 8px;
@@ -5123,6 +5145,33 @@ button.card-row {
   background: var(--fir);
   border-color: var(--fir);
   color: #fbfaf7;
+}
+.ecr-chip-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0 13px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.ecr-chip-input input {
+  width: 40px;
+  border: none;
+  background: transparent;
+  padding: 9px 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--body);
+  text-align: right;
+  -moz-appearance: textfield;
+}
+.ecr-chip-input input::-webkit-outer-spin-button,
+.ecr-chip-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .ecr-input {
   width: 100%;
@@ -5149,10 +5198,6 @@ button.card-row {
 .ecr-poseall {
   margin-top: 14px;
   background: var(--green);
-}
-.ecr-finish {
-  margin-top: 0;
-  flex: 1;
 }
 .ecr-next {
   background: var(--sand);
@@ -5184,12 +5229,6 @@ button.card-row {
   font-size: 11.5px;
   color: var(--muted);
   margin-top: 2px;
-}
-.ecr-foot {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 20px;
 }
 .ecr-reg {
   margin-top: 24px;

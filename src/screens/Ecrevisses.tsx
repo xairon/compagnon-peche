@@ -6,7 +6,6 @@ import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";
 import { wakeSupported } from "../lib/wakelock";
 import { askNotifyPermission, notifyPermission } from "../lib/notify";
 import {
-  DEFAULT_BALANCES,
   DEFAULT_INTERVAL_MIN,
   MAX_BALANCES,
   createSession,
@@ -26,7 +25,7 @@ import {
 } from "../lib/ecrevisses";
 import type { CrayfishSession, Spot } from "../types";
 
-const INTERVALS = [25, 30, 45, 60];
+const INTERVALS = [10, 15, 20, 30];
 
 export function Ecrevisses() {
   const { state, set, back, addCrayfishSession, saveCrayfishSession } = useStore();
@@ -109,7 +108,6 @@ function Preparation({
   onStart: (s: CrayfishSession) => void;
   spots: Spot[];
 }) {
-  const [count, setCount] = useState(DEFAULT_BALANCES);
   const [trempe, setTrempe] = useState(DEFAULT_INTERVAL_MIN);
   const [lieu, setLieu] = useState("");
   const [spotId, setSpotId] = useState("");
@@ -125,7 +123,9 @@ function Preparation({
     await askNotifyPermission(); // asked here, at the first session — never at launch
     onStart(
       createSession({
-        count,
+        // Start with a single balance; the angler builds the battery up with the
+        // "+" as they bait and drop each net (up to the regulatory MAX_BALANCES).
+        count: 1,
         intervalMin: trempe,
         lieu: lieu.trim() || "—",
         spotId: spotId || undefined,
@@ -150,22 +150,6 @@ function Preparation({
 
       <div className="pad">
         <div className="label" style={{ margin: "12px 0 8px" }}>
-          Nombre de balances
-        </div>
-        <div className="ecr-count">
-          <button onClick={() => setCount((c) => Math.max(1, c - 1))} aria-label="Une balance de moins">
-            −
-          </button>
-          <span>{count}</span>
-          <button
-            onClick={() => setCount((c) => Math.min(MAX_BALANCES, c + 1))}
-            aria-label="Une balance de plus"
-          >
-            +
-          </button>
-        </div>
-
-        <div className="label" style={{ margin: "18px 0 8px" }}>
           Temps de trempe
         </div>
         <div className="ecr-chips">
@@ -174,6 +158,16 @@ function Preparation({
               {m} min
             </button>
           ))}
+          <label className="ecr-chip-input" aria-label="Temps de trempe personnalisé">
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              value={trempe}
+              onChange={(e) => setTrempe(Math.max(1, parseInt(e.target.value) || 1))}
+            />
+            <span>min</span>
+          </label>
         </div>
 
         <div className="label" style={{ margin: "18px 0 8px" }}>
@@ -290,6 +284,7 @@ function SessionEnCours({
               b={b}
               now={now}
               expanded={expanded === b.id}
+              canRemove={session.balances.length > 1}
               onToggle={() => setExpanded((e) => (e === b.id ? null : b.id))}
               onPose={() => onSave(poseBalance(session, b.id, Date.now()))}
               onReleve={() => {
@@ -297,8 +292,20 @@ function SessionEnCours({
                 onSave(releveBalance(session, b.id, Date.now()));
               }}
               onOptions={() => setOptions(b.id)}
+              onRemove={() => onSave(removeBalance(session, b.id))}
             />
           ))}
+          {/* Grow the battery one net at a time, up to the regulatory cap. */}
+          {session.balances.length < MAX_BALANCES && (
+            <button
+              className="bal-add"
+              onClick={() => onSave(addBalance(session))}
+              aria-label="Ajouter une balance"
+            >
+              <span className="bal-add-plus">+</span>
+              <span className="bal-add-lbl">Ajouter une balance</span>
+            </button>
+          )}
         </div>
 
         <button className="ecr-poseall" onClick={() => onSave(poseAll(session, Date.now()))}>
@@ -319,14 +326,9 @@ function SessionEnCours({
           </label>
         )}
 
-        <div className="ecr-foot">
-          <button className="btn-light" onClick={() => onSave(addBalance(session))}>
-            + Balance
-          </button>
-          <button className="ecr-finish" onClick={onFinish}>
-            Terminer la séance
-          </button>
-        </div>
+        <button className="ecr-finish" onClick={onFinish}>
+          Terminer la séance
+        </button>
       </div>
 
       {opt && (
@@ -369,20 +371,6 @@ function SessionEnCours({
                 }}
               >
                 Relever et laisser vide
-              </button>
-            )}
-
-            {/* Hidden on the last balance: removeBalance refuses it, and an option
-                that does nothing is worse than no option at all. */}
-            {session.balances.length > 1 && (
-              <button
-                className="btn-light"
-                onClick={() => {
-                  onSave(removeBalance(session, opt.id));
-                  setOptions(null);
-                }}
-              >
-                Retirer cette balance
               </button>
             )}
 
