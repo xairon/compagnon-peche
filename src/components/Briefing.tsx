@@ -12,6 +12,16 @@ import {
   type Trend,
 } from "../lib/hubeau";
 import { assessCrue, crueLabel } from "../lib/crue";
+import {
+  classeO2,
+  classeSaturationO2,
+  classePh,
+  classeGlobale,
+  classeLabel,
+  isStaleQuality,
+  isTooFar,
+  MAX_DIST_KM,
+} from "../lib/qualiteEau";
 import { fetchMeteo, weatherLabel, type Meteo } from "../lib/meteo";
 import { sunTimes, moonIllumination, moonTimes, moonPhaseName, solunar } from "../lib/astro";
 import { fetchObstacles, obstacleInfo } from "../lib/sandre";
@@ -106,6 +116,19 @@ export function Briefing({
     () => (water.data ? assessCrue(water.data.h, water.data.q, Date.now()) : null),
     [water.data],
   );
+
+  // ---- Water quality verdict (see lib/qualiteEau.ts) — worst-of the three
+  // classified parameters, SEQ-Eau grid. Abstains beyond MAX_DIST_KM (see
+  // the Section below) rather than showing a number that isn't representative.
+  const qGlobal = useMemo(() => {
+    if (!quality.data || isTooFar(quality.data.dist)) return null;
+    const { o2, sat, ph } = quality.data;
+    return classeGlobale([
+      o2 != null ? classeO2(o2) : undefined,
+      sat != null ? classeSaturationO2(sat) : undefined,
+      ph != null ? classePh(ph) : undefined,
+    ]);
+  }, [quality.data]);
 
   // ---- Weather ----
   const meteo = useFetch<Meteo>(`meteo:${key}`, (s) => fetchMeteo(lat, lon, s), [key]);
@@ -256,26 +279,49 @@ export function Briefing({
           )}
         </Section>
 
-        {/* QUALITY (physico-chemistry) */}
+        {/* QUALITY (physico-chemistry) — classified with the SEQ-Eau grid
+            (lib/qualiteEau.ts), never as a health/consumption verdict. */}
         <Section title="🧪 Qualité de l'eau" state={quality}>
-          {quality.data && (
-            <>
-              <div className="brief-grid">
-                {quality.data.o2 != null && <Metric label="Oxygène dissous" value={`${quality.data.o2.toFixed(1)} mg/L`} />}
-                {quality.data.sat != null && <Metric label="Saturation O₂" value={`${Math.round(quality.data.sat)} %`} />}
-                {quality.data.ph != null && <Metric label="pH" value={quality.data.ph.toFixed(1)} />}
+          {quality.data &&
+            (isTooFar(quality.data.dist) ? (
+              <div className="brief-empty">
+                Station physico-chimique la plus proche : {quality.data.station} · {km(quality.data.dist)} — trop
+                loin (plus de {MAX_DIST_KM} km) pour représenter cet endroit, non affichée.
               </div>
-              <div className="brief-note">
-                {quality.data.station} · {km(quality.data.dist)} · analyse ponctuelle (labo) du{" "}
-                {frShort(quality.data.date)}
-                {isOld(quality.data.date) && (
-                  <b style={{ color: "#b06e14" }}> — donnée ancienne, à titre indicatif</b>
+            ) : (
+              <>
+                {qGlobal && (
+                  <div className={"verdict-banner " + classeLabel(qGlobal).tone} style={{ marginBottom: 10 }}>
+                    <span className="vb-word">Qualité {classeLabel(qGlobal).word.toLowerCase()}</span>
+                  </div>
                 )}
-              </div>
-            </>
-          )}
+                <div className="brief-grid">
+                  {quality.data.o2 != null && (
+                    <Metric label="Oxygène dissous" value={`${quality.data.o2.toFixed(1)} mg/L`} extra={classeLabel(classeO2(quality.data.o2)).word} />
+                  )}
+                  {quality.data.sat != null && (
+                    <Metric label="Saturation O₂" value={`${Math.round(quality.data.sat)} %`} extra={classeLabel(classeSaturationO2(quality.data.sat)).word} />
+                  )}
+                  {quality.data.ph != null && (
+                    <Metric label="pH" value={quality.data.ph.toFixed(1)} extra={classeLabel(classePh(quality.data.ph)).word} />
+                  )}
+                </div>
+                <div className="brief-note">
+                  {quality.data.station} · {km(quality.data.dist)} · analyse ponctuelle (labo) du{" "}
+                  {frShort(quality.data.date)}
+                  {isStaleQuality(quality.data.date) && (
+                    <b style={{ color: "#b06e14" }}> — donnée ancienne, à titre indicatif</b>
+                  )}
+                </div>
+                <div className="brief-note" style={{ fontSize: 11, opacity: 0.75 }}>
+                  Classement selon la grille SEQ-Eau (oxygène, acidification — MEDD &amp; agences de l'eau, 2003), un
+                  seul prélèvement, pas une synthèse DCE annuelle. Ce n'est pas un avis sanitaire : voir la fiche
+                  espèce pour les recommandations ANSES sur la consommation.
+                </div>
+              </>
+            ))}
           {quality.data === null && !quality.loading && !quality.error && (
-            <div className="brief-empty">Aucune analyse physico-chimique à proximité.</div>
+            <div className="brief-empty">Aucune analyse physico-chimique à moins de {MAX_DIST_KM} km.</div>
           )}
         </Section>
 
@@ -415,13 +461,6 @@ function frShort(ymd: string): string {
   const d = new Date(ymd + "T12:00:00");
   if (isNaN(d.getTime())) return ymd;
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
-}
-
-/** True if a YYYY-MM-DD date is older than ~18 months (stale quality sample). */
-function isOld(ymd: string): boolean {
-  const t = new Date(ymd + "T12:00:00").getTime();
-  if (isNaN(t)) return false;
-  return Date.now() - t > 540 * 86400000;
 }
 
 // ONDE code → human state + tone. Only 1/1a/2/3/4 exist in the data.
