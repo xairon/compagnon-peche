@@ -6,7 +6,11 @@
 //
 // Sources: Arrêté du 8 déc. 1988 & 25 janv. 1982 (Légifrance) · ANSES avis PCB
 // 2011/2015 (bioaccumulateurs) · arrêté 14 fév. 2018 (EEE) · SFMU (choléra des
-// barbeaux) · fédérations de pêche & références culinaires (DORIS, Fishipedia).
+// barbeaux) · fédérations de pêche & références culinaires (DORIS, Fishipedia) ·
+// de Haro L., « Intoxications par organismes aquatiques », Médecine Tropicale
+// 2008;68(4):367-374 (ichtyootoxisme/ichtyohémotoxisme) · Eve O. et al.,
+// Urgence-Pratique, reproduit avec l'autorisation du Dr J.-C. Deslandes
+// (ichtyohémotoxisme — poissons à sang toxique).
 
 export type EdibleStatus = "oui" | "réglementé" | "non";
 
@@ -35,6 +39,18 @@ const ANSES_TXT =
 const ANSES_ANGUILLE =
   "Espèce TRÈS fortement bioaccumulatrice — la plus concernée par les PCB/dioxines : ANSES 2 fois/mois max (population générale), 1 fois tous les 2 mois pour les publics sensibles.";
 const RELACHE = "Espèce protégée — capture interdite, remise à l'eau immédiate et soignée.";
+// SFMU + littérature médicale (de Haro 2008) nomment explicitement B. barbus ET
+// B. meridionalis parmi les barbeaux européens responsables du « choléra des
+// barbeaux » (ichtyootoxisme par les œufs) — donc pas une extrapolation.
+const SFMU_BARBEAU =
+  "SFMU (choléra des barbeaux, sfmu.org/toxin) · de Haro L., Médecine Tropicale 2008;68(4):367-374 — cite nommément B. barbus et B. meridionalis";
+// Le même article ne cite que « le brochet » (Esox lucius) ; le brochet aquitain
+// (Esox aquitanicus, décrit en 2014) n'a pas été étudié spécifiquement — la note
+// ci-dessous est donc formulée comme une précaution par analogie, pas un fait établi.
+const ICHTYOOTOX_BROCHET =
+  "de Haro L., Médecine Tropicale 2008;68(4):367-374 (toxicité des œufs chez Esox lucius ; E. aquitanicus non étudié spécifiquement — précaution par analogie)";
+const ICHTYOHEMO_LAMPROIE =
+  "Eve O. et al., Urgence-Pratique (reproduit avec l'autorisation du Dr J.-C. Deslandes) — liste la lamproie parmi les poissons à sang toxique (toxine thermolabile, détruite à 56 °C/15 min)";
 
 export const EDIBILITY: Record<string, Edible> = {
   // ── Carnassiers ──────────────────────────────────────────────
@@ -49,8 +65,8 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "réglementé",
     bones: "beaucoup",
     taste: "Chair blanche fine comparable au brochet ; arêtes en « Y ».",
-    prep: "Endémique du Sud-Ouest à fort enjeu de conservation : relâche recommandée ; réglementation « brochet ».",
-    source: CULINARY,
+    prep: "Endémique du Sud-Ouest à fort enjeu de conservation : relâche recommandée ; réglementation « brochet ». Par analogie avec le brochet commun (œufs toxiques/purgatifs) et par précaution — cette espèce n'ayant pas été étudiée spécifiquement — ne consommez jamais les œufs.",
+    source: CULINARY + " · " + ICHTYOOTOX_BROCHET,
   },
   sandre: {
     status: "oui",
@@ -269,15 +285,15 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "réglementé",
     bones: "peu",
     taste: "Chair grasse, dense et charnue, sans arêtes (mets recherché : lamproie à la bordelaise).",
-    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous moratoires récents (Gironde 2023) — ne consommer que si légal.",
-    source: MIGRATEUR,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous moratoires récents (Gironde 2023) — ne consommer que si légal. ⚠️ Sang toxique à l'état cru (ichtyohémotoxisme, comme l'anguille ou le congre) : saignez et cuisez soigneusement (toxine détruite par la chaleur), évitez tout contact avec une plaie ou les yeux.",
+    source: MIGRATEUR + " · " + ICHTYOHEMO_LAMPROIE,
   },
   "lamproie-de-riviere": {
     status: "réglementé",
     bones: "peu",
     taste: "Chair grasse et dense, sans arêtes.",
-    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous restrictions de bassin — ne consommer que si légal.",
-    source: MIGRATEUR,
+    prep: "Œufs/frayères protégés (arrêté 1988) ; adulte sous restrictions de bassin — ne consommer que si légal. ⚠️ Sang toxique à l'état cru (ichtyohémotoxisme, comme l'anguille ou le congre) : saignez et cuisez soigneusement (toxine détruite par la chaleur), évitez tout contact avec une plaie ou les yeux.",
+    source: MIGRATEUR + " · " + ICHTYOHEMO_LAMPROIE,
   },
   "mulet-porc": {
     status: "oui",
@@ -315,7 +331,13 @@ export const EDIBILITY: Record<string, Edible> = {
   },
   "vandoise-du-bearn": { status: "non", prep: RELACHE, source: A1988 },
   "ide-melanote": { status: "non", prep: RELACHE, source: A1988 },
-  "barbeau-meridional": { status: "non", prep: RELACHE, source: A1988 },
+  "barbeau-meridional": {
+    status: "non",
+    prep:
+      RELACHE +
+      " Comme chez le barbeau fluviatile, ses œufs (rogue) sont toxiques (« choléra des barbeaux » : douleurs abdominales, diarrhées, vomissements) — à ne jamais consommer, y compris en cas de confusion entre les deux espèces.",
+    source: A1988 + " · " + SFMU_BARBEAU,
+  },
   bouviere: { status: "non", prep: RELACHE, source: A1988 },
   "apron-du-rhone": { status: "non", prep: RELACHE, source: A1988 },
   toxostome: { status: "non", prep: "Espèce protégée (Directive Habitats) — remise à l'eau. Souvent confondue avec le hotu.", source: "Directive Habitats / protection nationale" },
