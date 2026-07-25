@@ -3955,6 +3955,56 @@ a:hover {
   padding-bottom: 6px;
 }
 
+/* Gloves mode reaches the crayfish module too: the tally counters, the soak-
+   time chips, the balance cards and their corner controls, the add tile, the
+   text fields and the three full-width session buttons. Same proportions as
+   the rules above — this is the screen worked with wet or gloved hands. */
+.app-frame[data-big] .ecr-step button {
+  width: 54px;
+  height: 54px;
+  font-size: 23px;
+}
+.app-frame[data-big] .ecr-chips button {
+  padding: 13px 18px;
+  font-size: 15px;
+}
+.app-frame[data-big] .ecr-chip-input input {
+  padding: 13px 0;
+  font-size: 15px;
+}
+.app-frame[data-big] .bal-main {
+  padding: 18px 14px 16px;
+}
+.app-frame[data-big] .bal-opt {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 19px;
+}
+.app-frame[data-big] .bal-rm {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 24px;
+}
+.app-frame[data-big] .bal-corner {
+  gap: 24px;
+}
+.app-frame[data-big] .bal-add {
+  min-height: 108px;
+}
+.app-frame[data-big] .bal-add-plus {
+  font-size: 34px;
+}
+.app-frame[data-big] .ecr-input {
+  padding: 16px;
+  font-size: 17px;
+}
+.app-frame[data-big] .ecr-start,
+.app-frame[data-big] .ecr-poseall,
+.app-frame[data-big] .ecr-finish {
+  padding: 19px;
+  font-size: 17px;
+}
+
 /* Elements converted from <div onClick> to <button> keep their exact look */
 button.sp-card,
 button.id-cand,
