@@ -172,7 +172,7 @@ export function Especes() {
               aria-label={`Fiche ${sp.name}`}
             >
               <div className="thumb">
-                <Media kind="species" id={sp.id} placeholder={`Photo ${sp.name}`} />
+                <Media kind="species" id={sp.id} placeholder={sp.name} />
                 {fl.length > 0 && (
                   <div className="flags">
                     {fl.map((f) => (

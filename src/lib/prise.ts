@@ -1,7 +1,7 @@
 import type { Species } from "../types";
 import type { PriseStep } from "../store";
 import { season } from "./season";
-import { QUOTA_CARNASSIERS } from "./helpers";
+import { QUOTA_CARNASSIERS, QUOTA_BROCHETS } from "./helpers";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { effectiveMaille } from "./maille";
 import { effectiveQuota } from "./quota";
@@ -108,9 +108,11 @@ export function priseView(
         kicker: "Période de pêche",
         title: "Pêche fermée aujourd'hui",
         paras: [
-          "La période de pêche du " +
-            sp.name.toLowerCase() +
-            " est fermée à cette date. Remise à l'eau immédiate et soignée.",
+          // Tournure sans article : « la période de pêche DU truite fario » était
+          // faux pour toute espèce féminine (la carpe, la perche, la tanche…), et
+          // porter le genre de 78 espèces pour une seule phrase n'en valait pas
+          // le prix.
+          sp.name + " : la période de pêche est fermée à cette date. Remise à l'eau immédiate et soignée.",
         ],
         actions: [btn("Gestes pour bien relâcher", "release", "primary")],
       };
@@ -137,9 +139,8 @@ export function priseView(
         ],
       };
     const openParas = [
-      "Aucune interdiction nationale pour " +
-        sp.name.toLowerCase() +
-        " à cette date (" +
+      sp.name +
+        " : aucune interdiction nationale à cette date (" +
         seas.label.toLowerCase() +
         "). Passons à la maille.",
     ];
@@ -224,10 +225,18 @@ export function priseView(
     const otherQuota = !isCarnassier && !declare && q.text !== null;
 
     if (isCarnassier) {
+      // The app already counts the day's kept fish; presenting "quota non
+      // atteint" as the primary path while its own line says "3 / 3" was the app
+      // contradicting itself on a legal cap. We don't block — the angler may be
+      // on 1ʳᵉ-catégorie water (only the 2-brochet cap applies there) or have an
+      // incomplete carnet — but the emphasis follows what we actually know.
+      const isBrochet = QUOTA_BROCHETS.includes(sp.id);
+      const atteint = quota.c >= 3 || (isBrochet && quota.b >= 2);
       return {
         ...V,
+        tone: atteint ? "warn" : undefined,
         kicker,
-        title: "Où en êtes-vous du quota ?",
+        title: atteint ? "Quota du jour atteint" : "Où en êtes-vous du quota ?",
         paras: [
           "Rappel : 3 carnassiers par jour et par pêcheur (sandre + brochet + black-bass), dont 2 brochets maximum (art. R436-21). Ce cumul vaut en 2ᵉ catégorie ; en 1ʳᵉ catégorie, seul le plafond de 2 brochets/jour s'applique.",
           "D'après votre carnet aujourd'hui : " +
@@ -235,11 +244,21 @@ export function priseView(
             " / 3 carnassiers gardés, dont " +
             quota.b +
             " / 2 brochets.",
+          ...(atteint
+            ? [
+                "Votre carnet indique que le plafond est atteint : la remise à l'eau s'impose, sauf si vous pêchez en 1ʳᵉ catégorie (où seul le plafond de 2 brochets vaut) ou si votre carnet est incomplet.",
+              ]
+            : []),
         ],
-        actions: [
-          btn("Quota non atteint — je continue", "choix", "primary"),
-          btn("Quota atteint — je relâche", "release"),
-        ],
+        actions: atteint
+          ? [
+              btn("Je relâche", "release", "primary"),
+              btn("1ʳᵉ catégorie ou carnet incomplet — continuer", "choix"),
+            ]
+          : [
+              btn("Quota non atteint — je continue", "choix", "primary"),
+              btn("Quota atteint — je relâche", "release"),
+            ],
       };
     }
     if (declare) {

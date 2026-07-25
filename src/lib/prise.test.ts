@@ -125,3 +125,75 @@ describe("priseView — quota (arrêté départemental)", () => {
     expect(v?.paras.join(" ")).toMatch(/R436-21/);
   });
 });
+
+/**
+ * L'app calculait le quota du jour depuis le carnet, l'affichait (« 3 / 3
+ * carnassiers gardés »)… puis proposait « Quota non atteint — je continue » en
+ * action PRINCIPALE. Elle se contredisait sur un plafond réglementaire.
+ *
+ * On ne bloque pas : le pêcheur peut être en 1ʳᵉ catégorie (seul le plafond de
+ * 2 brochets s'applique) ou avoir un carnet incomplet. Mais l'app ne doit pas
+ * présenter « non atteint » comme le chemin neutre quand elle sait le contraire.
+ */
+describe("priseView — quota atteint d'après le carnet", () => {
+  const brochet = () => sp({ id: "brochet", name: "Brochet", season: "brochet" });
+
+  it("sous le quota, « je continue » reste l'action principale", () => {
+    const v = priseView(brochet(), "quota", { c: 1, b: 0 }, "41");
+    expect(v?.actions[0].kind).toBe("primary");
+    expect(v?.actions[0].label).toMatch(/continue/i);
+  });
+
+  it("au plafond de carnassiers, « je continue » n'est plus l'action principale", () => {
+    const v = priseView(brochet(), "quota", { c: 3, b: 1 }, "41");
+    const principale = v?.actions.find((a) => a.kind === "primary");
+    expect(principale?.label).toMatch(/relâche/i);
+  });
+
+  it("au plafond, l'écran ne prétend plus que le quota n'est pas atteint", () => {
+    const v = priseView(brochet(), "quota", { c: 3, b: 1 }, "41");
+    expect(v?.actions.map((a) => a.label).join(" ")).not.toMatch(/quota non atteint/i);
+  });
+
+  it("le plafond des 2 brochets se déclenche aussi seul", () => {
+    const v = priseView(brochet(), "quota", { c: 2, b: 2 }, "41");
+    const principale = v?.actions.find((a) => a.kind === "primary");
+    expect(principale?.label).toMatch(/relâche/i);
+  });
+
+  it("au plafond, le ton alerte au lieu de rester neutre", () => {
+    const v = priseView(brochet(), "quota", { c: 3, b: 2 }, "41");
+    expect(v?.tone).toBe("warn");
+  });
+
+  it("le plafond brochet ne s'applique pas à une espèce qui n'en est pas un", () => {
+    const v = priseView(sp({ id: "sandre", name: "Sandre", season: "brochet" }), "quota", { c: 1, b: 2 }, "41");
+    expect(v?.actions.find((a) => a.kind === "primary")?.label).toMatch(/continue/i);
+  });
+});
+
+/**
+ * « La période de pêche DU truite fario » : l'article était collé en dur, donc
+ * faux pour toute espèce féminine — la carpe, la perche, la tanche, l'anguille.
+ * La tournure évite désormais l'article plutôt que de porter le genre de
+ * 78 espèces pour une seule phrase.
+ */
+describe("priseView — accord du français", () => {
+  it("une espèce féminine fermée ne produit pas « du »", () => {
+    const v = priseView(
+      sp({ id: "truite-fario", name: "Truite fario", season: "cat1" }),
+      "statut",
+      Q,
+      "41",
+    );
+    // Hors saison seulement : on teste la phrase quelle que soit la date en
+    // vérifiant qu'aucun para ne contient la faute.
+    expect(v?.paras.join(" ")).not.toMatch(/du truite/i);
+    expect(v?.paras.join(" ")).not.toMatch(/pour truite fario/i);
+  });
+
+  it("une espèce masculine reste correcte", () => {
+    const v = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet" }), "statut", Q, "41");
+    expect(v?.paras.join(" ")).not.toMatch(/du brochet est fermée/i);
+  });
+});
