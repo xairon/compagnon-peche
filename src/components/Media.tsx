@@ -46,6 +46,11 @@ interface MediaProps {
   dark?: boolean;
 }
 
+/** Thumbnail counterpart of a species photo (see scripts/thumbs.mjs). */
+export function thumbOf(file: string): string {
+  return file.replace("assets/species/", "assets/species-sm/");
+}
+
 const MEDIA_BY_KIND = {
   species: SPECIES_MEDIA,
   knot: ALL_KNOT_MEDIA,
@@ -63,10 +68,14 @@ export function Media({ kind, id, placeholder, dark }: MediaProps) {
   const raw = MEDIA_BY_KIND[kind][id];
   const entry = Array.isArray(raw) ? raw[0] : raw;
   if (entry && !failed) {
+    // Every Media use is a tile (grids, carousel, confusions) — the fiche hero
+    // goes through Gallery. Tiles take the precached thumbnail, which is what
+    // keeps the lists working offline without an 11 MB first install.
+    const file = kind === "species" ? thumbOf(entry.file) : entry.file;
     return (
       <img
         className="media-img"
-        src={import.meta.env.BASE_URL + entry.file}
+        src={import.meta.env.BASE_URL + file}
         alt={placeholder}
         loading="lazy"
         decoding="async"

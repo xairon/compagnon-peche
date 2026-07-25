@@ -54,7 +54,13 @@ export default defineConfig({
       includeAssets: ["favicon.svg", "icon-192.png", "icon-512.png", "icon-maskable-512.png"],
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,webp,woff2}"],
-        // Species photos live under /assets/species — precached too.
+        // Full-size species photos (~11 MB) are NOT precached: they made a first
+        // install 13.7 MB, which is a lot to ask over 4G at the water's edge. The
+        // 400 px thumbnails under /assets/species-sm ARE precached (~1.9 MB), so
+        // every list, grid and confusion tile works offline out of the box; the
+        // full photo is cached the first time a fiche is opened, and the gallery
+        // falls back to the thumbnail until then. Regenerate with `npm run thumbs`.
+        globIgnores: ["**/assets/species/**"],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         // Once the user accepts the update, the freshly-activated worker must take
         // control of the OPEN page so `controllerchange` fires and the plugin reloads
@@ -63,6 +69,17 @@ export default defineConfig({
         clientsClaim: true,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
+          {
+            // Full-size species photos, kept out of the precache (see globIgnores):
+            // cached the first time a fiche is opened, then available offline for good.
+            urlPattern: /\/assets\/species\/[^/]+\.webp$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "species-photos",
+              expiration: { maxEntries: 250, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
           {
             // Carto basemap style, glyphs, sprites and vector tiles — cache on use
             // so viewed map areas keep working offline.

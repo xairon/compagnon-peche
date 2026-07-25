@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { SPECIES_MEDIA } from "../data/media";
+import { thumbOf } from "./Media";
 
 /**
  * Species photo gallery: shows all locally-embedded photos for `id` (adult,
@@ -10,6 +11,10 @@ export function Gallery({ id, placeholder, dark }: { id: string; placeholder: st
   const photos = SPECIES_MEDIA[id] || [];
   const [i, setI] = useState(0);
   const [broken, setBroken] = useState<Record<string, boolean>>({});
+  // Full-size photos are fetched on demand (runtime cache), so offline a species
+  // never opened before has none. Its thumbnail IS precached: fall back to that
+  // rather than to the striped placeholder — a softer photo beats no photo.
+  const [small, setSmall] = useState<Record<string, boolean>>({});
   const startX = useRef(0);
 
   // Navigate only among photos that loaded — a single 404 is dropped from the
@@ -34,11 +39,15 @@ export function Gallery({ id, placeholder, dark }: { id: string; placeholder: st
     >
       <img
         className="media-img"
-        src={import.meta.env.BASE_URL + cur.file}
+        src={import.meta.env.BASE_URL + (small[cur.file] ? thumbOf(cur.file) : cur.file)}
         alt={cur.caption ? `${placeholder} — ${cur.caption}` : placeholder}
         loading="lazy"
         decoding="async"
-        onError={() => setBroken((b) => ({ ...b, [cur.file]: true }))}
+        onError={() =>
+          small[cur.file]
+            ? setBroken((b) => ({ ...b, [cur.file]: true }))
+            : setSmall((s) => ({ ...s, [cur.file]: true }))
+        }
       />
       {cur.caption && <span className="gallery-cap">{cur.caption}</span>}
       {n > 1 && (
