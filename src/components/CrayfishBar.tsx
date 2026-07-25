@@ -12,26 +12,31 @@ import { barStatus, currentSession, fmtDuration } from "../lib/ecrevisses";
  * lifted, else the next due countdown — recomputed from absolute timestamps like
  * everything else in the module.
  *
- * `raised` lifts it clear of the offline banner, which occupies the same corner
- * and would otherwise cover it — and being offline at the water's edge is the
- * normal case here, not an edge case.
+ * `raised` lifts it clear of the bottom banners (offline, storage failure) that
+ * occupy the same corner and would otherwise cover it — and being offline at the
+ * water's edge is the normal case here, not an edge case.
  */
 export function CrayfishBar({ raised = false }: { raised?: boolean }) {
   const { state, nav } = useStore();
   const session = currentSession(state.crayfish);
 
   // Tick only while a session is open; the pill shows a live countdown.
+  // Depend on the BOOLEAN, not on `session`: the session object is a new
+  // identity after every pose/relève/notification stamp, and depending on it
+  // would tear down and rebuild the interval on each of those (same trap
+  // crayfish-alerts.ts documents). The callback only needs the clock.
+  const running = session !== null;
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    if (!session) return;
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    if (!running) return;
     const sync = () => setNow(Date.now());
+    const id = setInterval(sync, 1000);
     document.addEventListener("visibilitychange", sync);
     return () => {
       clearInterval(id);
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [session]);
+  }, [running]);
 
   if (!session) return null;
 

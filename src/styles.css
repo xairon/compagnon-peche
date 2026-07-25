@@ -5487,8 +5487,8 @@ button.card-row {
   font-weight: 600;
   box-shadow: 0 4px 14px rgba(20, 30, 25, 0.22);
 }
-/* Clears the offline banner (bottom 84px, ~36px tall), which shares this corner
-   and sits above in the stack. */
+/* Clears the bottom banners (offline / storage failure: bottom 84px, ~36px tall)
+   which share this corner and sit above in the stack. */
 .cf-pill.raised {
   bottom: 132px;
 }
