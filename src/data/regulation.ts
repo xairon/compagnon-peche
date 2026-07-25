@@ -161,6 +161,36 @@ export function localRegRows(dept: DeptId, spId: string): [string, string][] {
   return rows;
 }
 
+/** Largest size in centimetres stated in a free-text rule, or null when it
+ *  states none. An arrêté may carry an exception ("20 cm on the listed rivers,
+ *  otherwise 23 cm"): the LARGEST is the only safe one to headline, because
+ *  announcing the smaller would have the angler keep an undersized fish
+ *  everywhere else, while the reverse merely releases a legal one. Requires the
+ *  "cm" unit, so a quota ("3 carnassiers dont 2 brochets") is never mistaken
+ *  for a size. */
+export function strictestCm(text: string): number | null {
+  const found = (text || "").match(/(\d+(?:[.,]\d+)?)\s*cm/gi);
+  if (!found) return null;
+  const sizes = found.map((m) => parseFloat(m.replace(",", ".")));
+  return sizes.length ? Math.max(...sizes) : null;
+}
+
+/** The minimum legal size the préfectoral arrêté sets for a species in a
+ *  department, or null when it sets none (→ the national floor applies). The
+ *  arrêté can only be stricter than the national baseline, so when it exists it
+ *  is the one that binds the angler. */
+export function localMaille(dept: DeptId, spId: string): { text: string; cm: number } | null {
+  const d = DEPT_REG[dept];
+  let text: string | null = null;
+  if (spId === "truite-fario" || spId === "truite-arc-en-ciel") text = d.truiteMaille;
+  else if (BROCHETS.has(spId)) text = d.brochetMaille;
+  else if (spId === "sandre") text = d.sandreMaille;
+  else if (BLACKBASS.has(spId)) text = d.blackbassMaille;
+  if (!text) return null;
+  const cm = strictestCm(text);
+  return cm === null ? null : { text, cm };
+}
+
 export const SOURCES: SourceEntry[] = [
   {
     t: "Legifrance — Code de l'environnement",

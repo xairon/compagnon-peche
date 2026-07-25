@@ -20,7 +20,7 @@ export function Prise() {
   const [size, setSize] = useState("");
   const qt = quotaToday(state.catches);
   const sp = SPECIES.find((s) => s.id === state.prise.sp);
-  const pv = priseView(sp, state.prise.step, qt);
+  const pv = priseView(sp, state.prise.step, qt, state.dept);
   const choosing = !state.prise.step;
 
   const nq = norm(pq);

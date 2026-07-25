@@ -2,6 +2,7 @@ import type { Species } from "../types";
 import type { PriseStep } from "../store";
 import { season } from "./season";
 import { QUOTA_CARNASSIERS } from "./helpers";
+import { DEPARTEMENTS, localMaille, type DeptId } from "../data/regulation";
 
 export type ActKind = "primary" | "danger" | "default";
 export interface PriseAction {
@@ -47,6 +48,7 @@ export function priseView(
   sp: Species | undefined,
   step: PriseStep,
   quota: { c: number; b: number },
+  dept?: DeptId,
 ): PriseView | null {
   if (!sp || !step) return null;
   const seas = season(sp);
@@ -166,17 +168,29 @@ export function priseView(
   }
 
   if (step === "maille") {
-    const has = sp.maille !== "—";
+    // The préfectoral arrêté can only be STRICTER than the national floor, so
+    // when it sets a size it is the one that binds the angler. Announcing the
+    // national value here would send them home with an undersized fish.
+    const local = dept ? localMaille(dept, sp.id) : null;
+    const shown = local ? local.text : sp.maille;
+    const has = shown !== "—";
     return {
       ...V,
       tone: "warn",
-      banner: has ? "MESURER — " + sp.maille : undefined,
-      kicker: "Maille — taille légale minimale",
-      title: has ? "Mesure-t-elle au moins " + sp.maille + " ?" : "Pas de taille légale nationale",
+      banner: has ? "MESURER — " + (local ? local.cm + " cm" : sp.maille) : undefined,
+      kicker: local ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
+      title: has
+        ? "Mesure-t-elle au moins " + (local ? local.cm + " cm" : sp.maille) + " ?"
+        : "Pas de taille légale nationale",
       paras: [
         has
           ? "Mesurez du bout du museau à l'extrémité de la queue. Sous la maille : remise à l'eau obligatoire, immédiate et soignée."
           : "Aucune maille nationale pour cette espèce — un arrêté local peut en fixer une : vérifiez. Sinon, à vous de décider.",
+        ...(local && dept
+          ? [
+              `${DEPARTEMENTS[dept].name} : ${local.text} — au-dessus du socle national (${sp.maille}). Vérifiez l'arrêté en vigueur.`,
+            ]
+          : []),
       ],
       note: sp.reg && sp.reg.note ? sp.reg.note : null,
       actions: has

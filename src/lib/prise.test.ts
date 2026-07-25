@@ -53,3 +53,35 @@ describe("priseView — statut (verdict keep/release)", () => {
     expect(v?.banner).toBe("RELÂCHER");
   });
 });
+
+describe("priseView — maille (arrêté départemental)", () => {
+  // Le cas qui compte : l'arrêté préfectoral relève la maille au-dessus du
+  // socle national. Annoncer la valeur nationale enverrait le pêcheur garder
+  // un poisson en infraction.
+  it("le brochet en 41 se mesure à 60 cm, pas aux 50 cm nationaux", () => {
+    const v = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet", maille: "50 cm" }), "maille", Q, "41");
+    expect(v?.title).toContain("60 cm");
+    expect(v?.banner).toContain("60 cm");
+    expect(v?.title).not.toContain("50 cm");
+  });
+
+  it("le sandre en 41 se mesure à 50 cm, pas aux 40 cm nationaux", () => {
+    const v = priseView(sp({ id: "sandre", name: "Sandre", season: "brochet", maille: "40 cm" }), "maille", Q, "41");
+    expect(v?.title).toContain("50 cm");
+  });
+
+  it("cite le département pour que le pêcheur puisse vérifier", () => {
+    const v = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet", maille: "50 cm" }), "maille", Q, "41");
+    expect((v?.paras.join(" ") + " " + (v?.note || "")).toLowerCase()).toMatch(/loir-et-cher|arrêté/);
+  });
+
+  it("sans spécificité départementale, garde la maille nationale", () => {
+    const v = priseView(sp({ id: "carpe-commune", name: "Carpe", season: "toujours", maille: "—" }), "maille", Q, "41");
+    expect(v?.title).toMatch(/pas de taille légale nationale/i);
+  });
+
+  it("une espèce à maille nationale seule reste inchangée", () => {
+    const v = priseView(sp({ id: "ombre", name: "Ombre", season: "cat1", maille: "30 cm" }), "maille", Q, "41");
+    expect(v?.title).toContain("30 cm");
+  });
+});
