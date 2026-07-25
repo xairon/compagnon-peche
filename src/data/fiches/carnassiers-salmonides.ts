@@ -114,14 +114,14 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
 
   "brochet-aquitain": {
     ficheSrc:
-      "INPN (MNHN) · Denys, Dettai, Persat, Hautecœur & Keith (2014) — description originale · Wikipédia (fr) · Aquaportail",
+      "INPN (MNHN) · Denys, Dettai, Persat, Hautecœur & Keith (2014) — description originale de l'espèce",
     ident: {
       summary:
         "Petit brochet endémique du Sud-Ouest, à la robe marbrée de bandes obliques (et non de taches claires comme le grand brochet), au museau proportionnellement plus court.",
       traits: [
         "Robe marbrée : bandes obliques sur les flancs, larges d'1 à 1,5 écaille",
         "Museau court : environ 0,9 fois la longueur post-orbitaire",
-        "Taille adulte modeste : 30–80 cm, guère plus de 41 cm chez le mâle observé",
+        "Taille adulte modeste : le plus souvent 30–50 cm, nettement moins que le brochet commun",
         "Moins d'écailles sur la ligne latérale que le grand brochet (104–107 contre 115–136)",
       ],
       conf: [
@@ -134,7 +134,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
     bio: {
       rows: [
         ["Habitat", "Cours d'eau et lacs du Grand Sud-Ouest (Charente, Dordogne, Eyre, Adour)"],
-        ["Statut", "Décrit en 2014, endémique français ; espèce rare, en régression possible"],
+        ["Taxonomie", "Décrit en 2014, endémique français ; espèce rare"],
         ["Longévité", "15 à 20 ans"],
         ["Menace", "Risque d'hybridation avec le grand brochet introduit dans son aire"],
       ],
@@ -196,7 +196,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       traits: [
         "Taches claires irrégulières et marbrures, y compris sur la caudale",
         "Nageoire caudale nettement fourchue",
-        "Denture vomérienne en croix (origine du nom « cristivomer »)",
+        "Dents portées par une crête du vomer — d'où le nom « cristivomer » (crista, la crête)",
         "Coloration plus terne que l'omble chevalier, sans teinte rougeâtre",
       ],
       conf: [
@@ -245,7 +245,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Origine", "Bassin du Danube (Europe centrale)"],
         ["Présence en France", "Introduit entre 1957 et 1960 dans les Usses (Haute-Savoie) ; n'a jamais colonisé le Rhône"],
-        ["Statut actuel", "Population anecdotique, maintien incertain au pied du haut Rhône"],
+        ["Conservation", "Population anecdotique, maintien incertain au pied du haut Rhône"],
         ["Habitat d'origine", "Grandes rivières vives du bassin danubien"],
       ],
     },
@@ -321,7 +321,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Cycle", "Migrateur amphihalin : naissance en rivière, croissance en mer, retour se reproduire en eau douce"],
         ["Habitat de fraie", "Têtes de bassin à courant vif et fond graveleux"],
-        ["Statut", "Espèce en fort déclin sur la plupart des bassins français faute de géniteurs"],
+        ["Conservation", "En fort déclin sur la plupart des bassins français, faute de géniteurs"],
         ["Répartition", "Historiquement Bretagne, Normandie, bassin Adour-Gaves ; aujourd'hui très localisé"],
       ],
     },

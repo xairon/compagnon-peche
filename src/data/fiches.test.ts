@@ -112,8 +112,27 @@ describe("aucune technique de pêche sur une espèce qu'on ne doit pas pêcher",
  * protège que les œufs et les habitats).
  */
 describe("aucune affirmation de droit dans le texte d'une fiche", () => {
+  // Première version : une liste de tournures interdites. Elle a laissé passer
+  // deux affirmations sur cinq, parce qu'il suffit d'écrire « pêche de l'adulte
+  // fermée » au lieu de « pêche fermée » pour lui échapper. Chasser les
+  // formulations est un jeu perdu d'avance.
+  //
+  // La vraie règle est structurelle : une fiche décrit un animal, pas son
+  // régime juridique. Une ligne « Statut » dans la biologie n'a donc rien à y
+  // faire — c'est là que les cinq se cachaient. La conservation (UICN, tendance
+  // de population) reste légitime, sous son propre intitulé.
+  it("aucune ligne « Statut » dans la biologie d'une fiche", () => {
+    const fautes: string[] = [];
+    for (const [id, f] of Object.entries(FICHES)) {
+      for (const [k, v] of f.bio?.rows ?? []) {
+        if (/^statut/i.test(k)) fautes.push(`${id} → ${k} : « ${v.slice(0, 60)}… »`);
+      }
+    }
+    expect(fautes).toEqual([]);
+  });
+
   const INTERDIT =
-    /capture (et détention )?interdite|détention interdite|pêche (est )?(fermée|interdite)|sous moratoire|remise à l'eau (immédiate )?obligatoire|protégée? par arrêté|quota/i;
+    /capture (et détention )?interdite|détention interdite|pêche[^.]{0,25}(fermée|interdite)|sous moratoire|remise à l'eau|protégée? par arrêté|quota|arrêté du \d/i;
 
   it("les sections descriptives ne prononcent pas d'interdiction", () => {
     const fautes: string[] = [];
