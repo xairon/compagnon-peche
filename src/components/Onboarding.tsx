@@ -13,7 +13,10 @@ const CONTENTS: { n: string; t: string }[] = [
 
 export function Onboarding({ onDone }: { onDone: () => void }) {
   const { installable, promptInstall } = usePwa();
-  const plate = `${import.meta.env.BASE_URL}assets/species/brochet.webp`;
+  // The full-size photos left the precache (see vite.config globIgnores), so a
+// fresh offline install has none. The thumbnail IS precached — use it here,
+// where this is the very first screen a new install renders.
+  const plate = `${import.meta.env.BASE_URL}assets/species-sm/brochet.webp`;
 
   return (
     <div className="onb2">

@@ -84,6 +84,18 @@ export function onQuotaWarning(l: QuotaListener): () => void {
   return () => quotaListeners.delete(l);
 }
 
+/** Whether a stored profile carries no identity at all.
+ *
+ *  Used by the import, which fills the profile only when the current one is
+ *  empty — never clobbering what the user already entered. The fishing card
+ *  counts as identity: a profile holding only an AAPPMA and a validity year is
+ *  NOT empty, and losing it to an import would lose a real, retyped-by-hand
+ *  piece of data. */
+export function isProfileEmpty(p: Partial<Profile> | undefined | null): boolean {
+  if (!p) return true;
+  return !p.name && !p.bio && !p.region && !p.aappma && !p.carteAnnee;
+}
+
 /** Ask the browser to make storage persistent (won't be auto-evicted under pressure). */
 export async function requestPersist(): Promise<boolean> {
   try {
@@ -286,7 +298,7 @@ export async function importData(file: File): Promise<ImportResult> {
 
   // Profile: fill only if the current identity is empty (don't clobber).
   const curProfile = (await get("carnet:profile")) as Profile | undefined;
-  const emptyProfile = !curProfile || (!curProfile.name && !curProfile.bio && !curProfile.region);
+  const emptyProfile = isProfileEmpty(curProfile);
   if (data.profile && emptyProfile) await set("carnet:profile", data.profile);
 
   // Photos: restore any blob not already present.

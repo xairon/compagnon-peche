@@ -26,7 +26,7 @@ describe("fishingCardStatus", () => {
     expect(fishingCardStatus(2023, new Date(2026, 6, 25))).toBe("perimee");
   });
 
-  it(`boundary: exactly ${0} days short of the window edge → expire-bientot`, () => {
+  it("à la borne exacte de la fenêtre → expire bientôt", () => {
     // 31 décembre 2026 moins CARD_WARNING_DAYS jours.
     const edge = new Date(2026, 11, 31);
     edge.setDate(edge.getDate() - CARD_WARNING_DAYS);
