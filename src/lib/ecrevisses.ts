@@ -220,6 +220,22 @@ export function removeBalance(s: CrayfishSession, id: string): CrayfishSession {
   return { ...s, balances: kept.map((b, i) => ({ ...b, n: i + 1 })) };
 }
 
+/** Undo path for removeBalance: reinsert a previously removed balance at its
+ *  original position and renumber 1…N again, exactly like removeBalance does.
+ *  Every field of the balance (label, interval, drop time, lift count) comes
+ *  back untouched — only its displayed number is recomputed from the new
+ *  position, same as any other balance. Guarded like addBalance against the
+ *  regulatory cap (the battery may have grown back to the cap during the few
+ *  seconds the "Annuler" toast was up) and against reinserting a balance
+ *  that is somehow already there. */
+export function restoreBalance(s: CrayfishSession, balance: Balance, index: number): CrayfishSession {
+  if (s.balances.some((b) => b.id === balance.id)) return s;
+  if (s.balances.length >= MAX_BALANCES) return s;
+  const at = Math.max(0, Math.min(index, s.balances.length));
+  const next = [...s.balances.slice(0, at), balance, ...s.balances.slice(at)];
+  return { ...s, balances: next.map((b, i) => ({ ...b, n: i + 1 })) };
+}
+
 /** Add an empty balance, refusing to exceed the regulatory cap. */
 export function addBalance(s: CrayfishSession): CrayfishSession {
   if (s.balances.length >= MAX_BALANCES) return s;

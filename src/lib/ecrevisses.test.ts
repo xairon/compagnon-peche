@@ -19,6 +19,7 @@ import {
   releveBalance,
   updateBalance,
   removeBalance,
+  restoreBalance,
   addBalance,
   addTally,
   tallyTotal,
@@ -252,6 +253,70 @@ describe("updateBalance / removeBalance / addBalance", () => {
     let s = createSession({ count: MAX_BALANCES, intervalMin: 30, lieu: "Étang", now: T0 });
     s = addBalance(s);
     expect(s.balances).toHaveLength(MAX_BALANCES);
+  });
+});
+
+describe("restoreBalance — annuler un retrait", () => {
+  it("réinsère la balance retirée à sa place et renumérote", () => {
+    const s = createSession({ count: 3, intervalMin: 30, lieu: "Étang", now: T0 });
+    const removed = s.balances[1]; // "balance 2"
+    const after = removeBalance(s, removed.id);
+    const restored = restoreBalance(after, removed, 1);
+    expect(restored.balances.map((b) => b.id)).toEqual(s.balances.map((b) => b.id));
+    expect(restored.balances.map((b) => b.n)).toEqual([1, 2, 3]);
+  });
+
+  it("conserve intacts le libellé, l'intervalle, l'horodatage et le compteur de relèves", () => {
+    const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
+    const withLabel = updateBalance(s, s.balances[0].id, { label: "sous le saule", intervalMin: 45 });
+    const posed = poseBalance(withLabel, s.balances[0].id, T0 + MIN);
+    const relevee = releveBalance(posed, s.balances[0].id, T0 + 2 * MIN); // releves = 1
+    const target = relevee.balances[0];
+    const after = removeBalance(relevee, target.id);
+    const restored = restoreBalance(after, target, 0);
+    const back = restored.balances.find((b) => b.id === target.id);
+    expect(back).toMatchObject({
+      label: "sous le saule",
+      intervalMin: 45,
+      poseeA: T0 + 2 * MIN,
+      releves: 1,
+    });
+  });
+
+  it("place la balance en tête quand elle était la première", () => {
+    const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
+    const removed = s.balances[0];
+    const after = removeBalance(s, removed.id);
+    const restored = restoreBalance(after, removed, 0);
+    expect(restored.balances[0].id).toBe(removed.id);
+    expect(restored.balances[0].n).toBe(1);
+  });
+
+  it("n'excède jamais le plafond réglementaire", () => {
+    let s = createSession({ count: MAX_BALANCES, intervalMin: 30, lieu: "Étang", now: T0 });
+    const removed = s.balances[0];
+    s = removeBalance(s, removed.id);
+    // le plafond est déjà atteint entretemps (une balance rajoutée pendant les
+    // ~5 s de la fenêtre d'annulation) : l'annulation ne doit pas le dépasser
+    s = addBalance(s);
+    const restored = restoreBalance(s, removed, 0);
+    expect(restored.balances).toHaveLength(MAX_BALANCES);
+    expect(restored.balances.some((b) => b.id === removed.id)).toBe(false);
+  });
+
+  it("ne réinsère pas une balance déjà présente (id dupliqué)", () => {
+    const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
+    const already = s.balances[0];
+    const restored = restoreBalance(s, already, 0);
+    expect(restored.balances).toHaveLength(2);
+  });
+
+  it("ne mute pas la séance reçue", () => {
+    const s = createSession({ count: 2, intervalMin: 30, lieu: "Étang", now: T0 });
+    const removed = s.balances[0];
+    const after = removeBalance(s, removed.id);
+    restoreBalance(after, removed, 0);
+    expect(after.balances).toHaveLength(1);
   });
 });
 

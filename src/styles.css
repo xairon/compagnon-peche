@@ -5127,7 +5127,11 @@ button.card-row {
   right: 5px;
   display: flex;
   align-items: center;
-  gap: 2px;
+  /* Wide gap on purpose: ⋯ (options, harmless) and − (removes the balance) used
+     to sit 2px apart — a stray tap meant for one landed on the other. This is
+     the everyday case, not an edge case: the − only shows on an empty/overdue
+     card, right where a hand busy with a net brushes the corner of the screen. */
+  gap: 20px;
 }
 .bal-opt {
   border: none;
@@ -5351,6 +5355,42 @@ button.card-row {
   font-size: 15px;
   font-weight: 700;
   margin-top: 4px;
+}
+
+/* Undo toast for a removed balance — same visual language as .update-toast,
+   but scoped to the screen (absolute against .app-frame, like .ecr-sheet)
+   rather than fixed to the viewport: it answers one action on this screen,
+   not an app-wide event. */
+.ecr-undo-toast {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  z-index: 65;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100% - 32px);
+  background: #16281e;
+  color: #fbfaf7;
+  border-radius: 100px;
+  padding: 8px 10px 8px 18px;
+  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.35);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+.ecr-undo-toast button {
+  border: none;
+  background: var(--fir);
+  color: #fbfaf7;
+  border-radius: 100px;
+  padding: 11px 16px; /* ≥44px tap target */
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ecr-undo-toast button:active {
+  transform: scale(0.97);
 }
 
 /* ---- Écrevisses : bilan ---- */

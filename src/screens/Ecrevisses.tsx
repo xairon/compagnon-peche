@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store";
 import { BalanceCard } from "../components/BalanceCard";
 import { BilanEcrevisses } from "../components/BilanEcrevisses";
@@ -16,6 +16,7 @@ import {
   releveBalance,
   updateBalance,
   removeBalance,
+  restoreBalance,
   addBalance,
   sortBalances,
   nextDue,
@@ -23,7 +24,11 @@ import {
   fmtDuration,
   fmtElapsed,
 } from "../lib/ecrevisses";
-import type { CrayfishSession, Spot } from "../types";
+import type { Balance, CrayfishSession, Spot } from "../types";
+
+/** How long the "Balance retirée · Annuler" toast stays up. Long enough to
+ *  react with a wet hand, short enough not to pile up across a few taps. */
+const UNDO_MS = 5000;
 
 const INTERVALS = [10, 15, 20, 30];
 
@@ -230,6 +235,44 @@ function SessionEnCours({
   const [expanded, setExpanded] = useState<string | null>(null);
   const [options, setOptions] = useState<string | null>(null);
 
+  // Removing a balance is undoable rather than armed-then-confirmed: it's an
+  // action taken several times a session (an empty or overdue net dropped by
+  // mistake), and doubling every tap would fight the "one hand, wet fingers"
+  // goal more than it protects. What's lost on a mis-tap is modest (a number
+  // and a lift count, never a running net — canRemove withholds this while
+  // soaking), so a toast that really restores the balance is enough of a net.
+  const [undo, setUndo] = useState<{ balance: Balance; index: number } | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // A pending toast must not survive leaving the screen with a stale timer
+  // still armed to clear state nobody can see anymore.
+  useEffect(
+    () => () => {
+      if (undoTimer.current) clearTimeout(undoTimer.current);
+    },
+    [],
+  );
+
+  const handleRemove = (id: string) => {
+    const index = session.balances.findIndex((b) => b.id === id);
+    if (index === -1) return;
+    const balance = session.balances[index];
+    onSave(removeBalance(session, id));
+    setUndo({ balance, index });
+    if (undoTimer.current) clearTimeout(undoTimer.current);
+    undoTimer.current = setTimeout(() => setUndo(null), UNDO_MS);
+  };
+
+  const handleUndo = () => {
+    if (!undo) return;
+    onSave(restoreBalance(session, undo.balance, undo.index));
+    setUndo(null);
+    if (undoTimer.current) {
+      clearTimeout(undoTimer.current);
+      undoTimer.current = null;
+    }
+  };
+
   // Alerting and the wake lock are driven by useCrayfishAlerts() at the App
   // level — this screen only displays the session.
   const sorted = useMemo(() => sortBalances(session.balances, now), [session, now]);
@@ -292,7 +335,7 @@ function SessionEnCours({
                 onSave(releveBalance(session, b.id, Date.now()));
               }}
               onOptions={() => setOptions(b.id)}
-              onRemove={() => onSave(removeBalance(session, b.id))}
+              onRemove={() => handleRemove(b.id)}
             />
           ))}
           {/* Grow the battery one net at a time, up to the regulatory cap. */}
@@ -330,6 +373,13 @@ function SessionEnCours({
           Terminer la séance
         </button>
       </div>
+
+      {undo && (
+        <div className="ecr-undo-toast" aria-live="polite">
+          <span>Balance retirée</span>
+          <button onClick={handleUndo}>Annuler</button>
+        </div>
+      )}
 
       {opt && (
         <div className="ecr-sheet" role="dialog" aria-label={`Options de la balance ${opt.n}`}>
