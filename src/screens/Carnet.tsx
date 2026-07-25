@@ -5,9 +5,10 @@ import { Media } from "../components/Media";
 import { ProfileHeader } from "../components/ProfileHeader";
 import { CatchEditor } from "../components/CatchEditor";
 import { usePhotoUrl } from "../lib/photos";
-import { uid } from "../lib/helpers";
+import { uid, frDate } from "../lib/helpers";
 import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
+import { upcomingSeasonReminders, type SeasonReminder } from "../lib/season-reminders";
 import type { Catch, CrayfishSession } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
@@ -26,6 +27,9 @@ export function Carnet() {
   const setSeg = (v: CarnetSeg) => set({ carnetSeg: v });
 
   const added = catches.find((c) => c.slot === state.justAdded);
+  // No scheduled notifications (unreliable in a PWA, see lib/notify.ts) — the
+  // reminder simply shows up whenever the carnet is opened.
+  const seasonReminders = upcomingSeasonReminders(new Date());
   const total = catches.length;
   const speciesCount = new Set(catches.map((c) => c.spid)).size;
   const record = catches.reduce((m, c) => (c.n > m ? c.n : m), 0);
@@ -72,6 +76,14 @@ export function Carnet() {
     <div className="screen">
       <div className="pad">
         <ProfileHeader />
+
+        {seasonReminders.length > 0 && (
+          <div className="season-reminders">
+            {seasonReminders.map((r) => (
+              <SeasonReminderRow key={r.rule} r={r} />
+            ))}
+          </div>
+        )}
 
         {added && (
           <div className="added-banner">
@@ -194,6 +206,16 @@ export function Carnet() {
           100 % local sur votre appareil. Aucune donnée n'est transmise.
         </div>
       </div>
+    </div>
+  );
+}
+
+function SeasonReminderRow({ r }: { r: SeasonReminder }) {
+  const verbe = r.kind === "ouverture" ? "Ouverture" : "Fermeture";
+  const delai = r.inDays === 0 ? "aujourd'hui" : `dans ${r.inDays} j`;
+  return (
+    <div className={`season-reminder-row ${r.kind === "fermeture" ? "closing" : "opening"}`}>
+      🗓️ {verbe} {r.label} — {delai} ({frDate(r.date)})
     </div>
   );
 }

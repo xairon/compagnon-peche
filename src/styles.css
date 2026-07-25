@@ -5628,3 +5628,63 @@ button.card-row {
     animation: none;
   }
 }
+
+/* ---- Carte de pêche : ligne discrète + rappel dans l'en-tête du Carnet ---- */
+.ph-card {
+  font-size: 12.5px;
+  color: #6b675c;
+  margin-top: 2px;
+}
+.ph-card-alert {
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ph-card-alert a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.ph-card-warn {
+  color: var(--amber);
+  background: var(--amber-bg);
+}
+.ph-card-danger {
+  color: var(--red);
+  background: rgba(179, 58, 46, 0.08);
+  border: 1px solid var(--red);
+  font-weight: 500;
+}
+.ph-card-nudge {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6b675c;
+}
+.ph-card-nudge a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* ---- Rappels d'ouverture/fermeture à venir (Carnet) ---- */
+.season-reminders {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.season-reminder-row {
+  font-size: 12.5px;
+  line-height: 1.4;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--sand);
+  color: #5a5e52;
+}
+.season-reminder-row.closing {
+  color: var(--amber);
+  background: var(--amber-bg);
+}
