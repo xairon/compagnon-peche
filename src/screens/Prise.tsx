@@ -8,6 +8,7 @@ import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
 import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
+import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 
 function actStyle(kind: ActKind) {
   if (kind === "primary") return { bd: "#16281E", bg: "#16281E", fg: "#FBFAF7" };
@@ -67,6 +68,12 @@ export function Prise() {
         <div className="h1">Ma prise</div>
         <div className="h-sub">Garder ou relâcher — le bon geste, tout de suite</div>
       </div>
+
+      {state.outOfZoneDept && (
+        <div style={{ margin: "0 18px 10px" }}>
+          <OutOfZoneWarning outOfZoneDept={state.outOfZoneDept} activeDept={state.dept} />
+        </div>
+      )}
 
       <div className="quota-bar">
         <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={18} stroke="#4A5D52" />

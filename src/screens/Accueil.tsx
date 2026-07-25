@@ -6,6 +6,7 @@ import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
+import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { usePhotoUrl } from "../lib/photos";
 import { fetchMeteo, weatherLabel, type Meteo, type MeteoHour } from "../lib/meteo";
 import {
@@ -173,12 +174,11 @@ export function Accueil() {
         </div>
 
         {state.outOfZoneDept && (
-          <div className="ecr-warn" style={{ marginTop: 10 }}>
-            Département détecté : n° {state.outOfZoneDept} — l'application ne couvre que la Creuse
-            (23), l'Indre (36) et le Loir-et-Cher (41). La réglementation affichée reste celle du
-            département actif, {deptName} : elle ne s'applique pas forcément là où vous êtes.
-            Consultez l'arrêté préfectoral de votre propre département.
-          </div>
+          <OutOfZoneWarning
+            outOfZoneDept={state.outOfZoneDept}
+            activeDept={state.dept}
+            style={{ marginTop: 10 }}
+          />
         )}
 
         {/* Minimap hero */}
