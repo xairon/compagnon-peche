@@ -94,7 +94,8 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     url: "https://www.peche36.fr/667-taille-minimale-de-capture.htm",
   },
   "41": {
-    truiteMaille: "25 cm (fario et arc-en-ciel) — relevée au-dessus du national",
+    truiteMaille:
+      "25 cm (fario et arc-en-ciel) — relevée au-dessus du national ; valeur à reconfirmer sur l'arrêté 2026 (source peche41.fr inaccessible lors de la dernière vérification, juillet 2026 — deux agrégateurs tiers indépendants indiquent 23 cm, sans confirmer la source primaire)",
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
     blackbassMaille: "30 cm (2ᵉ cat.)",
