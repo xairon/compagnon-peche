@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
 import { SPECIES } from "../data/species";
 import { RECIPES } from "../data/recipes";
-import { Icon } from "../components/Icon";
+import { Icon, ICONS } from "../components/Icon";
 import { Media, hasMedia } from "../components/Media";
 import { norm, uid, isoDay } from "../lib/helpers";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
+import { isQuotaError } from "../lib/storage";
 import type { PersonalRecipe } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
@@ -266,6 +267,11 @@ function RecipeEditor({
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [removePhoto, setRemovePhoto] = useState(false);
+  // Set when the photo write fails but the recipe itself is still savable:
+  // held here until the user acknowledges, so onDone() doesn't unmount this
+  // screen (and the message with it) before they've read why.
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const pendingRef = useRef<{ id: string; recipe: PersonalRecipe } | null>(null);
 
   useEffect(() => {
     return () => {
@@ -302,15 +308,26 @@ function RecipeEditor({
   const submit = async () => {
     if (!canSave) return;
     setSaving(true);
+    setPhotoError(null);
     const id = initial?.id ?? uid("r");
 
     let key = photoKey;
+    let failure: string | null = null;
     if (photoFile) {
       const blob = await downscaleImage(photoFile);
       const newKey = `photo:${id}:${Date.now()}`;
-      await savePhoto(newKey, blob);
-      if (photoKey && photoKey !== newKey) await deletePhoto(photoKey);
-      key = newKey;
+      try {
+        await savePhoto(newKey, blob);
+        if (photoKey && photoKey !== newKey) await deletePhoto(photoKey);
+        key = newKey;
+      } catch (e) {
+        // Write failed: keep whatever photo was already attached rather than
+        // pointing the recipe at a blob that was never written.
+        key = photoKey;
+        failure = isQuotaError(e)
+          ? "Espace de stockage saturé : la recette sera enregistrée, mais pas la nouvelle photo. Libérez de la place ou exportez une sauvegarde, puis réessayez d'ajouter la photo."
+          : "La recette sera enregistrée, mais la nouvelle photo n'a pas pu être sauvegardée sur cet appareil.";
+      }
     } else if (removePhoto && photoKey) {
       await deletePhoto(photoKey);
       key = undefined;
@@ -326,9 +343,25 @@ function RecipeEditor({
       note: note.trim() || undefined,
       created: initial?.created ?? isoDay(),
     };
+
+    if (failure) {
+      pendingRef.current = { id, recipe };
+      setPhotoError(failure);
+      setSaving(false);
+      return;
+    }
     if (initial) updateRecipe(id, recipe);
     else addRecipe(recipe);
     onDone(id);
+  };
+
+  // The user has read why the photo is missing — now actually save the recipe.
+  const confirmSaveWithoutPhoto = () => {
+    const pending = pendingRef.current;
+    if (!pending) return;
+    if (initial) updateRecipe(pending.id, pending.recipe);
+    else addRecipe(pending.recipe);
+    onDone(pending.id);
   };
 
   return (
@@ -426,6 +459,20 @@ function RecipeEditor({
             placeholder="Origine, adaptation, souvenir…"
           />
         </div>
+
+        {photoError && (
+          <div className="alert" style={{ marginTop: 12 }} role="alert">
+            <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <div className="txt">
+              {photoError}
+              <div style={{ marginTop: 8 }}>
+                <button className="save-btn" style={{ marginTop: 0 }} onClick={confirmSaveWithoutPhoto}>
+                  J'ai compris, continuer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="ce-actions">
           <button className="btn-light" onClick={onCancel} disabled={saving}>

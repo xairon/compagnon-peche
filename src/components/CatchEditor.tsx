@@ -5,6 +5,9 @@ import { CAT_LABEL } from "../data/gear";
 import { norm, uid, isoDay } from "../lib/helpers";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
 import { locate, locateMessage } from "../lib/locate";
+import { isQuotaError, getLastExportAt, storageInfo } from "../lib/storage";
+import { shouldSuggestBackup } from "../lib/backup-reminder";
+import { Icon, ICONS } from "./Icon";
 import type { Catch } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
@@ -79,6 +82,12 @@ export function CatchEditor({
   const [spq, setSpq] = useState("");
   const [saving, setSaving] = useState(false);
   const [gpsMsg, setGpsMsg] = useState<string | null>(null);
+  // Set when the photo write fails but the catch itself is still savable: we
+  // hold the entry here and wait for the user to acknowledge before calling
+  // onSave, so the parent doesn't unmount this screen (and the message with
+  // it) before they've had a chance to read why the photo is missing.
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const pendingEntryRef = useRef<Catch | null>(null);
 
   // Revoke the preview object URL on change/unmount (avoid leaking blobs).
   useEffect(() => {
@@ -89,6 +98,24 @@ export function CatchEditor({
   }, [f.photoPreview]);
   const existingPhoto = usePhotoUrl(f.removePhoto || f.photoFile ? undefined : f.photoKey);
   const shownPhoto = f.photoPreview || existingPhoto;
+
+  // Discreet backup nudge: this screen (adding/editing a catch) is the one
+  // place in the app every angler visits regularly, which makes it a better
+  // spot for a reminder than the Stockage screen alone (nobody goes there on
+  // their own). Anchored on the oldest catch/spot date so it still fires for
+  // someone who has never exported, not just after a first backup.
+  // `now`/`lastExportAtMs` are read once per mount (lazy initializer, not a
+  // direct call during render) — a form filled out over several days is not
+  // something this app needs to react to mid-render.
+  const [nowMs] = useState(() => Date.now());
+  const [lastExportAtMs] = useState(() => getLastExportAt());
+  const oldestDataAtMs = (() => {
+    const stamps = [...state.catches.map((c) => c.iso), ...state.spots.map((sp) => sp.created)]
+      .map((d) => new Date(d + "T00:00:00").getTime())
+      .filter((t) => Number.isFinite(t));
+    return stamps.length ? Math.min(...stamps) : null;
+  })();
+  const showBackupReminder = shouldSuggestBackup({ lastExportAtMs, oldestDataAtMs, now: nowMs });
 
   const up = (patch: Partial<FormState>) => setF((s) => ({ ...s, ...patch }));
 
@@ -125,17 +152,33 @@ export function CatchEditor({
     const sp = SPECIES.find((s) => s.id === f.spid);
     if (!sp) return;
     setSaving(true);
+    setPhotoError(null);
     const slot = initial?.slot ?? uid("u");
 
     let photoKey = f.photoKey;
+    let photoFailure: string | null = null;
     if (f.photoFile) {
       const blob = await downscaleImage(f.photoFile);
       // Versioned key so usePhotoUrl (keyed on the string) re-fetches after a
       // replacement, and the previous blob is removed (no orphan / stale image).
       const newKey = `photo:${slot}:${Date.now()}`;
-      await savePhoto(newKey, blob);
-      if (f.photoKey && f.photoKey !== newKey) await deletePhoto(f.photoKey);
-      photoKey = newKey;
+      try {
+        await savePhoto(newKey, blob);
+        if (f.photoKey && f.photoKey !== newKey) await deletePhoto(f.photoKey);
+        photoKey = newKey;
+        // The photo is the biggest single write this app makes — check right
+        // after it whether we're now close to the quota, so the user finds
+        // out before the NEXT photo write is the one that fails.
+        storageInfo().catch(() => {});
+      } catch (e) {
+        // Write failed (quota, private mode, …): keep whatever photo was
+        // already attached rather than pointing the catch at a blob that was
+        // never written. The catch itself must still be savable.
+        photoKey = f.photoKey;
+        photoFailure = isQuotaError(e)
+          ? "Espace de stockage saturé : la prise sera enregistrée, mais pas la nouvelle photo. Libérez de la place ou exportez une sauvegarde (« Stockage & données »), puis réessayez d'ajouter la photo."
+          : "La prise sera enregistrée, mais la nouvelle photo n'a pas pu être sauvegardée sur cet appareil.";
+      }
     } else if (f.removePhoto && f.photoKey) {
       await deletePhoto(f.photoKey);
       photoKey = undefined;
@@ -167,7 +210,19 @@ export function CatchEditor({
       note: f.note.trim() || undefined,
       kept: f.kept,
     };
+
+    if (photoFailure) {
+      pendingEntryRef.current = entry;
+      setPhotoError(photoFailure);
+      setSaving(false);
+      return;
+    }
     onSave(entry);
+  };
+
+  // The user has read why the photo is missing — now actually save the catch.
+  const confirmSaveWithoutPhoto = () => {
+    if (pendingEntryRef.current) onSave(pendingEntryRef.current);
   };
 
   return (
@@ -319,6 +374,27 @@ export function CatchEditor({
         <label>Note</label>
         <textarea value={f.note} onChange={(e) => up({ note: e.target.value })} rows={2} placeholder="Conditions, souvenir, détail…" />
       </div>
+
+      {photoError && (
+        <div className="alert" style={{ marginTop: 12 }} role="alert">
+          <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+          <div className="txt">
+            {photoError}
+            <div style={{ marginTop: 8 }}>
+              <button className="save-btn" style={{ marginTop: 0 }} onClick={confirmSaveWithoutPhoto}>
+                J'ai compris, continuer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!photoError && showBackupReminder && (
+        <div className="stg-note" style={{ marginTop: 12 }}>
+          💾 Cela fait un moment que le carnet n'a pas été sauvegardé — pensez à exporter une copie
+          depuis « Stockage & données ».
+        </div>
+      )}
 
       <div className="ce-actions">
         <button className="btn-light" onClick={onCancel} disabled={saving}>

@@ -5,13 +5,22 @@ import { get, set, del } from "idb-keyval";
 import { useEffect, useState } from "react";
 import { reportPersistError, clearPersistError } from "./storage";
 
+/** Persist a photo/avatar blob. Throws on failure (quota, private mode, …) —
+ *  never swallowed: photos are the biggest single write this app makes, and a
+ *  caller that stores the key regardless would end up with a catch/profile/
+ *  recipe pointing at a blob that doesn't exist (broken thumbnail, no error,
+ *  no way to know why). Rethrowing forces every call site to decide what to
+ *  do — keep the previous photo, tell the user, whatever fits — instead of a
+ *  boolean return that's just as easy to ignore as the exception it replaces.
+ *  Also reports to the app-wide persist-error banner, same as the other save
+ *  helpers in lib/db.ts, for consistency. */
 export async function savePhoto(key: string, blob: Blob): Promise<void> {
   try {
     await set(key, blob);
     clearPersistError();
   } catch (e) {
-    // Photos are the likeliest to blow the quota — never fail silently.
     reportPersistError(e);
+    throw e;
   }
 }
 
