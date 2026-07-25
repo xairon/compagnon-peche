@@ -5731,3 +5731,11 @@ button.card-row {
   color: #6b675c;
   font-size: 12px;
 }
+
+/* ---- Fiche : variétés / noms populaires d'une même espèce ---- */
+.fiche-varietes {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.45;
+}

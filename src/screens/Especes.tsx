@@ -3,8 +3,9 @@ import { SPECIES } from "../data/species";
 import { DEPARTEMENTS } from "../data/regulation";
 import { Icon, ICONS } from "../components/Icon";
 import { Media } from "../components/Media";
-import { norm, ratingFg } from "../lib/helpers";
+import { ratingFg } from "../lib/helpers";
 import { speciesStatus } from "../lib/statut";
+import { matchSpecies } from "../lib/recherche";
 import { effectiveMaille } from "../lib/maille";
 import type { Species } from "../types";
 
@@ -52,11 +53,10 @@ function flag(sp: Species): { label: string; amber: boolean } | null {
 export function Especes() {
   const { state, set, nav, openSp } = useStore();
   const deptName = DEPARTEMENTS[state.dept].name;
-  const nq = norm(state.q);
   const list = SPECIES.filter(
     (sp) =>
       (state.filter === "tous" || sp.group === state.filter) &&
-      (!nq || norm(sp.name).includes(nq) || norm(sp.latin).includes(nq)),
+      matchSpecies(sp, state.q),
   );
 
   const micAvail = !!speechCtor();

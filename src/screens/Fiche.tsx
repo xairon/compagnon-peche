@@ -9,6 +9,7 @@ import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
 import { effectiveMaille } from "../lib/maille";
+import { speciesAliases } from "../lib/recherche";
 import { effectiveQuota } from "../lib/quota";
 import { ratingFg, repere } from "../lib/helpers";
 import { EDIBILITY } from "../data/edibility";
@@ -498,6 +499,14 @@ export function Fiche() {
           <div className="hero-kicker">{GROUP_LABEL[sp.group] || "Espèce"}</div>
           <div className="t">{sp.name}</div>
           <div className="latin">{sp.latin}</div>
+          {/* Les variétés sont des formes d'une MÊME espèce (écailles, robe) :
+              on les nomme pour que le pêcheur qui les cherche se reconnaisse,
+              sans laisser croire qu'il s'agit d'espèces distinctes. */}
+          {speciesAliases(sp.id).length > 0 && (
+            <div className="fiche-varietes">
+              Aussi appelée : {speciesAliases(sp.id).slice(0, 4).join(", ")} — même espèce.
+            </div>
+          )}
         </div>
       </div>
 
