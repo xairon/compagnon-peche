@@ -168,6 +168,16 @@ export interface Profile {
   bio: string;
   region: string;
   avatar?: string; // IndexedDB blob key
+  /** Fishing card (carte de pêche), device-only, optional (existing profiles
+   *  load fine without it). `aappma` = the association that issued the card
+   *  ("AAPPMA de…"), the thing actually asked for at a control alongside the
+   *  card itself. `carteAnnee` = its calendar year of validity (a card is
+   *  valid 1ᵉʳ janvier → 31 décembre of that year — see lib/carte-peche.ts).
+   *  Deliberately NO card number: the physical card/QR is what's shown at a
+   *  control, never a number recalled from an app, so storing one would be a
+   *  sensitive identifier kept for no functional benefit. */
+  aappma?: string;
+  carteAnnee?: number;
 }
 
 /** A personal fishing spot the user declares on the map, persisted in IndexedDB. */
