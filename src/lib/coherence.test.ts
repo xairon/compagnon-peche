@@ -82,3 +82,45 @@ describe("cohérence des verdicts entre écrans", () => {
     expect(perdues).toEqual([]);
   });
 });
+
+/**
+ * Le trou par lequel la quatrième incohérence est passée : la fiche dérivait la
+ * couleur de sa pastille de `season(sp).open`, qui répond « y a-t-il une
+ * fermeture nationale » et vaut TRUE pour les espèces protégées comme pour le
+ * régime spécial. 28 espèces — dont l'esturgeon, pêche interdite partout —
+ * affichaient un point vert « Ouverte toute l'année » au-dessus de leur photo.
+ *
+ * Aucune garde ne pouvait le voir : l'une grepait une forme syntaxique, l'autre
+ * ne comparait que des modules purs. On interdit désormais la source du défaut.
+ */
+describe("aucun écran ne colore un statut depuis season().open", () => {
+  it("les écrans n'utilisent pas season(...).open pour choisir une couleur", () => {
+    const offenders: string[] = [];
+    for (const path of uiFiles()) {
+      const src = readFileSync(path, "utf8");
+      src.split("\n").forEach((line: string, i: number) => {
+        // Un ternaire sur `.open` qui produit une couleur ou une classe.
+        if (/\.open\s*\?/.test(line) && /#[0-9A-Fa-f]{3,6}|"(good|bad|warn)"/.test(line)) {
+          offenders.push(`${path}:${i + 1} → ${line.trim()}`);
+        }
+      });
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("aucune espèce non-verte n'est présentée en vert par la fiche", async () => {
+    const { SPECIES } = await import("../data/species");
+    const { speciesStatus } = await import("./statut");
+    const { season } = await import("./season");
+    // La fiche suit désormais speciesStatus ; ce test fige l'écart avec l'ancien
+    // critère pour que personne ne revienne à season().open sans s'en apercevoir.
+    const divergentes = SPECIES.filter(
+      (sp) => season(sp).open && speciesStatus(sp).cls !== "good",
+    ).map((sp) => sp.id);
+    expect(divergentes.length).toBeGreaterThan(0); // sinon le test ne prouve rien
+    for (const id of divergentes) {
+      const sp = SPECIES.find((s) => s.id === id)!;
+      expect(speciesStatus(sp).cls, `${id} ne doit pas être vert`).not.toBe("good");
+    }
+  });
+});

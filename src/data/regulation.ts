@@ -16,6 +16,13 @@ export type DeptId = "23" | "36" | "41";
 export interface DeptInfo {
   id: DeptId;
   name: string;
+  /** Chef-lieu coordinates, used as the reference point for the legal-hours
+   *  ephemeris. Sunset moves by ~10 min across these three departments — enough
+   *  to have an angler in the Creuse read "pêche autorisée" after the real
+   *  closing time if everything is computed at Blois. */
+  lat: number;
+  lon: number;
+  chefLieu: string;
   regText: string;
   url: string;
   fede: string;
@@ -25,6 +32,9 @@ export const DEPARTEMENTS: Record<DeptId, DeptInfo> = {
   "41": {
     id: "41",
     name: "Loir-et-Cher (41)",
+    lat: 47.586,
+    lon: 1.336,
+    chefLieu: "Blois",
     regText:
       "Loir-et-Cher — 2ᵉ catégorie dominante (Loire, Cher, étangs de Sologne). Mailles relevées par l'arrêté : truite 25 cm, brochet 60 cm, sandre 50 cm. Vérifiez l'arrêté 2026.",
     url: "http://www.peche41.fr/606-tailles-reglementaires-et-nombre-de-captures.htm",
@@ -33,6 +43,9 @@ export const DEPARTEMENTS: Record<DeptId, DeptInfo> = {
   "36": {
     id: "36",
     name: "Indre (36)",
+    lat: 46.811,
+    lon: 1.691,
+    chefLieu: "Châteauroux",
     regText:
       "Indre — arrêté préfectoral n° 36-2025-12-12-00002 (pêche 2026). Brochet 60 cm, sandre 50 cm ; brochet no-kill 14/03–24/04. Vérifiez le texte en vigueur.",
     url: "https://www.peche36.fr/667-taille-minimale-de-capture.htm",
@@ -41,6 +54,9 @@ export const DEPARTEMENTS: Record<DeptId, DeptInfo> = {
   "23": {
     id: "23",
     name: "Creuse (23)",
+    lat: 46.170,
+    lon: 1.874,
+    chefLieu: "Guéret",
     regText:
       "Creuse — arrêté préfectoral n° 23-2025-12-19-00001 (pêche 2026). Truite 20 cm sur cours d'eau listés (Thaurion, Maulde, Creuse…) sinon 23 cm ; brochet 60 cm, sandre 50 cm. Vérifiez l'arrêté.",
     url: "https://fdpeche23.wixsite.com/peche23/reglementation",

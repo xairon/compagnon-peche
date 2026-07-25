@@ -10,6 +10,7 @@ import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
 import { effectiveMaille } from "../lib/maille";
 import { speciesAliases } from "../lib/recherche";
+import { speciesStatus } from "../lib/statut";
 import { effectiveQuota } from "../lib/quota";
 import { ratingFg, repere } from "../lib/helpers";
 import { EDIBILITY } from "../data/edibility";
@@ -422,8 +423,16 @@ export function Fiche() {
   const eff = effectiveMaille(sp, state.dept);
   const effQuota = effectiveQuota(sp, state.dept);
   const mailleCm = eff.cm;
-  const seasonFg = seas.open ? "#1D6E42" : "#B33A2E";
-  const seasonDot = seas.open ? "#2E9E5B" : "#B33A2E";
+  // La couleur suit le statut partagé, pas season().open : ce dernier répond
+  // « y a-t-il une fermeture nationale » et vaut TRUE pour les espèces
+  // protégées comme pour le régime spécial. La fiche de l'esturgeon — pêche
+  // interdite partout — affichait donc un point vert « Ouverte toute l'année »
+  // au-dessus de sa photo, en se contredisant elle-même plus bas.
+  const statut = speciesStatus(sp);
+  const seasonFg =
+    statut.cls === "good" ? "#1D6E42" : statut.cls === "warn" ? "#9A6A12" : "#B33A2E";
+  const seasonDot =
+    statut.cls === "good" ? "#2E9E5B" : statut.cls === "warn" ? "#C08A2E" : "#B33A2E";
 
   const toggle = (id: string) => set((s) => ({ open: { ...s.open, [id]: !s.open[id] } }));
 

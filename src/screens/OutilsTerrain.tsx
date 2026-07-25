@@ -6,8 +6,11 @@ import { hhmm } from "../lib/geo";
 import { DEPARTEMENTS } from "../data/regulation";
 
 // Practical field chronos. Legal fishing hours are ½h before sunrise → ½h after
-// sunset (national rule) — computed from the local ephemeris (real, offline).
-const HOME = { lat: 47.586, lon: 1.336 };
+// sunset (national rule) — computed from the local ephemeris (real, offline),
+// at the ACTIVE department's chef-lieu. They used to be computed at Blois for
+// everyone: in the Creuse the screen then announced "pêche autorisée" for some
+// ten minutes past the real closing time, on a card titled "repères
+// réglementaires".
 const CLOCK = "M12 8v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z";
 
 const PRESETS: { id: string; label: string; sub: string; min: number }[] = [
@@ -38,7 +41,8 @@ export function OutilsTerrain() {
   }, []);
 
   const legal = useMemo(() => {
-    const t = sunTimes(new Date(nowMs), HOME.lat, HOME.lon);
+    const d = DEPARTEMENTS[state.dept];
+    const t = sunTimes(new Date(nowMs), d.lat, d.lon);
     if (!t.sunrise || !t.sunset) return null;
     const open = new Date(t.sunrise.getTime() - 30 * 60000);
     const close = new Date(t.sunset.getTime() + 30 * 60000);
@@ -49,7 +53,7 @@ export function OutilsTerrain() {
     const h = Math.floor(remainMs / 3600000);
     const m = Math.floor((remainMs % 3600000) / 60000);
     return { open, close, isOpen, beforeOpen, remain: `${h} h ${String(m).padStart(2, "0")}` };
-  }, [nowMs]);
+  }, [nowMs, state.dept]);
 
   // A single active countdown at a time.
   const [active, setActive] = useState<string | null>(null);
@@ -128,7 +132,9 @@ export function OutilsTerrain() {
               )}
             </div>
             <div className="ot-legal-note">
-              ½ h avant le lever → ½ h après le coucher (repère national). {deptName} : vérifiez l'arrêté.
+              ½ h avant le lever → ½ h après le coucher (repère national). Calculé pour{" "}
+              {DEPARTEMENTS[state.dept].chefLieu} ({deptName}) : quelques minutes d'écart d'un bout
+              à l'autre du département. Vérifiez l'arrêté.
             </div>
           </div>
         )}

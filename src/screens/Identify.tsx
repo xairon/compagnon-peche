@@ -1,5 +1,6 @@
 import { useStore } from "../store";
 import { Media } from "../components/Media";
+import { speciesStatus } from "../lib/statut";
 import type { Species } from "../types";
 import { candidates, nextQuestions, answerLabel, IDENTIFIER_COVERAGE } from "../lib/identify";
 
@@ -128,6 +129,15 @@ function CandCard({ sp, onOpen }: { sp: Species; onOpen: () => void }) {
       <div className="id-cand-cap">
         <div className="n">{sp.name}</div>
         <div className="lt">{sp.latin}</div>
+        {/* C'est l'écran de celui qui ne sait PAS ce qu'il a pêché — donc le plus
+            exposé. Ne rien y dire du statut laissait un esturgeon ou un saumon
+            sous moratoire ressembler à n'importe quelle prise ordinaire. */}
+        {(() => {
+          const st = speciesStatus(sp);
+          return st.cls === "good" ? null : (
+            <span className={"id-cand-statut " + st.cls}>{st.label}</span>
+          );
+        })()}
       </div>
     </button>
   );

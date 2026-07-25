@@ -33,9 +33,13 @@ export function Prise() {
   const pick = (id: string) => set((st) => ({ prise: { ...st.prise, sp: id, step: "statut" } }));
   const ui = state.bigUI ? { fs: "17.5px", h: 66 } : { fs: "15px", h: 54 };
 
-  // Protected/invasive/out-of-season jump straight from "statut" to kill/release,
-  // skipping choix. Back must return to "statut" then — never to "garder ou relâcher".
-  const shortcut = !!sp && (!!sp.protected || !!sp.invasive || !season(sp).open);
+  // Protected/invasive/out-of-season/special-regime jump straight from "statut"
+  // to kill/release, skipping choix. Back must return to "statut" then — never to
+  // "garder ou relâcher". The "special" regime was added later and forgotten
+  // here: pressing ‹ after releasing a salmon landed on "Je garde", an offer the
+  // angler never saw and that the moratorium warning had explicitly avoided.
+  const shortcut =
+    !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp).open);
   const step = state.prise.step;
   const isShortcutStep = shortcut && (step === "kill" || step === "release");
 
