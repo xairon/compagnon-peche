@@ -56,6 +56,12 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,webp,woff2}"],
         // Species photos live under /assets/species — precached too.
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // Once the user accepts the update, the freshly-activated worker must take
+        // control of the OPEN page so `controllerchange` fires and the plugin reloads
+        // at the right moment. Without clientsClaim that event never fires on the
+        // current client, which is why the update used to "come back in a loop".
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
             // Carto basemap style, glyphs, sprites and vector tiles — cache on use

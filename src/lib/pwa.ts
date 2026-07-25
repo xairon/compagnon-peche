@@ -38,24 +38,12 @@ export function initPwa() {
 }
 
 export function applyUpdate() {
-  // updateSW(true) asks the waiting SW to skipWaiting and reloads on the
-  // `controllerchange` event. On some Android / installed-PWA setups that event
-  // doesn't fire, so the button appears to "do nothing". Belt-and-suspenders:
-  // reload on controllerchange AND on a short fallback timer (by then the new SW
-  // has usually activated, so the reload picks up the new version).
-  let done = false;
-  const reload = () => {
-    if (done) return;
-    done = true;
-    window.location.reload();
-  };
-  try {
-    navigator.serviceWorker?.addEventListener("controllerchange", reload, { once: true });
-  } catch {
-    /* SW API unavailable — the fallback timer still reloads */
-  }
+  // Tell the waiting worker to skipWaiting. With `clientsClaim` set (see
+  // vite.config), it then claims this page, `controllerchange` fires, and the
+  // plugin's own `controlling` handler reloads once the new worker is actually in
+  // control. No blind timer: a fixed-delay reload used to fire before the new
+  // worker took control, so the update never stuck and the prompt looped.
   Promise.resolve(updateSW(true)).catch(() => {});
-  setTimeout(reload, 1500);
 }
 
 export async function promptInstall(): Promise<boolean> {
