@@ -2,7 +2,8 @@ import type { Species } from "../types";
 import type { PriseStep } from "../store";
 import { season } from "./season";
 import { QUOTA_CARNASSIERS } from "./helpers";
-import { DEPARTEMENTS, localMaille, type DeptId } from "../data/regulation";
+import { DEPARTEMENTS, type DeptId } from "../data/regulation";
+import { effectiveMaille } from "./maille";
 
 export type ActKind = "primary" | "danger" | "default";
 export interface PriseAction {
@@ -168,29 +169,31 @@ export function priseView(
   }
 
   if (step === "maille") {
-    // The préfectoral arrêté can only be STRICTER than the national floor, so
-    // when it sets a size it is the one that binds the angler. Announcing the
-    // national value here would send them home with an undersized fish.
-    const local = dept ? localMaille(dept, sp.id) : null;
-    const shown = local ? local.text : sp.maille;
-    const has = shown !== "—";
+    // One resolution for the whole app (see lib/maille): the size input and the
+    // on-screen ruler read the same value, so the flow can no longer announce
+    // 60 cm here and measure 50 one tap later.
+    const m = effectiveMaille(sp, dept);
+    const has = m.cm > 0;
+    const size = m.cm + " cm";
     return {
       ...V,
       tone: "warn",
-      banner: has ? "MESURER — " + (local ? local.cm + " cm" : sp.maille) : undefined,
-      kicker: local ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
-      title: has
-        ? "Mesure-t-elle au moins " + (local ? local.cm + " cm" : sp.maille) + " ?"
-        : "Pas de taille légale nationale",
+      banner: has ? "MESURER — " + size : undefined,
+      kicker: m.aboveNational ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
+      title: has ? "Mesure-t-elle au moins " + size + " ?" : "Pas de taille légale nationale",
       paras: [
         has
           ? "Mesurez du bout du museau à l'extrémité de la queue. Sous la maille : remise à l'eau obligatoire, immédiate et soignée."
           : "Aucune maille nationale pour cette espèce — un arrêté local peut en fixer une : vérifiez. Sinon, à vous de décider.",
-        ...(local && dept
+        // Only claim "stricter than national" when it actually is: most arrêtés
+        // restate the national figure, and saying otherwise contradicts itself.
+        ...(m.aboveNational && dept && m.text
           ? [
-              `${DEPARTEMENTS[dept].name} : ${local.text} — au-dessus du socle national (${sp.maille}). Vérifiez l'arrêté en vigueur.`,
+              `${DEPARTEMENTS[dept].name} : ${m.text} — au-dessus du socle national (${sp.maille}). Vérifiez l'arrêté en vigueur.`,
             ]
-          : []),
+          : m.local && dept && m.text
+            ? [`${DEPARTEMENTS[dept].name} : ${m.text}. Vérifiez l'arrêté en vigueur.`]
+            : []),
       ],
       note: sp.reg && sp.reg.note ? sp.reg.note : null,
       actions: has

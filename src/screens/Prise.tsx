@@ -7,6 +7,7 @@ import { HoldButton } from "../components/HoldButton";
 import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
 import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
+import { effectiveMaille } from "../lib/maille";
 
 function actStyle(kind: ActKind) {
   if (kind === "primary") return { bd: "#16281E", bg: "#16281E", fg: "#FBFAF7" };
@@ -216,7 +217,7 @@ export function Prise() {
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
                 inputMode="numeric"
-                placeholder={`≥ ${parseInt(sp.maille)} cm`}
+                placeholder={`≥ ${effectiveMaille(sp, state.dept).cm} cm`}
               />
             </div>
           )}

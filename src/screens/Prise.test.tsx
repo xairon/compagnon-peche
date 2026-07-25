@@ -69,3 +69,23 @@ describe("Prise — la maille affichée est celle de l'arrêté départemental",
     expect(within(heading).getByText(/30 cm/)).toBeDefined();
   });
 });
+
+/**
+ * La revue finale a montré que le premier correctif ne couvrait que le titre de
+ * la carte : le champ de saisie et l'écran Règle lisaient toujours la maille
+ * nationale. Ces tests verrouillent les surfaces oubliées.
+ */
+describe("Prise — toutes les surfaces annoncent la même maille", () => {
+  it("le champ « taille mesurée » propose le seuil départemental, pas le national", async () => {
+    renderAtMaille("brochet", "41");
+    await screen.findByText(/Mesure-t-elle au moins 60 cm/);
+    expect(screen.getByPlaceholderText("≥ 60 cm")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("≥ 50 cm")).not.toBeInTheDocument();
+  });
+
+  it("ne prétend pas « au-dessus du socle national » quand la valeur est la même", async () => {
+    renderAtMaille("black-bass", "41");
+    await screen.findByText(/Mesure-t-elle au moins 30 cm/);
+    expect(screen.queryByText(/au-dessus du socle national/)).not.toBeInTheDocument();
+  });
+});

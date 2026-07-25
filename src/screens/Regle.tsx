@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
+import { effectiveMaille } from "../lib/maille";
 import { SPECIES } from "../data/species";
 
 // 1 cm ≈ 37.795 px at 96 dpi. Real-world accuracy depends on the device DPI —
@@ -10,7 +11,9 @@ export function Regle() {
   const { state, back } = useStore();
   const cur = SPECIES.find((s) => s.id === state.spId) || SPECIES[0];
   const sp = SPECIES.find((s) => s.id === state.prise.sp) || cur;
-  const cm = parseInt(sp.maille) || 0;
+  // Same resolution as the decision card that leads here: the ruler must never
+  // measure a different maille from the one the flow just announced.
+  const cm = effectiveMaille(sp, state.dept).cm;
 
   // The ruler MUST keep the true 1:1 cm scale (it measures a fish laid on the
   // glass), so it can't shrink to fit. Instead we measure how many centimetres
