@@ -7,6 +7,7 @@ import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/phot
 import { locate, locateMessage } from "../lib/locate";
 import { isQuotaError, getLastExportAt, storageInfo } from "../lib/storage";
 import { shouldSuggestBackup } from "../lib/backup-reminder";
+import { getFreshConditions } from "../lib/conditionsCache";
 import { Icon, ICONS } from "./Icon";
 import type { Catch } from "../types";
 
@@ -209,6 +210,10 @@ export function CatchEditor({
       photo: photoKey,
       note: f.note.trim() || undefined,
       kept: f.kept,
+      // Conditions snapshot: only attached to a brand-new catch, from whatever
+      // Accueil/Briefing last cached (see lib/conditionsCache) — never fresher
+      // than ~3h, and never added retroactively when editing an older entry.
+      conditions: initial ? initial.conditions : getFreshConditions() ?? undefined,
     };
 
     if (photoFailure) {
