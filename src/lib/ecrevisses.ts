@@ -7,8 +7,8 @@
 import type { Balance, CrayfishSession, CrayfishTally } from "../types";
 import { uid, isoDay, frDate } from "./helpers";
 
-/** National rule: 6 balances per angler, up to 10 in some départements. */
-export const DEFAULT_BALANCES = 6;
+/** National rule: 6 balances per angler, up to 10 in some départements. A session
+ *  starts with one and the angler adds nets as they drop them, up to this cap. */
 export const MAX_BALANCES = 10;
 export const DEFAULT_INTERVAL_MIN = 20;
 /** Past this, a still-open session is treated as forgotten (banner, no auto-close). */

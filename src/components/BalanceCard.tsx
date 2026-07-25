@@ -73,21 +73,22 @@ export function BalanceCard({
         </div>
       )}
 
-      {/* Corner controls: options (⋯) for non-soaking cards, and a direct − to
-          remove this balance — hidden when it's the last one (removeBalance floors
-          the session at one). */}
-      <div className="bal-corner">
-        {st !== "trempe" && (
+      {/* Corner controls, only on a non-soaking card: options (⋯) and a direct −
+          to remove this balance. Both are withheld while it soaks — a stray tap
+          must never silently kill a running net; lift it first, then remove. The
+          − is also hidden on the last balance (removeBalance floors at one). */}
+      {st !== "trempe" && (
+        <div className="bal-corner">
           <button className="bal-opt" onClick={onOptions} aria-label={`Options de la balance ${b.n}`}>
             ⋯
           </button>
-        )}
-        {canRemove && (
-          <button className="bal-rm" onClick={onRemove} aria-label={`Retirer la balance ${b.n}`}>
-            −
-          </button>
-        )}
-      </div>
+          {canRemove && (
+            <button className="bal-rm" onClick={onRemove} aria-label={`Retirer la balance ${b.n}`}>
+              −
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
