@@ -130,6 +130,26 @@ export interface Knot {
   steps: string[];
 }
 
+/** A trend already computed elsewhere (lib/meteo, lib/hubeau): rising/falling/stable. */
+export type ConditionTrend = "rising" | "falling" | "stable";
+
+/** A snapshot of the fishing conditions at the moment a catch is logged —
+ *  pulled from whatever Accueil/Briefing last fetched (see lib/conditionsCache),
+ *  never fetched by the catch form itself. Every field is optional: a snapshot
+ *  older than ~3h isn't attached at all (see MAX_AGE_MS in lib/conditionsCache),
+ *  and even a fresh one may be missing a field (e.g. no hydrometry station
+ *  nearby). Existing catches have no `conditions` at all — never backfilled,
+ *  see lib/analysePrises which only reasons over catches that carry one. */
+export interface CatchConditions {
+  pressure?: number; // hPa, from lib/meteo
+  pressureTrend?: ConditionTrend; // lib/meteo pressureTrend, ~3h window
+  moonPhase?: number; // 0 (nouvelle) .. 1, from lib/astro moonIllumination().phase
+  waterTemp?: number; // °C, from lib/hubeau waterTemp()
+  flow?: number; // value in `flowUnit`, from lib/hubeau latestHydro()
+  flowUnit?: "m³/s" | "m"; // m³/s = débit (Q) when a station has it, else niveau (H) in m
+  flowTrend?: ConditionTrend; // lib/hubeau latestHydro().trend, ~3h window
+}
+
 /** A catch logged in the offline notebook (carnet), persisted in IndexedDB.
  *  Everything beyond species + size is optional (rich, retro-compatible). */
 export interface Catch {
@@ -152,6 +172,10 @@ export interface Catch {
   photo?: string; // IndexedDB blob key ("photo:<slot>")
   note?: string;
   kept: boolean;
+  /** Conditions snapshot at capture time (see CatchConditions above). Absent on
+   *  every catch logged before this feature, and on any new one taken without a
+   *  fresh-enough reading in cache — never retrofitted. */
+  conditions?: CatchConditions;
 }
 
 /** An item in the tacklebox (gear), persisted in IndexedDB, linkable to catches. */
