@@ -15,6 +15,14 @@ export function Reglement() {
         <div className="topbar-title">Réglementation</div>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
+        {state.outOfZoneDept && (
+          <div className="ecr-warn" style={{ marginTop: 0, marginBottom: 12 }}>
+            Département détecté : n° {state.outOfZoneDept} — l'application ne couvre que la Creuse
+            (23), l'Indre (36) et le Loir-et-Cher (41). Tout ce qui suit est la réglementation du
+            département actif, {dept.name} : elle ne s'applique pas forcément là où vous êtes.
+            Consultez l'arrêté préfectoral de votre propre département.
+          </div>
+        )}
         <div className="label" style={{ margin: "8px 0 8px" }}>
           Socle national — tailles minimales
         </div>

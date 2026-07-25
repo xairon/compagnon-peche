@@ -116,6 +116,10 @@ export interface AppState {
   focusSpot: string | null; // spot id to fly to & open when the Carte mounts (from Carnet)
   catchSlot: string | null; // slot of the catch shown on the prise-detail screen
   bilanSession: string | null; // crayfish session whose bilan the Écrevisses screen shows (from Carnet, to correct a closed one)
+  // Département code (e.g. "37") detected by GPS when it falls OUTSIDE the app's
+  // covered zone (23/36/41) — null otherwise. Kept in the store (not local state)
+  // so the warning can also be shown wherever regulation is displayed (Reglement).
+  outOfZoneDept: string | null;
   hydrated: boolean;
   loadOk: boolean; // false if reading stored data failed — persistence is suspended
 }
@@ -153,6 +157,7 @@ const initialState: AppState = {
   focusSpot: null,
   catchSlot: null,
   bilanSession: null,
+  outOfZoneDept: null,
   hydrated: false,
   loadOk: true,
 };

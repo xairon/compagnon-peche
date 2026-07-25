@@ -128,13 +128,26 @@ export function Accueil() {
         // Auto-set the active department from the GPS position (supported: 23/36/41).
         deptFromCoords(lat, lon).then((d) => {
           if (!mounted.current) return;
-          if (d && d in DEPARTEMENTS && d !== state.dept) {
-            set({ dept: d as DeptId });
-            setGpsMsg(`Département : ${DEPARTEMENTS[d as DeptId].name}`);
-            setTimeout(() => {
-              if (mounted.current) setGpsMsg((m) => (m?.startsWith("Département") ? null : m));
-            }, 3500);
+          if (d && d in DEPARTEMENTS) {
+            // Back in (or already in) a covered department: clear any earlier
+            // out-of-zone warning, it no longer applies.
+            if (d !== state.dept) {
+              set({ dept: d as DeptId, outOfZoneDept: null });
+              setGpsMsg(`Département : ${DEPARTEMENTS[d as DeptId].name}`);
+              setTimeout(() => {
+                if (mounted.current) setGpsMsg((m) => (m?.startsWith("Département") ? null : m));
+              }, 3500);
+            } else {
+              set({ outOfZoneDept: null });
+            }
+          } else if (d) {
+            // Detected département isn't covered: keep the active department's
+            // regulation displayed (never guess), but remember the mismatch so a
+            // persistent banner (not a fleeting toast) can warn it doesn't apply.
+            set({ outOfZoneDept: d });
+            setGpsMsg(null);
           }
+          // d === null: reverse-geocoding failed — leave state as is, no claim either way.
         });
       })
       .catch((e) => {
@@ -158,6 +171,15 @@ export function Accueil() {
             {avatar ? <img src={avatar} alt="" /> : <span>🎣</span>}
           </button>
         </div>
+
+        {state.outOfZoneDept && (
+          <div className="ecr-warn" style={{ marginTop: 10 }}>
+            Département détecté : n° {state.outOfZoneDept} — l'application ne couvre que la Creuse
+            (23), l'Indre (36) et le Loir-et-Cher (41). La réglementation affichée reste celle du
+            département actif, {deptName} : elle ne s'applique pas forcément là où vous êtes.
+            Consultez l'arrêté préfectoral de votre propre département.
+          </div>
+        )}
 
         {/* Minimap hero */}
         <div className="dash-map">
