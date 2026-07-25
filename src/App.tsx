@@ -197,7 +197,9 @@ export function App() {
         </button>
       )}
 
-      {showCrayfishPill && <CrayfishBar raised={offline || !!persistMsg || quotaWarn} />}
+      {showCrayfishPill && (
+        <CrayfishBar raised={offline || !!persistMsg || quotaWarn || needRefresh} />
+      )}
 
       {showNav && <BottomNav />}
     </div>
