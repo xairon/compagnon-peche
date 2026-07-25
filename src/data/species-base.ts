@@ -1699,6 +1699,8 @@ export const BASE_SPECIES: Species[] = [
     "quota": "—",
     "quotaSub": "—",
     "season": "toujours",
+    "invasive": true,
+    "invasiveBasis": "règl. UE 1143/2014 · arrêté 14 fév. 2018",
     "depth": "base",
     "reg": {
       "rows": [
@@ -1712,7 +1714,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Aucun statut national particulier"
+          "Espèce exotique envahissante (règl. UE 1143/2014) : remise à l'eau vivante interdite"
         ],
         [
           "Période",
@@ -1742,7 +1744,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Exotique introduite (lutte anti-moustiques) ; non listée R432-5 au national — à vérifier localement."
+          "Introduite (lutte anti-moustiques) ; pas sur R432-5 mais espèce exotique envahissante (annexe II-4, règlement UE 1143/2014 · arrêté 14 fév. 2018)."
         ]
       ]
     }
