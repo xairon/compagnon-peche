@@ -1,5 +1,6 @@
 import type { Species } from "../types";
 import { BASE_SPECIES } from "./species-base";
+import { withFiche } from "./fiches";
 
 // Shared health messages. Wording is taken from the ANSES fact sheet
 // "Poissons, conseils de consommation" — not paraphrased into a stronger claim.
@@ -1374,7 +1375,9 @@ const CURATED: Species[] = [
 ];
 
 // Full national coverage = hand-curated fiches first, then generated "base" fiches.
-export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES];
+// Les fiches « base » reçoivent leur contenu descriptif ici (voir data/fiches) :
+// le fichier généré reste intact, et une régénération n'efface plus rien.
+export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES.map(withFiche)];
 
 // Dev guard: duplicate ids would cause React key collisions and ambiguous lookups.
 if (import.meta.env.DEV) {

@@ -119,6 +119,8 @@ export interface Species {
   bio?: {
     rows: [string, string][];
   };
+  /** Source of the hand-written descriptive sections (see data/fiches). */
+  ficheSrc?: string;
 }
 
 export interface Knot {
