@@ -1377,7 +1377,10 @@ const CURATED: Species[] = [
 // Full national coverage = hand-curated fiches first, then generated "base" fiches.
 // Les fiches « base » reçoivent leur contenu descriptif ici (voir data/fiches) :
 // le fichier généré reste intact, et une régénération n'efface plus rien.
-export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES.map(withFiche)];
+// withFiche s'applique AUSSI aux fiches rédigées à la main : la règle « pas de
+// technique de pêche sur une espèce protégée » ne souffre pas d'exception selon
+// l'origine de la fiche — la vandoise et l'anguille en portaient une.
+export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES].map(withFiche);
 
 // Dev guard: duplicate ids would cause React key collisions and ambiguous lookups.
 if (import.meta.env.DEV) {

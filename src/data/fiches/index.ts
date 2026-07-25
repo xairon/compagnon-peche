@@ -40,16 +40,31 @@ export const FICHES: Record<string, Fiche> = {
   ...CARNASSIERS_SALMONIDES,
 };
 
-/** Apply the overlay for a species, if any — descriptive sections only. */
+/** A species nobody may simply catch and keep: telling them how to fish it, or
+ *  how to cook it, is a contradiction whatever the rest of the fiche says. */
+function nePasPecher(sp: Species): boolean {
+  return !!sp.protected || sp.season === "special";
+}
+
+/**
+ * Apply the overlay for a species — descriptive sections only.
+ *
+ * It also REMOVES the fishing and cooking sections from protected species and
+ * from those under a special regime. Adding was not enough: the generator gives
+ * every base species a generic "Pêche" block, so the sturgeon kept one no matter
+ * how carefully a fiche avoided writing it. And a fiche written by hand can get
+ * it wrong too — the ide mélanote shipped with a technique and a recipe under
+ * its own red "espèce protégée" banner.
+ */
 export function withFiche(sp: Species): Species {
-  const f = FICHES[sp.id];
-  if (!f) return sp;
+  const f = FICHES[sp.id] ?? {};
   const enriched = !!(f.ident || f.fish || f.cook || f.bio);
+  const interdit = nePasPecher(sp);
   return {
     ...sp,
     ident: f.ident ?? sp.ident,
-    fish: f.fish ?? sp.fish,
-    cook: f.cook ?? sp.cook,
+    fish: interdit ? undefined : (f.fish ?? sp.fish),
+    cook: interdit ? undefined : (f.cook ?? sp.cook),
     bio: f.bio ?? sp.bio,
     ficheSrc: f.ficheSrc ?? sp.ficheSrc,
     // Once it carries real content it is no longer a bare "base" record, and the

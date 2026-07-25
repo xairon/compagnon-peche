@@ -12,7 +12,7 @@ import type { Fiche } from "./index";
 // naturel, MNHN) et FishBase, complétés par les fédérations de pêche pour les
 // techniques. Une espèce dont un trait n'est pas établi n'a pas ce trait.
 
-const SRC = "INPN (MNHN) · FishBase — biologie et répartition";
+const SRC = "INPN (MNHN) · FishBase — biologie et répartition ; techniques : fédérations de pêche";
 
 export const CYPRINIDES: Record<string, Fiche> = {
   "breme-bordeliere": {

@@ -13,7 +13,12 @@ import type { Fiche } from "./index";
 // biologie et la répartition, complétés par des sources halieutiques
 // (fédérations de pêche, Esoxiste, Pêche & Poissons) pour les techniques et la
 // cuisine. Une espèce dont un trait n'est pas établi n'a pas ce trait.
-const SRC = "INPN (MNHN) · FishBase · DORIS — biologie et répartition";
+// La source doit couvrir TOUT ce qu'elle signe. INPN, FishBase et DORIS portent
+// la biologie et la répartition, pas les grammages de leurres ni les longueurs
+// de canne : la partie technique vient de la presse halieutique et des
+// fédérations, et le dire évite d'attribuer à un institut une préconisation
+// qu'il n'a jamais écrite.
+const SRC = "INPN (MNHN) · FishBase · DORIS — biologie et répartition ; techniques : presse halieutique et fédérations de pêche";
 
 export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
   // --- Carnassiers ---------------------------------------------------------

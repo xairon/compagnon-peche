@@ -18,12 +18,22 @@ const ALIASES: Record<string, string[]> = {
   carpe: ["carpe miroir", "miroir", "carpe cuir", "cuir", "carpe royale", "royale", "koi", "koï", "carpe koï"],
   // Noms populaires et régionaux courants.
   gardon: ["gardèche", "rousse", "vengeron"],
-  chevesne: ["chevaine", "cabot", "meunier"],
+  chevesne: ["chevaine", "meunier"],
+  // « cabot » désigne le CHABOT selon l'INPN — espèce protégée. Il pointait vers
+  // le chevesne, sans maille et conservable : la recherche envoyait vers la
+  // fiche la plus permissive, l'erreur exacte que cette app traque. Il mène
+  // désormais au chabot ; « Mulet cabot » ressort aussi, par son nom, et c'est
+  // très bien : les deux existent, à l'utilisateur de reconnaître le sien.
+  "chabot-commun": ["cabot", "chabot"],
   brochet: ["bec de canard"],
   "perche-soleil": ["calicoba", "perche arc-en-ciel"],
   "poisson-chat": ["barbotte"],
   ablette: ["able"],
-  vandoise: ["dard", "seuffe"],
+  // « dard » et « seuffe » désignent aussi le toxostome et le blageon, tous
+  // deux protégés : l'issue reste « à relâcher » puisque la vandoise l'est
+  // aussi, mais la fiche servie serait la mauvaise. On garde le nom le moins
+  // ambigu.
+  vandoise: ["dard de rivière"],
   hotu: ["nase"],
   "truite-arc-en-ciel": ["arc en ciel"],
   silure: ["silure glane", "poisson-chat géant"],

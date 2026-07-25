@@ -25,6 +25,11 @@ import type { Fiche } from "./index";
 
 const SRC = "INPN (MNHN) · DORIS (FFESSM) · FishBase · OFB — biologie et identification";
 
+// Le statut légal n'est jamais écrit ici : il vient du générateur et des
+// modules de réglementation, et l'app l'affiche déjà en bandeau. Une fiche qui
+// le répète crée une seconde source pour une valeur de droit — l'une d'elles
+// était fausse (« capture et détention interdites » pour la lamproie de Planer,
+// quand l'arrêté cité ne protège que les œufs et les habitats).
 export const MIGRATEURS: Record<string, Fiche> = {
   // ---------------------------------------------------------------------
   // Aloses — protégées au titre de la Directive Habitats, pêche de l'adulte
@@ -100,7 +105,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         "Rangée de 4 à 8 taches sombres derrière l'opercule",
         "Dos bleu-vert métallique, flancs et ventre argentés",
         "Ventre caréné (scutelles)",
-        "Plus petite que la grande alose, absente du bassin méditerranéen",
+        "Plus petite que la grande alose, qui est elle absente du bassin méditerranéen",
       ],
       conf: [
         {
@@ -152,7 +157,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : mer côtière puis grands fleuves pour la reproduction"],
         ["Régime", "Parasite en mer (se fixe sur d'autres poissons) ; jeûne en rivière"],
         ["Reproduction", "Printemps, nid de galets creusé en eau courante"],
-        ["Statut", "Population en déclin ; pêche traditionnelle réglementée par bassin, souvent sous moratoire"],
+        ["Conservation", "Population en fort déclin sur les bassins français"],
       ],
     },
   },
@@ -188,7 +193,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : estuaires et côtes, remonte les fleuves pour frayer"],
         ["Régime", "Parasite en mer et en estuaire (se fixe sur d'autres poissons) ; jeûne en rivière"],
         ["Reproduction", "Hiver–printemps, nid de galets creusé en eau courante"],
-        ["Statut", "Population en déclin ; pêche réglementée par bassin, souvent sous moratoire ou quota"],
+        ["Conservation", "Population en déclin sur les bassins français"],
       ],
     },
   },
@@ -220,7 +225,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Petits cours d'eau à fond meuble (sable, limon) où la larve reste enfouie plusieurs années"],
         ["Régime", "Larve filtreuse (détritus, micro-organismes) ; adulte non parasite, ne s'alimente plus"],
         ["Reproduction", "Mars–avril, sur substrat minéral, puis mort peu après la fraie"],
-        ["Statut", "Espèce protégée (arrêté du 8 décembre 1988 + Directive Habitats) — capture et détention interdites"],
+        ["Conservation", "Inscrite à la Directive Habitats ; populations fragmentées"],
       ],
     },
   },
@@ -253,7 +258,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : estuaire de la Gironde et bassin Gironde-Garonne-Dordogne, seule population sauvage française"],
         ["Longévité", "Peut dépasser 100 ans, croissance très lente"],
         ["Reproduction", "Dernière reproduction naturelle constatée en 1994 ; programme de réintroduction en cours depuis 2007"],
-        ["Statut", "En danger critique d'extinction (UICN) — protection totale depuis 1982, capture et détention interdites"],
+        ["Conservation", "En danger critique d'extinction (UICN) — une seule population relictuelle en France"],
       ],
     },
   },

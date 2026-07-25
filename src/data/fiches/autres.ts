@@ -20,8 +20,13 @@ import type { Fiche } from "./index";
 // Source : INPN (MNHN) et DORIS (FFESSM) pour l'identification, la biologie et
 // la répartition, complétés par FishBase et des sources halieutiques pour les
 // quelques espèces pêchées ou consommées.
-const SRC = "INPN (MNHN) · DORIS (FFESSM) — biologie et répartition";
+const SRC = "INPN (MNHN) · DORIS (FFESSM) — biologie et répartition ; techniques : fédérations de pêche";
 
+// Le statut légal n'est jamais écrit ici : il vient du générateur et des
+// modules de réglementation, et l'app l'affiche déjà en bandeau. Une fiche qui
+// le répète crée une seconde source pour une valeur de droit — l'une d'elles
+// était fausse (« capture et détention interdites » pour la lamproie de Planer,
+// quand l'arrêté cité ne protège que les œufs et les habitats).
 export const AUTRES: Record<string, Fiche> = {
   // --- Espèces protégées : ident + bio uniquement ---------------------------
 
@@ -151,7 +156,7 @@ export const AUTRES: Record<string, Fiche> = {
       conf: [
         {
           n: "Chabot commun",
-          how: "Les deux espèces sont quasi indissociables à l'œil ; le critère le plus fiable reste le bassin versant. Le chabot fluviatile n'est aujourd'hui connu que dans une poignée de départements du centre et du centre-sud-ouest, quand le chabot commun occupe un territoire bien plus large jusqu'à l'axe Rhin-Rhône.",
+          how: "Les deux espèces sont quasi indissociables à l'œil ; le critère le plus fiable reste le bassin versant. Le chabot fluviatile occupe les bassins atlantiques, de la Garonne à l'Escaut (Loire, Seine, Somme) ; le chabot commun domine à l'est, sur l'axe Rhin-Rhône.",
         },
       ],
     },
@@ -347,7 +352,7 @@ export const AUTRES: Record<string, Fiche> = {
       conf: [
         {
           n: "Able de Heckel",
-          how: "L'able de Heckel a une ligne latérale interrompue et une bouche nettement tournée vers le haut ; le vairon a une ligne latérale complète et un corps plus trapu, tacheté.",
+          how: "Les deux ont une ligne latérale incomplète — ce critère ne les sépare pas. Le vairon est trapu, brun-vert marbré de sombre, avec une bouche terminale ; l'able de Heckel est mince, argenté et translucide, bouche nettement tournée vers le haut.",
         },
       ],
     },
@@ -542,7 +547,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Grands cours d'eau frais et bien oxygénés, lacs profonds, surtout à l'est et au nord-est"],
         ["Comportement", "Benthique et solitaire, strictement crépusculaire à nocturne"],
-        ["Statut", "En régression ; protégée par arrêté préfectoral dans plusieurs départements — vérifier localement"],
+        ["Conservation", "En régression marquée sur une grande partie de son aire française"],
       ],
     },
   },
