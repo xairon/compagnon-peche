@@ -1,5 +1,8 @@
 import type { Species } from "../../types";
 import { CYPRINIDES } from "./cyprinides";
+import { MIGRATEURS } from "./migrateurs";
+import { AUTRES } from "./autres";
+import { CARNASSIERS_SALMONIDES } from "./carnassiers-salmonides";
 
 /**
  * Enrichment overlays for the auto-generated "base" species.
@@ -32,6 +35,9 @@ export interface Fiche {
 /** Every overlay, keyed by species id. */
 export const FICHES: Record<string, Fiche> = {
   ...CYPRINIDES,
+  ...MIGRATEURS,
+  ...AUTRES,
+  ...CARNASSIERS_SALMONIDES,
 };
 
 /** Apply the overlay for a species, if any — descriptive sections only. */

@@ -342,6 +342,9 @@ export function Fiche() {
               <span className="v">{v}</span>
             </div>
           ))}
+          {/* Cette app source ce qu'elle affirme ; une fiche rédigée à la main
+              ne fait pas exception. */}
+          {sp.ficheSrc && <div className="fiche-src">Source : {sp.ficheSrc}</div>}
         </>
       ),
     });
