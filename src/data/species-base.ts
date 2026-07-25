@@ -79,7 +79,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
@@ -143,7 +143,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
@@ -1952,7 +1952,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
@@ -2202,7 +2202,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
@@ -2266,7 +2266,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
@@ -2942,7 +2942,7 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "réglementation spéciale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
     "alert": {
       "title": "Migrateur réglementé",
