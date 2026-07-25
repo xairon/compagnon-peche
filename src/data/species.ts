@@ -173,6 +173,8 @@ const CURATED: Species[] = [
     quota: "—",
     quotaSub: "pas de quota national",
     season: "toujours",
+    invasive: true,
+    invasiveBasis: "R432-5 (bassins Adour-Garonne et Loire-Bretagne) · décret n° 2026-464 du 8 juin 2026",
     alert: {
       title: "Consommation limitée",
       text: "Bioaccumulateur : ANSES 2×/mois max (publics sensibles : 1×/2 mois).",
@@ -197,11 +199,15 @@ const CURATED: Species[] = [
       rows: [
         ["Maille", "Pas de taille légale nationale — voir arrêté local"],
         ["Quota", "Aucun quota national"],
+        [
+          "Statut (23 · 36 · 41)",
+          "Susceptible de provoquer des déséquilibres biologiques dans le bassin Loire-Bretagne — remise à l'eau vivante interdite (R432-5)",
+        ],
         ["Période", "2ᵉ cat. : ouverte toute l'année"],
         ["Horaires", "½ h avant lever → ½ h après coucher"],
       ],
-      note: null,
-      src: "Legifrance R436-18 · F2117",
+      note: "Décret n° 2026-464 du 8 juin 2026 : le silure entre à l'art. R432-5 uniquement dans les bassins Adour-Garonne et Loire-Bretagne (pas sur tout le territoire). La Creuse, l'Indre et le Loir-et-Cher sont dans le bassin Loire-Bretagne, donc concernés.",
+      src: "Legifrance R436-18 · R432-5 · décret n° 2026-464 du 8 juin 2026 (JORFTEXT000054223579)",
     },
     fish: {
       rows: [
