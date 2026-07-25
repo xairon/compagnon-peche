@@ -11,6 +11,7 @@ import {
   type TempReading,
   type Trend,
 } from "../lib/hubeau";
+import { assessCrue, crueLabel } from "../lib/crue";
 import { fetchMeteo, weatherLabel, type Meteo } from "../lib/meteo";
 import { sunTimes, moonIllumination, moonTimes, moonPhaseName, solunar } from "../lib/astro";
 import { fetchObstacles, obstacleInfo } from "../lib/sandre";
@@ -98,6 +99,14 @@ export function Briefing({
   const onde = useFetch(`onde:${key}`, (s) => nearestOnde(lat, lon, s), [key]);
   const quality = useFetch(`quality:${key}`, (s) => nearestQuality(lat, lon, s), [key]);
 
+  // ---- Flood-rise heuristic (see lib/crue.ts) — derived from the SAME hydro
+  // readings above, recomputed whenever they're refreshed. No banner at all
+  // when nothing is happening: staying quiet at "aucune" IS the discreet state.
+  const crue = useMemo(
+    () => (water.data ? assessCrue(water.data.h, water.data.q, Date.now()) : null),
+    [water.data],
+  );
+
   // ---- Weather ----
   const meteo = useFetch<Meteo>(`meteo:${key}`, (s) => fetchMeteo(lat, lon, s), [key]);
 
@@ -162,6 +171,24 @@ export function Briefing({
           <button className="official-jump" onClick={onOfficial}>
             🗺️ Parcours & réserves ici — carte officielle
           </button>
+        )}
+
+        {/* FLOOD-RISE HEURISTIC — quiet when nothing's happening, unmissable
+            otherwise. Not the official Vigicrues vigilance: an indice derived
+            from the same Hub'Eau readings shown below (see lib/crue.ts). */}
+        {crue && crue.level !== "aucune" && (
+          <>
+            <div className={"verdict-banner " + crueLabel(crue.level).tone}>
+              <span className="vb-word">⚠️ {crueLabel(crue.level).title}</span>
+            </div>
+            <div className="brief-note" style={{ marginTop: -8, marginBottom: 14 }}>
+              {crue.reasons.join(" · ")} — indice calculé à partir des relevés Hub'Eau ci-dessous, ce
+              n'est pas la vigilance officielle.{" "}
+              <a href="https://www.vigicrues.gouv.fr/" target="_blank" rel="noopener noreferrer">
+                Voir Vigicrues →
+              </a>
+            </div>
+          </>
         )}
 
         {/* WATER — level/flow (hydro station) + temperature (independent, sparse) */}
