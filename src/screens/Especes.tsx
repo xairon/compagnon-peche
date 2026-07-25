@@ -43,11 +43,15 @@ const GROUPS: [string, string][] = [
   ["autres", "Autres"],
 ];
 
-function flag(sp: Species): { label: string; amber: boolean } | null {
-  if (sp.protected) return { label: "Protégée", amber: false };
-  if (sp.invasive) return { label: "Invasive", amber: false };
-  if (sp.sante?.alert) return { label: "ANSES", amber: true };
-  return null;
+// Deux badges au plus : le statut légal ET l'alerte sanitaire, qui ne se
+// remplacent pas. Le silure, le plus bioaccumulateur du catalogue, n'affichait
+// jamais « ANSES » parce que son badge « Invasive » sortait en premier.
+function flags(sp: Species): { label: string; amber: boolean }[] {
+  const out: { label: string; amber: boolean }[] = [];
+  if (sp.protected) out.push({ label: "Protégée", amber: false });
+  else if (sp.invasive) out.push({ label: "Invasive", amber: false });
+  if (sp.sante?.alert) out.push({ label: "ANSES", amber: true });
+  return out;
 }
 
 export function Especes() {
@@ -158,7 +162,7 @@ export function Especes() {
 
       <div className="grid2" style={{ padding: "16px 18px 24px" }}>
         {list.map((sp) => {
-          const fl = flag(sp);
+          const fl = flags(sp);
           return (
             <button
               key={sp.id}
@@ -169,7 +173,15 @@ export function Especes() {
             >
               <div className="thumb">
                 <Media kind="species" id={sp.id} placeholder={`Photo ${sp.name}`} />
-                {fl && <span className={"flag" + (fl.amber ? " amber" : "")}>{fl.label}</span>}
+                {fl.length > 0 && (
+                  <div className="flags">
+                    {fl.map((f) => (
+                      <span key={f.label} className={"flag" + (f.amber ? " amber" : "")}>
+                        {f.label}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="sp-name">
                 <span

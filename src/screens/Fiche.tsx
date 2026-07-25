@@ -268,7 +268,10 @@ export function Fiche() {
       sub: recipes.length ? `${recipes.length} recette(s) sourcée(s)` : "Préparation & conseils",
       render: () => (
         <>
-          {sp.protected && (
+          {/* `protected` seul laissait passer les migrateurs sous moratoire :
+              depuis qu'aloses et lamproies sont en régime spécial plutôt que
+              protégées, leur fiche cuisine ne portait plus aucun avertissement. */}
+          {(sp.protected || sp.season === "special") && (
             <div className="cook-warn">
               Espèce protégée : à relâcher, ne pas conserver. Les préparations ci-dessous ont un
               intérêt patrimonial/historique et ne valent que là où l'espèce est légalement pêchable

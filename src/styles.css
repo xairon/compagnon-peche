@@ -299,10 +299,19 @@ a:hover {
 .thumb.wide {
   aspect-ratio: 16 / 9;
 }
-.thumb .flag {
+/* Statut légal ET alerte sanitaire peuvent coexister : on les empile plutôt
+   que de les superposer au même point. */
+.thumb .flags {
   position: absolute;
   top: 8px;
   left: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  pointer-events: none;
+}
+.thumb .flag {
   background: rgba(179, 58, 46, 0.95);
   color: #fff;
   font-size: 10px;
