@@ -7,8 +7,10 @@ import {
   importData,
   wipeAll,
   fmtBytes,
+  getLastExportAt,
   type StorageInfo,
 } from "../lib/storage";
+import { isQuotaNearlyFull, shouldSuggestBackup } from "../lib/backup-reminder";
 
 export function Stockage() {
   const { state, back } = useStore();
@@ -72,6 +74,25 @@ export function Stockage() {
   };
 
   const pct = info && info.quota ? Math.min(100, (info.usage / info.quota) * 100) : 0;
+  const quotaWarn = info ? isQuotaNearlyFull(info.usage, info.quota) : false;
+
+  // "now" is a snapshot taken once (not on every render — Date.now() isn't
+  // called directly in the render body): the reminder threshold is measured
+  // in days, a session-long drift of a few minutes changes nothing. The last
+  // export time IS read fresh each render, so the reminder clears itself
+  // right after a successful export (doExport → setExported → re-render).
+  const [nowMs] = useState(() => Date.now());
+  const oldestDataAtMs = (() => {
+    const stamps = [...state.catches.map((c) => c.iso), ...state.spots.map((sp) => sp.created)]
+      .map((d) => new Date(d + "T00:00:00").getTime())
+      .filter((t) => Number.isFinite(t));
+    return stamps.length ? Math.min(...stamps) : null;
+  })();
+  const backupOverdue = shouldSuggestBackup({
+    lastExportAtMs: getLastExportAt(),
+    oldestDataAtMs,
+    now: nowMs,
+  });
 
   return (
     <div className="screen">
@@ -118,6 +139,21 @@ export function Stockage() {
           )}
         </div>
 
+        {/* Proactive quota warning — before a write ever fails */}
+        {quotaWarn && (
+          <div className="stg-card warn">
+            <div className="stg-h">⚠️ Stockage presque saturé</div>
+            <div className="stg-p">
+              Vous approchez de la limite d'espace de ce navigateur ({Math.round(pct)} %). Au-delà,
+              les nouvelles photos (les plus grosses données stockées) risquent de ne plus
+              s'enregistrer. Exportez une sauvegarde maintenant, puis libérez de la place si besoin.
+            </div>
+            <button className="stg-btn dark" onClick={doExport}>
+              {exported ? "✓ Sauvegarde téléchargée" : "⤓ Exporter maintenant"}
+            </button>
+          </div>
+        )}
+
         {/* Counts */}
         <div className="stg-counts">
           <div className="stg-count">
@@ -133,6 +169,20 @@ export function Stockage() {
             <div className="l">Photos</div>
           </div>
         </div>
+
+        {/* Backup reminder — this card only appears once the delay AND real
+            data have both been met (see shouldSuggestBackup); otherwise the
+            plain note at the bottom of the screen is enough. */}
+        {backupOverdue && (
+          <div className="stg-card warn">
+            <div className="stg-h">💾 Pensez à sauvegarder</div>
+            <div className="stg-p">
+              Votre carnet contient des données non sauvegardées depuis un moment. Tout est stocké
+              uniquement sur cet appareil — un téléphone perdu ou un cache vidé les efface
+              définitivement. Une minute suffit pour exporter une copie.
+            </div>
+          </div>
+        )}
 
         {/* Export */}
         <button className="stg-btn" onClick={doExport}>

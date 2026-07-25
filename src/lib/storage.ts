@@ -3,6 +3,7 @@
 
 import { get, set, keys, clear } from "idb-keyval";
 import type { Profile } from "../types";
+import { isQuotaNearlyFull } from "./backup-reminder";
 
 // ── Persistence-failure notifier ───────────────────────────────────────────
 // Writes to IndexedDB can fail silently (quota exceeded, private mode, storage
@@ -55,6 +56,34 @@ export function onPersistError(l: PersistListener): () => void {
   return () => persistListeners.delete(l);
 }
 
+// ── Proactive quota warning ─────────────────────────────────────────────
+// Distinct from persistError above: that one reports a write that ALREADY
+// failed. This one fires ahead of any failure, as soon as usage crosses a
+// high ratio of the quota (isQuotaNearlyFull, in lib/backup-reminder.ts —
+// pure so the threshold itself is unit-tested), so the user has a chance to
+// export or free space before the next write — most likely a photo, the
+// biggest single object this app stores — gets refused.
+type QuotaListener = (warn: boolean) => void;
+let quotaWarning = false;
+const quotaListeners = new Set<QuotaListener>();
+
+/** Feed a usage/quota reading into the shared quota-warning state. There's no
+ *  background polling — this is driven by whatever already calls
+ *  storageInfo() (see below), so the warning stays current without a timer. */
+function reportQuotaWarning(usage: number, quota: number): void {
+  const warn = isQuotaNearlyFull(usage, quota);
+  if (warn === quotaWarning) return;
+  quotaWarning = warn;
+  quotaListeners.forEach((l) => l(warn));
+}
+
+/** Subscribe to the quota-warning state; fires immediately with the current value. */
+export function onQuotaWarning(l: QuotaListener): () => void {
+  quotaListeners.add(l);
+  l(quotaWarning);
+  return () => quotaListeners.delete(l);
+}
+
 /** Ask the browser to make storage persistent (won't be auto-evicted under pressure). */
 export async function requestPersist(): Promise<boolean> {
   try {
@@ -102,7 +131,36 @@ export async function storageInfo(): Promise<StorageInfo> {
   } catch {
     /* ignore */
   }
+  // Every reader of storageInfo() (Stockage on mount, a photo save elsewhere)
+  // doubles as a check-in for the proactive quota warning — see onQuotaWarning.
+  reportQuotaWarning(usage, quota);
   return { usage, quota, photos, persisted: await isPersisted() };
+}
+
+// ── Backup reminder ─────────────────────────────────────────────────────
+// Just the persistence side (a localStorage timestamp); the "should we
+// actually nudge" decision is pure logic in lib/backup-reminder.ts.
+const LAST_EXPORT_KEY = "backup:lastExportAt";
+
+/** Epoch ms of the last successful export, or null if never exported (or if
+ *  localStorage is unavailable — private browsing, old WebView, …). */
+export function getLastExportAt(): number | null {
+  try {
+    const raw = localStorage.getItem(LAST_EXPORT_KEY);
+    if (!raw) return null;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+function setLastExportAt(ms: number): void {
+  try {
+    localStorage.setItem(LAST_EXPORT_KEY, String(ms));
+  } catch {
+    /* best-effort — worst case the reminder just doesn't clear itself */
+  }
 }
 
 function blobToDataUrl(blob: Blob): Promise<string> {
@@ -179,6 +237,11 @@ export async function exportData(): Promise<void> {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+  // Best available signal of "the user has a backup": we can't know whether
+  // they actually kept the downloaded file, but a completed export resets
+  // the reminder clock — that's the same tradeoff a "last saved" timestamp
+  // always makes.
+  setLastExportAt(Date.now());
 }
 
 export interface ImportResult {
