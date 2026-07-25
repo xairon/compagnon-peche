@@ -5374,13 +5374,29 @@ button.card-row {
 /* Undo toast for a removed balance — same visual language as .update-toast,
    but scoped to the screen (absolute against .app-frame, like .ecr-sheet)
    rather than fixed to the viewport: it answers one action on this screen,
-   not an app-wide event. */
+   not an app-wide event.
+
+   z-index sits ABOVE .persist-warn (2100) and .update-toast (2200), rendered
+   app-wide by App.tsx regardless of screen — including during a session, and
+   precisely when storage is full is when a balance is most likely to be
+   removed. This is the only safety net for that delete: the Annuler button
+   must stay tappable even while those banners show.
+
+   Chose raising the z-index over mirroring .cf-pill.raised's self-relocation:
+   that pattern works because CrayfishBar is rendered by App.tsx, which already
+   holds the persistMsg/quotaWarn/needRefresh state driving `raised`. This
+   toast is rendered deep in the Ecrevisses screen, with no access to that
+   App-level state short of threading it down through props (or promoting it
+   into the global store) for a toast that lives 5 seconds. Sitting on top for
+   its short life is the simpler, equally correct fix — it doesn't reposition
+   the banners, it just wins the overlap while it's up, then gets out of the
+   way on its own. */
 .ecr-undo-toast {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   bottom: calc(88px + env(safe-area-inset-bottom, 0px));
-  z-index: 65;
+  z-index: 2300;
   display: flex;
   align-items: center;
   gap: 12px;
