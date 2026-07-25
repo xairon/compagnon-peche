@@ -2944,7 +2944,10 @@ export const BASE_SPECIES: Species[] = [
     "quotaSub": "—",
     "season": "cat1",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Migrateur réglementé",
+      "text": "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée."
+    },
     "reg": {
       "rows": [
         [
@@ -2957,7 +2960,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
         ],
         [
           "Période",
@@ -2965,17 +2968,17 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · statut migrateur (voir remarque)"
     },
     "fish": {
       "rows": [
         [
-          "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
         ],
         [
-          "Bon geste",
-          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
         ]
       ]
     },
@@ -2987,7 +2990,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Migrateur amphihalin ; réglementation spéciale (TAC, carnet, timbre migrateur), pêche fermée sur de nombreux bassins."
+          "Migrateur amphihalin ; l'arrêté du 8 déc. 1988 ne protège que les œufs et les frayères (art. 1er) — la pêche de l'adulte reste légale, encadrée par TAC/carnet/timbre migrateur, rivière classée par rivière. En 2026, fermée sur la plupart des bassins (Bretagne, Adour/Gaves, Seine-Normandie) faute de géniteurs : vérifiez l'arrêté COGEPOMI de votre bassin avant de conserver une capture."
         ]
       ]
     }
