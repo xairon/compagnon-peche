@@ -1382,6 +1382,12 @@ const CURATED: Species[] = [
 // l'origine de la fiche — la vandoise et l'anguille en portaient une.
 export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES].map(withFiche);
 
+/** Ids of the hand-curated species — the ones the app treats as its headline
+ *  catalogue. Screens used to infer this from `depth !== "base"`, which stopped
+ *  meaning anything once base fiches gained real content: the home carousel
+ *  would have started suggesting a goldfish as "what's biting". */
+export const CURATED_IDS: ReadonlySet<string> = new Set(CURATED.map((s) => s.id));
+
 // Dev guard: duplicate ids would cause React key collisions and ambiguous lookups.
 if (import.meta.env.DEV) {
   const ids = SPECIES.map((s) => s.id);

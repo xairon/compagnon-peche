@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store";
-import { SPECIES } from "../data/species";
+import { SPECIES, CURATED_IDS } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
@@ -130,7 +130,10 @@ export function Accueil() {
   }, []);
 
   const openSpecies = useMemo(
-    () => SPECIES.filter((s) => s.depth !== "base" && isPlainlyOpen(s)).slice(0, 10),
+    // Le carrousel montre le catalogue vedette, pas tout ce qui a une fiche : il
+    // filtrait sur `depth !== "base"`, ce qui ne veut plus rien dire depuis que les
+    // fiches « base » ont du contenu — un poisson rouge aurait fini par y remonter.
+    () => SPECIES.filter((s) => CURATED_IDS.has(s.id) && isPlainlyOpen(s)).slice(0, 10),
     [],
   );
 
