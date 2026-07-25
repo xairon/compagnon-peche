@@ -8,6 +8,7 @@ import { askNotifyPermission, notifyPermission } from "../lib/notify";
 import {
   DEFAULT_INTERVAL_MIN,
   MAX_BALANCES,
+  balanceState,
   createSession,
   currentSession,
   isStaleSession,
@@ -281,6 +282,19 @@ function SessionEnCours({
   const perm = notifyPermission();
   const opt = options ? session.balances.find((b) => b.id === options) : null;
 
+  // What a screen reader should hear when this ticks: not the seconds (that
+  // would read out a new number every second), the actionable summary — how
+  // many are overdue, or which one is coming up next. Its TEXT only changes
+  // on a real state transition, so React only touches the live region (and a
+  // screen reader only announces) when there is something to say.
+  const dueCount = session.balances.filter((b) => balanceState(b, now) === "echue").length;
+  const announce =
+    dueCount > 0
+      ? `${dueCount} balance${dueCount > 1 ? "s" : ""} à relever`
+      : next
+        ? `Balance ${next.balance.n} est la prochaine à relever`
+        : "Aucune balance en trempe";
+
   return (
     <div className="screen">
       <div className="topbar">
@@ -311,6 +325,10 @@ function SessionEnCours({
           ) : (
             <>Aucune balance en trempe</>
           )}
+        </div>
+        {/* Same information, worded for a screen reader — see `announce` above. */}
+        <div className="sr-only" aria-live="polite">
+          {announce}
         </div>
 
         {perm !== "granted" && (

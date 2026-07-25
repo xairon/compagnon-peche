@@ -110,6 +110,20 @@ a:hover {
   padding: 22px 18px 26px;
 }
 
+/* Screen-reader-only: keeps a live-region announcement out of sighted layout
+   while still being read out on change (standard clip technique). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Typography helpers */
 .h1 {
   font-family: "Source Serif 4", Georgia, serif;
