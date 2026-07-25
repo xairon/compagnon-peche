@@ -10,5 +10,12 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     setupFiles: ["./src/test-setup.ts"],
+    // Only the real sources. Agent worktrees under .claude/ are full copies of
+    // the repo: without this, vitest ran every suite twice, the count drifted
+    // between runs (372 then 374, unexplained for a while), and the extra load
+    // pushed slower tests past their timeout — failures that looked like
+    // regressions but were pure contention.
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["**/node_modules/**", "**/dist/**", ".claude/**", "coverage/**"],
   },
 });
