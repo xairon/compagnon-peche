@@ -5361,8 +5361,10 @@ button.card-row {
   flex: none;
 }
 .ecr-step button {
-  width: 40px;
-  height: 40px;
+  /* 44px: the most-tapped buttons in a session (counting crayfish one by one,
+     wet hands) get the app-wide minimum tap target, not the old 40px. */
+  width: 44px;
+  height: 44px;
   border-radius: 11px;
   border: 1.5px solid var(--line-strong);
   background: var(--sand);
