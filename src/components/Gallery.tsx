@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { SPECIES_MEDIA } from "../data/media";
-import { thumbOf } from "./Media";
+import { thumbOf } from "../lib/thumbs";
 
 /**
  * Species photo gallery: shows all locally-embedded photos for `id` (adult,

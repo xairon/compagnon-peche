@@ -1,3 +1,4 @@
+import { thumbOf } from "../lib/thumbs";
 import { useState } from "react";
 import { SPECIES_MEDIA, KNOT_MEDIA, RECIPE_MEDIA, TECHNIQUE_MEDIA } from "../data/media";
 import { LOCAL_KNOT_MEDIA } from "../data/knot-diagrams";
@@ -44,11 +45,6 @@ interface MediaProps {
   id: string;
   placeholder: string;
   dark?: boolean;
-}
-
-/** Thumbnail counterpart of a species photo (see scripts/thumbs.mjs). */
-export function thumbOf(file: string): string {
-  return file.replace("assets/species/", "assets/species-sm/");
 }
 
 const MEDIA_BY_KIND = {
