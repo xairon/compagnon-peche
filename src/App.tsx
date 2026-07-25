@@ -27,7 +27,7 @@ import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
 import { useCrayfishAlerts } from "./lib/crayfish-alerts";
-import { requestPersist, onPersistError } from "./lib/storage";
+import { requestPersist, onPersistError, onQuotaWarning } from "./lib/storage";
 
 // Heavier / non-startup screens are code-split (Carte pulls in MapLibre GL).
 const Carte = lazy(() => import("./screens/Carte").then((m) => ({ default: m.Carte })));
@@ -62,6 +62,11 @@ export function App() {
   // Surface silent IndexedDB write failures (quota, private mode) so a catch is
   // never implied "saved ✓" when it wasn't persisted.
   useEffect(() => onPersistError(setPersistMsg), []);
+
+  // The same warning, but BEFORE the failure: storage nearly full is worth saying
+  // everywhere, not only on the Stockage screen nobody visits until it's too late.
+  const [quotaWarn, setQuotaWarn] = useState(false);
+  useEffect(() => onQuotaWarning(setQuotaWarn), []);
 
   useEffect(() => {
     const on = () => setOffline(false);
@@ -154,6 +159,14 @@ export function App() {
         </div>
       )}
 
+      {/* A write that already failed outranks a warning about the next one. */}
+      {!persistMsg && quotaWarn && (
+        <div className="persist-warn" role="status">
+          <span>Stockage bientôt plein — sauvegardez vos données pour ne rien perdre.</span>
+          <button onClick={() => set({ screen: "stockage" })}>Gérer</button>
+        </div>
+      )}
+
       {needRefresh && (
         <div className="update-toast">
           <span>Nouvelle version disponible</span>
@@ -174,7 +187,7 @@ export function App() {
         </button>
       )}
 
-      {showCrayfishPill && <CrayfishBar raised={offline || !!persistMsg} />}
+      {showCrayfishPill && <CrayfishBar raised={offline || !!persistMsg || quotaWarn} />}
 
       {showNav && <BottomNav />}
     </div>
