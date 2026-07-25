@@ -7,6 +7,26 @@ import { norm, ratingFg } from "../lib/helpers";
 import { season } from "../lib/season";
 import type { Species } from "../types";
 
+// Web Speech API: still absent from TypeScript's DOM lib, and prefixed on WebKit.
+// Only the members the voice search actually touches are declared.
+interface SpeechRecognitionLike {
+  lang: string;
+  start: () => void;
+  onresult: ((e: { results: { [i: number]: { [j: number]: { transcript: string } } } }) => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+}
+type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
+
+function speechCtor(): SpeechRecognitionCtor | undefined {
+  if (typeof window === "undefined") return undefined;
+  const w = window as unknown as {
+    SpeechRecognition?: SpeechRecognitionCtor;
+    webkitSpeechRecognition?: SpeechRecognitionCtor;
+  };
+  return w.SpeechRecognition || w.webkitSpeechRecognition;
+}
+
 function statusPill(sp: Species): { label: string; cls: string } {
   if (sp.protected || sp.invasive) return { label: "À relâcher", cls: "bad" };
   if (!season(sp).open) return { label: "● Fermée", cls: "bad" };
@@ -39,18 +59,16 @@ export function Especes() {
       (!nq || norm(sp.name).includes(nq) || norm(sp.latin).includes(nq)),
   );
 
-  const micAvail =
-    typeof window !== "undefined" &&
-    !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+  const micAvail = !!speechCtor();
 
   function startVoice() {
     try {
-      const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SR = speechCtor();
       if (!SR) return;
       const r = new SR();
       r.lang = "fr-FR";
       set({ listening: true });
-      r.onresult = (e: any) => set({ q: e.results[0][0].transcript, listening: false });
+      r.onresult = (e) => set({ q: e.results[0][0].transcript, listening: false });
       r.onend = () => set({ listening: false });
       r.onerror = () => set({ listening: false });
       r.start();
