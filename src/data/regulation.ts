@@ -234,6 +234,18 @@ export function localMaille(dept: DeptId, spId: string): { text: string; cm: num
   return cm === null ? null : { text, cm };
 }
 
+/** The daily quota the préfectoral arrêté sets for a species in a department, or
+ *  null when it sets none (→ the national quota applies). Mirrors localMaille:
+ *  same species groupings already used by localRegRows for the "Quota
+ *  salmonidés" / "Quota carnassiers" département rows, so this can never
+ *  disagree with what the fiche espèce already shows. */
+export function localQuota(dept: DeptId, spId: string): string | null {
+  const d = DEPT_REG[dept];
+  if (SALMONIDES_CAT1.has(spId)) return d.salmonideQuota;
+  if (BROCHETS.has(spId) || spId === "sandre" || BLACKBASS.has(spId)) return d.carnassierQuota;
+  return null;
+}
+
 export const SOURCES: SourceEntry[] = [
   {
     t: "Legifrance — Code de l'environnement",
