@@ -93,7 +93,7 @@ const CURATED: Species[] = [
     rating: "Excellent",
     ratingCls: "good",
     maille: "50 cm",
-    mailleSub: "nat. — 41 : à vérifier",
+    mailleSub: "national — souvent relevé localement",
     quota: "2 / jour",
     quotaSub: "max. dans les 3 carnassiers",
     season: "brochet",
@@ -117,8 +117,8 @@ const CURATED: Species[] = [
       rows: [
         ["Maille", "50 cm (national, R436-18)"],
         [
-          "Maille 41",
-          "Arrêté préfectoral 2026 : à vérifier — certains départements relèvent à 60 cm",
+          "Maille départementale",
+          "Relevée à 60 cm par arrêté préfectoral dans plusieurs départements (ex. Creuse, Indre, Loir-et-Cher) — vérifiez celui de votre département",
         ],
         ["Quota", "2 brochets max/jour (dans les 3 carnassiers)"],
         [
@@ -126,7 +126,7 @@ const CURATED: Species[] = [
           "Fermé sauf : 1ᵉʳ janv. → dernier dim. de janv., puis dernier sam. d'avril → 31 déc.",
         ],
       ],
-      note: "Valeur départementale non vérifiée : faites foi à l'arrêté 41 en vigueur (peche41.fr).",
+      note: "Le socle national fixe 50 cm ; de nombreux arrêtés préfectoraux la relèvent à 60 cm (voir la réglementation locale ci-dessus pour votre département). Vérifiez l'arrêté en vigueur avant de conserver un poisson.",
       src: "Legifrance R436-18 · R436-21 · F2117",
     },
     fish: {
