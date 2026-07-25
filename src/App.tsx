@@ -27,7 +27,7 @@ import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
 import { useCrayfishAlerts } from "./lib/crayfish-alerts";
-import { requestPersist, onPersistError, onQuotaWarning } from "./lib/storage";
+import { requestPersist, onPersistError, onQuotaWarning, storageInfo } from "./lib/storage";
 
 // Heavier / non-startup screens are code-split (Carte pulls in MapLibre GL).
 const Carte = lazy(() => import("./screens/Carte").then((m) => ({ default: m.Carte })));
@@ -67,6 +67,16 @@ export function App() {
   // everywhere, not only on the Stockage screen nobody visits until it's too late.
   const [quotaWarn, setQuotaWarn] = useState(false);
   useEffect(() => onQuotaWarning(setQuotaWarn), []);
+
+  // onQuotaWarning only ever fires from a storageInfo() read, and until now
+  // the only callers were the Stockage screen (on mount) and CatchEditor
+  // (after a photo write) — so on a phone that's already saturated, reopening
+  // the app stayed silent until the user happened to visit Stockage. Prime the
+  // reading once at startup. The Storage API can be absent (older WebView):
+  // fail silently, same as requestPersist below.
+  useEffect(() => {
+    storageInfo().catch(() => {});
+  }, []);
 
   useEffect(() => {
     const on = () => setOffline(false);
