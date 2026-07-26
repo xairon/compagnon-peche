@@ -25,10 +25,21 @@ export interface Statut {
  * `invasive` reads "ne pas relâcher" and NOT "à relâcher": R432-5 forbids
  * putting those species back alive, so telling the angler to release one is the
  * exact opposite of the rule.
+ *
+ * Exception, and it has to stay narrow: the ponto-caspian gobies are `invasive`
+ * under art. L432-10, not R432-5 — and L432-10 forbids INTRODUCING the species
+ * elsewhere, not releasing it back where it was caught (already established
+ * there). "Ne pas relâcher" would tell the angler to do the one thing the law
+ * doesn't actually forbid. Detected via `invasiveBasis` rather than a new
+ * boolean, since it's the only place this distinction currently matters.
  */
 export function speciesStatus(sp: Species, now: Date = new Date()): Statut {
   if (sp.protected) return { kind: "protegee", label: "À relâcher", cls: "bad" };
-  if (sp.invasive) return { kind: "invasive", label: "Ne pas relâcher", cls: "bad" };
+  if (sp.invasive) {
+    if (sp.invasiveBasis?.includes("L432-10"))
+      return { kind: "invasive", label: "Ne pas déplacer", cls: "warn" };
+    return { kind: "invasive", label: "Ne pas relâcher", cls: "bad" };
+  }
   if (sp.season === "special")
     return { kind: "speciale", label: "Réglementée", cls: "warn" };
   if (!season(sp, now).open) return { kind: "fermee", label: "● Fermée", cls: "bad" };

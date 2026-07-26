@@ -35,6 +35,17 @@ describe("speciesStatus", () => {
     expect(st.label.toLowerCase()).toContain("ne pas relâcher");
   });
 
+  // Les gobies ponto-caspiens sont invasive:true, mais leur base légale
+  // (L432-10) interdit de les DÉPLACER, pas de les relâcher sur place — c'est
+  // même explicitement autorisé, l'espèce y étant déjà établie. Réutiliser le
+  // libellé R432-5 leur ferait dire l'inverse de leur propre règle.
+  it("un gobie ponto-caspien (L432-10) dit « ne pas déplacer », pas « ne pas relâcher »", () => {
+    const st = speciesStatus(sp("gobie-a-taches-noires"));
+    expect(st.kind).toBe("invasive");
+    expect(st.label.toLowerCase()).toContain("ne pas déplacer");
+    expect(st.label.toLowerCase()).not.toContain("relâcher");
+  });
+
   it("une espèce ordinaire en saison reste verte", () => {
     const st = speciesStatus(sp("sandre"), new Date("2026-07-15"));
     expect(st.kind).toBe("ouverte");

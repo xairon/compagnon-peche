@@ -9,7 +9,7 @@ import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";
 import { season } from "../lib/season";
 import { effectiveMaille } from "../lib/maille";
-import { speciesAliases } from "../lib/recherche";
+import { speciesAliasLabels } from "../lib/recherche";
 import { speciesStatus } from "../lib/statut";
 import { effectiveQuota } from "../lib/quota";
 import { ratingFg, repere } from "../lib/helpers";
@@ -230,8 +230,14 @@ export function Fiche() {
       id: "comestibilite",
       title: "Comestibilité",
       sub:
+        // « non » n'est pas toujours une protection : les esturgeons d'élevage
+        // échappés ne sont pas protégés, ils sont seulement indissociables d'une
+        // espèce qui l'est. Écrire « Espèce protégée » sur leur fiche affirmait
+        // un statut légal faux — le défaut même que ce champ sert à éviter.
         ed.status === "non"
-          ? "Espèce protégée"
+          ? sp.protected
+            ? "Espèce protégée"
+            : "À ne pas consommer"
           : ed.status === "réglementé"
             ? "Selon la réglementation"
             : ed.bones
@@ -516,10 +522,13 @@ export function Fiche() {
           <div className="latin">{sp.latin}</div>
           {/* Les variétés sont des formes d'une MÊME espèce (écailles, robe) :
               on les nomme pour que le pêcheur qui les cherche se reconnaisse,
-              sans laisser croire qu'il s'agit d'espèces distinctes. */}
-          {speciesAliases(sp.id).length > 0 && (
+              sans laisser croire qu'il s'agit d'espèces distinctes.
+              « Autres noms » plutôt que « Aussi appelée » : depuis que les
+              alias couvrent aussi le toxostome, le huchon ou le flet, l'accord
+              au féminin était faux une fois sur deux. */}
+          {speciesAliasLabels(sp.id).length > 0 && (
             <div className="fiche-varietes">
-              Aussi appelée : {speciesAliases(sp.id).slice(0, 4).join(", ")} — même espèce.
+              Autres noms : {speciesAliasLabels(sp.id).join(", ")} — même espèce.
             </div>
           )}
         </div>
