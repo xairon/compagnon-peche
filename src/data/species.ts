@@ -347,6 +347,31 @@ const CURATED: Species[] = [
       note: null,
       src: "Legifrance R436-18 · R436-21",
     },
+    fish: {
+      rows: [
+        ["Techniques", "Leurre souple, spinnerbait, teigne/ver au coup, drop shot"],
+        ["Leurres", "Petits shads et grubs 4–7 cm, cuillers tournantes"],
+        ["Postes", "Herbiers, bois immergé, piles de pont, bancs de petits poissons"],
+        ["Profondeur", "0,5–4 m"],
+        ["Moment", "Toute la journée, plus active à l'aube et au crépuscule"],
+      ],
+    },
+    cook: {
+      note: "Chair fine, ferme et délicate, très recherchée — mais des écailles très adhérentes qui rendent le levage des filets plus simple que l'écaillage.",
+      prep: [
+        "Lever les filets plutôt qu'écailler (peau très adhérente)",
+        "Retirer la peau si désiré",
+        "Poêle ou meunière, cuisson courte",
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes à courant modéré, herbiers, bois immergé, bancs de sable"],
+        ["Régime", "Invertébrés et alevins en juvénile, piscivore à l'âge adulte"],
+        ["Reproduction", "Mars–mai, longs cordons d'œufs déposés sur la végétation ou les branchages immergés"],
+        ["Comportement", "Grégaire, chasse en petites bandes coordonnées"],
+      ],
+    },
     sante: {
       paras: ["Non bioaccumulateur. Consommation normale.", POLLU_LOC],
     },
@@ -387,6 +412,26 @@ const CURATED: Species[] = [
       ],
       note: "Maille et quota souvent relevés localement : vérifiez l'arrêté de votre département.",
       src: "Legifrance R436-18 · F2117",
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Toc au naturel, mouche (sèche/nymphe), petite cuiller, teigne"],
+        ["Appâts", "Ver de terre, teigne, insectes imités à la mouche"],
+        ["Postes", "Fosses ombragées, sous les berges, abords de courants rapides"],
+        ["Moment", "Éclosions du matin et du soir ; actif toute la journée par temps couvert"],
+      ],
+    },
+    cook: {
+      note: "Chair fine, savoureuse, rosée à blanche selon le régime — l'un des meilleurs poissons de rivière.",
+      prep: ["Vider par incision ventrale", "Écailler ou cuire en filets peau sur table", "Cuisson courte, meunière ou au four"],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau clairs, frais et bien oxygénés (têtes de bassin, 1ʳᵉ catégorie)"],
+        ["Régime", "Invertébrés aquatiques et terrestres, petits poissons chez les grands sujets"],
+        ["Reproduction", "Octobre–janvier, frai sur graviers en eau vive (les œufs demandent une eau très oxygénée)"],
+        ["Longévité", "Souvent 5 à 8 ans en rivière"],
+      ],
     },
     sante: {
       paras: ["Non bioaccumulateur. Consommation normale.", POLLU_LOC],
@@ -431,6 +476,30 @@ const CURATED: Species[] = [
       note: null,
       src: "Legifrance R436-18",
     },
+    fish: {
+      rows: [
+        ["Techniques", "Bouillette au posé, PVA, method feeder, coup au maïs/pain"],
+        ["Appâts", "Bouillettes, maïs, graines, pain"],
+        ["Postes", "Fosses profondes, herbiers, zones calmes de fond vaseux"],
+        ["Moment", "Nuit et petit matin, surtout en eau réchauffée"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche mais très arêtée, prenant facilement le goût de vase du milieu — peu pratiquée en France, très prisée en Europe centrale.",
+      prep: [
+        "Dégorger quelques jours en eau claire pour atténuer le goût de vase",
+        "Écailler et vider, inciser les flancs en croisillons pour sectionner les arêtes",
+        "Friture pour les petits sujets, cuisson au four pour les gros",
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes ou lentes, fonds vaseux, étangs, grands cours d'eau"],
+        ["Régime", "Omnivore benthique : mollusques, vers, végétaux, détritus"],
+        ["Reproduction", "Mai–juin, sur végétation immergée, forte fécondité"],
+        ["Longévité", "Peut dépasser 20 ans"],
+      ],
+    },
     sante: {
       paras: [ANSES_GEN, ANSES_SENS, POLLU_LOC],
       alert: true,
@@ -471,6 +540,30 @@ const CURATED: Species[] = [
       ],
       note: null,
       src: "Legifrance R436-18",
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Pêche au coup, à l'anglaise, au feeder, avec amorçage"],
+        ["Appâts", "Asticot, ver, pain, graines, amorce fine"],
+        ["Postes", "Bordures, herbiers, zones calmes de tout plan d'eau ou cours d'eau"],
+        ["Moment", "Toute la journée, très actif en eau réchauffée"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche, correcte mais très riche en petites arêtes en Y — friture pour les petits sujets, farce ou quenelles pour valoriser les gros.",
+      prep: [
+        "Écailler et vider",
+        "Inciser les flancs en croisillons pour sectionner les arêtes intramusculaires",
+        "Friture vive, ou chair broyée en quenelles",
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Quasiment tous les milieux d'eau douce calme : étangs, canaux, rivières lentes"],
+        ["Régime", "Omnivore : invertébrés, végétaux, détritus"],
+        ["Reproduction", "Mai–juin, sur végétation immergée, très prolifique"],
+        ["Comportement", "Grégaire, se déplace en bancs souvent nombreux"],
+      ],
     },
     sante: {
       paras: [
@@ -515,6 +608,30 @@ const CURATED: Species[] = [
       ],
       note: null,
       src: "Legifrance R436-18",
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Pêche au feeder, à la coulée, au vairon manié pour les gros"],
+        ["Appâts", "Ver de terre, asticot, graines"],
+        ["Postes", "Courants vifs sur fond de graviers, radiers, têtes de pont"],
+        ["Moment", "Nuit et crépuscule, surtout en été"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche ferme, appréciée, mais retirez impérativement la rogue (œufs) avant toute préparation — elle est toxique.",
+      prep: [
+        "Vider avec soin en écartant complètement les œufs, jamais consommés",
+        "Écailler, lever les filets",
+        "Cuisson au choix (poêle, four)",
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Rivières à courant vif, fond de graviers et galets"],
+        ["Régime", "Benthivore : larves, mollusques, crustacés fouillés dans le substrat"],
+        ["Reproduction", "Mai–juin, migration vers des radiers graveleux pour la ponte"],
+        ["Comportement", "Grégaire, souvent en bancs sur les zones à courant"],
+      ],
     },
     sante: {
       paras: [
@@ -568,6 +685,30 @@ const CURATED: Species[] = [
       note: null,
       src: "Legifrance R432-5",
     },
+    fish: {
+      rows: [
+        ["Techniques", "Pêche au coup au fond, au ver, souvent en prise accessoire"],
+        ["Appâts", "Ver de terre, asticot"],
+        ["Postes", "Eaux calmes et vaseuses, étangs, canaux, bordures"],
+        ["Conduite à tenir", "Espèce exotique envahissante (R432-5) : ne jamais la remettre vivante à l'eau ni la transporter vivante"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche fine, correcte en friture — un des rares aspects positifs d'une espèce à ne pas relâcher.",
+      prep: [
+        "Manipuler avec précaution : épines acérées à la base des nageoires pectorales et dorsale",
+        "Dépouiller (peau nue, sans écailles) et vider",
+        "Friture ou meunière",
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes et vaseuses, très tolérant à la pollution et au manque d'oxygène"],
+        ["Régime", "Omnivore opportuniste : invertébrés, œufs et alevins d'autres poissons, détritus"],
+        ["Reproduction", "Mai–juin, nid gardé par les parents"],
+        ["Origine", "Amérique du Nord, introduit en Europe à la fin du XIXᵉ siècle"],
+      ],
+    },
     sante: {
       paras: [
         "Non bioaccumulateur. Chair correcte en friture ; manipulez avec précaution (épines).",
@@ -614,6 +755,26 @@ const CURATED: Species[] = [
       ],
       note: "Protections locales fréquentes (no-kill) : vérifiez l'arrêté départemental.",
       src: "Legifrance R436-18 · R436-21",
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Leurres souples, crankbaits, poppers, spinnerbaits, pêche au vif"],
+        ["Postes", "Bois immergé, herbiers, pontons, zones rocheuses"],
+        ["Moment", "Aube et crépuscule, actif toute la journée par temps couvert"],
+        ["Pratique", "Très majoritairement pêché en no-kill par culture halieutique sportive"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche ferme et fine, comparable à celle de la perche ; peu consommé en France où la pêche se pratique presque exclusivement en no-kill.",
+      prep: ["Écailler et vider, ou lever les filets", "Poêle, grill ou papillote selon la taille"],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Lacs, étangs et rivières lentes, zones à structures (bois, herbiers, rochers)"],
+        ["Régime", "Piscivore et invertivore : petits poissons, écrevisses, insectes"],
+        ["Reproduction", "Mai–juin vers 16–20 °C, nid graveleux gardé par le mâle jusqu'à l'éclosion"],
+        ["Origine", "Amérique du Nord, introduit en France dès 1880"],
+      ],
     },
     sante: {
       paras: ["Non bioaccumulateur. Consommation normale.", POLLU_LOC],

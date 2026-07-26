@@ -891,6 +891,304 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "license": "CC BY 4.0",
       "sourceUrl": "https://www.inaturalist.org/observations/307110637"
     }
+  ],
+  "aphanius-de-corse": [
+    {
+      "file": "assets/species/aphanius-de-corse.webp",
+      "author": "Gastcrf / Gastcrf at Greek Wikipedia",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aphan.jpg"
+    }
+  ],
+  "bar-commun": [
+    {
+      "file": "assets/species/bar-commun.webp",
+      "author": "Andrea Quadrio",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dicentrarchus_labrax_23224415.jpg"
+    }
+  ],
+  "blageon-italien": [
+    {
+      "file": "assets/species/blageon-italien.webp",
+      "author": "Etrusko25",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Telestes_muticellus.jpg"
+    }
+  ],
+  "breme-du-danube": [
+    {
+      "file": "assets/species/breme-du-danube.webp",
+      "author": "[Marsigli, Danubius Pannonico-Mysicus], IV tab. 17",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Abramis_sapa_-_1726_-_Print_-_Iconographia_Zoologica_-_Special_Collections_University_of_Amsterdam_-_UBA01_IZ15000128.tif",
+      "caption": "Illustration historique (Marsigli, 1726)"
+    }
+  ],
+  "brochet-italien": [
+    {
+      "file": "assets/species/brochet-italien.webp",
+      "author": "Etrusko25",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Esox_cisalpinus_(cropped).jpg"
+    }
+  ],
+  "carpe-a-grosse-tete": [
+    {
+      "file": "assets/species/carpe-a-grosse-tete.webp",
+      "author": "Original uploader was Carptracker at en.wikipedia",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bighead_carp_b.gif"
+    }
+  ],
+  "chabot-d-auvergne": [
+    {
+      "file": "assets/species/chabot-d-auvergne.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cottus_duranii_214190150.jpg"
+    }
+  ],
+  "chabot-du-bearn": [
+    {
+      "file": "assets/species/chabot-du-bearn.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adour_sculpin_(cropped).jpg"
+    }
+  ],
+  "chabot-du-lez": [
+    {
+      "file": "assets/species/chabot-du-lez.webp",
+      "author": "Blé en Herbe",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chabot_du_Lez_(cropped).JPG"
+    }
+  ],
+  "coregone-blanc": [
+    {
+      "file": "assets/species/coregone-blanc.webp",
+      "author": "encyclopedia, \"Pieni Tietosanakirja\"",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coregonus_albula_(Pieni).jpg"
+    }
+  ],
+  "epirine-lippue": [
+    {
+      "file": "assets/species/epirine-lippue.webp",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pachychilon_pictum_(cropped).jpg"
+    }
+  ],
+  "gobie-a-taches-noires": [
+    {
+      "file": "assets/species/gobie-a-taches-noires.webp",
+      "author": "Eric Engbretson, U.S. Fish and Wildlife Service",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Neogobius_melanostomus1.jpg"
+    }
+  ],
+  "gobie-de-kessler": [
+    {
+      "file": "assets/species/gobie-de-kessler.webp",
+      "author": "Piet Spaans",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:NeogobiusKessleriSide_7-9-2009_10-13-45_AM.JPG"
+    }
+  ],
+  "gobie-demi-lune": [
+    {
+      "file": "assets/species/gobie-demi-lune.webp",
+      "author": "FilipTomíček48",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hlava%C4%8Dka_polom%C4%9Bs%C3%AD%C4%8Dit%C3%A1.jpg"
+    }
+  ],
+  "gobie-des-sables": [
+    {
+      "file": "assets/species/gobie-des-sables.webp",
+      "author": "Joacim Näslund",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sand_goby_(Pomatoschistus_minutus)_Sweden.jpg"
+    }
+  ],
+  "gobie-fluviatile": [
+    {
+      "file": "assets/species/gobie-fluviatile.webp",
+      "author": "Yuriy Kvach",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monkey_goby_male_1.jpg"
+    }
+  ],
+  "gobie-tachete": [
+    {
+      "file": "assets/species/gobie-tachete.webp",
+      "author": "Ove Glenjen",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:046-011_Pomatoschistus_microps_(cropped).JPG"
+    }
+  ],
+  "goujon-de-l-adour": [
+    {
+      "file": "assets/species/goujon-de-l-adour.webp",
+      "author": "David Perez",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gobio_lozanoi_01_by-dpc.jpg"
+    }
+  ],
+  "guppy": [
+    {
+      "file": "assets/species/guppy.webp",
+      "author": "Sevan76",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alevins_guppy.PNG"
+    }
+  ],
+  "joel": [
+    {
+      "file": "assets/species/joel.webp",
+      "author": "Roberto Pillon",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Atherina_boyeri_Sardinia.jpg"
+    }
+  ],
+  "loche-a-grandes-ecailles": [
+    {
+      "file": "assets/species/loche-a-grandes-ecailles.webp",
+      "author": "MaiMend",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paramisgusnus_dabryanus_Dabry_de_Thiersant,_1872.png",
+      "caption": "Illustration du holotype (Dabry de Thiersant, 1872)"
+    }
+  ],
+  "loche-leopard": [
+    {
+      "file": "assets/species/loche-leopard.webp",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbatula_leoparda_01_(cropped).jpg"
+    }
+  ],
+  "loche-transalpine": [
+    {
+      "file": "assets/species/loche-transalpine.webp",
+      "author": "Etrusko25",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cobitis_bilineata_1_(cropped).jpg"
+    }
+  ],
+  "mulet-sauteur": [
+    {
+      "file": "assets/species/mulet-sauteur.webp",
+      "author": "Citron",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Liza_saliens.jpg"
+    }
+  ],
+  "palee": [
+    {
+      "file": "assets/species/palee.webp",
+      "author": "Ellicrum",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coregonus_palaea.png"
+    }
+  ],
+  "rotengle-italien": [
+    {
+      "file": "assets/species/rotengle-italien.webp",
+      "author": "etrusko25",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Italian_rudd.jpg"
+    }
+  ],
+  "saumon-rose": [
+    {
+      "file": "assets/species/saumon-rose.webp",
+      "author": "Timothy Knepp",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pink_salmon_FWS.jpg"
+    }
+  ],
+  "sterlet": [
+    {
+      "file": "assets/species/sterlet.webp",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Acipenser_ruthenus_Prague_Vltava_1.jpg"
+    }
+  ],
+  "syngnathe": [
+    {
+      "file": "assets/species/syngnathe.webp",
+      "author": "Yuriy Kvach",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Syngnathus_abaster-23.jpg"
+    }
+  ],
+  "tete-de-boule": [
+    {
+      "file": "assets/species/tete-de-boule.webp",
+      "author": "Rankin1958",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fathead_Minnow_-_Breeding_Male.JPG"
+    }
+  ],
+  "truite-corse": [
+    {
+      "file": "assets/species/truite-corse.webp",
+      "author": "Novaculum",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_ghigii_Capodacqua_(cropped).jpg"
+    }
+  ],
+  "vairon-italien": [
+    {
+      "file": "assets/species/vairon-italien.webp",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phoxinus_lumaireul_(cropped).jpg"
+    }
+  ],
+  "esturgeon-siberien": [
+    {
+      "file": "assets/species/esturgeon-siberien.webp",
+      "author": "Kovács András",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Acipenser_baerii-Lenai_tok.jpg"
+    }
+  ],
+  "loche-asiatique": [
+    {
+      "file": "assets/species/loche-asiatique.webp",
+      "author": "Naotake Murayama from San Francisco, CA, USA",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Misgurnus_anguillicaudatus_(2678935266).jpg"
+    }
+  ],
+  "loche-du-lez": [
+    {
+      "file": "assets/species/loche-du-lez.webp",
+      "author": "David Perez",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbatula_quignardi_01_by-dpc.jpg"
+    }
+  ],
+  "truite-du-rhone": [
+    {
+      "file": "assets/species/truite-du-rhone.webp",
+      "author": "Samuel GUIRAUDOU",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_rhodanensis_152902013.jpg"
+    }
+  ],
+  "umbre-pygmee": [
+    {
+      "file": "assets/species/umbre-pygmee.webp",
+      "author": "Ellen Edmonson and Hugh Chrisp",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Umbra_pygmaea.jpg"
+    }
   ]
 };
 

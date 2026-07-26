@@ -246,6 +246,19 @@ export const MIGRATEURS: Record<string, Fiche> = {
           n: "Silure glane",
           how: "Le silure a la peau totalement nue et lisse, sans aucune plaque osseuse, et porte 6 barbillons (2 longs sur la mâchoire supérieure, 4 courts sous le menton) contre 4 barbillons ronds pour l'esturgeon. Toute capture ressemblant à un esturgeon doit être relâchée immédiatement quoi qu'il en soit — mais l'identifier correctement permet de signaler la capture, utile au suivi de l'espèce.",
         },
+        // La confusion qui compte vraiment. Les esturgeons d'élevage échappés
+        // sont aujourd'hui bien plus nombreux dans les eaux françaises que le
+        // sturio sauvage, et la distinction se joue sur des comptages de
+        // scutelles — hors de portée au bord de l'eau. La consigne est donc la
+        // même dans les trois cas, et c'est ce que la fiche doit dire.
+        {
+          n: "Esturgeon sibérien",
+          how: "Espèce d'élevage échappée, aujourd'hui plus fréquente en eau douce que l'esturgeon européen sauvage. La distinction repose sur le nombre d'écussons dorsaux, latéraux et ventraux — une affaire de spécialistes. N'essayez pas de trancher au bord de l'eau : relâchez et déclarez sur sturio.eu.",
+        },
+        {
+          n: "Sterlet",
+          how: "Autre esturgeon d'élevage, plus petit, à rostre fin et relevé et à écussons latéraux nombreux et clairs. Là encore, la détermination sûre est affaire de spécialistes : relâchez et déclarez.",
+        },
       ],
     },
     bio: {
@@ -254,6 +267,85 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Longévité", "Peut dépasser 100 ans, croissance très lente"],
         ["Reproduction", "Dernière reproduction naturelle constatée en 1994 ; programme de réintroduction en cours depuis 2007"],
         ["Statut", "En danger critique d'extinction (UICN) — protection totale depuis 1982, capture et détention interdites"],
+      ],
+    },
+  },
+
+  // ---------------------------------------------------------------------
+  // Esturgeons d'élevage échappés — ni protégés, ni distinguables.
+  //
+  // Ils n'étaient pas au catalogue : un pêcheur qui en prenait un n'avait que
+  // la fiche de l'esturgeon européen, qui dit « pêche totalement interdite ».
+  // Les ajouter sans traiter la confusion aurait créé le défaut inverse — une
+  // fiche « espèce introduite » rassurante sous laquelle se cache peut-être un
+  // sturio en danger critique.
+  //
+  // Ces deux fiches disent donc exactement la même chose que celle du sturio :
+  // relâchez, déclarez. C'est le seul message qui reste vrai quelle que soit
+  // l'espèce réellement au bout de la ligne.
+  // ---------------------------------------------------------------------
+
+  "esturgeon-siberien": {
+    ficheSrc:
+      "INPN (MNHN) · FishBase · Observatoire des poissons Seine-Normandie · programme LIFE Sturio / MIGADO",
+    ident: {
+      summary:
+        "Esturgeon d'élevage échappé, morphologiquement très proche de l'esturgeon européen : cinq rangées de plaques osseuses, rostre pointu, quatre barbillons sous le museau. Rostre généralement plus court et plus arrondi que celui du sturio, mais le caractère varie avec l'âge.",
+      traits: [
+        "Cinq rangées de scutelles, peau nue entre les rangées — comme tous les esturgeons",
+        "Quatre barbillons frangés en avant de la bouche ventrale",
+        "Rostre plutôt court et arrondi chez l'adulte",
+        "La détermination sûre passe par le comptage des écussons dorsaux, latéraux et ventraux",
+      ],
+      conf: [
+        {
+          n: "Esturgeon européen",
+          how: "C'est LA confusion à connaître : le sturio est en danger critique et strictement protégé depuis 1982, l'esturgeon sibérien ne l'est pas. Mais la distinction repose sur des comptages d'écussons qu'on ne fait pas au bord de l'eau. Traitez toute capture comme un esturgeon européen : remise à l'eau immédiate et déclaration sur sturio.eu.",
+        },
+        {
+          n: "Sterlet",
+          how: "Le sterlet est nettement plus petit, à rostre fin et retroussé, avec des écussons latéraux plus nombreux et clairs. Les deux sont des esturgeons d'élevage échappés : même conduite à tenir.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Origine", "Sibérie (bassins de l'Ob à la Kolyma) ; élevé en France depuis 1989 pour le caviar d'Aquitaine"],
+        ["Présence en France", "Uniquement par échappées d'élevage — Dordogne, Gironde, Charente-Maritime, et la Garonne après la rupture de digue de 1999"],
+        ["Reproduction", "Aucune reproduction naturelle constatée en France à ce jour"],
+        ["Statut", "Non applicable sur la Liste rouge française (espèce introduite) ; en danger critique dans son aire d'origine"],
+      ],
+    },
+  },
+
+  sterlet: {
+    ficheSrc: "INPN (MNHN) · FishBase · programme LIFE Sturio / MIGADO",
+    ident: {
+      summary:
+        "Le plus petit des esturgeons européens, au rostre fin, allongé et nettement retroussé vers le haut. Écussons latéraux nombreux (souvent plus de 50) et clairs, tranchant sur le fond sombre du corps. Barbillons frangés.",
+      traits: [
+        "Rostre fin, long et retroussé — le trait le plus visible du genre",
+        "Écussons latéraux nombreux et clairs, bien contrastés",
+        "Barbillons frangés (et non lisses)",
+        "Taille modeste : le plus petit esturgeon d'Europe",
+      ],
+      conf: [
+        {
+          n: "Esturgeon européen",
+          how: "Le sturio a un rostre plus large et moins retroussé et des écussons latéraux moins nombreux — mais la détermination sûre se fait par comptage, pas à vue. Le sturio étant strictement protégé et en danger critique, traitez toute capture comme telle : relâchez et déclarez sur sturio.eu.",
+        },
+        {
+          n: "Esturgeon sibérien",
+          how: "L'esturgeon sibérien est plus massif, à rostre plus court et arrondi. Tous deux sont des échappés d'élevage : même conduite à tenir.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Origine", "Bassins de la mer Noire, de la Caspienne et de la Baltique ; introduit en France par l'aquaculture et des lâchers d'agrément"],
+        ["Présence en France", "Sporadique, entièrement dépendante des échappées et des lâchers"],
+        ["Reproduction", "Pas de reproduction naturelle établie en France"],
+        ["Statut", "Non applicable sur la Liste rouge française (espèce introduite)"],
       ],
     },
   },
@@ -321,6 +413,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Appâts", "Arénicole, gravette (ver de vase), crabe mou"],
         ["Postes", "Embouchures, chenaux d'estuaire, fonds sablo-vaseux"],
         ["Moment", "Marée montante, eau agitée à trouble"],
+        ["Réglementation réelle", "Régi par la pêche maritime (maille selon la façade) — pas par le socle eau douce affiché plus haut, que cette application ne couvre pas"],
       ],
     },
     cook: {
@@ -414,6 +507,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Appâts", "Pain amorcé, asticot, petits morceaux de crevette"],
         ["Postes", "Ports, estuaires, lagunes, eaux calmes"],
         ["Moment", "Journée, eau claire"],
+        ["Réglementation réelle", "Régi par la pêche maritime/estuarienne, comme les autres mulets — pas par le socle eau douce affiché plus haut, que cette application ne couvre pas"],
       ],
     },
     cook: {
@@ -458,6 +552,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Appâts", "Pain amorcé, asticot, petits morceaux de crevette"],
         ["Postes", "Ports, digues, estuaires, zones rocheuses peu profondes"],
         ["Moment", "Journée, eau claire"],
+        ["Réglementation réelle", "Régi par la pêche maritime/estuarienne, comme les autres mulets — pas par le socle eau douce affiché plus haut, que cette application ne couvre pas"],
       ],
     },
     cook: {
@@ -502,6 +597,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Appâts", "Pain amorcé, asticot, petits morceaux de crevette"],
         ["Postes", "Estuaires, embouchures, basses rivières, eaux calmes"],
         ["Moment", "Journée, eau claire"],
+        ["Réglementation réelle", "Régi par la pêche maritime/estuarienne, comme les autres mulets — pas par le socle eau douce affiché plus haut, que cette application ne couvre pas"],
       ],
     },
     cook: {
@@ -514,6 +610,151 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Régime", "Détritus, algues, micro-organismes filtrés dans la vase"],
         ["Reproduction", "Fin d'été–automne, en mer"],
         ["Répartition", "Toutes les côtes françaises et bassins fluviaux associés"],
+      ],
+    },
+  },
+
+  // ---------------------------------------------------------------------
+  // Bar commun et mulet sauteur — espèces surtout marines qui remontent
+  // volontiers estuaires et basses rivières, comme les mulets et le flet
+  // ci-dessus. Le socle « Maille/Quota/Période » du haut de fiche est le
+  // socle EAU DOUCE (R436-18/21) : il ne s'applique pas à ces deux espèces,
+  // régies par la pêche maritime. C'est pourquoi la vraie règle est explicitée
+  // ici en toutes lettres plutôt que dans le socle national — un renvoi vers
+  // « reg » n'aurait rien affiché de juste.
+  //
+  // Le bar est le cas le plus sensible : en régression, ses quotas de pêche de
+  // loisir sont revus CHAQUE ANNÉE par règlement européen. Les chiffres
+  // ci-dessous sont ceux en vigueur au 26 janvier 2026 (règlement UE 2026/249)
+  // — à vérifier avant chaque sortie, comme pour le saumon plus haut.
+  // ---------------------------------------------------------------------
+
+  "bar-commun": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Corps allongé argenté, dos gris-bleu, deux nageoires dorsales bien séparées (épineuse puis molle). Une tache sombre plus ou moins visible sur l'opercule ; les jeunes portent des points noirs sur le dos, qui s'estompent avec l'âge.",
+      traits: [
+        "Deux nageoires dorsales nettement séparées, de taille comparable",
+        "Tache sombre variable sur le bord de l'opercule",
+        "Dos gris-bleu, flancs et ventre argentés",
+        "Jeunes tachetés de noir sur le dos, adultes unis",
+      ],
+      conf: [],
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Leurre (jig, popper, plug de surface), vif, appât naturel (crabe, ver, sardine)"],
+        ["Postes", "Estuaires, embouchures, ports, roches battues, surf de plage"],
+        ["Moment", "Marée montante à mi-marée, aube et crépuscule"],
+        [
+          "Réglementation réelle",
+          "Régi par la pêche maritime de loisir (taille, quota, périodes selon la façade et révisés chaque année) — pas par le socle eau douce affiché plus haut, que cette application ne couvre pas. Renseignez-vous auprès des textes de pêche maritime en vigueur avant de conserver une capture.",
+        ],
+      ],
+    },
+    cook: {
+      note: "Chair blanche ferme et délicate, l'un des poissons les plus recherchés des côtes françaises. Attention : au restaurant, « loup » désigne parfois un poisson différent (loup de mer/rascasse selon la région) — le vrai bar reste le meilleur choix.",
+      prep: ["Écailler et vider, ou lever les filets", "Cuisson entière au four ou en croûte de sel", "Filets poêlés côté peau pour la croustiller"],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Surtout marin (fonds sableux ou rocheux du littoral), pénètre volontiers en eaux saumâtres, ports et parties terminales des fleuves côtiers"],
+        ["Régime", "Invertébrés (crevettes, mollusques) chez le jeune, franchement piscivore à l'âge adulte"],
+        ["Reproduction", "Printemps, en mer ; œufs pélagiques"],
+        ["Statut", "En régression sur les stocks du nord (Manche/Atlantique) ; suivi et quotas européens depuis le milieu des années 2010"],
+      ],
+    },
+  },
+
+  "mulet-sauteur": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Mulet des eaux côtières, corps fuselé argenté proche des autres mulets, connu pour ses sauts hors de l'eau qui lui donnent son nom. Se distingue surtout par sa préférence pour les eaux plus au large que ses cousins estuariens.",
+      traits: [
+        "Corps fuselé, argenté, silhouette typique des mulets",
+        "Saute fréquemment hors de l'eau, plus que les autres mulets",
+        "Taille courante 30 cm, jusqu'à 40 cm",
+        "Bouche sans papilles ni paupière adipeuse marquée",
+      ],
+      conf: [
+        {
+          n: "Mulet cabot",
+          how: "Le mulet cabot a une grosse tête arrondie et des paupières adipeuses épaisses ; le mulet sauteur a une tête plus fine et des paupières peu développées.",
+        },
+      ],
+    },
+    fish: {
+      rows: [
+        ["Techniques", "Coup fin, feeder léger, amorçage discret"],
+        ["Postes", "Eaux côtières, parfois lagunes et estuaires"],
+        ["Réglementation réelle", "Régi par la pêche maritime/estuarienne, comme les autres mulets — pas par le socle eau douce affiché plus haut"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche correcte, comme les autres mulets, moins recherchée que celle du mulet cabot.",
+      prep: ["Écailler et vider", "Griller entier ou lever les filets"],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux côtières, plus au large que les autres mulets ; pénètre parfois lagunes et estuaires"],
+        ["Régime", "Zooplancton puis organismes benthiques chez le jeune ; algues et détritus végétaux chez l'adulte"],
+        ["Reproduction", "Été, en mer ; œufs pélagiques"],
+        ["Répartition", "Méditerranée, mer Noire, mer d'Azov, côtes atlantiques du Maroc à la France"],
+      ],
+    },
+  },
+
+  // ---------------------------------------------------------------------
+  // Saumon rose — le seul migrateur du catalogue dont la consigne est de
+  // GARDER la capture plutôt que de la relâcher. Introduit massivement en
+  // Russie pour la pêche commerciale, il colonise l'Atlantique depuis et
+  // apparaît de façon récurrente dans les rivières françaises depuis 2017.
+  // Le conserver et le signaler (échantillon d'écailles, tête pour analyse
+  // otolithique) sert le suivi de sa colonisation — le relâcher reviendrait
+  // à l'aider à s'implanter, contrairement à un migrateur menacé qu'on
+  // protège en le remettant à l'eau.
+  // ---------------------------------------------------------------------
+
+  "saumon-rose": {
+    ficheSrc:
+      "CDR-EEE (Centre de ressources espèces exotiques envahissantes) · INRAE · Observatoire des poissons migrateurs de Bretagne",
+    ident: {
+      summary:
+        "Petit saumon du Pacifique, corps fusiforme argenté en mer, le mâle développant en rivière une bosse dorsale prononcée et une mâchoire crochue. Nageoire caudale marquée de grandes taches ovales, contrairement au saumon atlantique.",
+      traits: [
+        "Grandes taches ovales sur toute la nageoire caudale (absentes ou réduites chez le saumon atlantique)",
+        "Le mâle reproducteur développe une bosse dorsale marquée et une mâchoire crochue",
+        "Très petites écailles comparé au saumon atlantique",
+        "Cycle de vie court : 2 ans seulement, contre plusieurs années pour le saumon atlantique",
+      ],
+      conf: [
+        {
+          n: "Saumon atlantique",
+          how: "Le saumon rose a de grandes taches ovales sur toute la caudale et des écailles bien plus petites ; le saumon atlantique n'a pas ces taches et le mâle ne développe pas de bosse dorsale aussi marquée.",
+        },
+      ],
+    },
+    fish: {
+      rows: [
+        ["Prise", "Capture accessoire en pêchant le saumon ou la truite de mer, en rivière lors de la remontée (fin d'été)"],
+        [
+          "Conduite à tenir",
+          "À l'inverse des autres migrateurs de cette fiche : gardez la capture plutôt que de la relâcher — c'est la recommandation officielle par précaution, pour freiner son implantation",
+        ],
+        [
+          "Signalement",
+          "Notez date, lieu, longueur et poids ; prélevez une trentaine d'écailles 2-3 cm au-dessus de la ligne latérale ; conservez la tête au congélateur pour analyse des otolithes. Déclarez via un formulaire de déclaration truite de mer du CNICS en précisant « saumon rose »",
+        ],
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat d'origine", "Pacifique Nord ; cycle de vie le plus court des saumons du Pacifique (2 ans)"],
+        ["Introduction", "Introduit massivement en Russie dès les années 1950 pour la pêche commerciale ; colonise l'Atlantique depuis"],
+        ["Présence en France", "Premier signalement en 2017 (Canche, Pas-de-Calais) ; récidive en 2017, 2021 et 2023 en Normandie, Bretagne et dans le Nord"],
+        ["Statut", "Non applicable (UICN NA) — espèce introduite, en cours de colonisation surveillée"],
       ],
     },
   },

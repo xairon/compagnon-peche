@@ -22,6 +22,56 @@ import type { Fiche } from "./index";
 // quelques espèces pêchées ou consommées.
 const SRC = "INPN (MNHN) · DORIS (FFESSM) — biologie et répartition";
 
+// Les vairons régionaux (basque, de Garonne, du Danube, du Languedoc) ont été
+// séparés du vairon commun par la génétique, pas par un usage différent : au
+// bord de l'eau c'est le même petit poisson, pris de la même façon et cuisiné
+// de la même façon. Plutôt que de recopier quatre fois une donnée qui n'est
+// propre à aucun d'eux, l'usage est décrit une fois et rapporté explicitement
+// au vairon commun — comme le fait déjà data/edibility.ts pour ces lignées.
+const VAIRON_FISH = {
+  rows: [
+    ["Usage", "Appât vif classique pour la truite, le brochet et le sandre"],
+    ["Capture", "Pêche au coup à l'hameçon fin, ou à la carafe"],
+    ["Postes", "Ruisseaux frais et oxygénés, en bancs près des bordures"],
+    ["Remarque", "Usage rapporté au vairon commun, dont cette lignée est indissociable au bord de l'eau"],
+  ] as [string, string][],
+};
+const VAIRON_COOK = {
+  note: "Comme le vairon commun : petit poisson de friture, traditionnel dans les régions de tête de bassin. Usage rapporté à l'espèce commune, faute de donnée culinaire propre à cette lignée.",
+  prep: [
+    "Ne pas écailler : les écailles sont minuscules",
+    "Vider les sujets les plus gros, garder les petits entiers",
+    "Fariner puis friture vive et brève",
+  ],
+};
+
+// Les quatre gobies ponto-caspiens partagent la même source, la même confusion
+// décisive avec le chabot (protégé) et la même conduite légale — voir le
+// commentaire au-dessus de leurs entrées pour le détail de cette dernière.
+const SRC_GOBIE =
+  "DORIS (FFESSM) · FishBase · SNPN · Observatoire des poissons Seine-Normandie · CDR-EEE — biologie, répartition et invasion";
+
+const GOBIE_CONF_CHABOT = {
+  n: "Chabot commun",
+  how: "Le critère qui tranche à coup sûr : les gobies ont les nageoires pelviennes soudées en un disque ventouse sur le ventre (un trait de famille des Gobiidae) ; le chabot a deux nageoires pelviennes bien séparées, sans ventouse. Le chabot est protégé — dans le doute, relâchez.",
+};
+
+function gobieFish(transportInterdit: string) {
+  return {
+    rows: [
+      ["Prise", "Prise fréquente en pêchant au fond dans les secteurs colonisés"],
+      [
+        "Ne pas transporter vivant",
+        `Interdit de l'introduire ailleurs, y compris comme vif (art. L432-10, jusqu'à 9 000 € d'amende) : ${transportInterdit}`,
+      ],
+      [
+        "Sur place",
+        "La remise à l'eau au point même de capture n'est pas interdite — l'espèce y est déjà établie ; c'est le déplacer qui l'est",
+      ],
+    ] as [string, string][],
+  };
+}
+
 export const AUTRES: Record<string, Fiche> = {
   // --- Espèces protégées : ident + bio uniquement ---------------------------
 
@@ -125,6 +175,10 @@ export const AUTRES: Record<string, Fiche> = {
           n: "Loche franche",
           how: "La loche franche a un corps cylindrique allongé et six barbillons bien visibles autour de la bouche ; le chabot a une tête massive aplatie et pas de barbillons.",
         },
+        {
+          n: "Gobie de Kessler",
+          how: "Les quatre gobies ponto-caspiens envahissent aujourd'hui le Rhin, la Moselle et le Rhône — là même où vit le chabot. Le critère qui tranche à coup sûr : le gobie a les nageoires pelviennes soudées en disque ventouse ventral, le chabot a deux nageoires pelviennes bien séparées. Le chabot est protégé — dans le doute, relâchez.",
+        },
       ],
     },
     bio: {
@@ -153,6 +207,10 @@ export const AUTRES: Record<string, Fiche> = {
           n: "Chabot commun",
           how: "Les deux espèces sont quasi indissociables à l'œil ; le critère le plus fiable reste le bassin versant. Le chabot fluviatile n'est aujourd'hui connu que dans une poignée de départements du centre et du centre-sud-ouest, quand le chabot commun occupe un territoire bien plus large jusqu'à l'axe Rhin-Rhône.",
         },
+        {
+          n: "Gobie de Kessler",
+          how: "Le gobie de Kessler et les trois autres gobies ponto-caspiens ont les nageoires pelviennes soudées en disque ventouse ventral ; le chabot fluviatile, comme tous les chabots, a deux nageoires pelviennes bien séparées. Le chabot est protégé — dans le doute, relâchez.",
+        },
       ],
     },
     bio: {
@@ -161,6 +219,176 @@ export const AUTRES: Record<string, Fiche> = {
         ["Statut taxonomique", "Séparée du chabot commun (Cottus gobio) en 2005 par étude génétique"],
         ["Répartition", "Bassins du nord-ouest de l'Europe, dont une partie du bassin de la Seine"],
         ["Statut", "Protégée comme le chabot commun"],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Trois autres lignées cryptiques du complexe Cottus gobio, plus le chabot
+  // du Lez (espèce à part entière, mais même traitement : protégée, terrain
+  // indissociable de ses cousins). Comme pour le chabot fluviatile ci-dessus,
+  // le seul critère fiable est le bassin versant — jamais l'apparence.
+  //
+  // Source : INPN (MNHN), FishBase, SNPN (chabot du Lez) — identification,
+  // répartition et statut de protection.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  "chabot-du-bearn": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Lignée cryptique du complexe chabot, indissociable à l'œil du chabot commun et des autres chabots régionaux. Seule la répartition géographique permet de la reconnaître : bassin de l'Adour.",
+      traits: [
+        "Tête large et aplatie, corps trapu sans écailles — traits communs à tous les chabots",
+        "Deux nageoires dorsales rapprochées",
+        "Taille 8–15 cm",
+        "Endémique du bassin de l'Adour",
+      ],
+      conf: [
+        {
+          n: "Chabot commun",
+          how: "Indissociable à l'œil ; seule la répartition tranche — le chabot du Béarn est propre au bassin de l'Adour, le chabot commun occupe un territoire bien plus large. Les deux sont protégés : dans le doute, relâchez.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
+        ["Répartition", "Endémique du bassin de l'Adour"],
+        ["Statut", "Quasi menacé (UICN NT, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+      ],
+    },
+  },
+
+  "chabot-d-auvergne": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Lignée cryptique du complexe chabot, indissociable à l'œil de ses cousins. Seule la répartition géographique permet de la reconnaître : Massif central.",
+      traits: [
+        "Tête large et aplatie, corps trapu sans écailles — traits communs à tous les chabots",
+        "Deux nageoires dorsales rapprochées",
+        "Taille 8–15 cm",
+        "Endémique du Massif central",
+      ],
+      conf: [
+        {
+          n: "Chabot commun",
+          how: "Indissociable à l'œil ; seule la répartition tranche — le chabot d'Auvergne est propre au Massif central, le chabot commun occupe un territoire bien plus large. Les deux sont protégés : dans le doute, relâchez.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
+        ["Répartition", "Endémique du Massif central"],
+        ["Statut", "Données insuffisantes (UICN DD, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+      ],
+    },
+  },
+
+  "chabot-des-pyrenees": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Lignée cryptique du complexe chabot, indissociable à l'œil de ses cousins. Seule la répartition géographique permet de la reconnaître : Pyrénées.",
+      traits: [
+        "Tête large et aplatie, corps trapu sans écailles — traits communs à tous les chabots",
+        "Deux nageoires dorsales rapprochées",
+        "Taille 8–15 cm",
+        "Endémique des Pyrénées",
+      ],
+      conf: [
+        {
+          n: "Chabot commun",
+          how: "Indissociable à l'œil ; seule la répartition tranche — le chabot des Pyrénées est propre à la chaîne pyrénéenne, le chabot commun occupe un territoire bien plus large. Les deux sont protégés : dans le doute, relâchez.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
+        ["Répartition", "Endémique des Pyrénées"],
+        ["Statut", "Quasi menacé (UICN NT, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+      ],
+    },
+  },
+
+  "chabot-du-lez": {
+    ficheSrc: SRC + " · SNPN — le chabot du Lez",
+    ident: {
+      summary:
+        "Chabot minuscule et extrêmement localisé, indissociable à l'œil de ses cousins régionaux. Ne vit que sur trois kilomètres à la source du Lez, près de Montpellier — le lieu de capture suffit à l'identifier.",
+      traits: [
+        "Très petite taille : 5–6 cm",
+        "Tête large et aplatie, corps trapu sans écailles — traits communs à tous les chabots",
+        "Uniquement présent aux trois premiers kilomètres du Lez (Hérault)",
+      ],
+      conf: [
+        {
+          n: "Chabot commun",
+          how: "Indissociable à l'œil ; c'est le lieu qui identifie ce chabot à coup sûr — il ne vit nulle part ailleurs qu'à la source du Lez. Les deux sont protégés : dans le doute, relâchez.",
+        },
+        {
+          n: "Loche du Lez (loche du Languedoc)",
+          how: "Le nom prête à confusion mais ce sont deux espèces sans rapport, d'ordres différents : le chabot du Lez est un chabot à tête large, restreint aux trois premiers kilomètres du Lez ; la loche du Lez est une loche allongée à barbillons, présente sur un territoire bien plus vaste (Lez, Tech, Adour, Garonne).",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Résurgence karstique fraîche, sur trois kilomètres seulement, en amont de Montferrier-sur-Lez"],
+        ["Répartition", "Endémique le plus restreint des chabots français — trois kilomètres de rivière, rien d'autre"],
+        ["Statut", "En danger critique (UICN CR, 2023) ; protégé, Directive Habitats, site Natura 2000 dédié — remise à l'eau immédiate en cas de capture accidentelle"],
+      ],
+    },
+  },
+
+  "chabot-de-rhenanie": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Lignée cryptique du complexe chabot, indissociable à l'œil de ses cousins. Seule la répartition géographique permet de la reconnaître : bassins du Rhin et de la Meuse.",
+      traits: [
+        "Tête large et aplatie, corps trapu sans écailles — traits communs à tous les chabots",
+        "Deux nageoires dorsales rapprochées",
+        "Taille 8–10 cm",
+        "Bassins du Rhin et de la Meuse",
+      ],
+      conf: [
+        {
+          n: "Chabot commun",
+          how: "Indissociable à l'œil ; seule la répartition tranche — le chabot de Rhénanie occupe les bassins du Rhin et de la Meuse. Les deux sont protégés : dans le doute, relâchez.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Petits cours d'eau frais à fond de graviers, comme les autres chabots"],
+        ["Répartition", "Bassins du Rhin et de la Meuse, en amont jusqu'à Mannheim (Allemagne)"],
+        ["Statut", "Préoccupation mineure (UICN LC, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+      ],
+    },
+  },
+
+  "aphanius-de-corse": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Minuscule poisson des lagunes et eaux saumâtres corses, corps trapu, robe argentée barrée de sombre — plus marquée chez la femelle, orangée chez le mâle en période de reproduction.",
+      traits: [
+        "Très petite taille : jusqu'à 7 cm",
+        "Corps trapu, robe barrée de sombre",
+        "Mâle à nageoire caudale jaune-orangé, plus marqué en période de reproduction",
+        "Vit en groupes dans les lagunes et embouchures corses",
+      ],
+      conf: [],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Lagunes côtières, eaux saumâtres à douces, embouchures, mares et fossés — exclusivement en Corse"],
+        ["Régime", "Petits invertébrés"],
+        ["Statut", "Quasi menacé (UICN NT, 2022) ; endémique corse au sens français"],
       ],
     },
   },
@@ -180,6 +408,14 @@ export const AUTRES: Record<string, Fiche> = {
         {
           n: "Loche franche",
           how: "La loche franche n'a que 6 barbillons et vit en eau vive et fraîche, sur graviers ; la loche d'étang en a 10 et vit enfouie dans la vase des eaux stagnantes.",
+        },
+        {
+          n: "Loche asiatique",
+          how: "La loche asiatique (introduite) a une robe tachetée avec une tache noire nette à la base de la caudale ; la loche d'étang a des bandes sombres et cuivrées continues, sans tache caudale. Dans le doute, relâchez : la loche d'étang est protégée.",
+        },
+        {
+          n: "Loche à grandes écailles",
+          how: "La loche à grandes écailles (introduite, un seul signalement français à ce jour) n'a pas de motif de couleur net et des crêtes adipeuses hautes ; la loche d'étang a des bandes continues bien marquées. Dans le doute, relâchez : la loche d'étang est protégée.",
         },
       ],
     },
@@ -294,6 +530,18 @@ export const AUTRES: Record<string, Fiche> = {
         },
       ],
     },
+    fish: {
+      rows: [
+        ["Capture", "Prise accessoire de la pêche au coup au fond, en ruisseau à truite"],
+        ["Appâts", "Petit ver, asticot, posés au ras du substrat"],
+        ["Moment", "Active la nuit : les prises sont surtout de fin de journée"],
+        ["Attention", "Ne pas la confondre avec la loche d'étang et la loche de rivière, protégées : celles-là se relâchent"],
+      ],
+    },
+    cook: {
+      note: "Petite loche sans écailles à chair fine, consommée en friture là où elle est abondante — jamais une pêche que l'on cible, toujours un complément.",
+      prep: ["Rincer : la peau est nue, il n'y a rien à écailler", "Vider les plus gros sujets", "Fariner puis friture vive"],
+    },
     bio: {
       rows: [
         ["Habitat", "Petits cours d'eau vifs, clairs et bien oxygénés, sur fonds de graviers, galets ou sable"],
@@ -323,6 +571,8 @@ export const AUTRES: Record<string, Fiche> = {
         },
       ],
     },
+    fish: VAIRON_FISH,
+    cook: VAIRON_COOK,
     bio: {
       rows: [
         ["Habitat", "Petits cours d'eau de montagne à faible pente, près des berges en eau calme sur graviers"],
@@ -358,6 +608,14 @@ export const AUTRES: Record<string, Fiche> = {
         ["Postes", "Cours d'eau à truite, en bancs de plusieurs centaines d'individus"],
       ],
     },
+    cook: {
+      note: "Poisson de friture traditionnel des régions de tête de bassin (« friture de vairons ») : menu mais à chair fine, consommé entier.",
+      prep: [
+        "Ne pas écailler : les écailles sont minuscules",
+        "Vider les sujets les plus gros, garder les petits entiers",
+        "Fariner puis friture vive et brève",
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Eaux fraîches, claires et oxygénées — typiquement les cours d'eau à truite"],
@@ -387,6 +645,8 @@ export const AUTRES: Record<string, Fiche> = {
         },
       ],
     },
+    fish: VAIRON_FISH,
+    cook: VAIRON_COOK,
     bio: {
       rows: [
         ["Habitat", "Petits cours d'eau de montagne à faible pente, berges à faible courant, fond sableux ou graveleux"],
@@ -409,6 +669,8 @@ export const AUTRES: Record<string, Fiche> = {
       ],
       conf: [],
     },
+    fish: VAIRON_FISH,
+    cook: VAIRON_COOK,
     bio: {
       rows: [
         ["Répartition en France", "Bassin du Léman et du haut Rhin (première mention : Rupt de Mad, bassin Rhin-Moselle)"],
@@ -435,11 +697,67 @@ export const AUTRES: Record<string, Fiche> = {
         },
       ],
     },
+    fish: VAIRON_FISH,
+    cook: VAIRON_COOK,
     bio: {
       rows: [
         ["Répartition", "Bassins côtiers méditerranéens du Languedoc"],
         ["Statut taxonomique", "Espèce cryptique du complexe Phoxinus, distinguée récemment par génétique et robe nuptiale"],
         ["Remarque", "Littérature encore limitée sur cette espèce récemment décrite"],
+      ],
+    },
+  },
+
+  "vairon-ligerien": {
+    ficheSrc: "INPN (MNHN) · Denys, Dettaï, Persat, Daszkiewicz, Hautecœur & Keith (2020) — description originale",
+    ident: {
+      summary:
+        "Vairon endémique du bassin de la Loire, décrit en 2020 en même temps que le vairon de Garonne. Morphologiquement proche du vairon commun hors période de fraie ; le mâle nuptial se distingue par des barres vertes et un ventre rouge.",
+      traits: [
+        "Morphologie générale du genre Phoxinus : corps fuselé, museau arrondi, caudale fourchue",
+        "Taille inférieure à 10 cm (jusqu'à 7,4 cm mesurés)",
+        "Robe nuptiale du mâle : barres vertes, ventre rouge",
+      ],
+      conf: [
+        {
+          n: "Vairon commun",
+          how: "Hors reproduction, la distinction fiable est géographique : le vairon ligérien est endémique du bassin de la Loire (et de la Sèvre Niortaise), introduit depuis dans les bassins de la Garonne et du Rhône. En fraie, la robe nuptiale (barres vertes, ventre rouge du mâle) aide à trancher.",
+        },
+      ],
+    },
+    fish: VAIRON_FISH,
+    cook: VAIRON_COOK,
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau clairs et peu profonds à faible courant, fond sableux ou graveleux ; très commun dans tout le bassin de la Loire"],
+        ["Répartition", "Endémique des bassins de la Loire et de la Sèvre Niortaise ; introduit dans les bassins de la Garonne et du Rhône"],
+        ["Statut taxonomique", "Décrit en 2020, en même temps que le vairon de Garonne"],
+      ],
+    },
+  },
+
+  "vairon-italien": {
+    ficheSrc: "GBIF · Denys & al. — premier signalement français (2010), publié depuis",
+    ident: {
+      summary:
+        "Vairon originaire du bassin adriatique nord et du moyen Danube, signalé une seule fois en France : un mâle capturé en 2010 dans le bassin du Léman. Morphologiquement proche des autres vairons hors période de fraie.",
+      traits: [
+        "Morphologie générale du genre Phoxinus : corps fuselé, museau arrondi, caudale fourchue",
+        "Taille inférieure à 10 cm",
+        "Robe nuptiale caractéristique décrite chez le mâle capturé en France",
+      ],
+      conf: [
+        {
+          n: "Vairon commun",
+          how: "Hors reproduction, quasi indissociable ; seule l'analyse génétique ou une robe nuptiale bien observée permet de confirmer l'identification.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau du bassin adriatique nord et du moyen Danube — le même type de milieu que le vairon commun"],
+        ["Répartition d'origine", "Italie, Slovénie, Croatie, Bosnie-Herzégovine (bassin adriatique nord et moyen Danube)"],
+        ["Présence en France", "Un seul individu connu à ce jour : un mâle capturé le 31 mai 2010 à Publier (Haute-Savoie, bassin du Léman). Statut de population inconnu"],
       ],
     },
   },
@@ -495,6 +813,22 @@ export const AUTRES: Record<string, Fiche> = {
         },
       ],
     },
+    fish: {
+      rows: [
+        ["Techniques", "Pêche au coup, ultra-léger, petites imitations — combatif pour sa taille"],
+        ["Appâts", "Ver, asticot, petits leurres souples et cuillers"],
+        ["Postes", "Abris rocheux, blocs et souches des rivières lentes de la Saône et de la Loire"],
+        ["Conduite à tenir", "Centrarchidé nord-américain introduit : ne le transportez pas vivant vers un autre milieu"],
+      ],
+    },
+    cook: {
+      note: "Chair blanche fine, de la qualité des autres centrarchidés, mais poisson petit : le rendement en filets reste faible.",
+      prep: [
+        "Écailles adhérentes : lever les filets plutôt qu'écailler",
+        "Attention aux épines dorsales et anales en manipulant",
+        "Filets poêlés ou panés",
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Rivières et fonds rocheux ou graveleux"],
@@ -543,6 +877,580 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Grands cours d'eau frais et bien oxygénés, lacs profonds, surtout à l'est et au nord-est"],
         ["Comportement", "Benthique et solitaire, strictement crépusculaire à nocturne"],
         ["Statut", "En régression ; protégée par arrêté préfectoral dans plusieurs départements — vérifier localement"],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Gobies ponto-caspiens — invasion en cours, catalogue absent jusqu'ici.
+  //
+  // Quatre espèces arrivées par les canaux depuis le bassin de la mer Noire et
+  // de la Caspienne (Rhin dès 2007, puis Moselle, Rhône et estuaire de la
+  // Seine). Un pêcheur du Nord-Est ou du couloir rhodanien en prend
+  // régulièrement en pêchant au fond, sans qu'aucune fiche n'existe pour lui
+  // dire ce que c'est.
+  //
+  // Statut légal à ne pas confondre avec celui du pseudorasbora ou de la
+  // gambusie : ces quatre gobies ne figurent PAS au règlement UE 1143/2014 (ils
+  // sont considérés indigènes du sud-est de l'aire biogéographique
+  // européenne), et ne sont pas davantage sur R432-5. Leur interdiction
+  // d'introduction relève d'un autre texte — l'art. L432-10 du code de
+  // l'environnement (introduction d'une espèce non représentée dans les eaux
+  // concernées, jusqu'à 9 000 € d'amende), qui vise le TRANSPORT vivant et
+  // l'usage comme vif ailleurs, pas la remise à l'eau sur place : relâcher au
+  // point de capture n'est pas interdit puisque l'espèce y est déjà établie.
+  // Écrire « ne pas relâcher » sans cette nuance affirmerait une obligation
+  // qui n'existe pas.
+  //
+  // Confusion majeure avec le chabot (Cottus), lui protégé : le critère qui
+  // tranche à coup sûr est que les gobies ont les nageoires pelviennes soudées
+  // en un disque ventouse ventral, un trait de famille des Gobiidae que le
+  // chabot n'a pas.
+  //
+  // Source : DORIS (FFESSM), FishBase, SNPN, Observatoire des poissons
+  // Seine-Normandie, CDR-EEE (Centre de ressources espèces exotiques
+  // envahissantes) pour la répartition française et la chronologie d'invasion.
+
+  "gobie-demi-lune": {
+    ficheSrc: SRC_GOBIE,
+    ident: {
+      summary:
+        "Le plus petit et le plus discret des quatre gobies ponto-caspiens : robe grise à bandes obliques ou verticales plus sombres, bouche nettement orientée vers le bas.",
+      traits: [
+        "Taille modeste : jusqu'à 9 cm",
+        "Bandes sombres verticales ou obliques sur fond gris",
+        "Bouche orientée vers le bas",
+        "Nageoires pelviennes soudées en disque ventouse — trait de famille des Gobiidae",
+      ],
+      conf: [
+        GOBIE_CONF_CHABOT,
+        {
+          n: "Gobie fluviatile",
+          how: "Le gobie fluviatile a des reflets bleutés sur les flancs, absents ici ; les deux restent proches en taille et se distinguent surtout par la robe.",
+        },
+      ],
+    },
+    fish: gobieFish("ne le mettez pas au seau à vifs, ne le déplacez pas vers un autre plan d'eau"),
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes à lentement courantes, végétation dense ou blocs rocheux"],
+        ["Régime", "Invertébrés benthiques"],
+        ["Reproduction", "Avril–août ; le mâle garde les œufs déposés dans une cavité"],
+        ["Invasion en France", "Premier des quatre gobies ponto-caspiens détecté en France, dans le Rhin en 2007"],
+      ],
+    },
+  },
+
+  "gobie-de-kessler": {
+    ficheSrc: SRC_GOBIE,
+    ident: {
+      summary:
+        "Le plus massif des quatre gobies ponto-caspiens. Bouche orientée vers le haut — à l'inverse des trois autres — et nageoires pectorales barrées de gris et de jaune pâle.",
+      traits: [
+        "Corps massif, le plus trapu des quatre",
+        "Bouche orientée vers le haut (les trois autres l'ont vers le bas)",
+        "Nageoires pectorales barrées verticalement gris/jaune pâle",
+        "Nageoires pelviennes soudées en disque ventouse",
+      ],
+      conf: [
+        GOBIE_CONF_CHABOT,
+        {
+          n: "Gobie à taches noires",
+          how: "Le gobie à taches noires a la bouche orientée vers le bas et une tache noire nette sur la première dorsale, absentes chez le gobie de Kessler.",
+        },
+        {
+          n: "Gobie des sables",
+          how: "Les petits gobies natifs des côtes françaises (gobie des sables, gobie tacheté) ne dépassent pas une dizaine de centimètres et vivent sur les sables et vases côtiers ; le gobie de Kessler est bien plus massif et colonise des rivières précises (Rhin, Moselle, Rhône), souvent loin de toute influence saline.",
+        },
+      ],
+    },
+    fish: gobieFish("ne le mettez pas au seau à vifs, ne le déplacez pas vers un autre plan d'eau"),
+    bio: {
+      rows: [
+        ["Habitat", "Cours inférieurs, lagunes, lacs et grands fleuves à fond rocheux ou végétalisé"],
+        ["Régime", "Crustacés (mysidacés, amphipodes) et petits poissons, dont d'autres gobies"],
+        ["Reproduction", "Maturité à 2 ans, mars–mai ; œufs adhésifs déposés sur pierres et coquilles, gardés par le mâle"],
+        ["Invasion en France", "Détecté dans le Rhin en 2010, en expansion par le canal Rhin-Main-Danube"],
+      ],
+    },
+  },
+
+  "gobie-a-taches-noires": {
+    ficheSrc: SRC_GOBIE,
+    ident: {
+      summary:
+        "Le plus impactant et le plus répandu des quatre gobies ponto-caspiens en France. Tache noire nette sur la première nageoire dorsale, bouche orientée vers le bas ; le mâle devient entièrement noir en période de reproduction.",
+      traits: [
+        "Tache noire bien visible sur la première nageoire dorsale",
+        "Bouche orientée vers le bas",
+        "Mâle entièrement noir en période de reproduction",
+        "Taille jusqu'à 35 cm — le plus grand des quatre",
+      ],
+      conf: [
+        GOBIE_CONF_CHABOT,
+        {
+          n: "Gobie de Kessler",
+          how: "Le gobie de Kessler a la bouche orientée vers le haut et pas de tache noire sur la dorsale ; il est aussi plus massif.",
+        },
+      ],
+    },
+    fish: gobieFish("ne le mettez pas au seau à vifs, ne le déplacez pas vers un autre plan d'eau"),
+    bio: {
+      rows: [
+        ["Habitat", "Eaux peu profondes, saumâtres ou douces, fond rocheux ou végétalisé ; tolère de très faibles teneurs en oxygène"],
+        ["Régime", "Large spectre d'invertébrés et petits poissons, surtout des mollusques"],
+        ["Reproduction", "Avril–septembre, pontes répétées tous les 18–20 jours ; le mâle garde les œufs jusqu'à l'éclosion"],
+        ["Impact", "Dévore œufs et alevins et concurrence les poissons de fond indigènes (gardon, perche, chabot) — le plus impactant des quatre"],
+        ["Invasion en France", "Détecté dans le Rhin en 2011 ; colonise aujourd'hui Rhin, Moselle, Rhône et l'estuaire de la Seine"],
+      ],
+    },
+  },
+
+  "gobie-fluviatile": {
+    ficheSrc: SRC_GOBIE,
+    ident: {
+      summary:
+        "Le plus récemment arrivé des quatre gobies ponto-caspiens en France. Petite taille, bouche orientée vers le bas, flancs à reflets bleutés caractéristiques.",
+      traits: [
+        "Petite taille : jusqu'à 20 cm, souvent moins",
+        "Bouche orientée vers le bas",
+        "Reflets bleutés sur les flancs",
+        "Nageoires pelviennes soudées en disque ventouse",
+      ],
+      conf: [
+        GOBIE_CONF_CHABOT,
+        {
+          n: "Gobie demi-lune",
+          how: "Le gobie demi-lune est marqué de bandes sombres obliques ou verticales et n'a pas les reflets bleutés du gobie fluviatile.",
+        },
+      ],
+    },
+    fish: gobieFish("ne le mettez pas au seau à vifs, ne le déplacez pas vers un autre plan d'eau"),
+    bio: {
+      rows: [
+        ["Habitat", "Zones littorales, estuaires, lagunes, grands et moyens cours d'eau à fond sableux ou vaseux"],
+        ["Régime", "Invertébrés, surtout des mollusques"],
+        ["Reproduction", "Avril–juillet, localement jusqu'en septembre ; le mâle garde les œufs 3 à 4 jours"],
+        ["Invasion en France", "Le plus récent des quatre : premier individu capturé en Moselle (Berg-sur-Moselle) en juin 2014"],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Trois introductions discrètes et un signalement unique.
+  //
+  // Umbre pygmée et guppy : introduites de longue date (1910 pour l'umbre) ou
+  // tout juste documentées (guppy, 2024), mais sans mesure de gestion connue —
+  // `invasive: false` n'est pas un oubli, c'est ce que les sources disent.
+  //
+  // Les deux loches asiatiques (Misgurnus) sont la confusion qui compte dans
+  // ce lot : la loche d'étang (Misgurnus fossilis), déjà au catalogue, est
+  // protégée — et les critères qui la séparent de ses cousines introduites
+  // sont précis (patron de couleur, tache caudale, hauteur des crêtes
+  // adipeuses), pas une impression générale. Sourcé sur Cuinet et al. (2024,
+  // BioInvasions Records) pour M. dabryanus, dont l'unique mention française
+  // est un individu photographié puis relâché — le signalement le dit
+  // explicitement plutôt que de laisser croire à une population établie.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  "umbre-pygmee": {
+    ficheSrc:
+      "INPN (MNHN) · FishBase · Keith & Allardi — biologie et historique d'introduction en France",
+    ident: {
+      summary:
+        "Petit poisson trapu au corps peu comprimé, vert olive à brun sombre, surnommé « poisson-chien ». Dix à douze fines rayures sombres longitudinales, une bande sombre traversant l'œil et une barre noire à la base de la caudale.",
+      traits: [
+        "Corps trapu, peu comprimé latéralement",
+        "10 à 12 rayures sombres longitudinales fines",
+        "Bande sombre traversant l'œil",
+        "Barre noire nette à la base de la caudale",
+      ],
+      conf: [],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Marais, fossés et eaux stagnantes acides, souvent envasées et très pauvres en oxygène — respiration aérienne facultative"],
+        ["Régime", "Larves d'insectes, vers, mollusques, crustacés, alevins"],
+        ["Reproduction", "Avril–mai ; les larves restent environ 6 jours dans un nid algal"],
+        ["Introduction en France", "Introduite d'Amérique du Nord en étang dès 1910–1911 (Charolais, Saône-et-Loire) puis 1913 (Allier)"],
+        ["Présence actuelle", "Naturalisée localement dans des zones humides acides du nord et de l'ouest (dont la Marne), en populations discrètes et méconnues"],
+      ],
+    },
+  },
+
+  guppy: {
+    ficheSrc:
+      "FishBase · SFI-Cybium (Denys et al. 2024) — première population établie documentée en France métropolitaine",
+    ident: {
+      summary:
+        "Minuscule poisson vivipare, très connu en aquariophilie. Le mâle, nettement plus petit que la femelle, porte une nageoire anale modifiée en organe reproducteur et une robe colorée et variable ; la femelle est plus grande et terne.",
+      traits: [
+        "Très petite taille : mâle jusqu'à 5 cm, femelle jusqu'à 6 cm",
+        "Mâle coloré et bariolé, femelle terne et plus grande",
+        "Nageoire anale du mâle modifiée en organe reproducteur (gonopode)",
+        "Vivipare : la femelle donne naissance à des jeunes déjà formés",
+      ],
+      conf: [],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux chaudes (18–28 °C) : sources thermales, canaux et fossés bien végétalisés à faible prédation"],
+        ["Régime", "Zooplancton, petits insectes, détritus"],
+        ["Reproduction", "Vivipare, portées de 20 à 40 jeunes toutes les 4 à 6 semaines ; la femelle peut stocker le sperme pour des pontes différées"],
+        ["Présence en France", "Espèce tropicale ne survivant pas aux hivers métropolitains en pleine nature ; première population établie documentée dans un bassin alimenté par une source thermale (parc des Thermes, Juvignac, Hérault, signalée en 2024)"],
+      ],
+    },
+  },
+
+  "loche-asiatique": {
+    ficheSrc:
+      "Cuinet et al. (2024), BioInvasions Records 13(2):541-550 · INPN (MNHN) · FishBase — identification et présence en France",
+    ident: {
+      summary:
+        "Loche asiatique introduite par l'aquariophilie (loche « dojo » ou « loche météo », sensible aux variations de pression). Robe à motif de taches sombres, une tache noire nette à la base supérieure de la caudale, crêtes adipeuses basses sur le pédoncule caudal.",
+      traits: [
+        "Robe à taches sombres (pas de bandes continues)",
+        "Tache noire nette à la base supérieure de la nageoire caudale",
+        "Crêtes adipeuses basses sur le pédoncule caudal",
+        "Devient agitée avant les changements de pression atmosphérique — d'où le nom de « loche météo »",
+      ],
+      conf: [
+        {
+          n: "Loche d'étang",
+          how: "La loche d'étang, protégée, a un patron de bandes sombres et cuivrées continues, sans tache noire caudale ; la loche asiatique a une robe tachetée et une tache noire nette à la base de la caudale. Dans le doute, relâchez : la loche d'étang est protégée.",
+        },
+        {
+          n: "Loche à grandes écailles",
+          how: "La loche à grandes écailles n'a ni motif de couleur net ni tache caudale, et ses crêtes adipeuses sont hautes ; la loche asiatique a une robe tachetée, une tache caudale nette et des crêtes basses.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes à lentement courantes, substrat vaseux ; tolère de très faibles teneurs en oxygène grâce à une respiration intestinale"],
+        ["Régime", "Large spectre : zooplancton, invertébrés benthiques, végétaux"],
+        ["Introduction en France", "Issue du commerce aquariophile ; un individu isolé signalé dans l'Orge (bassin de la Seine) en 2010"],
+        ["Présence actuelle", "Population établie depuis l'automne 2021 dans le ruisseau du Schadgraben à Geispolsheim (bassin du Rhin, près de Strasbourg)"],
+      ],
+    },
+  },
+
+  "loche-a-grandes-ecailles": {
+    ficheSrc: "Cuinet et al. (2024), BioInvasions Records 13(2):541-550 — premier signalement français",
+    ident: {
+      summary:
+        "Loche asiatique introduite, très proche de la loche asiatique (dojo) mais sans motif de couleur net et sans tache caudale noire ; crêtes adipeuses hautes sur le pédoncule caudal — le critère le plus fiable à l'œil.",
+      traits: [
+        "Pas de motif de couleur net (ni bandes, ni taches marquées)",
+        "Pas de tache noire à la base de la caudale",
+        "Crêtes adipeuses hautes sur le pédoncule caudal",
+        "Peut dépasser 25 cm",
+      ],
+      conf: [
+        {
+          n: "Loche d'étang",
+          how: "La loche d'étang, protégée, a un patron de bandes sombres et cuivrées continues ; la loche à grandes écailles n'a pas de motif net. Dans le doute, relâchez : la loche d'étang est protégée.",
+        },
+        {
+          n: "Loche asiatique",
+          how: "La loche asiatique a une robe tachetée, une tache noire nette à la base de la caudale et des crêtes adipeuses basses ; la loche à grandes écailles n'a ni motif net ni tache caudale, et ses crêtes sont hautes.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat d'origine", "Bassins du Yangtsé et de la rivière des Perles (Chine), Taïwan ; eaux lentiques et lotiques à substrat vaseux"],
+        ["Régime", "Zooplancton, macroinvertébrés et algues"],
+        ["Reproduction", "Peut se reproduire par gynogenèse (sans fécondation par un mâle) — un facteur qui favoriserait son caractère envahissant"],
+        [
+          "Présence en France",
+          "Un seul individu connu à ce jour : capturé, photographié puis relâché dans le ruisseau de la Lanterne (affluent de l'Ognon, bassin du Rhône, Doubs) le 22 juillet 2020. Statut de population inconnu — probablement un lâcher aquariophile isolé, à surveiller",
+        ],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Petites espèces estuariennes et lagunaires, natives — à ne pas confondre
+  // avec les invasions déjà cataloguées.
+  //
+  // Les deux Pomatoschistus sont eux-mêmes des Gobiidae : ils ont donc le même
+  // disque ventouse ventral que les quatre gobies ponto-caspiens, ce qui
+  // écarte ce critère comme différenciateur ici. Ce qui sépare les deux
+  // groupes en pratique, c'est le lieu et la taille : les Pomatoschistus sont
+  // minuscules (10 cm max) et vivent sur les sables et vases côtiers, lagunes
+  // et estuaires de toutes les côtes françaises ; les quatre invasifs sont
+  // plus grands et colonisent des rivières précises (Rhin, Moselle, Rhône,
+  // Seine), souvent bien en amont de l'influence saline.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  joel: {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Petit poisson argenté vivant en bancs denses, corps allongé semi-transparent, bande argentée longitudinale caractéristique sur les flancs. Deux nageoires dorsales bien séparées, l'œil grand par rapport au museau.",
+      traits: [
+        "Bande argentée longitudinale nette sur les flancs",
+        "Corps allongé, semi-transparent",
+        "Deux nageoires dorsales séparées",
+        "Vit en bancs denses, souvent en surface"
+      ],
+      conf: [],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Très euryhalin : lagunes côtières, étangs méditerranéens, estuaires, bas des fleuves, occasionnellement l'eau douce"],
+        ["Régime", "Petits crustacés, vers, mollusques, larves de poissons"],
+        ["Reproduction", "Pontes fractionnées, œufs à filaments accrochés aux algues, 2 à 6 m de profondeur"],
+        ["Usage traditionnel", "Pêché à la senne dans les étangs méditerranéens, traditionnellement pour la friture (avec l'anchois et la sardine)"],
+      ],
+    },
+  },
+
+  "gobie-tachete": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Minuscule gobie natif des côtes françaises, corps trapu et translucide, tacheté de brun. Nageoires pelviennes soudées en disque ventouse comme tous les gobies — mais sa taille modeste et son habitat côtier le distinguent des gobies ponto-caspiens invasifs.",
+      traits: [
+        "Très petite taille : jusqu'à 6 cm",
+        "Corps trapu, translucide, tacheté de brun",
+        "Nageoires pelviennes soudées en disque ventouse (trait de tous les Gobiidae)",
+        "Vit sur sables et vases d'estuaires et lagunes côtières",
+      ],
+      conf: [
+        {
+          n: "Gobie de Kessler",
+          how: "Les quatre gobies ponto-caspiens invasifs sont nettement plus grands (jusqu'à 35 cm pour le gobie à taches noires) et colonisent des rivières précises (Rhin, Moselle, Rhône, Seine), souvent loin de l'influence saline ; le gobie tacheté, natif, reste minuscule (6 cm) et vit sur les sables et vases côtiers de toutes les côtes françaises. Le disque ventouse ne distingue pas les deux groupes : ce sont tous des Gobiidae.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Estuaires, lagunes, vasières côtières — toutes les côtes françaises"],
+        ["Régime", "Petits invertébrés benthiques"],
+        ["Reproduction", "Le mâle garde les œufs déposés dans une cavité ou sous une coquille"],
+        ["Statut", "Natif, préoccupation mineure au niveau mondial"],
+      ],
+    },
+  },
+
+  "gobie-des-sables": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Gobie natif des fonds sableux côtiers et estuariens, un peu plus grand que le gobie tacheté mais tout aussi discret. Corps translucide à brunâtre, nageoires pelviennes soudées en disque ventouse comme tous les gobies.",
+      traits: [
+        "Petite taille : quelques centimètres, plus grand que le gobie tacheté",
+        "Corps translucide à brunâtre, tacheté",
+        "Nageoires pelviennes soudées en disque ventouse (trait de tous les Gobiidae)",
+        "Vit enfoui dans le sable des fonds côtiers et estuariens",
+      ],
+      conf: [
+        {
+          n: "Gobie de Kessler",
+          how: "Les quatre gobies ponto-caspiens invasifs sont nettement plus grands et colonisent des rivières précises (Rhin, Moselle, Rhône, Seine) ; le gobie des sables, natif, reste sur les fonds sableux côtiers et estuariens de toutes les côtes françaises. Le disque ventouse ne distingue pas les deux groupes : ce sont tous des Gobiidae.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Fonds sableux côtiers et estuariens, enfoui le jour"],
+        ["Régime", "Petits invertébrés benthiques"],
+        ["Statut", "Natif, préoccupation mineure au niveau mondial ; données insuffisantes en France (Liste rouge nationale)"],
+      ],
+    },
+  },
+
+  syngnathe: {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Cousin d'eau saumâtre et douce de l'hippocampe, corps très allongé et cuirassé d'anneaux osseux, museau tubulaire. Le mâle porte une poche incubatrice ventrale sous la queue.",
+      traits: [
+        "Corps en forme de tige, cuirassé d'anneaux osseux",
+        "Museau tubulaire, bouche minuscule à son extrémité",
+        "Le mâle porte les œufs dans une poche ventrale sous la queue",
+        "Nage lentement, ondulant parmi la végétation",
+      ],
+      conf: [],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Très euryhalin : végétation ou détritus sur sable et vase, mer, estuaires et eau douce"],
+        ["Régime", "Petits invertébrés, aspirés par le museau tubulaire"],
+        ["Reproduction", "Le mâle féconde 10 à 60 œufs déposés dans sa poche ventrale et les porte 20 à 32 jours selon la température"],
+        ["Statut", "Préoccupation mineure au niveau mondial (UICN LC)"],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Trois lignées cryptiques du complexe loche franche, plus une loche
+  // italienne introduite accidentellement, et les deux épinochettes qui
+  // ferment le catalogue. Dernier lot pour boucler la liste de référence
+  // (moins les corégones et cyprinodontes éteints, volontairement exclus).
+  // ═══════════════════════════════════════════════════════════════════════
+
+  "loche-d-espagne": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Lignée cryptique du complexe loche franche, revalidée en 2021, indissociable à l'œil de la loche franche commune. Seule la répartition géographique permet de la reconnaître : bassin de l'Adour.",
+      traits: [
+        "6 barbillons autour de la bouche, tête aplatie — traits communs à toutes les loches franches",
+        "Marbrures brunes sur fond jaunâtre",
+        "Taille jusqu'à 12 cm",
+        "Bassin de l'Adour (France) et Espagne du Nord",
+      ],
+      conf: [
+        {
+          n: "Loche franche",
+          how: "Indissociable à l'œil ; seule la répartition tranche — la loche d'Espagne est propre au bassin de l'Adour, la loche franche occupe le reste du territoire.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de graviers, comme la loche franche"],
+        ["Répartition", "Bassin de l'Adour (France), Ebro et Cantabrique oriental (Espagne)"],
+        ["Statut taxonomique", "Revalidée en 2021 après avoir été considérée comme un synonyme"],
+      ],
+    },
+  },
+
+  "loche-leopard": {
+    ficheSrc: "INPN (MNHN) · Gauliard, Dettaï, Persat, Keith & Denys (2019) — description originale, Cybium",
+    ident: {
+      summary:
+        "Lignée cryptique du complexe loche franche, décrite en 2019, indissociable à l'œil de la loche franche commune. Seule la répartition géographique permet de la reconnaître : bassins du Tech et de la Têt.",
+      traits: [
+        "6 barbillons autour de la bouche, tête aplatie — traits communs à toutes les loches franches",
+        "Marbrures brunes sur fond jaunâtre",
+        "Taille jusqu'à 12 cm",
+        "Endémique des bassins du Tech et de la Têt (Pyrénées-Orientales)",
+      ],
+      conf: [
+        {
+          n: "Loche franche",
+          how: "Indissociable à l'œil ; seule la répartition tranche — la loche léopard est endémique des bassins du Tech et de la Têt (Pyrénées-Orientales), la loche franche occupe le reste du territoire.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de graviers, comme la loche franche"],
+        ["Répartition", "Endémique des bassins du Tech et de la Têt (Pyrénées-Orientales, Catalogne française)"],
+        ["Statut taxonomique", "Décrite en 2019 ; type collecté sur la Têt à Néfiach"],
+      ],
+    },
+  },
+
+  "loche-du-lez": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Lignée cryptique du complexe loche franche, indissociable à l'œil de la loche franche commune. Nommée d'après le Lez, l'un des cours d'eau de son aire — à ne pas confondre avec le chabot du Lez, une espèce totalement différente qui partage le même nom de rivière.",
+      traits: [
+        "6 barbillons autour de la bouche, tête aplatie — traits communs à toutes les loches franches",
+        "Marbrures brunes sur fond jaunâtre",
+        "Taille jusqu'à 7 cm",
+        "Bassins du Lez, du Tech, de l'Adour et de la Garonne",
+      ],
+      conf: [
+        {
+          n: "Loche franche",
+          how: "Indissociable à l'œil ; seule la répartition tranche — la loche du Lez occupe les bassins du Lez, du Tech, de l'Adour et de la Garonne.",
+        },
+        {
+          n: "Chabot du Lez",
+          how: "Le nom prête à confusion mais ce sont deux espèces sans rapport, d'ordres différents : le chabot du Lez (Cottus petiti) est un chabot à tête large protégé, endémique des trois premiers kilomètres du Lez ; la loche du Lez est une loche allongée à barbillons, présente sur un territoire bien plus vaste (Lez, Tech, Adour, Garonne).",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Cours d'eau vifs et frais à fond de graviers, comme la loche franche"],
+        ["Répartition", "Bassins du Lez, du Tech, de l'Adour et de la Garonne"],
+        ["Étymologie", "Nommée en l'honneur de l'ichtyologiste Jean-Pierre Quignard"],
+      ],
+    },
+  },
+
+  "loche-transalpine": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Loche italienne introduite accidentellement en France, proche de la loche de rivière. Corps allongé, deux taches noires nettes à la base de la nageoire caudale.",
+      traits: [
+        "Corps allongé, ne dépassant guère 10 cm",
+        "Deux taches noires nettes à la base de la caudale",
+        "Vit sur fonds sableux à débris organiques, en bordure des cours d'eau de piémont et de plaine",
+      ],
+      conf: [
+        {
+          n: "Loche de rivière",
+          how: "Les deux espèces sont proches ; la loche transalpine est endémique du nord de l'Italie et n'est présente en France que par introduction accidentelle (basse Durance depuis 1995), la loche de rivière est native et protégée sur le reste du territoire. Dans le doute, relâchez.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Biotopes marginaux peu profonds des rivières de piémont et de plaine, fonds sableux à débris organiques"],
+        ["Origine", "Endémique du nord de l'Italie"],
+        ["Présence en France", "Introduite accidentellement ; signalée dans la basse vallée de la Durance depuis 1995"],
+      ],
+    },
+  },
+
+  "epinochette-neuf-epines": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Petit gastérostéidé du nord et de l'est de la France, à ne pas confondre avec l'épinochette (Pungitius laevis) déjà au catalogue : les deux espèces portent le même nom vernaculaire « épinochette », y compris dans les bases officielles.",
+      traits: [
+        "6 à 12 épines dorsales (en moyenne 9-10), aussi longues que la nageoire anale",
+        "Petite taille, quelques centimètres",
+        "Nord et est de la France : bassins Seine, Meuse, Escaut, côtiers de la Manche",
+      ],
+      conf: [
+        {
+          n: "Épinochette",
+          how: "Les deux espèces portent officiellement le même nom vernaculaire « épinochette » — Pungitius laevis (déjà au catalogue) et Pungitius pungitius (ici) ne se distinguent de façon fiable que par le nombre d'épines dorsales (plus nombreuses ici, 6 à 12) et l'analyse génétique.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes végétalisées, comme les autres gastérostéidés"],
+        ["Répartition", "Nord et est de la France (Seine, Meuse, Escaut, côtiers de la Manche), pénétrant jusqu'en Saône ; large répartition holarctique (Asie du Nord, Amérique du Nord, Europe septentrionale)"],
+      ],
+    },
+  },
+
+  "epinochette-du-poitou": {
+    ficheSrc: "INPN (MNHN) · Denys & al. (2018) — révalidation · FishBase",
+    ident: {
+      summary:
+        "Petit gastérostéidé endémique du Centre-Ouest français, décrit en 1848 puis synonymisé avec l'épinochette à neuf épines avant d'être revalidé en 2018 comme espèce distincte.",
+      traits: [
+        "Morphologie générale des épinochettes : petite taille, épines dorsales",
+        "Très petite taille : 3,9 cm (mâle) à 4,6 cm (femelle)",
+        "Endémique du Centre-Ouest français",
+      ],
+      conf: [
+        {
+          n: "Épinochette",
+          how: "Longtemps confondue avec les autres épinochettes ; seule la répartition (Centre-Ouest : Vienne, estuaire de la Gironde, Dordogne, Charente, Sèvre Niortaise, Ligneron) et l'analyse génétique permettent de la distinguer avec certitude.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Eaux calmes végétalisées, cours d'eau et zones estuariennes du Centre-Ouest"],
+        ["Répartition", "Bassin de la Vienne, estuaire de la Gironde, affluents de la Dordogne, Charente, Sèvre Niortaise, Ligneron"],
+        ["Statut taxonomique", "Décrite en 1848, synonymisée puis revalidée en 2018 (Denys & al.)"],
+        ["Statut", "Quasi menacée (Liste rouge française, UICN NT)"],
       ],
     },
   },

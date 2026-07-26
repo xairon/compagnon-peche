@@ -68,3 +68,71 @@ describe("lamproies pêchables — toxicité du sang cru (ichtyohémotoxisme)", 
     expect(EDIBILITY["lamproie-de-planer"]?.prep).not.toMatch(/sang toxique/i);
   });
 });
+
+/**
+ * Couverture et discipline de l'overlay, depuis que les 58 espèces « base » y
+ * ont toutes une entrée. Une fiche muette sur la consommation était le trou
+ * d'origine ; le trou symétrique — une recommandation sanitaire étendue à une
+ * espèce que la source ne nomme pas — serait pire, et c'est celui-là que les
+ * deux derniers tests surveillent.
+ */
+describe("comestibilité — couverture et sourçage", () => {
+  it("chaque espèce « base » a son entrée", () => {
+    const sans = BASE_SPECIES.filter((s) => !EDIBILITY[s.id]).map((s) => s.id);
+    expect(sans).toEqual([]);
+  });
+
+  it("aucune entrée n'affirme sans citer sa source", () => {
+    const muettes = Object.entries(EDIBILITY)
+      .filter(([, e]) => !e.source || e.source.trim() === "")
+      .map(([id]) => id);
+    expect(muettes).toEqual([]);
+  });
+
+  /**
+   * L'avis PCB de l'ANSES nomme cinq espèces fortement bioaccumulatrices. Le
+   * porter sur une sixième « qui lui ressemble » (la carpe argentée n'est pas
+   * une carpe, l'amour blanc non plus) serait exactement l'invention que cette
+   * app refuse. Ce test fige la liste : l'élargir demandera de citer l'avis.
+   */
+  it("l'avis ANSES ne porte que sur les espèces que l'avis nomme", () => {
+    const NOMMEES = ["anguille", "barbeau", "breme", "carpe", "silure"];
+    const porteuses = Object.entries(EDIBILITY)
+      .filter(([, e]) => e.anses)
+      .map(([id]) => id)
+      .sort();
+    expect(porteuses).toEqual(NOMMEES);
+  });
+
+  /**
+   * Le flet est un poisson de fond d'estuaire : le risque PCB est réel mais
+   * c'est un risque de milieu, porté par les arrêtés préfectoraux, pas un avis
+   * ANSES par espèce. Sa fiche doit renvoyer à l'arrêté — et surtout ne pas
+   * fabriquer une fréquence de consommation que personne n'a publiée.
+   */
+  it("le flet renvoie à l'arrêté préfectoral, sans inventer de fréquence", () => {
+    const ed = EDIBILITY["flet"];
+    expect(ed.prep).toMatch(/arrêté préfectoral/i);
+    expect(ed.anses).toBeUndefined();
+    expect(ed.prep).not.toMatch(/fois (par|tous les)/i);
+  });
+
+  /**
+   * Les lignées décrites par scission récente (goujons, vairons régionaux)
+   * n'ont pas de donnée culinaire propre. Leur entrée est légitime — c'est le
+   * même poisson dans l'assiette — à condition que la source le dise.
+   */
+  it("les lignées cryptiques annoncent que leur usage est rapporté à l'espèce sœur", () => {
+    const CRYPTIQUES = [
+      "goujon-occitan",
+      "goujon-auvergne",
+      "goujon-ukraine",
+      "vairon-basque",
+      "vairon-de-garonne",
+      "vairon-du-danube",
+      "vairon-du-languedoc",
+    ];
+    const sans = CRYPTIQUES.filter((id) => !/lignée cryptique/i.test(EDIBILITY[id]?.source ?? ""));
+    expect(sans).toEqual([]);
+  });
+});

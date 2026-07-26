@@ -126,6 +126,18 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
         },
       ],
     },
+    // Personne ne « pêche le brochet aquitain » : on pêche le brochet, et dans
+    // quatre bassins du Sud-Ouest c'est parfois celui-là qui vient. La section
+    // décrit donc la reconnaissance et la remise à l'eau, pas une technique
+    // pour le cibler — ce serait viser une espèce endémique et rare.
+    fish: {
+      rows: [
+        ["Prise", "Capture accessoire de la pêche du brochet, dans les seuls bassins Charente, Dordogne, Eyre et Adour"],
+        ["Réglementation", "Traité comme le brochet : mêmes maille, quota et période (voir la section Règles)"],
+        ["Conduite à tenir", "Endémique français rare, décrit seulement en 2014 : remise à l'eau immédiate et soignée, sans le sortir de l'eau plus que nécessaire"],
+        ["Ne pas confondre", "Un brochet pris hors de ces quatre bassins est un grand brochet — la localisation prime sur la robe"],
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Cours d'eau et lacs du Grand Sud-Ouest (Charente, Dordogne, Eyre, Adour)"],
@@ -209,6 +221,14 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
         ["Moment", "Faible luminosité : tôt le matin, temps couvert"],
       ],
     },
+    cook: {
+      note: "Chair fine et fondante, blanche à rosée — nettement orangée chez les grands sujets qui se nourrissent de poissons. Peu d'arêtes, comme chez les autres ombles.",
+      prep: [
+        "Lever les filets : la peau est fine, les écailles minuscules",
+        "Cuisson courte, à la meunière ou au four — la chair est grasse et sèche vite",
+        "Les grands sujets se prêtent au fumage ou au gravlax",
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Lacs profonds et froids d'altitude, souvent au-delà de 2 000 m dans les Pyrénées"],
@@ -234,6 +254,17 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
           n: "Truite fario",
           how: "La truite fario porte des taches rondes noires et rouges bien distinctes ; le huchon a des taches allongées en X ou en croissant, et un corps nettement plus massif et cylindrique.",
         },
+      ],
+    },
+    // Population française « anecdotique » (voir bio) : décrire comment le
+    // cibler n'aurait pas de sens. Ce qui manquait au pêcheur, c'est de savoir
+    // quoi faire s'il en accroche un — la maille de 70 cm ne suffit pas à le
+    // dire, et elle est de toute façon portée par la section Règles.
+    fish: {
+      rows: [
+        ["Prise", "Capture exceptionnelle en pêchant le carnassier ou la truite au pied du haut Rhône"],
+        ["Conduite à tenir", "Population résiduelle et non pérenne : remise à l'eau immédiate, quelle que soit la taille du poisson"],
+        ["Signalement", "Une capture mérite d'être signalée à la fédération départementale — les données sur l'espèce en France sont très rares"],
       ],
     },
     bio: {
@@ -318,6 +349,191 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
         ["Habitat de fraie", "Têtes de bassin à courant vif et fond graveleux"],
         ["Statut", "Espèce en fort déclin sur la plupart des bassins français faute de géniteurs"],
         ["Répartition", "Historiquement Bretagne, Normandie, bassin Adour-Gaves ; aujourd'hui très localisé"],
+      ],
+    },
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // Deux lignées de truite régionales et deux corégones vivants supplémen-
+  // taires, plus l'ombre du haut bassin de la Loire — tous des salmonidés
+  // d'eau douce, réglementés comme leurs cousins déjà curatés (même maille,
+  // même période 1ʳᵉ catégorie), avec la même prudence que le reste du
+  // catalogue sur les identifications de terrain incertaines.
+  // ═══════════════════════════════════════════════════════════════════════
+
+  "truite-corse": {
+    ficheSrc: "INPN (MNHN) · FishBase · DORIS (FFESSM) — biologie et répartition",
+    ident: {
+      summary:
+        "Truite endémique de Corse, de Sardaigne, de Sicile et du sud de l'Italie continentale, distincte de la truite fario continentale. Robe marquée de nombreuses petites taches sombres et brun-rougeâtre, plus petites que l'œil.",
+      traits: [
+        "20 à 60 petites taches ocellées sur les flancs, plus petites que l'œil, noires ou brun-rougeâtre",
+        "9 à 13 marques pariétales (« parr marks ») persistant chez l'adulte",
+        "Caudale légèrement échancrée",
+        "Vit en eaux claires et fraîches, souvent des résurgences karstiques à végétation aquatique dense",
+      ],
+      conf: [
+        {
+          n: "Truite fario",
+          how: "La truite fario continentale n'est pas présente en Corse à l'état génétiquement pur ; toute truite sauvage corse est présumée être cette espèce ou un hybride. Le nombre élevé de petites taches, plus petites que l'œil, est le trait le plus caractéristique.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Résurgences karstiques et cours d'eau clairs et frais (10–20 °C), végétation aquatique dense"],
+        ["Répartition", "Corse, Sardaigne, Sicile, sud de l'Italie continentale (bassin du Magra et au sud)"],
+        ["Statut", "En danger critique (UICN CR, 2023) — menacée notamment par l'introgression génétique de la truite fario introduite pour l'empoissonnement"],
+      ],
+    },
+  },
+
+  "truite-du-rhone": {
+    ficheSrc: "INPN (MNHN) · FishBase — biologie et répartition",
+    ident: {
+      summary:
+        "Truite du Grand Sud-Est, du bassin du Rhône jusqu'à la Roya. Robe plus sombre et plus unie que la truite fario, quatre barres sombres larges caractéristiques (derrière l'ouïe, sous la dorsale, au-dessus de l'anale, à l'extrémité du pédoncule caudal), peu ou pas de points rouges.",
+      traits: [
+        "Quatre barres sombres larges : derrière l'opercule, sous la base de la dorsale, au-dessus de l'anale, à l'extrémité du pédoncule caudal",
+        "Robe globalement plus sombre et plus unie que la truite fario",
+        "Peu ou pas de points rouges, pas de marques orangées sur l'adipeuse",
+        "Peut atteindre 80 cm",
+      ],
+      conf: [
+        {
+          n: "Truite fario",
+          how: "La truite fario porte des points rouges bien visibles et des marques orangées sur l'adipeuse, absents ou très réduits ici ; la truite du Rhône se reconnaît à ses quatre barres sombres larges et à sa robe plus unie. Validité taxonomique débattue : certains auteurs n'y voient qu'un morphotype régional de la truite commune plutôt qu'une espèce distincte.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Rivières et ruisseaux à eau claire et fraîche, courant lent à vif"],
+        ["Répartition", "Bassin du Rhône (hors bassin du Léman) jusqu'au bassin de la Roya ; Suisse occidentale et nord-ouest de l'Italie"],
+        ["Statut taxonomique", "Distinguée de la truite commune, mais validité débattue — considérée par certains comme un morphotype régional plutôt qu'une espèce à part entière"],
+      ],
+    },
+  },
+
+  "ombre-d-auvergne": {
+    ficheSrc: "INPN (MNHN) · Persat & al. (2019), description originale — Cybium",
+    ident: {
+      summary:
+        "Ombre endémique du haut bassin de la Loire et de l'Allier, décrit en 2019 — la troisième espèce d'ombre reconnue en Europe. Corps plus allongé que l'ombre commun, museau pointu, bouche inférieure à ouverture transversale, plus de 50 points sombres sur les flancs.",
+      traits: [
+        "Corps plus allongé, museau pointu, profil rectiligne à convexe",
+        "Bouche inférieure à ouverture transversale, lèvre supérieure charnue",
+        "Plus de 50 (jusqu'à plusieurs centaines) points sombres sur les flancs",
+        "Tête et œil proportionnellement plus petits que l'ombre commun",
+      ],
+      conf: [
+        {
+          n: "Ombre commun",
+          how: "Les deux espèces sont très proches ; l'ombre d'Auvergne est endémique du haut bassin de la Loire et de l'Allier (Alagnon, Dore, Ance, Sioule), l'ombre commun occupe le reste du territoire français. Des lâchers d'ombre commun dans l'aire de l'ombre d'Auvergne créent un risque d'hybridation — un critère de terrain fiable et rapide manque encore.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Rivières fraîches et bien oxygénées du haut bassin de la Loire, très sensible à la qualité de l'eau"],
+        ["Répartition", "Endémique de quelques rivières du haut bassin Loire-Allier : Alagnon, haute Loire, Allier, Sioule, Dore, Ance"],
+        ["Statut", "Décrit en 2019 ; seulement huit populations connues, en danger (Liste rouge régionale UICN Auvergne-Rhône-Alpes)"],
+        ["Menace", "Hybridation avec l'ombre commun introduit par des sociétés de pêche locales dans son aire de répartition"],
+      ],
+    },
+  },
+
+  "coregone-blanc": {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Corégone pélagique natif des grands lacs alpins, aux côtés du corégone lavaret. Corps fuselé argenté sans tache, nageoires sans épine — un trait qui le distingue des autres corégones. Selon le lac, il porte le nom vernaculaire de « lavaret » ou d'autres noms locaux, à ne pas confondre avec l'espèce Coregonus lavaretus déjà au catalogue.",
+      traits: [
+        "Corps fuselé et argenté, sans tache, comme les autres corégones",
+        "Aucune épine sur les nageoires dorsale et anale — un critère distinctif du genre",
+        "Nageoire caudale très échancrée",
+        "Vit en bancs pélagiques dans les grands lacs alpins profonds",
+      ],
+      conf: [
+        {
+          n: "Corégone / lavaret / féra",
+          how: "Les deux espèces sont natives des mêmes grands lacs alpins et quasiment indissociables à l'œil. Le nom vernaculaire n'aide pas à trancher : « lavaret » désigne localement tantôt l'une, tantôt l'autre selon le lac — seule une identification experte ou génétique permet de distinguer les deux espèces avec certitude.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Grands lacs alpins profonds et froids, en bancs pélagiques"],
+        ["Régime", "Zooplancton"],
+        ["Répartition", "Lac du Bourget (où il est appelé localement « lavaret »), lacs d'Aiguebelette, de Nantua, de Paladru, de Laffrey, d'Issarlès"],
+        ["Remarque", "Cohabite avec le corégone lavaret dans plusieurs lacs ; les deux espèces sont difficiles à distinguer sans expertise"],
+      ],
+    },
+  },
+
+  palee: {
+    ficheSrc: SRC,
+    ident: {
+      summary:
+        "Corégone natif des lacs suisses de Neuchâtel et Bienne, introduit au Léman et dans d'autres lacs franco-suisses. « Palée » est un nom vernaculaire ambigu : selon le lac, il peut désigner cette espèce ou d'autres corégones du même complexe.",
+      traits: [
+        "Corps fuselé et argenté, sans tache — silhouette générale de corégone",
+        "Peut atteindre 45 cm",
+        "Vit en bancs, fraie sur graviers proches du rivage jusqu'à 50 m de profondeur",
+      ],
+      conf: [
+        {
+          n: "Corégone / lavaret / féra",
+          how: "Indissociable à l'œil des autres corégones du complexe présents dans les mêmes lacs. « Palée » est un nom ambigu qui désigne, selon le plan d'eau, plusieurs espèces différentes — l'identification certaine relève de l'expertise ou de la génétique, pas de l'œil nu.",
+        },
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Lacs profonds franco-suisses, en bancs"],
+        ["Reproduction", "Sur graviers proches du rivage à grande profondeur (jusqu'à 50 m) ; novembre-décembre en eau peu profonde, décembre-février en eau profonde"],
+        ["Répartition", "Native des lacs de Neuchâtel et Bienne (Suisse) ; introduite au Léman et dans d'autres lacs franco-suisses"],
+        ["Remarque", "Nom vernaculaire ambigu, partagé selon les lacs avec d'autres corégones (dont Coregonus fera, éteint) — la confusion est documentée, pas seulement locale"],
+      ],
+    },
+  },
+
+  "brochet-italien": {
+    ficheSrc: "INPN (MNHN) · MNHN (actualités) · Esoxiste.com — biologie, répartition et statut",
+    ident: {
+      summary:
+        "Troisième espèce de brochet reconnue en France, décrite en 2011, présente dans le Sud-Est près de l'arc alpin. Robe marquée de bandes ou stries claires sur fond sombre (à l'inverse des taches claires ovales du grand brochet), moins d'écailles sur la ligne latérale.",
+      traits: [
+        "Robe à bandes ou stries claires sur fond sombre, plutôt que des taches ovales isolées",
+        "Moins d'écailles sur la ligne latérale que le grand brochet",
+        "Génétiquement distinct du brochet commun et du brochet aquitain",
+      ],
+      conf: [
+        {
+          n: "Brochet",
+          how: "Le grand brochet présente des rangées de taches claires ovales sur fond sombre ; le brochet italien a des bandes ou stries plutôt que des taches isolées. Le critère le plus sûr reste la localisation : connu en France près de l'arc alpin (Sud-Est), historiquement dans le lac Léman et le lac Saint-André.",
+        },
+        {
+          n: "Brochet aquitain",
+          how: "Les deux sont des brochets régionaux distincts du grand brochet, mais sans rapport géographique : le brochet aquitain est endémique du Sud-Ouest (Charente, Dordogne, Eyre, Adour), le brochet italien du Sud-Est alpin.",
+        },
+      ],
+    },
+    // Comme pour le brochet aquitain : une espèce menacée par l'hybridation
+    // avec le brochet commun repeuplé dans son aire ne se cible pas, elle se
+    // reconnaît et se relâche.
+    fish: {
+      rows: [
+        ["Prise", "Capture accessoire de la pêche du brochet, dans le Sud-Est près de l'arc alpin"],
+        ["Réglementation", "Traité comme le brochet : mêmes maille, quota et période (voir la section Règles)"],
+        ["Conduite à tenir", "Vulnérable (UICN VU) et en déclin par hybridation avec le brochet commun introduit dans son aire : remise à l'eau immédiate et soignée recommandée"],
+      ],
+    },
+    bio: {
+      rows: [
+        ["Habitat", "Lacs et cours d'eau du Sud-Est français et du nord de l'Italie"],
+        ["Répartition", "Nord et centre de l'Italie, Sud-Est français ; historiquement lac Léman (XIXᵉ siècle) et lac Saint-André (années 1920)"],
+        ["Statut", "Décrit en 2011 ; vulnérable (UICN VU, 2023) — déclin par hybridation avec le brochet commun repeuplé par des opérations d'empoissonnement"],
       ],
     },
   },

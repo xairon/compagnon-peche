@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { FICHES, withFiche } from "./fiches";
 import { BASE_SPECIES } from "./species-base";
 import { SPECIES } from "./species";
+import type { Species } from "../types";
 
 /**
  * Une fiche n'ajoute QUE du descriptif. Elle ne doit jamais porter une maille,
@@ -54,9 +55,50 @@ describe("fiches — overlay descriptif", () => {
     }
   });
 
+  // Espèce synthétique, et non « la première du catalogue qui n'a pas de fiche » :
+  // depuis que les 58 espèces « base » sont toutes couvertes, un tel candidat
+  // n'existe plus — et le test tombait, alors que c'était une bonne nouvelle.
   it("withFiche laisse intacte une espèce sans overlay", () => {
-    const sans = BASE_SPECIES.find((s) => !FICHES[s.id])!;
-    expect(withFiche(sans)).toEqual(sans);
+    const inconnue: Species = {
+      id: "espece-sans-fiche",
+      name: "Espèce sans fiche",
+      latin: "Testus absentis",
+      group: "autres",
+      maille: "—",
+      mailleSub: "pas de maille nationale",
+      quota: "—",
+      quotaSub: "—",
+      season: "toujours",
+      depth: "base",
+    };
+    expect(withFiche(inconnue)).toEqual(inconnue);
+  });
+
+  // Le corollaire : plus aucune espèce « base » ne doit rester sans section
+  // descriptive. C'est ce test qui dira qu'une régénération en a réintroduit une.
+  it("chaque espèce « base » a reçu sa fiche", () => {
+    const orphelines = BASE_SPECIES.filter((s) => !FICHES[s.id]).map((s) => s.id);
+    expect(orphelines).toEqual([]);
+  });
+
+  /**
+   * Sept des espèces curatées les plus emblématiques du catalogue — perche,
+   * truite fario, carpe, gardon, barbeau, poisson-chat, black-bass — n'avaient
+   * historiquement ni `fish`, ni `cook`, ni `bio` : seulement l'identification
+   * et la santé. Un pêcheur ouvrant la fiche de la perche n'y trouvait ni où
+   * la pêcher, ni comment la cuisiner, ni sa biologie. Ce test fige que ces
+   * sept espèces — ordinaires, comestibles, sans raison de rester incomplètes
+   * — ont bien les trois sections désormais.
+   */
+  it("les 7 espèces curatées historiquement incomplètes ont fish, cook et bio", () => {
+    const ORDINAIRES = ["perche", "truite-fario", "carpe", "gardon", "barbeau", "poisson-chat", "black-bass"];
+    for (const id of ORDINAIRES) {
+      const sp = SPECIES.find((s) => s.id === id);
+      expect(sp, `${id} doit exister`).toBeDefined();
+      expect(sp?.fish, `${id}.fish`).toBeDefined();
+      expect(sp?.cook, `${id}.cook`).toBeDefined();
+      expect(sp?.bio, `${id}.bio`).toBeDefined();
+    }
   });
 
   it("les confusions citées renvoient à des espèces réelles", () => {

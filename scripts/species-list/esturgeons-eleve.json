@@ -1,0 +1,4 @@
+[
+  { "id": "esturgeon-siberien", "name": "Esturgeon sibérien", "latin": "Acipenser baerii", "family": "Acipenseridae", "group": "migrateurs", "maille": "spéciale", "invasive": false, "protected": false, "sosieDe": "l'esturgeon européen", "season": "special", "cd_nom": "200254", "note": "Introduit : présent uniquement par échappées d'élevage (caviar d'Aquitaine — Dordogne, Gironde, Charente-Maritime), aucune reproduction naturelle constatée en France. Élevé ici depuis 1989 ; plusieurs dizaines de tonnes libérées dans la Garonne en 1999 après une rupture de digue." },
+  { "id": "sterlet", "name": "Sterlet", "latin": "Acipenser ruthenus", "family": "Acipenseridae", "group": "migrateurs", "maille": "spéciale", "invasive": false, "protected": false, "sosieDe": "l'esturgeon européen", "season": "special", "note": "Introduit par l'aquaculture et des lâchers d'agrément ; le plus petit des esturgeons européens, ne se reproduit pas naturellement en France." }
+]

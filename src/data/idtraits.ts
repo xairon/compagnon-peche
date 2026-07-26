@@ -205,4 +205,69 @@ export const ID_TRAITS: Record<string, IdTrait> = {
   "vairon-de-garonne": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
   "vairon-du-danube": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
   "vairon-du-languedoc": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "vairon-ligerien": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "vairon-italien": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "vandoise-du-bearn": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "moyen" },
+  "vandoise-au-long-museau": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "moyen" },
+  vimbe: { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "goujon-de-l-adour": { silhouette: "allonge", barb: "2", adipeuse: false, bouche: "infere", dorsale: "une", taille: "petit" },
+  "blageon-italien": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "breme-du-danube": { silhouette: "trapu", barb: "0", adipeuse: false, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "epirine-lippue": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "rotengle-italien": { silhouette: "trapu", barb: "0", adipeuse: false, bouche: "supere", dorsale: "une", taille: "moyen" },
+  "carpe-koi-sauvage": { silhouette: "trapu", barb: "4", adipeuse: false, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "carpe-a-grosse-tete": { silhouette: "trapu", barb: "0", adipeuse: false, bouche: "supere", dorsale: "une", taille: "tres-grand" },
+  "tete-de-boule": { silhouette: "trapu", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+
+  // ── Salmonidés supplémentaires ──
+  "truite-corse": { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "moyen" },
+  "truite-du-rhone": { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "grand" },
+  "ombre-d-auvergne": { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "coregone-blanc": { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "moyen" },
+  palee: { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "moyen" },
+  "saumon-rose": { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "grand" },
+  eperlan: { silhouette: "fusiforme", barb: "0", adipeuse: true, bouche: "terminale", dorsale: "une", taille: "petit" },
+  "esturgeon-siberien": { silhouette: "allonge", barb: "4", adipeuse: false, bouche: "infere", dorsale: "une", taille: "tres-grand" },
+  sterlet: { silhouette: "allonge", barb: "4", adipeuse: false, bouche: "infere", dorsale: "une", taille: "grand" },
+  "brochet-italien": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "une", taille: "grand" },
+
+  // ── Chabots régionaux (complexe Cottus gobio) ──
+  "chabot-du-bearn": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "deux", taille: "petit" },
+  "chabot-d-auvergne": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "deux", taille: "petit" },
+  "chabot-des-pyrenees": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "deux", taille: "petit" },
+  "chabot-du-lez": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "deux", taille: "petit" },
+  "chabot-de-rhenanie": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "gueule", dorsale: "deux", taille: "petit" },
+  "crapet-de-roche": { silhouette: "trapu", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "epineuse", taille: "moyen" },
+
+  // ── Loches (Barbatula/Cobitis/Misgurnus) ──
+  "loche-d-espagne": { silhouette: "allonge", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "petit" },
+  "loche-leopard": { silhouette: "allonge", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "petit" },
+  "loche-du-lez": { silhouette: "allonge", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "petit" },
+  "loche-transalpine": { silhouette: "allonge", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "petit" },
+  "loche-asiatique": { silhouette: "serpentiforme", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "loche-a-grandes-ecailles": { silhouette: "serpentiforme", barb: "6+", adipeuse: false, bouche: "infere", dorsale: "une", taille: "moyen" },
+  "lote-de-riviere": { silhouette: "serpentiforme", adipeuse: false, dorsale: "deux" },
+
+  // ── Introductions et cyprinodontes ──
+  "umbre-pygmee": { silhouette: "trapu", barb: "0", adipeuse: false, dorsale: "une", taille: "petit" },
+  guppy: { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "supere", dorsale: "une", taille: "petit" },
+  "aphanius-de-corse": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "une", taille: "petit" },
+
+  // ── Estuariens ──
+  "bar-commun": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "deux", taille: "grand" },
+  "mulet-sauteur": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "terminale", dorsale: "deux", taille: "moyen" },
+  joel: { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "supere", dorsale: "deux", taille: "petit" },
+  "gobie-tachete": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "infere", dorsale: "deux", taille: "petit" },
+  "gobie-des-sables": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "infere", dorsale: "deux", taille: "petit" },
+  syngnathe: { silhouette: "serpentiforme", barb: "0", adipeuse: false, dorsale: "une", taille: "petit" },
+
+  // ── Gobies ponto-caspiens (disque ventouse — non représenté par `bouche`) ──
+  "gobie-demi-lune": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "infere", dorsale: "deux", taille: "petit" },
+  "gobie-de-kessler": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "supere", dorsale: "deux", taille: "moyen" },
+  "gobie-a-taches-noires": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "infere", dorsale: "deux", taille: "moyen" },
+  "gobie-fluviatile": { silhouette: "allonge", barb: "0", adipeuse: false, bouche: "infere", dorsale: "deux", taille: "petit" },
+
+  // ── Épinochettes régionales ──
+  "epinochette-neuf-epines": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "supere", dorsale: "epineuse", taille: "petit" },
+  "epinochette-du-poitou": { silhouette: "fusiforme", barb: "0", adipeuse: false, bouche: "supere", dorsale: "epineuse", taille: "petit" },
 };

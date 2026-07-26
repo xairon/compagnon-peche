@@ -261,6 +261,66 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "aphanius-de-corse",
+    "name": "Aphanius de Corse",
+    "latin": "Aphanius fasciatus",
+    "group": "autres",
+    "family": "Cyprinodontidae",
+    "cdNom": "68802",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinodontidae"
+        ],
+        [
+          "Remarque",
+          "Petit cyprinodonte des lagunes et eaux saumâtres à douces littorales de Corse ; quasi menacé (UICN NT, 2022)."
+        ]
+      ]
+    }
+  },
+  {
     "id": "apron-du-rhone",
     "name": "Apron du Rhône",
     "latin": "Zingel asper",
@@ -381,6 +441,66 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Seul cyprinidé franchement piscivore ; ex-Aspius aspius. En expansion (Rhin, introductions)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "bar-commun",
+    "name": "Bar commun",
+    "latin": "Dicentrarchus labrax",
+    "group": "migrateurs",
+    "family": "Moronidae",
+    "cdNom": "69317",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
+        ],
+        [
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Moronidae"
+        ],
+        [
+          "Remarque",
+          "Poisson surtout marin, pénétrant en eaux saumâtres, ports et parties terminales des fleuves côtiers ; en régression, sous quotas de pêche de loisir révisés chaque année par règlement UE — réglementation pêche maritime, pas d'eau douce."
         ]
       ]
     }
@@ -572,6 +692,70 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "blageon-italien",
+    "name": "Blageon italien",
+    "latin": "Telestes muticellus",
+    "group": "cyprinides",
+    "family": "Leuciscidae",
+    "cdNom": "847533",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Présent en France uniquement dans les Alpes-Maritimes (bassins frontaliers avec l'Italie), par ailleurs commun en Italie du nord et du centre."
+        ]
+      ]
+    }
+  },
+  {
     "id": "blennie-fluviatile",
     "name": "Blennie fluviatile",
     "latin": "Salariopsis fluviatilis",
@@ -758,6 +942,70 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "breme-du-danube",
+    "name": "Brème du Danube",
+    "latin": "Ballerus sapa",
+    "group": "cyprinides",
+    "family": "Cyprinidae",
+    "cdNom": "347940",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinidae"
+        ],
+        [
+          "Remarque",
+          "Introduite dans le Rhin en 1995 ; présence très localisée en Alsace, avec des mentions occasionnelles en Bourgogne."
+        ]
+      ]
+    }
+  },
+  {
     "id": "brochet-aquitain",
     "name": "Brochet aquitain",
     "latin": "Esox aquitanicus",
@@ -817,6 +1065,70 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Endémique du Sud-Ouest, décrit en 2014 ; même réglementation que le brochet ; enjeu de conservation — à vérifier."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "brochet-italien",
+    "name": "Brochet italien",
+    "latin": "Esox cisalpinus",
+    "group": "carnassiers",
+    "family": "Esocidae",
+    "cdNom": "781088",
+    "maille": "50 cm",
+    "mailleSub": "national (R436-18)",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "brochet",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "50 cm (national, R436-18)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "Fermeture spécifique brochet (voir réglementation)"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Leurres (souples, poissons-nageurs, cuiller), pêche au vif"
+        ],
+        [
+          "Postes",
+          "Cassures, obstacles immergés, herbiers, veines de courant"
+        ],
+        [
+          "Moment",
+          "Souvent plus actif à l'aube et au crépuscule"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Esocidae"
+        ],
+        [
+          "Remarque",
+          "Décrit en 2011, présent dans le Sud-Est français près de l'arc alpin ; vulnérable (UICN VU, 2023), en déclin par hybridation avec le brochet commun introduit dans son aire — restocking en cause."
         ]
       ]
     }
@@ -950,6 +1262,70 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "carpe-a-grosse-tete",
+    "name": "Carpe à grosse tête",
+    "latin": "Hypophthalmichthys nobilis",
+    "group": "cyprinides",
+    "family": "Cyprinidae",
+    "cdNom": "67277",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinidae"
+        ],
+        [
+          "Remarque",
+          "Introduite d'Asie pour l'entretien du plancton en étangs (comme la carpe argentée) ; une enquête menée en 2011 n'a trouvé aucun individu pêché en eaux libres françaises en trois décennies — reproduction naturelle non établie en France."
+        ]
+      ]
+    }
+  },
+  {
     "id": "carpe-argentee",
     "name": "Carpe argentée",
     "latin": "Hypophthalmichthys molitrix",
@@ -1014,6 +1390,69 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "carpe-koi-sauvage",
+    "name": "Carpe koï (forme sauvage, Amour)",
+    "latin": "Cyprinus rubrofuscus",
+    "group": "cyprinides",
+    "family": "Cyprinidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinidae"
+        ],
+        [
+          "Remarque",
+          "Ancêtre est-asiatique de la carpe koï ornementale, longtemps considéré comme une sous-espèce de la carpe commune avant d'être reconnu comme une espèce distincte. Les koïs échappées ou relâchées en France sont le plus souvent hybridées avec la carpe commune, sans distinction possible sur le terrain."
+        ]
+      ]
+    }
+  },
+  {
     "id": "chabot-commun",
     "name": "Chabot commun",
     "latin": "Cottus gobio",
@@ -1070,6 +1509,311 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Directive Habitats (intérêt communautaire) ; complexe d'espèces — remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "chabot-d-auvergne",
+    "name": "Chabot d'Auvergne",
+    "latin": "Cottus duranii",
+    "group": "autres",
+    "family": "Cottidae",
+    "cdNom": "416656",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cottidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe Cottus gobio, endémique du Massif central ; Directive Habitats — remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "chabot-de-rhenanie",
+    "name": "Chabot de Rhénanie",
+    "latin": "Cottus rhenanus",
+    "group": "autres",
+    "family": "Cottidae",
+    "cdNom": "459645",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cottidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe Cottus gobio, bassins du Rhin et de la Meuse ; Directive Habitats — remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "chabot-des-pyrenees",
+    "name": "Chabot des Pyrénées",
+    "latin": "Cottus hispaniolensis",
+    "group": "autres",
+    "family": "Cottidae",
+    "cdNom": "348102",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cottidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe Cottus gobio, endémique des Pyrénées ; Directive Habitats — remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "chabot-du-bearn",
+    "name": "Chabot du Béarn",
+    "latin": "Cottus aturi",
+    "group": "autres",
+    "family": "Cottidae",
+    "cdNom": "416655",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cottidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe Cottus gobio, endémique du bassin de l'Adour ; Directive Habitats — remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "chabot-du-lez",
+    "name": "Chabot du Lez",
+    "latin": "Cottus petiti",
+    "group": "autres",
+    "family": "Cottidae",
+    "cdNom": "159453",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "protected": true,
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce protégée / menacée — remise à l'eau"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Espèce protégée ou menacée — à ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement toute capture accidentelle, mains mouillées."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cottidae"
+        ],
+        [
+          "Remarque",
+          "Endémique d'un unique tronçon de 3 km à la source du Lez (Hérault) ; en danger critique, Directive Habitats, site Natura 2000 dédié — remise à l'eau immédiate."
         ]
       ]
     }
@@ -1259,6 +2003,70 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Complexe lavaret/féra ; grands lacs (Léman, Bourget, Aiguebelette, 2ᵉ cat.) : pas de fermeture 1ʳᵉ catégorie ; période fixée par arrêté préfectoral (souvent fermeture hivernale de fraie). Maille 0,30 m."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "coregone-blanc",
+    "name": "Corégone blanc (vendace)",
+    "latin": "Coregonus albula",
+    "group": "salmonides",
+    "family": "Salmonidae",
+    "cdNom": "887271",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche à la mouche, au toc, petits leurres (cuiller, vairon)"
+        ],
+        [
+          "Milieu",
+          "Eaux vives, fraîches et oxygénées (1ʳᵉ catégorie)"
+        ],
+        [
+          "Éthique",
+          "Souvent no-kill / quotas stricts — vérifiez localement"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Natif des grands lacs alpins avec le corégone lavaret ; présent notamment aux lacs du Bourget (où on l'appelle localement « lavaret »), d'Aiguebelette, de Nantua, de Paladru, de Laffrey et d'Issarlès."
         ]
       ]
     }
@@ -1567,6 +2375,190 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "epinochette-neuf-epines",
+    "name": "Épinochette à neuf épines",
+    "latin": "Pungitius pungitius",
+    "group": "autres",
+    "family": "Gasterosteidae",
+    "cdNom": "69016",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gasterosteidae"
+        ],
+        [
+          "Remarque",
+          "Porte le même nom vernaculaire « épinochette » que Pungitius laevis, déjà au catalogue — ce sont deux espèces distinctes. Présente dans le nord et l'est de la France (bassins Seine, Meuse, Escaut, côtiers de la Manche), pénétrant jusqu'en Saône."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "epinochette-du-poitou",
+    "name": "Épinochette du Poitou",
+    "latin": "Pungitius vulgaris",
+    "group": "autres",
+    "family": "Gasterosteidae",
+    "cdNom": "853286",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gasterosteidae"
+        ],
+        [
+          "Remarque",
+          "Décrite en 1848, revalidée en 2018 après avoir été synonymisée avec l'épinochette à neuf épines. Endémique du Centre-Ouest : bassin de la Vienne, estuaire de la Gironde, affluents de la Dordogne, Charente, Sèvre Niortaise, Ligneron."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "epirine-lippue",
+    "name": "Épirine lippue",
+    "latin": "Pachychilon pictum",
+    "group": "cyprinides",
+    "family": "Cyprinidae",
+    "cdNom": "199188",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinidae"
+        ],
+        [
+          "Remarque",
+          "Endémique des Balkans occidentaux, signalée en France dans le Sud-Ouest et l'Aude depuis les années 1980 — introduction probablement accidentelle lors d'un empoissonnement en goujons."
+        ]
+      ]
+    }
+  },
+  {
     "id": "esturgeon-europeen",
     "name": "Esturgeon européen",
     "latin": "Acipenser sturio",
@@ -1623,6 +2615,74 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "PÊCHE TOTALEMENT INTERDITE — protection stricte (Directive Habitats An. IV, Berne, CITES) ; en danger critique, remise à l'eau immédiate obligatoire."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "esturgeon-siberien",
+    "name": "Esturgeon sibérien",
+    "latin": "Acipenser baerii",
+    "group": "migrateurs",
+    "family": "Acipenseridae",
+    "cdNom": "200254",
+    "maille": "spéciale",
+    "mailleSub": "réglementation spéciale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "special",
+    "depth": "base",
+    "alert": {
+      "title": "À traiter comme une espèce protégée",
+      "text": "Cette espèce n'est pas protégée, mais on ne la distingue pas de l'esturgeon européen sans expertise. Dans le doute, relâchez : se tromper dans l'autre sens tue un poisson en danger critique. Déclarez la capture sur sturio.eu."
+    },
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Réglementation spéciale (voir statut)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Non protégée, mais indissociable de l'esturgeon européen (strictement protégé) — remise à l'eau et déclaration"
+        ],
+        [
+          "Période",
+          "Réglementation spéciale — vérifiez l'arrêté avant toute conservation"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Indissociable de l'esturgeon européen sans expertise — ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement, mains mouillées, sans sortir le poisson de l'eau plus que nécessaire."
+        ],
+        [
+          "Déclaration",
+          "Notez taille, poids, date et lieu ; si le poisson porte une marque, laissez-la et notez le numéro. Déclarez sur sturio.eu."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Acipenseridae"
+        ],
+        [
+          "Remarque",
+          "Introduit : présent uniquement par échappées d'élevage (caviar d'Aquitaine — Dordogne, Gironde, Charente-Maritime), aucune reproduction naturelle constatée en France. Élevé ici depuis 1989 ; plusieurs dizaines de tonnes libérées dans la Garonne en 1999 après une rupture de digue."
         ]
       ]
     }
@@ -1699,9 +2759,9 @@ export const BASE_SPECIES: Species[] = [
     "quota": "—",
     "quotaSub": "—",
     "season": "toujours",
+    "depth": "base",
     "invasive": true,
     "invasiveBasis": "règl. UE 1143/2014 · arrêté 14 fév. 2018",
-    "depth": "base",
     "reg": {
       "rows": [
         [
@@ -1745,6 +2805,374 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Introduite (lutte anti-moustiques) ; pas sur R432-5 mais espèce exotique envahissante (annexe II-4, règlement UE 1143/2014 · arrêté 14 fév. 2018)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-a-taches-noires",
+    "name": "Gobie à taches noires",
+    "latin": "Neogobius melanostomus",
+    "group": "autres",
+    "family": "Gobiidae",
+    "cdNom": "70155",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gobiidae"
+        ],
+        [
+          "Remarque",
+          "Détecté dans le Rhin en 2011, colonise désormais Rhin, Moselle, Rhône et l'estuaire de la Seine. Le plus impactant des quatre : dévore œufs et alevins et concurrence les poissons de fond indigènes. Non listé au règlement UE 1143/2014 mais son introduction dans une eau où il n'est pas représenté reste interdite (art. L432-10, arrêté du 17 déc. 1985)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-de-kessler",
+    "name": "Gobie de Kessler",
+    "latin": "Ponticola kessleri",
+    "group": "autres",
+    "family": "Gobiidae",
+    "cdNom": "70175",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gobiidae"
+        ],
+        [
+          "Remarque",
+          "Détecté dans le Rhin en 2010, en expansion via le canal Rhin-Main-Danube. Non listé au règlement UE 1143/2014 mais son introduction dans une eau où il n'est pas représenté reste interdite (art. L432-10, arrêté du 17 déc. 1985)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-demi-lune",
+    "name": "Gobie demi-lune",
+    "latin": "Proterorhinus semilunaris",
+    "group": "autres",
+    "family": "Gobiidae",
+    "cdNom": "521597",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gobiidae"
+        ],
+        [
+          "Remarque",
+          "Premier gobie ponto-caspien détecté en France, dans le Rhin en 2007. Non listé au règlement UE 1143/2014 (considéré indigène du sud-est européen) mais son introduction dans une eau où il n'est pas représenté reste interdite (art. L432-10, arrêté du 17 déc. 1985)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-des-sables",
+    "name": "Gobie des sables",
+    "latin": "Pomatoschistus minutus",
+    "group": "autres",
+    "family": "Oxudercidae",
+    "cdNom": "70287",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Oxudercidae"
+        ],
+        [
+          "Remarque",
+          "Petit gobie natif des estuaires et fonds sableux côtiers, à ne pas confondre avec les quatre gobies ponto-caspiens invasifs déjà au catalogue."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-fluviatile",
+    "name": "Gobie fluviatile",
+    "latin": "Neogobius fluviatilis",
+    "group": "autres",
+    "family": "Gobiidae",
+    "cdNom": "70166",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gobiidae"
+        ],
+        [
+          "Remarque",
+          "Le plus récent des quatre en France : premier individu capturé en Moselle (Berg-sur-Moselle) en juin 2014. Non listé au règlement UE 1143/2014 mais son introduction dans une eau où il n'est pas représenté reste interdite (art. L432-10, arrêté du 17 déc. 1985)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "gobie-tachete",
+    "name": "Gobie tacheté",
+    "latin": "Pomatoschistus microps",
+    "group": "autres",
+    "family": "Oxudercidae",
+    "cdNom": "70284",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Oxudercidae"
+        ],
+        [
+          "Remarque",
+          "Petit gobie natif des estuaires et lagunes, à ne pas confondre avec les quatre gobies ponto-caspiens invasifs déjà au catalogue."
         ]
       ]
     }
@@ -1878,6 +3306,70 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "goujon-de-l-adour",
+    "name": "Goujon de l'Adour",
+    "latin": "Gobio lozanoi",
+    "group": "cyprinides",
+    "family": "Gobionidae",
+    "cdNom": "347973",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Gobionidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe goujon, bassin de l'Adour et péninsule Ibérique ; quasi menacée (UICN NT, 2023)."
+        ]
+      ]
+    }
+  },
+  {
     "id": "goujon-occitan",
     "name": "Goujon occitan",
     "latin": "Gobio occitaniae",
@@ -2006,6 +3498,65 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "guppy",
+    "name": "Guppy",
+    "latin": "Poecilia reticulata",
+    "group": "autres",
+    "family": "Poeciliidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Poeciliidae"
+        ],
+        [
+          "Remarque",
+          "Espèce tropicale ne survivant en France métropolitaine que dans de rares refuges d'eau chaude ; première population établie documentée dans un bassin alimenté par une source thermale (Juvignac, Hérault, 2024)."
+        ]
+      ]
+    }
+  },
+  {
     "id": "huchon",
     "name": "Huchon",
     "latin": "Hucho hucho",
@@ -2126,6 +3677,66 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Protégée (arrêté 8 déc. 1988) ; native NE France (Rhin), aussi introduite (forme orfe dorée)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "joel",
+    "name": "Joël",
+    "latin": "Atherina boyeri",
+    "group": "autres",
+    "family": "Atherinidae",
+    "cdNom": "68833",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Atherinidae"
+        ],
+        [
+          "Remarque",
+          "Très euryhalin : lagunes côtières, estuaires, bas des fleuves et occasionnellement eau douce. Vit en bancs denses, pêché traditionnellement à la senne dans les étangs méditerranéens."
         ]
       ]
     }
@@ -2320,6 +3931,125 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "loche-a-grandes-ecailles",
+    "name": "Loche à grandes écailles",
+    "latin": "Misgurnus dabryanus",
+    "group": "autres",
+    "family": "Cobitidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cobitidae"
+        ],
+        [
+          "Remarque",
+          "Un seul individu connu à ce jour en France : capturé, photographié puis relâché dans le ruisseau de la Lanterne (bassin du Rhône, Doubs) le 22 juillet 2020 — premier signalement européen hors Allemagne/Suisse/Catalogne. Statut de population inconnu ; probablement issue d'un lâcher aquariophile."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "loche-asiatique",
+    "name": "Loche asiatique",
+    "latin": "Misgurnus anguillicaudatus",
+    "group": "autres",
+    "family": "Cobitidae",
+    "cdNom": "67533",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cobitidae"
+        ],
+        [
+          "Remarque",
+          "Introduite via le commerce aquariophile (loche « dojo »). Population établie dans le ruisseau du Schadgraben à Geispolsheim (bassin du Rhin) depuis 2021 ; un seul individu isolé signalé dans l'Orge (bassin de la Seine) en 2010."
+        ]
+      ]
+    }
+  },
+  {
     "id": "loche-d-etang",
     "name": "Loche d'étang",
     "latin": "Misgurnus fossilis",
@@ -2442,6 +4172,66 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "loche-du-lez",
+    "name": "Loche du Lez (loche du Languedoc)",
+    "latin": "Barbatula quignardi",
+    "group": "autres",
+    "family": "Nemacheilidae",
+    "cdNom": "348051",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Nemacheilidae"
+        ],
+        [
+          "Remarque",
+          "Bassins du Lez, du Tech, de l'Adour et de la Garonne — à ne pas confondre avec le chabot du Lez (Cottus petiti), une espèce totalement différente du même secteur."
+        ]
+      ]
+    }
+  },
+  {
     "id": "loche-franche",
     "name": "Loche franche",
     "latin": "Barbatula barbatula",
@@ -2497,6 +4287,186 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Non protégée, commune sur fonds de rivières ; à distinguer des loches protégées (Cobitidae)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "loche-d-espagne",
+    "name": "Loche franche espagnole",
+    "latin": "Barbatula hispanica",
+    "group": "autres",
+    "family": "Nemacheilidae",
+    "cdNom": "987535",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Nemacheilidae"
+        ],
+        [
+          "Remarque",
+          "Lignée cryptique du complexe loche franche, revalidée en 2021 ; bassin de l'Adour (Sud-Ouest) et Espagne du Nord."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "loche-leopard",
+    "name": "Loche léopard",
+    "latin": "Barbatula leoparda",
+    "group": "autres",
+    "family": "Nemacheilidae",
+    "cdNom": "920139",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Nemacheilidae"
+        ],
+        [
+          "Remarque",
+          "Décrite en 2019, endémique des bassins du Tech et de la Têt (Pyrénées-Orientales)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "loche-transalpine",
+    "name": "Loche transalpine (loche italienne)",
+    "latin": "Cobitis bilineata",
+    "group": "autres",
+    "family": "Cobitidae",
+    "cdNom": "67505",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cobitidae"
+        ],
+        [
+          "Remarque",
+          "Endémique du nord de l'Italie, introduite accidentellement ; signalée dans la basse vallée de la Durance depuis 1995."
         ]
       ]
     }
@@ -2802,6 +4772,66 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "mulet-sauteur",
+    "name": "Mulet sauteur",
+    "latin": "Chelon saliens",
+    "group": "migrateurs",
+    "family": "Mugilidae",
+    "cdNom": "135681",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
+        ],
+        [
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Mugilidae"
+        ],
+        [
+          "Remarque",
+          "Mulet des eaux côtières, pénétrant parfois lagunes et estuaires ; réglementation pêche maritime/estuarienne comme les autres mulets déjà au catalogue."
+        ]
+      ]
+    }
+  },
+  {
     "id": "omble-chevalier",
     "name": "Omble chevalier",
     "latin": "Salvelinus alpinus",
@@ -2866,6 +4896,134 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "ombre-d-auvergne",
+    "name": "Ombre d'Auvergne (ombre ligérien)",
+    "latin": "Thymallus ligericus",
+    "group": "salmonides",
+    "family": "Salmonidae",
+    "cdNom": "932869",
+    "maille": "30 cm",
+    "mailleSub": "national (R436-18)",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "30 cm (national, R436-18)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche à la mouche, au toc, petits leurres (cuiller, vairon)"
+        ],
+        [
+          "Milieu",
+          "Eaux vives, fraîches et oxygénées (1ʳᵉ catégorie)"
+        ],
+        [
+          "Éthique",
+          "Souvent no-kill / quotas stricts — vérifiez localement"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Décrit en 2019, endémique du haut bassin de la Loire et de l'Allier ; seulement huit populations connues, en danger (Liste rouge régionale Auvergne-Rhône-Alpes) — menacé notamment par l'hybridation avec l'ombre commun introduit dans son aire."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "palee",
+    "name": "Palée",
+    "latin": "Coregonus palaea",
+    "group": "salmonides",
+    "family": "Salmonidae",
+    "cdNom": "961787",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche à la mouche, au toc, petits leurres (cuiller, vairon)"
+        ],
+        [
+          "Milieu",
+          "Eaux vives, fraîches et oxygénées (1ʳᵉ catégorie)"
+        ],
+        [
+          "Éthique",
+          "Souvent no-kill / quotas stricts — vérifiez localement"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Native des lacs suisses de Neuchâtel et Bienne, introduite au Léman et dans d'autres lacs franco-suisses. « Palée » est un nom vernaculaire ambigu qui désigne selon le lac plusieurs espèces de corégones différentes."
+        ]
+      ]
+    }
+  },
+  {
     "id": "pseudorasbora",
     "name": "Pseudorasbora (goujon asiatique)",
     "latin": "Pseudorasbora parva",
@@ -2877,9 +5035,9 @@ export const BASE_SPECIES: Species[] = [
     "quota": "—",
     "quotaSub": "—",
     "season": "toujours",
+    "depth": "base",
     "invasive": true,
     "invasiveBasis": "règl. UE 1143/2014 · arrêté 14 fév. 2018",
-    "depth": "base",
     "reg": {
       "rows": [
         [
@@ -2927,6 +5085,70 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Introduit très envahissant ; pas sur R432-5 mais espèce exotique envahissante (règlement UE 1143/2014), vecteur de parasite."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "rotengle-italien",
+    "name": "Rotengle italien",
+    "latin": "Scardinius hesperidicus",
+    "group": "cyprinides",
+    "family": "Leuciscidae",
+    "cdNom": "348007",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Présent dans le bassin du Pô et l'Adriatique (Italie), en Suisse et par extension frontalière dans le Sud-Est français ; localité précise mal documentée dans les sources consultées."
         ]
       ]
     }
@@ -2996,6 +5218,68 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "saumon-rose",
+    "name": "Saumon rose",
+    "latin": "Oncorhynchus gorbuscha",
+    "group": "migrateurs",
+    "family": "Salmonidae",
+    "cdNom": "67798",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · absent de l'arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · absent de l'arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Selon l'espèce ; pêche souvent très réglementée ou fermée"
+        ],
+        [
+          "Rappel",
+          "Nombreux migrateurs protégés ou sous quota — vérifiez l'arrêté"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Saumon du Pacifique introduit massivement en Russie dès les années 1950 pour la pêche commerciale, colonisant depuis l'Atlantique. Premier signalement français en 2017 (Canche, Pas-de-Calais), récidivant en 2017/2021/2023 en Normandie, Bretagne et dans le Nord."
+        ]
+      ]
+    }
+  },
+  {
     "id": "spirlin",
     "name": "Spirlin",
     "latin": "Alburnoides bipunctatus",
@@ -3060,6 +5344,199 @@ export const BASE_SPECIES: Species[] = [
     }
   },
   {
+    "id": "sterlet",
+    "name": "Sterlet",
+    "latin": "Acipenser ruthenus",
+    "group": "migrateurs",
+    "family": "Acipenseridae",
+    "maille": "spéciale",
+    "mailleSub": "réglementation spéciale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "special",
+    "depth": "base",
+    "alert": {
+      "title": "À traiter comme une espèce protégée",
+      "text": "Cette espèce n'est pas protégée, mais on ne la distingue pas de l'esturgeon européen sans expertise. Dans le doute, relâchez : se tromper dans l'autre sens tue un poisson en danger critique. Déclarez la capture sur sturio.eu."
+    },
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Réglementation spéciale (voir statut)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Non protégée, mais indissociable de l'esturgeon européen (strictement protégé) — remise à l'eau et déclaration"
+        ],
+        [
+          "Période",
+          "Réglementation spéciale — vérifiez l'arrêté avant toute conservation"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "À savoir",
+          "Indissociable de l'esturgeon européen sans expertise — ne pas cibler."
+        ],
+        [
+          "Bon geste",
+          "Relâchez immédiatement, mains mouillées, sans sortir le poisson de l'eau plus que nécessaire."
+        ],
+        [
+          "Déclaration",
+          "Notez taille, poids, date et lieu ; si le poisson porte une marque, laissez-la et notez le numéro. Déclarez sur sturio.eu."
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Acipenseridae"
+        ],
+        [
+          "Remarque",
+          "Introduit par l'aquaculture et des lâchers d'agrément ; le plus petit des esturgeons européens, ne se reproduit pas naturellement en France."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "syngnathe",
+    "name": "Syngnathe de rivière",
+    "latin": "Syngnathus abaster",
+    "group": "autres",
+    "family": "Syngnathidae",
+    "cdNom": "21257",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Syngnathidae"
+        ],
+        [
+          "Remarque",
+          "Cousin d'eau douce et saumâtre de l'hippocampe, corps allongé cuirassé ; le mâle porte les œufs dans une poche ventrale jusqu'à l'éclosion."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "tete-de-boule",
+    "name": "Tête-de-boule",
+    "latin": "Pimephales promelas",
+    "group": "cyprinides",
+    "family": "Cyprinidae",
+    "cdNom": "67401",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "invasive": true,
+    "invasiveBasis": "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Espèce exotique envahissante (L432-10 code de l'environnement · arrêté du 17 déc. 1985)"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Cyprinidae"
+        ],
+        [
+          "Remarque",
+          "Introduit par des seaux à vifs de pêcheurs sportifs ; petites populations isolées et localisées (Champagne, Alsace, Île-de-France, Berry, Savoie). Suspecté vecteur de la maladie de la bouche rouge (yersiniose), qui touche truites et anguilles."
+        ]
+      ]
+    }
+  },
+  {
     "id": "toxostome",
     "name": "Toxostome (sofie)",
     "latin": "Parachondrostoma toxostoma",
@@ -3116,6 +5593,193 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Directive Habitats An. II ; bouche infère, endémique franco-ibérique menacé. Remise à l'eau conseillée."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "truite-corse",
+    "name": "Truite à grosses taches (truite corse)",
+    "latin": "Salmo ghigii",
+    "group": "salmonides",
+    "family": "Salmonidae",
+    "maille": "23 cm",
+    "mailleSub": "national (R436-18)",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "23 cm (national, R436-18)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche à la mouche, au toc, petits leurres (cuiller, vairon)"
+        ],
+        [
+          "Milieu",
+          "Eaux vives, fraîches et oxygénées (1ʳᵉ catégorie)"
+        ],
+        [
+          "Éthique",
+          "Souvent no-kill / quotas stricts — vérifiez localement"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Truite endémique de Corse, de Sardaigne, de Sicile et du sud de l'Italie continentale, distincte de la truite fario continentale."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "truite-du-rhone",
+    "name": "Truite du Rhône",
+    "latin": "Salmo rhodanensis",
+    "group": "salmonides",
+    "family": "Salmonidae",
+    "cdNom": "200258",
+    "maille": "23 cm",
+    "mailleSub": "national (R436-18)",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "cat1",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "23 cm (national, R436-18)"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche à la mouche, au toc, petits leurres (cuiller, vairon)"
+        ],
+        [
+          "Milieu",
+          "Eaux vives, fraîches et oxygénées (1ʳᵉ catégorie)"
+        ],
+        [
+          "Éthique",
+          "Souvent no-kill / quotas stricts — vérifiez localement"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Salmonidae"
+        ],
+        [
+          "Remarque",
+          "Bassin du Rhône jusqu'à la Roya (Grand Sud-Est) ; espèce dont la validité taxonomique est débattue, certains auteurs la considérant comme un morphotype régional de la truite commune plutôt qu'une espèce distincte."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "umbre-pygmee",
+    "name": "Umbre pygmée",
+    "latin": "Umbra pygmaea",
+    "group": "autres",
+    "family": "Umbridae",
+    "cdNom": "67612",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Umbridae"
+        ],
+        [
+          "Remarque",
+          "Introduite d'Amérique du Nord dans des étangs en 1910-1913 (Charolais, Allier) ; naturalisée localement dans des zones humides acides du nord et de l'ouest, en populations discrètes et méconnues."
         ]
       ]
     }
@@ -3416,6 +6080,188 @@ export const BASE_SPECIES: Species[] = [
         [
           "Remarque",
           "Espèce cryptique du complexe Phoxinus ; bassin du Rhône / Sud."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "vairon-italien",
+    "name": "Vairon italien",
+    "latin": "Phoxinus lumaireul",
+    "group": "autres",
+    "family": "Leuciscidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Premier signalement français : un seul individu mâle capturé le 31 mai 2010 à Publier (Haute-Savoie, bassin du Léman). Natif du bassin Adriatique nord et du moyen Danube (Italie, Slovénie, Croatie, Bosnie-Herzégovine)."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "vairon-ligerien",
+    "name": "Vairon ligérien",
+    "latin": "Phoxinus fayollarum",
+    "group": "autres",
+    "family": "Leuciscidae",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Statut",
+          "Petite espèce, rarement ciblée ; parfois utilisée comme vif"
+        ],
+        [
+          "Postes",
+          "Fonds et bordures des rivières et ruisseaux"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Décrit en 2020, endémique des bassins de la Loire et de la Sèvre Niortaise ; introduit depuis dans les bassins de la Garonne et du Rhône."
+        ]
+      ]
+    }
+  },
+  {
+    "id": "vandoise-au-long-museau",
+    "name": "Vandoise au long museau",
+    "latin": "Leuciscus oxyrrhis",
+    "group": "cyprinides",
+    "family": "Leuciscidae",
+    "cdNom": "521596",
+    "maille": "—",
+    "mailleSub": "pas de maille nationale",
+    "quota": "—",
+    "quotaSub": "—",
+    "season": "toujours",
+    "depth": "base",
+    "reg": {
+      "rows": [
+        [
+          "Maille",
+          "Aucune taille légale nationale"
+        ],
+        [
+          "Quota",
+          "Aucun quota national spécifique"
+        ],
+        [
+          "Statut",
+          "Aucun statut national particulier"
+        ],
+        [
+          "Période",
+          "2ᵉ cat. : ouverte toute l'année"
+        ]
+      ],
+      "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
+      "src": "Legifrance R436-18 · R436-21"
+    },
+    "fish": {
+      "rows": [
+        [
+          "Techniques",
+          "Pêche au coup, feeder, à l'anglaise, avec amorçage"
+        ],
+        [
+          "Appâts",
+          "Asticot, ver, graines, maïs, pain"
+        ],
+        [
+          "Postes",
+          "Eaux calmes, bordures, fonds nourriciers"
+        ]
+      ]
+    },
+    "bio": {
+      "rows": [
+        [
+          "Famille",
+          "Leuciscidae"
+        ],
+        [
+          "Remarque",
+          "Endémique des bassins du Lot, du Tarn, de la Dordogne et de la Garonne (Massif central, Aquitaine)."
         ]
       ]
     }

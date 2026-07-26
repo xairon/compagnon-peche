@@ -849,6 +849,267 @@
       "author": "Julien Renoult (iNaturalist)",
       "license": "CC BY 4.0",
       "file_page_url": "https://www.inaturalist.org/observations/307110637"
+    },
+    {
+      "id": "aphanius-de-corse",
+      "filename": "File:Aphan.jpg",
+      "author": "Gastcrf / Gastcrf at Greek Wikipedia",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Aphan.jpg"
+    },
+    {
+      "id": "bar-commun",
+      "filename": "File:Dicentrarchus labrax 23224415.jpg",
+      "author": "Andrea Quadrio",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Dicentrarchus_labrax_23224415.jpg"
+    },
+    {
+      "id": "blageon-italien",
+      "filename": "File:Telestes muticellus.jpg",
+      "author": "Etrusko25",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Telestes_muticellus.jpg"
+    },
+    {
+      "id": "breme-du-danube",
+      "filename": "File:Abramis sapa - 1726 - Print - Iconographia Zoologica - Special Collections University of Amsterdam - UBA01 IZ15000128.tif",
+      "author": "[Marsigli, Danubius Pannonico-Mysicus], IV tab. 17",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Abramis_sapa_-_1726_-_Print_-_Iconographia_Zoologica_-_Special_Collections_University_of_Amsterdam_-_UBA01_IZ15000128.tif",
+      "caption": "Illustration historique (Marsigli, 1726)"
+    },
+    {
+      "id": "brochet-italien",
+      "filename": "File:Esox cisalpinus (cropped).jpg",
+      "author": "Etrusko25",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Esox_cisalpinus_(cropped).jpg"
+    },
+    {
+      "id": "carpe-a-grosse-tete",
+      "filename": "File:Bighead carp b.gif",
+      "author": "Original uploader was Carptracker at en.wikipedia",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Bighead_carp_b.gif"
+    },
+    {
+      "id": "chabot-d-auvergne",
+      "filename": "File:Cottus duranii 214190150.jpg",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Cottus_duranii_214190150.jpg"
+    },
+    {
+      "id": "chabot-du-bearn",
+      "filename": "File:Adour sculpin (cropped).jpg",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Adour_sculpin_(cropped).jpg"
+    },
+    {
+      "id": "chabot-du-lez",
+      "filename": "File:Chabot du Lez (cropped).JPG",
+      "author": "Blé en Herbe",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Chabot_du_Lez_(cropped).JPG"
+    },
+    {
+      "id": "coregone-blanc",
+      "filename": "File:Coregonus albula (Pieni).jpg",
+      "author": "encyclopedia, \"Pieni Tietosanakirja\"",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Coregonus_albula_(Pieni).jpg"
+    },
+    {
+      "id": "epirine-lippue",
+      "filename": "File:Pachychilon pictum (cropped).jpg",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Pachychilon_pictum_(cropped).jpg"
+    },
+    {
+      "id": "gobie-a-taches-noires",
+      "filename": "File:Neogobius melanostomus1.jpg",
+      "author": "Eric Engbretson, U.S. Fish and Wildlife Service",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Neogobius_melanostomus1.jpg"
+    },
+    {
+      "id": "gobie-de-kessler",
+      "filename": "File:NeogobiusKessleriSide 7-9-2009 10-13-45 AM.JPG",
+      "author": "Piet Spaans",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:NeogobiusKessleriSide_7-9-2009_10-13-45_AM.JPG"
+    },
+    {
+      "id": "gobie-demi-lune",
+      "filename": "File:Hlavačka poloměsíčitá.jpg",
+      "author": "FilipTomíček48",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Hlava%C4%8Dka_polom%C4%9Bs%C3%AD%C4%8Dit%C3%A1.jpg"
+    },
+    {
+      "id": "gobie-des-sables",
+      "filename": "File:Sand goby (Pomatoschistus minutus) Sweden.jpg",
+      "author": "Joacim Näslund",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Sand_goby_(Pomatoschistus_minutus)_Sweden.jpg"
+    },
+    {
+      "id": "gobie-fluviatile",
+      "filename": "File:Monkey goby male 1.jpg",
+      "author": "Yuriy Kvach",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Monkey_goby_male_1.jpg"
+    },
+    {
+      "id": "gobie-tachete",
+      "filename": "File:046-011 Pomatoschistus microps (cropped).JPG",
+      "author": "Ove Glenjen",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:046-011_Pomatoschistus_microps_(cropped).JPG"
+    },
+    {
+      "id": "goujon-de-l-adour",
+      "filename": "File:Gobio lozanoi 01 by-dpc.jpg",
+      "author": "David Perez",
+      "license": "CC BY 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gobio_lozanoi_01_by-dpc.jpg"
+    },
+    {
+      "id": "guppy",
+      "filename": "File:Alevins guppy.PNG",
+      "author": "Sevan76",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Alevins_guppy.PNG"
+    },
+    {
+      "id": "joel",
+      "filename": "File:Atherina boyeri Sardinia.jpg",
+      "author": "Roberto Pillon",
+      "license": "CC BY 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Atherina_boyeri_Sardinia.jpg"
+    },
+    {
+      "id": "loche-a-grandes-ecailles",
+      "filename": "File:Paramisgusnus dabryanus Dabry de Thiersant, 1872.png",
+      "author": "MaiMend",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Paramisgusnus_dabryanus_Dabry_de_Thiersant,_1872.png",
+      "caption": "Illustration du holotype (Dabry de Thiersant, 1872)"
+    },
+    {
+      "id": "loche-leopard",
+      "filename": "File:Barbatula leoparda 01 (cropped).jpg",
+      "author": "Julien Renoult",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Barbatula_leoparda_01_(cropped).jpg"
+    },
+    {
+      "id": "loche-transalpine",
+      "filename": "File:Cobitis bilineata 1 (cropped).jpg",
+      "author": "Etrusko25",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Cobitis_bilineata_1_(cropped).jpg"
+    },
+    {
+      "id": "mulet-sauteur",
+      "filename": "File:Liza saliens.jpg",
+      "author": "Citron",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Liza_saliens.jpg"
+    },
+    {
+      "id": "palee",
+      "filename": "File:Coregonus palaea.png",
+      "author": "Ellicrum",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Coregonus_palaea.png"
+    },
+    {
+      "id": "rotengle-italien",
+      "filename": "File:Italian rudd.jpg",
+      "author": "etrusko25",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Italian_rudd.jpg"
+    },
+    {
+      "id": "saumon-rose",
+      "filename": "File:Pink salmon FWS.jpg",
+      "author": "Timothy Knepp",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Pink_salmon_FWS.jpg"
+    },
+    {
+      "id": "sterlet",
+      "filename": "File:Acipenser ruthenus Prague Vltava 1.jpg",
+      "author": "Karelj",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Acipenser_ruthenus_Prague_Vltava_1.jpg"
+    },
+    {
+      "id": "syngnathe",
+      "filename": "File:Syngnathus abaster-23.jpg",
+      "author": "Yuriy Kvach",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Syngnathus_abaster-23.jpg"
+    },
+    {
+      "id": "tete-de-boule",
+      "filename": "File:Fathead Minnow - Breeding Male.JPG",
+      "author": "Rankin1958",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Fathead_Minnow_-_Breeding_Male.JPG"
+    },
+    {
+      "id": "truite-corse",
+      "filename": "File:Salmo ghigii Capodacqua (cropped).jpg",
+      "author": "Novaculum",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Salmo_ghigii_Capodacqua_(cropped).jpg"
+    },
+    {
+      "id": "vairon-italien",
+      "filename": "File:Phoxinus lumaireul (cropped).jpg",
+      "author": "jujurenoult",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Phoxinus_lumaireul_(cropped).jpg"
+    },
+    {
+      "id": "esturgeon-siberien",
+      "filename": "File:Acipenser baerii-Lenai tok.jpg",
+      "author": "Kovács András",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Acipenser_baerii-Lenai_tok.jpg"
+    },
+    {
+      "id": "loche-asiatique",
+      "filename": "File:Misgurnus anguillicaudatus (2678935266).jpg",
+      "author": "Naotake Murayama from San Francisco, CA, USA",
+      "license": "CC BY 2.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Misgurnus_anguillicaudatus_(2678935266).jpg"
+    },
+    {
+      "id": "loche-du-lez",
+      "filename": "File:Barbatula quignardi 01 by-dpc.jpg",
+      "author": "David Perez",
+      "license": "CC BY 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Barbatula_quignardi_01_by-dpc.jpg"
+    },
+    {
+      "id": "truite-du-rhone",
+      "filename": "File:Salmo rhodanensis 152902013.jpg",
+      "author": "Samuel GUIRAUDOU",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Salmo_rhodanensis_152902013.jpg"
+    },
+    {
+      "id": "umbre-pygmee",
+      "filename": "File:Umbra pygmaea.jpg",
+      "author": "Ellen Edmonson and Hugh Chrisp",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Umbra_pygmaea.jpg"
     }
   ],
   "knots": [

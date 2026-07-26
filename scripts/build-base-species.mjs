@@ -36,6 +36,9 @@ const SEASON_DESC = {
   cat1: "1ʳᵉ cat. : 2ᵉ samedi de mars → 3ᵉ dimanche de septembre",
   brochet: "Fermeture spécifique brochet (voir réglementation)",
   "invasive-year": "Ouverte toute l'année",
+  // Sans cette entrée, une espèce en régime `special` retombait sur le libellé
+  // « ouverte toute l'année » — le contraire de ce que le régime signifie.
+  special: "Réglementation spéciale — vérifiez l'arrêté avant toute conservation",
 };
 
 // Generic technique per group, so every fiche has a "Pêcher" section.
@@ -70,6 +73,26 @@ const FISH_PROTECTED = [
   ["Bon geste", "Relâchez immédiatement toute capture accidentelle, mains mouillées."],
 ];
 
+// `sosie` = espèce NON protégée, mais qu'on ne sait pas distinguer sur le terrain
+// d'une espèce strictement protégée.
+//
+// Le cas qui l'a imposé : les esturgeons d'élevage échappés (A. baerii, sterlet).
+// La littérature donne deux consignes opposées — l'esturgeon européen doit être
+// relâché et déclaré, l'esturgeon sibérien introduit « ne doit en aucun cas être
+// relâché » — et la distinction entre les deux « est une affaire de spécialistes »
+// (nombre d'écussons dorsaux, latéraux et ventraux).
+//
+// L'asymétrie des conséquences tranche : tuer un Acipenser sturio en le prenant
+// pour un baerii est irréversible et frappe une espèce en danger critique ;
+// relâcher un baerii est une incertitude écologique. La fiche dit donc « relâchez
+// et déclarez », et l'espèce prend le régime `special` pour que la pastille
+// n'affiche jamais un vert « ouverte ».
+const FISH_SOSIE = (protegee) => [
+  ["À savoir", `Indissociable de ${protegee} sans expertise — ne pas cibler.`],
+  ["Bon geste", "Relâchez immédiatement, mains mouillées, sans sortir le poisson de l'eau plus que nécessaire."],
+  ["Déclaration", "Notez taille, poids, date et lieu ; si le poisson porte une marque, laissez-la et notez le numéro. Déclarez sur sturio.eu."],
+];
+
 // Base species that count toward the R436-21 3-carnassier daily limit. Mirrors
 // QUOTA_CARNASSIERS in src/lib/helpers.ts for the base tier (the main predators
 // are curated in species.ts). BROCHET_QUOTA_IDS are those that also count in the
@@ -79,8 +102,30 @@ const CARNASSIER_QUOTA_IDS = new Set(["black-bass-petite-bouche", "brochet-aquit
 const BROCHET_QUOTA_IDS = new Set(["brochet-aquitain"]);
 
 function toBase(s) {
-  const [maille, mailleSub, mailleDesc] = mailleRow(s.maille || "—");
-  const season = s.season || "toujours";
+  const [maille, mailleSubAuto, mailleDesc] = mailleRow(s.maille || "—");
+  // Override ponctuel : le cristivomer a une maille nationale de 35 cm mais ne
+  // vit que dans quelques grands lacs, où l'arrêté préfectoral fait foi. Dire
+  // « national (R436-18) » tout court y était trompeur.
+  const mailleSub = s.mailleSub || mailleSubAuto;
+  // Un migrateur sous moratoire n'a PAS de période nationale simple : c'est la
+  // définition même du régime `special` (voir SeasonRule dans src/types.ts), et
+  // c'est ce qui empêche la pastille d'afficher un vert « ouverte » là où
+  // l'arrêté de bassin dit l'inverse.
+  //
+  // Cette ligne était appliquée à la main dans le fichier généré : la première
+  // régénération l'effaçait en silence, et six espèces sous moratoire — les
+  // trois aloses, les deux lamproies pêchables, le saumon — repassaient
+  // « ouvertes ». Elle vit ici désormais.
+  //
+  // Deux notions distinctes, et c'est volontaire :
+  //   · `declaredSeason` = la catégorie piscicole réelle, ce que la ligne
+  //     « Période » affiche (« 1ʳᵉ cat. : 2ᵉ samedi de mars → … » pour le saumon) ;
+  //   · `season` = le régime que la logique applique, forcé à `special` sous
+  //     moratoire pour que la pastille dise « Réglementée » et non « Ouverte ».
+  // Les confondre effacerait l'information de catégorie ; les fusionner dans
+  // l'autre sens rouvrirait les espèces sous moratoire.
+  const declaredSeason = s.season || "toujours";
+  const season = s.moratoire ? "special" : declaredSeason;
   const inCarnassierQuota = CARNASSIER_QUOTA_IDS.has(s.id);
   const quotaText = !inCarnassierQuota
     ? "Aucun quota national spécifique"
@@ -96,17 +141,30 @@ function toBase(s) {
   // (which would contradict the "réglementé" comestibilité panel on the same fiche).
   const statut = s.protected
     ? "Espèce protégée / menacée — remise à l'eau"
-    : s.moratoire
-      ? "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
-      : s.invasive
-        ? "Susceptible de déséquilibres (R432-5)"
-        : "Aucun statut national particulier";
+    : s.sosieDe
+      ? `Non protégée, mais indissociable de ${s.sosieDe} (strictement protégé) — remise à l'eau et déclaration`
+      : s.moratoire
+        ? "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
+        : s.invasive
+          ? // Toutes les invasives ne relèvent pas de R432-5 : la gambusie et le
+            // pseudorasbora sont des espèces exotiques envahissantes au sens du
+            // règlement UE 1143/2014, pas de la liste R432-5. Citer R432-5 pour
+            // elles serait une base légale fausse — d'où `invasive_basis`.
+            s.invasive_basis
+            ? `Espèce exotique envahissante (${s.invasive_basis})`
+            : "Susceptible de déséquilibres (R432-5)"
+          : "Aucun statut national particulier";
   const alert = s.moratoire
     ? {
         title: "Migrateur réglementé",
         text: "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée.",
       }
-    : undefined;
+    : s.sosieDe
+      ? {
+          title: "À traiter comme une espèce protégée",
+          text: `Cette espèce n'est pas protégée, mais on ne la distingue pas de ${s.sosieDe} sans expertise. Dans le doute, relâchez : se tromper dans l'autre sens tue un poisson en danger critique. Déclarez la capture sur sturio.eu.`,
+        }
+      : undefined;
   return {
     id: s.id,
     name: s.name,
@@ -122,16 +180,17 @@ function toBase(s) {
     depth: "base",
     protected: s.protected || undefined,
     invasive: s.invasive || undefined,
+    invasiveBasis: s.invasive_basis || undefined,
     alert,
     reg: {
       rows: [
-        ["Maille", mailleDesc],
+        ["Maille", s.maille_desc || mailleDesc],
         [
           "Quota",
           quotaText,
         ],
-        ["Statut", statut],
-        ["Période", SEASON_DESC[season] || SEASON_DESC.toujours],
+        ["Statut", s.statut || statut],
+        ["Période", SEASON_DESC[declaredSeason] || SEASON_DESC.toujours],
       ],
       note: "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
       src:
@@ -139,7 +198,15 @@ function toBase(s) {
         (s.protected ? " · statut de protection (voir remarque)" : "") +
         (s.moratoire ? " · statut migrateur (voir remarque)" : ""),
     },
-    fish: { rows: s.protected ? FISH_PROTECTED : FISH_BY_GROUP[s.group] || FISH_BY_GROUP.autres },
+    fish: {
+      rows:
+        s.fish_rows ||
+        (s.protected
+          ? FISH_PROTECTED
+          : s.sosieDe
+            ? FISH_SOSIE(s.sosieDe)
+            : FISH_BY_GROUP[s.group] || FISH_BY_GROUP.autres),
+    },
     bio: { rows: [["Famille", s.family || "—"], ["Remarque", s.note || "—"]] },
   };
 }

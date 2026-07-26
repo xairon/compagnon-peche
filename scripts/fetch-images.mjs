@@ -29,14 +29,22 @@ async function get(url, attempt = 0) {
 }
 
 // Compute the CDN thumbnail URL directly from the filename's MD5 — no API call,
-// so no rate-limiting. Served by upload.wikimedia.org (a CDN). SVGs get a .png thumb.
+// so no rate-limiting. Served by upload.wikimedia.org (a CDN). Vector/document
+// formats get rendered to a raster thumb with an extra suffix: SVG → .png,
+// TIFF/PDF/DjVu → .jpg (verified against the CDN directly — a bare .tif thumb
+// URL 400s, appending .jpg is what actually serves the image).
 function thumbUrl(filename, width) {
   const name = filename.replace(/^File:/, "").replace(/ /g, "_");
   const md5 = createHash("md5").update(name).digest("hex");
   const dir = `${md5[0]}/${md5.slice(0, 2)}`;
   const enc = encodeURI(name).replace(/[?#]/g, (c) => "%" + c.charCodeAt(0).toString(16));
-  const isSvg = name.toLowerCase().endsWith(".svg");
-  const thumbName = `${width}px-${enc}${isSvg ? ".png" : ""}`;
+  const lower = name.toLowerCase();
+  const suffix = lower.endsWith(".svg")
+    ? ".png"
+    : /\.(tif|tiff|pdf|djvu)$/.test(lower)
+      ? ".jpg"
+      : "";
+  const thumbName = `${width}px-${enc}${suffix}`;
   return `https://upload.wikimedia.org/wikipedia/commons/thumb/${dir}/${enc}/${thumbName}`;
 }
 
