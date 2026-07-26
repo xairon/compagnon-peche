@@ -4,16 +4,17 @@
     "flags_semantics": {
       "maille_cm": "National minimum size (Code env. R436-18). null = no national size (may be set by préfet). sandre 40 / black-bass 30 are the 2e-catégorie values.",
       "quota": "Counts in the R436-21 3-carnassiers/day (max 2 brochets) limit: brochet (incl. Esox aquitanicus), sandre, black-bass only.",
-      "protected_in_1988_arrete": "Listed in Arrêté 8 déc. 1988. IMPORTANT: for game/migratory species (brochet, truites, saumon, ombre, corégone, omble chevalier, aloses, lamproies marine/fluviatile) this protects EGGS/SPAWNING HABITAT — angling stays legal under size/season. TRUE no-take = only the non-game listed species: apron, bouvière, vandoise(s), ide, barbeau méridional, loche épineuse, loche d'étang, blennie fluviatile, lamproie de Planer. Esturgeon is no-take under Arrêté 20 déc. 2004 (NOT the 1988 one).",
+      "protected_in_1988_arrete": "Listed in Arrêté 8 déc. 1988. CORRECTED 2026-07-26 after re-reading the text in force: article 1 forbids ONLY (1°) destroying/removing the EGGS and (2°) destroying/degrading the SPAWNING GROUNDS designated by arrêté préfectoral. It never forbids catching or keeping an adult — for ANY of the listed species, game or not. The previous note here claimed the non-game listed species (apron, bouvière, vandoise(s), ide, barbeau méridional, loches, blennie, lamproie de Planer) were no-take: that was wrong and produced 14 false 'RELÂCHER' verdicts in the app. See src/data/protection.test.ts.",
       "invasive_R432_5": "Only perche-soleil and poisson-chat nationally. NOT silure, gobies, pseudorasbora, gambusie.",
       "cd_nom": "Read from live inpn.mnhn.fr/espece/cd_nom pages. null = not verified (do not guess)."
     },
-    "no_take_species": ["Apron du Rhône", "Bouvière", "Vandoise commune", "Vandoise du Béarn", "Vandoise rostrée", "Ide mélanote", "Barbeau méridional", "Loche épineuse (loche de rivière)", "Loche d'étang", "Blennie fluviatile", "Lamproie de Planer", "Esturgeon européen"],
+    "no_take_species": ["Esturgeon européen (arrêté 20 déc. 2004, art. 1er: capture/détention interdites)", "Apron du Rhône (Directive Habitats an. IV — protection stricte; transposition nationale limitée aux oeufs/frayères, drapeau maintenu par prudence)"],
+    "no_take_species_note": "These two only. Everything else on the 1988 list is regulated (season: special + alert), not no-take. Species absent from the 1988 arrêté and merely on Habitats Annex II (chabots, blageon, toxostome) carry no national take prohibition at all.",
     "sources": {
       "inventory": "UICN France / MNHN / SFI / OFB (2019) Liste rouge des poissons d'eau douce de France métropolitaine",
       "maille": "Code de l'environnement R436-18 (Légifrance LEGIARTI000038416171)",
       "quota": "Code de l'environnement R436-21",
-      "protected": "Arrêté du 8 décembre 1988, art. 1 (JORFTEXT000000327373) ; esturgeon: arrêté 20 déc. 2004",
+      "protected": "Arrêté du 8 décembre 1988, art. 1 (JORFTEXT000000327373, en vigueur) ; esturgeon: arrêté 20 déc. 2004 (JORFTEXT000000259841, remplace celui du 25 janv. 1982 abrogé le 07/01/2005) ; apron: directive 92/43/CEE an. IV(a) ; scissions taxonomiques: note OFB du 22 fév. 2019 (Poulet/Denys)",
       "invasive": "Code de l'environnement R432-5",
       "taxonomy": "INPN/TAXREF (inpn.mnhn.fr)"
     }

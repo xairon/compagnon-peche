@@ -13,7 +13,12 @@ import type { Fiche } from "./index";
 // biologie et la répartition, complétés par des sources halieutiques
 // (fédérations de pêche, Esoxiste, Pêche & Poissons) pour les techniques et la
 // cuisine. Une espèce dont un trait n'est pas établi n'a pas ce trait.
-const SRC = "INPN (MNHN) · FishBase · DORIS — biologie et répartition";
+// La source doit couvrir TOUT ce qu'elle signe. INPN, FishBase et DORIS portent
+// la biologie et la répartition, pas les grammages de leurres ni les longueurs
+// de canne : la partie technique vient de la presse halieutique et des
+// fédérations, et le dire évite d'attribuer à un institut une préconisation
+// qu'il n'a jamais écrite.
+const SRC = "INPN (MNHN) · FishBase · DORIS — biologie et répartition ; techniques : presse halieutique et fédérations de pêche";
 
 export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
   // --- Carnassiers ---------------------------------------------------------
@@ -109,14 +114,14 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
 
   "brochet-aquitain": {
     ficheSrc:
-      "INPN (MNHN) · Denys, Dettai, Persat, Hautecœur & Keith (2014) — description originale · Wikipédia (fr) · Aquaportail",
+      "INPN (MNHN) · Denys, Dettai, Persat, Hautecœur & Keith (2014) — description originale de l'espèce",
     ident: {
       summary:
         "Petit brochet endémique du Sud-Ouest, à la robe marbrée de bandes obliques (et non de taches claires comme le grand brochet), au museau proportionnellement plus court.",
       traits: [
         "Robe marbrée : bandes obliques sur les flancs, larges d'1 à 1,5 écaille",
         "Museau court : environ 0,9 fois la longueur post-orbitaire",
-        "Taille adulte modeste : 30–80 cm, guère plus de 41 cm chez le mâle observé",
+        "Taille adulte modeste : le plus souvent 30–50 cm, nettement moins que le brochet commun",
         "Moins d'écailles sur la ligne latérale que le grand brochet (104–107 contre 115–136)",
       ],
       conf: [
@@ -141,7 +146,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
     bio: {
       rows: [
         ["Habitat", "Cours d'eau et lacs du Grand Sud-Ouest (Charente, Dordogne, Eyre, Adour)"],
-        ["Statut", "Décrit en 2014, endémique français ; espèce rare, en régression possible"],
+        ["Taxonomie", "Décrit en 2014, endémique français ; espèce rare"],
         ["Longévité", "15 à 20 ans"],
         ["Menace", "Risque d'hybridation avec le grand brochet introduit dans son aire"],
       ],
@@ -203,7 +208,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       traits: [
         "Taches claires irrégulières et marbrures, y compris sur la caudale",
         "Nageoire caudale nettement fourchue",
-        "Denture vomérienne en croix (origine du nom « cristivomer »)",
+        "Dents portées par une crête du vomer — d'où le nom « cristivomer » (crista, la crête)",
         "Coloration plus terne que l'omble chevalier, sans teinte rougeâtre",
       ],
       conf: [
@@ -271,7 +276,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Origine", "Bassin du Danube (Europe centrale)"],
         ["Présence en France", "Introduit entre 1957 et 1960 dans les Usses (Haute-Savoie) ; n'a jamais colonisé le Rhône"],
-        ["Statut actuel", "Population anecdotique, maintien incertain au pied du haut Rhône"],
+        ["Conservation", "Population anecdotique, maintien incertain au pied du haut Rhône"],
         ["Habitat d'origine", "Grandes rivières vives du bassin danubien"],
       ],
     },
@@ -347,7 +352,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Cycle", "Migrateur amphihalin : naissance en rivière, croissance en mer, retour se reproduire en eau douce"],
         ["Habitat de fraie", "Têtes de bassin à courant vif et fond graveleux"],
-        ["Statut", "Espèce en fort déclin sur la plupart des bassins français faute de géniteurs"],
+        ["Conservation", "En fort déclin sur la plupart des bassins français, faute de géniteurs"],
         ["Répartition", "Historiquement Bretagne, Normandie, bassin Adour-Gaves ; aujourd'hui très localisé"],
       ],
     },
@@ -383,7 +388,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Résurgences karstiques et cours d'eau clairs et frais (10–20 °C), végétation aquatique dense"],
         ["Répartition", "Corse, Sardaigne, Sicile, sud de l'Italie continentale (bassin du Magra et au sud)"],
-        ["Statut", "En danger critique (UICN CR, 2023) — menacée notamment par l'introgression génétique de la truite fario introduite pour l'empoissonnement"],
+        ["Conservation", "En danger critique (UICN CR, 2023) — menacée notamment par l'introgression génétique de la truite fario introduite pour l'empoissonnement"],
       ],
     },
   },
@@ -410,7 +415,7 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Rivières et ruisseaux à eau claire et fraîche, courant lent à vif"],
         ["Répartition", "Bassin du Rhône (hors bassin du Léman) jusqu'au bassin de la Roya ; Suisse occidentale et nord-ouest de l'Italie"],
-        ["Statut taxonomique", "Distinguée de la truite commune, mais validité débattue — considérée par certains comme un morphotype régional plutôt qu'une espèce à part entière"],
+        ["Taxonomie", "Distinguée de la truite commune, mais validité débattue — considérée par certains comme un morphotype régional plutôt qu'une espèce à part entière"],
       ],
     },
   },
@@ -437,7 +442,8 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Rivières fraîches et bien oxygénées du haut bassin de la Loire, très sensible à la qualité de l'eau"],
         ["Répartition", "Endémique de quelques rivières du haut bassin Loire-Allier : Alagnon, haute Loire, Allier, Sioule, Dore, Ance"],
-        ["Statut", "Décrit en 2019 ; seulement huit populations connues, en danger (Liste rouge régionale UICN Auvergne-Rhône-Alpes)"],
+        ["Taxonomie", "Décrit en 2019"],
+        ["Conservation", "Seulement huit populations connues, en danger (Liste rouge régionale UICN Auvergne-Rhône-Alpes)"],
         ["Menace", "Hybridation avec l'ombre commun introduit par des sociétés de pêche locales dans son aire de répartition"],
       ],
     },
@@ -533,7 +539,8 @@ export const CARNASSIERS_SALMONIDES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Lacs et cours d'eau du Sud-Est français et du nord de l'Italie"],
         ["Répartition", "Nord et centre de l'Italie, Sud-Est français ; historiquement lac Léman (XIXᵉ siècle) et lac Saint-André (années 1920)"],
-        ["Statut", "Décrit en 2011 ; vulnérable (UICN VU, 2023) — déclin par hybridation avec le brochet commun repeuplé par des opérations d'empoissonnement"],
+        ["Taxonomie", "Décrit en 2011"],
+        ["Conservation", "Vulnérable (UICN VU, 2023) — déclin par hybridation avec le brochet commun repeuplé par des opérations d'empoissonnement"],
       ],
     },
   },

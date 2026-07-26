@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
+import { SPECIES } from "../data/species";
+import { speciesStatus } from "./statut";
+import { priseView } from "./prise";
+import { effectiveMaille } from "./maille";
+import { season } from "./season";
 import { join } from "node:path";
 
 /**
@@ -59,10 +64,7 @@ describe("cohérence réglementaire dans l'interface", () => {
  * migrateur sous moratoire. On teste désormais le RÉSULTAT, pas la syntaxe.
  */
 describe("cohérence des verdicts entre écrans", () => {
-  it("aucune espèce n'est verte dans la grille et « à vérifier » dans le parcours", async () => {
-    const { SPECIES } = await import("../data/species");
-    const { speciesStatus } = await import("./statut");
-    const { priseView } = await import("./prise");
+  it("aucune espèce n'est verte dans la grille et « à vérifier » dans le parcours", () => {
     const desaccords = SPECIES.filter((sp) => {
       const vert = speciesStatus(sp).cls === "good";
       const v = priseView(sp, "statut", { c: 0, b: 0 }, "41");
@@ -71,9 +73,7 @@ describe("cohérence des verdicts entre écrans", () => {
     expect(desaccords).toEqual([]);
   });
 
-  it("aucune espèce à maille non numérique n'est annoncée « sans maille »", async () => {
-    const { SPECIES } = await import("../data/species");
-    const { effectiveMaille } = await import("./maille");
+  it("aucune espèce à maille non numérique n'est annoncée « sans maille »", () => {
     const perdues = SPECIES.filter((sp) => {
       const brut = (sp.maille || "").trim();
       const aUneRegle = brut !== "" && brut !== "—";
@@ -108,10 +108,7 @@ describe("aucun écran ne colore un statut depuis season().open", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("aucune espèce non-verte n'est présentée en vert par la fiche", async () => {
-    const { SPECIES } = await import("../data/species");
-    const { speciesStatus } = await import("./statut");
-    const { season } = await import("./season");
+  it("aucune espèce non-verte n'est présentée en vert par la fiche", () => {
     // La fiche suit désormais speciesStatus ; ce test fige l'écart avec l'ancien
     // critère pour que personne ne revienne à season().open sans s'en apercevoir.
     const divergentes = SPECIES.filter(

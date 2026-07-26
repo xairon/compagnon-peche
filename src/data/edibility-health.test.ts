@@ -16,8 +16,14 @@ describe("barbeau méridional — toxicité des œufs (parité avec le barbeau f
     expect(ed).toBeDefined();
   });
 
-  it("reste 'non' consommable : c'est une espèce protégée, pas un jugement de goût", () => {
-    expect(ed.status).toBe("non");
+  // L'audit de protection (2026-07) a vérifié l'arrêté du 8 décembre 1988 :
+  // son article 1er n'interdit que « la destruction ou l'enlèvement des oeufs »
+  // et la dégradation des frayères — jamais la capture. Le barbeau méridional y
+  // figure au même titre que le brochet et les truites, qui se conservent tous
+  // les jours. « non » (= un texte interdit de le garder) était donc faux ;
+  // « réglementé » dit ce qui est vrai, et la mise en garde sanitaire reste.
+  it("est 'réglementé' et non 'non' : aucun texte national n'interdit de le garder", () => {
+    expect(ed.status).toBe("réglementé");
   });
 
   it("signale la toxicité des œufs (choléra des barbeaux)", () => {
@@ -30,10 +36,13 @@ describe("barbeau méridional — toxicité des œufs (parité avec le barbeau f
     expect(ed.source).toMatch(/meridionalis/i);
   });
 
-  it("la fiche « base » du barbeau méridional existe toujours et reste protégée", () => {
+  it("la fiche « base » existe toujours et n'est jamais présentée comme ouverte", () => {
     const sp = BASE_SPECIES.find((s) => s.id === "barbeau-meridional");
     expect(sp?.depth).toBe("base");
-    expect(sp?.protected).toBe(true);
+    // Plus `protected` (voir ci-dessus), mais pas nu pour autant : le régime
+    // spécial fait dire « vérifiez l'arrêté » au lieu d'un feu vert.
+    expect(sp?.protected).toBeUndefined();
+    expect(sp?.season).toBe("special");
   });
 });
 

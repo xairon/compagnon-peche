@@ -24,11 +24,20 @@ const CURATED_BINOMIALS = new Set(
 );
 console.log(`Curées détectées : ${CURATED_IDS.size} ids, ${CURATED_BINOMIALS.size} binômes.`);
 
-function mailleRow(maille) {
-  if (/^\d+\s*cm$/.test(maille)) return [maille, "national (R436-18)", `${maille} (national, R436-18)`];
-  if (maille === "—") return ["—", "pas de maille nationale", "Aucune taille légale nationale"];
-  if (/sp[ée]ciale/i.test(maille)) return ["spéciale", "réglementation spéciale", "Réglementation spéciale (voir statut)"];
-  return [maille, "voir réglementation", maille];
+function mailleRow(s) {
+  const maille = s.maille || "—";
+  const row = /^\d+\s*cm$/.test(maille)
+    ? [maille, "national (R436-18)", `${maille} (national, R436-18)`]
+    : maille === "—"
+      ? ["—", "pas de maille nationale", "Aucune taille légale nationale"]
+      : /sp[ée]ciale/i.test(maille)
+        ? ["spéciale", "réglementation spéciale", "Réglementation spéciale (voir statut)"]
+        : [maille, "voir réglementation", maille];
+  // A species whose figure is in use without a clean national basis says so
+  // rather than being announced as "national (R436-18)".
+  if (s.maille_sub) row[1] = s.maille_sub;
+  if (s.maille_desc) row[2] = s.maille_desc;
+  return row;
 }
 
 const SEASON_DESC = {
@@ -38,7 +47,68 @@ const SEASON_DESC = {
   "invasive-year": "Ouverte toute l'année",
   // Sans cette entrée, une espèce en régime `special` retombait sur le libellé
   // « ouverte toute l'année » — le contraire de ce que le régime signifie.
-  special: "Réglementation spéciale — vérifiez l'arrêté avant toute conservation",
+  special: "Régime spécial — voir l'arrêté préfectoral / de bassin",
+};
+
+/**
+ * Legal regimes, verified against the primary texts (audit 2026-07).
+ *
+ * `protected` now means ONE thing: a national text forbids KEEPING the animal.
+ * That verdict is read by lib/prise as a red "RELÂCHER — ne pas conserver", so
+ * it may only rest on a text that actually says so.
+ *
+ * The arrêté du 8 décembre 1988 does NOT say so. Its article 1 forbids exactly
+ * two things — "la destruction ou l'enlèvement des oeufs" and "la destruction,
+ * l'altération ou la dégradation des milieux particuliers, et notamment des
+ * lieux de reproduction, désignés par arrêté préfectoral" — for a list that
+ * also contains the pike, the trout and the grayling, all legally kept every
+ * day. Habitats Annex II is a site-designation instrument, not a take ban.
+ *
+ * So those species are `encadre` instead: `season: "special"` + an alert, which
+ * lib/statut and lib/prise render as "RÉGLEMENTATION SPÉCIALE — vérifiez
+ * l'arrêté". Never a green light, never a false prohibition either.
+ */
+const NO_TAKE = {
+  // Arrêté du 20 déc. 2004 (JORFTEXT000000259841), art. 1er & 3 — replaced the
+  // arrêté du 25 janv. 1982, abrogated on 2005-01-07.
+  "esturgeon-2004": {
+    statut: "Capture, détention et transport interdits (arrêté 20 déc. 2004)",
+    titre: "Capture et détention interdites",
+    alerte:
+      "L'arrêté du 20 décembre 2004 interdit la capture, l'enlèvement, la perturbation intentionnelle, le transport, la détention, la vente et l'achat de l'esturgeon européen. Toute capture accidentelle doit être remise à l'eau immédiatement.",
+    src: "arrêté 20 déc. 2004",
+  },
+  // Directive 92/43/CEE annexe IV(a) : "toute forme de capture ou de mise à
+  // mort intentionnelle" est interdite. Le seul poisson d'eau douce de France
+  // métropolitaine concerné avec l'esturgeon. La transposition française
+  // (arrêté 8 déc. 1988) ne couvre que les œufs et les frayères : le drapeau
+  // est maintenu par prudence, l'incertitude est documentée dans l'audit.
+  "habitats-an4": {
+    statut: "Protection stricte — Directive Habitats an. IV (capture interdite)",
+    titre: "Protection stricte",
+    alerte:
+      "Espèce inscrite à l'annexe IV de la directive Habitats (protection stricte : capture intentionnelle interdite) et à l'annexe II de la convention de Berne ; l'arrêté du 8 décembre 1988 y ajoute la protection des œufs et des frayères. En danger critique d'extinction : remise à l'eau immédiate de toute capture accidentelle.",
+    src: "Directive Habitats an. IV · arrêté 8 déc. 1988",
+  },
+};
+
+const ENCADRE = {
+  "oeufs-1988": {
+    statut:
+      "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte",
+    titre: "Œufs et frayères protégés",
+    alerte:
+      "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture.",
+    src: "arrêté 8 déc. 1988 (œufs/frayères)",
+  },
+  "habitats-an2": {
+    statut:
+      "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture",
+    titre: "Espèce d'intérêt communautaire",
+    alerte:
+      "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau.",
+    src: "Directive Habitats an. II",
+  },
 };
 
 // Generic technique per group, so every fiche has a "Pêcher" section.
@@ -69,7 +139,7 @@ const FISH_BY_GROUP = {
 };
 
 const FISH_PROTECTED = [
-  ["À savoir", "Espèce protégée ou menacée — à ne pas cibler."],
+  ["À savoir", "Espèce protégée ou réglementée — à ne pas cibler."],
   ["Bon geste", "Relâchez immédiatement toute capture accidentelle, mains mouillées."],
 ];
 
@@ -102,69 +172,71 @@ const CARNASSIER_QUOTA_IDS = new Set(["black-bass-petite-bouche", "brochet-aquit
 const BROCHET_QUOTA_IDS = new Set(["brochet-aquitain"]);
 
 function toBase(s) {
-  const [maille, mailleSubAuto, mailleDesc] = mailleRow(s.maille || "—");
-  // Override ponctuel : le cristivomer a une maille nationale de 35 cm mais ne
-  // vit que dans quelques grands lacs, où l'arrêté préfectoral fait foi. Dire
-  // « national (R436-18) » tout court y était trompeur.
-  const mailleSub = s.mailleSub || mailleSubAuto;
-  // Un migrateur sous moratoire n'a PAS de période nationale simple : c'est la
-  // définition même du régime `special` (voir SeasonRule dans src/types.ts), et
-  // c'est ce qui empêche la pastille d'afficher un vert « ouverte » là où
-  // l'arrêté de bassin dit l'inverse.
-  //
-  // Cette ligne était appliquée à la main dans le fichier généré : la première
-  // régénération l'effaçait en silence, et six espèces sous moratoire — les
-  // trois aloses, les deux lamproies pêchables, le saumon — repassaient
-  // « ouvertes ». Elle vit ici désormais.
+  const [maille, mailleSub, mailleDesc] = mailleRow(s);
+  // The declared season stays in the source list (it describes the water
+  // category), but a species under moratorium, under a "regulated, not
+  // no-take" regime, or a sosie of a strictly protected species must never
+  // reach a plain green "PÊCHE OUVERTE" verdict: `special` is what lib/statut
+  // and lib/prise read to say "vérifiez l'arrêté". Derived here rather than
+  // written by hand in the generated file — that hand edit is exactly what a
+  // regeneration silently reverted once before.
   //
   // Deux notions distinctes, et c'est volontaire :
   //   · `declaredSeason` = la catégorie piscicole réelle, ce que la ligne
   //     « Période » affiche (« 1ʳᵉ cat. : 2ᵉ samedi de mars → … » pour le saumon) ;
-  //   · `season` = le régime que la logique applique, forcé à `special` sous
-  //     moratoire pour que la pastille dise « Réglementée » et non « Ouverte ».
-  // Les confondre effacerait l'information de catégorie ; les fusionner dans
-  // l'autre sens rouvrirait les espèces sous moratoire.
+  //   · `season` = le régime que la logique applique, forcé à `special` pour
+  //     que la pastille dise « Réglementée » et non « Ouverte ».
   const declaredSeason = s.season || "toujours";
-  const season = s.moratoire ? "special" : declaredSeason;
+  const season = s.moratoire || s.encadre || s.sosieDe ? "special" : declaredSeason;
   const inCarnassierQuota = CARNASSIER_QUOTA_IDS.has(s.id);
   const quotaText = !inCarnassierQuota
     ? "Aucun quota national spécifique"
     : BROCHET_QUOTA_IDS.has(s.id)
       ? "Compte dans les 3 carnassiers/jour (2 brochets max, R436-21)"
       : "Compte dans les 3 carnassiers/jour (R436-21)";
-  // The arrêté du 8 déc. 1988 protects eggs/spawning grounds, not adult capture —
-  // and not every protected species is on it (some are Habitats/CITES). Keep the
-  // status honest and general; the per-species `note` carries the exact instrument.
-  // `moratoire` = amphihaline migrator whose ADULTS are legally fished under
-  // moratorium/quota by basin (aloses, lamproies marine/rivière): not a blanket
-  // no-take, so it must NOT get the strict "protégée — remise à l'eau" treatment
-  // (which would contradict the "réglementé" comestibilité panel on the same fiche).
-  const statut = s.protected
-    ? "Espèce protégée / menacée — remise à l'eau"
-    : s.sosieDe
-      ? `Non protégée, mais indissociable de ${s.sosieDe} (strictement protégé) — remise à l'eau et déclaration`
-      : s.moratoire
-        ? "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
-        : s.invasive
-          ? // Toutes les invasives ne relèvent pas de R432-5 : la gambusie et le
-            // pseudorasbora sont des espèces exotiques envahissantes au sens du
-            // règlement UE 1143/2014, pas de la liste R432-5. Citer R432-5 pour
-            // elles serait une base légale fausse — d'où `invasive_basis`.
-            s.invasive_basis
-            ? `Espèce exotique envahissante (${s.invasive_basis})`
-            : "Susceptible de déséquilibres (R432-5)"
-          : "Aucun statut national particulier";
-  const alert = s.moratoire
-    ? {
-        title: "Migrateur réglementé",
-        text: "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée.",
-      }
+  // Exactly one regime applies, and each one names the text it rests on (see
+  // NO_TAKE / ENCADRE above). `moratoire` = amphihaline migrator whose ADULTS
+  // are legally fished under moratorium/quota by basin (aloses, lamproies
+  // marine/rivière, saumon): not a blanket no-take either.
+  const regime = s.protected
+    ? NO_TAKE[s.no_take]
+    : s.encadre
+      ? ENCADRE[s.encadre]
+      : undefined;
+  if (s.protected && !regime) throw new Error(`${s.id}: "protected" sans "no_take" (base légale)`);
+  if (s.encadre && !regime) throw new Error(`${s.id}: régime "encadre" inconnu — ${s.encadre}`);
+  // `s.statut` est un échappatoire volontaire : le texte auto-généré pour une
+  // invasive avec `invasive_basis` affirme "remise à l'eau vivante interdite",
+  // vrai pour le règlement UE 1143/2014 (gambusie, pseudorasbora) mais FAUX
+  // pour l'art. L432-10 (gobies ponto-caspiens, tête-de-boule) : ce texte
+  // n'interdit que le déplacement, pas la remise à l'eau sur place. Sans cet
+  // override, le générateur affirmerait une interdiction qui n'existe pas.
+  const statut = s.statut
+    ? s.statut
+    : regime
+      ? regime.statut
+      : s.sosieDe
+        ? `Non protégée, mais indissociable de ${s.sosieDe} (strictement protégé) — remise à l'eau et déclaration`
+        : s.moratoire
+          ? "Migrateur réglementé — pêche sous moratoire/quota selon le bassin"
+          : s.invasive
+            ? s.invasive_basis
+              ? `Espèce exotique envahissante (${s.invasive_basis}) : remise à l'eau vivante interdite`
+              : "Susceptible de déséquilibres (R432-5)"
+            : "Aucun statut national particulier";
+  const alert = regime
+    ? { title: regime.titre, text: regime.alerte }
     : s.sosieDe
       ? {
           title: "À traiter comme une espèce protégée",
           text: `Cette espèce n'est pas protégée, mais on ne la distingue pas de ${s.sosieDe} sans expertise. Dans le doute, relâchez : se tromper dans l'autre sens tue un poisson en danger critique. Déclarez la capture sur sturio.eu.`,
         }
-      : undefined;
+      : s.moratoire
+        ? {
+            title: "Migrateur réglementé",
+            text: "Pêche sous moratoire ou quota selon le bassin (souvent fermée). Ne conservez la capture que si l'arrêté préfectoral l'autorise ; sinon remise à l'eau soignée.",
+          }
+        : undefined;
   return {
     id: s.id,
     name: s.name,
@@ -189,19 +261,25 @@ function toBase(s) {
           "Quota",
           quotaText,
         ],
-        ["Statut", s.statut || statut],
+        ["Statut", statut],
+        // The declared season still describes the real period, even when the
+        // effective regime is "special" (a chabot lives in 1ʳᵉ-catégorie water
+        // whether or not its capture is regulated).
         ["Période", SEASON_DESC[declaredSeason] || SEASON_DESC.toujours],
       ],
       note: "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
       src:
         "Legifrance R436-18 · R436-21" +
-        (s.protected ? " · statut de protection (voir remarque)" : "") +
+        (regime ? " · " + regime.src : "") +
         (s.moratoire ? " · statut migrateur (voir remarque)" : ""),
     },
+    // A species nobody may simply keep gets no generic "how to fish it" block.
+    // data/fiches strips it again for `special` — belt and braces, because the
+    // stripped value is what once shipped a recipe under a red banner.
     fish: {
       rows:
         s.fish_rows ||
-        (s.protected
+        (s.protected || s.encadre
           ? FISH_PROTECTED
           : s.sosieDe
             ? FISH_SOSIE(s.sosieDe)

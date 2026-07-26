@@ -1435,14 +1435,19 @@ const CURATED: Species[] = [
     rating: "Médiocre",
     ratingCls: "warn",
     maille: "—",
-    mailleSub: "espèce protégée",
+    mailleSub: "pas de maille nationale",
     quota: "—",
     quotaSub: "—",
-    season: "toujours",
-    protected: true,
+    // Listed in the arrêté du 8 déc. 1988, whose article 1 forbids destroying
+    // eggs and spawning grounds — not keeping an adult. `protected: true` made
+    // the app answer "RELÂCHER — ne pas conserver" for a fish anglers legally
+    // catch and eat. `special` keeps it out of the green light without
+    // inventing a prohibition: the real restriction (use as live bait, local
+    // take limits) is departmental.
+    season: "special",
     alert: {
-      title: "Espèce protégée",
-      text: "Inscrite à l'arrêté du 8 décembre 1988 (poissons protégés) : protection notamment des frayères. Le prélèvement et l'usage comme vif peuvent être restreints selon le département. Vérifiez l'arrêté préfectoral avant de conserver.",
+      title: "Œufs et frayères protégés",
+      text: "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture.",
     },
     ident: {
       summary:
@@ -1461,18 +1466,12 @@ const CURATED: Species[] = [
     reg: {
       rows: [
         ["Maille", "Aucune maille nationale spécifique"],
-        ["Protection", "Espèce protégée — arrêté du 8 décembre 1988"],
-        ["Portée", "Protection des zones de reproduction et habitats"],
+        ["Protection", "Œufs et frayères — arrêté du 8 décembre 1988, art. 1er"],
+        ["Portée", "L'arrêté ne prononce aucune interdiction de capture"],
         ["Statut local", "Restrictions possibles (prélèvement, vif) — à vérifier"],
       ],
-      note: "Statut de protection nuancé : la destruction des frayères est interdite ; l'usage comme vif est contesté. Vérifiez localement.",
+      note: "L'arrêté protège les œufs et les frayères, pas l'adulte : conserver une vandoise n'est pas interdit au niveau national. L'arrêté préfectoral peut l'être davantage — vérifiez-le.",
       src: "Arrêté du 8 décembre 1988 · Legifrance R436-18",
-    },
-    fish: {
-      rows: [
-        ["Techniques", "Pêche au coup fine, au toc, en surface"],
-        ["Postes", "Courants clairs et radiers, en banc"],
-      ],
     },
     bio: {
       rows: [
@@ -1538,7 +1537,16 @@ const CURATED: Species[] = [
 // Full national coverage = hand-curated fiches first, then generated "base" fiches.
 // Les fiches « base » reçoivent leur contenu descriptif ici (voir data/fiches) :
 // le fichier généré reste intact, et une régénération n'efface plus rien.
-export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES.map(withFiche)];
+// withFiche s'applique AUSSI aux fiches rédigées à la main : la règle « pas de
+// technique de pêche sur une espèce protégée » ne souffre pas d'exception selon
+// l'origine de la fiche — la vandoise et l'anguille en portaient une.
+export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES].map(withFiche);
+
+/** Ids of the hand-curated species — the ones the app treats as its headline
+ *  catalogue. Screens used to infer this from `depth !== "base"`, which stopped
+ *  meaning anything once base fiches gained real content: the home carousel
+ *  would have started suggesting a goldfish as "what's biting". */
+export const CURATED_IDS: ReadonlySet<string> = new Set(CURATED.map((s) => s.id));
 
 // Dev guard: duplicate ids would cause React key collisions and ambiguous lookups.
 if (import.meta.env.DEV) {

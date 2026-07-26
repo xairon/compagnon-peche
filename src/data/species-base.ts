@@ -334,6 +334,10 @@ export const BASE_SPECIES: Species[] = [
     "season": "toujours",
     "depth": "base",
     "protected": true,
+    "alert": {
+      "title": "Protection stricte",
+      "text": "Espèce inscrite à l'annexe IV de la directive Habitats (protection stricte : capture intentionnelle interdite) et à l'annexe II de la convention de Berne ; l'arrêté du 8 décembre 1988 y ajoute la protection des œufs et des frayères. En danger critique d'extinction : remise à l'eau immédiate de toute capture accidentelle."
+    },
     "reg": {
       "rows": [
         [
@@ -346,7 +350,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Protection stricte — Directive Habitats an. IV (capture interdite)"
         ],
         [
           "Période",
@@ -354,13 +358,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. IV · arrêté 8 déc. 1988"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -376,7 +380,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "PROTÉGÉ et en danger critique (arrêté 8 déc. 1988 + Directive Habitats + Berne) ; endémique rhodanien, capture à proscrire, remise à l'eau immédiate."
+          "Endémique rhodanien en danger critique : Directive Habitats an. IV (protection stricte), Berne an. II, arrêté du 8 déc. 1988 (œufs et frayères). Capture à proscrire, remise à l'eau immédiate."
         ]
       ]
     }
@@ -516,9 +520,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -531,7 +538,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -539,13 +546,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -561,7 +568,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Protégé (arrêté 8 déc. 1988) + Directive Habitats An. II ; petit barbeau du Sud (barbeau truité). Remise à l'eau."
+          "Cité à l'arrêté du 8 déc. 1988 (œufs et frayères) + Directive Habitats an. II et V ; petit barbeau du Sud (barbeau truité). Remise à l'eau conseillée."
         ]
       ]
     }
@@ -641,9 +648,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -656,7 +666,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -664,13 +674,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -686,7 +696,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Directive Habitats An. II (protection d'habitat) ; bande latérale sombre ; Rhône, Est/Sud-Est. Remise à l'eau conseillée."
+          "Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988. Bande latérale sombre ; Rhône, Est/Sud-Est. Remise à l'eau conseillée."
         ]
       ]
     }
@@ -766,9 +776,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -781,7 +794,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -789,13 +802,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -811,7 +824,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés (arrêté 8 déc. 1988) ; seule blennie d'eau douce, bassins méditerranéens — remise à l'eau."
+          "Citée à l'arrêté du 8 déc. 1988 (œufs et frayères, sous le nom Blennius fluviatilis) ; seule blennie d'eau douce, bassins méditerranéens — remise à l'eau conseillée."
         ]
       ]
     }
@@ -827,9 +840,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -842,7 +858,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -850,13 +866,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -872,7 +888,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats ; pond dans les moules d'eau douce — remise à l'eau."
+          "Citée à l'arrêté du 8 déc. 1988 (œufs et frayères, sous le nom Rhodeus sericeus) + Directive Habitats an. II ; pond dans les moules d'eau douce — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1463,9 +1479,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1478,7 +1497,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1486,13 +1505,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1508,7 +1527,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Directive Habitats (intérêt communautaire) ; complexe d'espèces — remise à l'eau conseillée."
+          "Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988. Complexe d'espèces — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1524,9 +1543,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1539,7 +1561,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1547,13 +1569,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1569,7 +1591,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Lignée cryptique du complexe Cottus gobio, endémique du Massif central ; Directive Habitats — remise à l'eau conseillée."
+          "Lignée cryptique du complexe Cottus gobio, endémique du Massif central ; Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988 — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1585,9 +1607,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1600,7 +1625,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1608,13 +1633,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1630,7 +1655,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Lignée cryptique du complexe Cottus gobio, bassins du Rhin et de la Meuse ; Directive Habitats — remise à l'eau conseillée."
+          "Lignée cryptique du complexe Cottus gobio, bassins du Rhin et de la Meuse ; Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988 — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1646,9 +1671,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1661,7 +1689,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1669,13 +1697,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1691,7 +1719,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Lignée cryptique du complexe Cottus gobio, endémique des Pyrénées ; Directive Habitats — remise à l'eau conseillée."
+          "Lignée cryptique du complexe Cottus gobio, endémique des Pyrénées ; Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988 — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1707,9 +1735,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1722,7 +1753,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1730,13 +1761,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1752,7 +1783,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Lignée cryptique du complexe Cottus gobio, endémique du bassin de l'Adour ; Directive Habitats — remise à l'eau conseillée."
+          "Lignée cryptique du complexe Cottus gobio, endémique du bassin de l'Adour ; Directive Habitats an. II ; absent de l'arrêté du 8 déc. 1988 — remise à l'eau conseillée."
         ]
       ]
     }
@@ -1768,9 +1799,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1783,7 +1817,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1791,13 +1825,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1813,7 +1847,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Endémique d'un unique tronçon de 3 km à la source du Lez (Hérault) ; en danger critique, Directive Habitats, site Natura 2000 dédié — remise à l'eau immédiate."
+          "Endémique d'un unique tronçon de 3 km à la source du Lez (Hérault) ; en danger critique (UICN CR) ; Directive Habitats an. II, site Natura 2000 dédié, absent de l'arrêté du 8 déc. 1988 — remise à l'eau immédiate conseillée."
         ]
       ]
     }
@@ -1829,9 +1863,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -1844,7 +1881,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -1852,13 +1889,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -1874,7 +1911,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Issu de la révision du complexe Cottus gobio ; Directive Habitats — remise à l'eau conseillée."
+          "Issu de la révision du complexe Cottus gobio, dont il hérite le statut ; Directive Habitats an. II, absent de l'arrêté du 8 déc. 1988 — remise à l'eau conseillée."
         ]
       ]
     }
@@ -2572,6 +2609,10 @@ export const BASE_SPECIES: Species[] = [
     "season": "toujours",
     "depth": "base",
     "protected": true,
+    "alert": {
+      "title": "Capture et détention interdites",
+      "text": "L'arrêté du 20 décembre 2004 interdit la capture, l'enlèvement, la perturbation intentionnelle, le transport, la détention, la vente et l'achat de l'esturgeon européen. Toute capture accidentelle doit être remise à l'eau immédiatement."
+    },
     "reg": {
       "rows": [
         [
@@ -2584,7 +2625,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Capture, détention et transport interdits (arrêté 20 déc. 2004)"
         ],
         [
           "Période",
@@ -2592,13 +2633,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 20 déc. 2004"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -2614,7 +2655,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "PÊCHE TOTALEMENT INTERDITE — protection stricte (Directive Habitats An. IV, Berne, CITES) ; en danger critique, remise à l'eau immédiate obligatoire."
+          "Capture, détention, transport et vente interdits par l'arrêté du 20 déc. 2004 (qui a remplacé celui du 25 janv. 1982, abrogé en 2005) ; Directive Habitats an. II et IV, Berne, CITES. En danger critique : remise à l'eau immédiate obligatoire."
         ]
       ]
     }
@@ -2652,7 +2693,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Période",
-          "Réglementation spéciale — vérifiez l'arrêté avant toute conservation"
+          "Régime spécial — voir l'arrêté préfectoral / de bassin"
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
@@ -2774,7 +2815,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce exotique envahissante (règl. UE 1143/2014) : remise à l'eau vivante interdite"
+          "Espèce exotique envahissante (règl. UE 1143/2014 · arrêté 14 fév. 2018) : remise à l'eau vivante interdite"
         ],
         [
           "Période",
@@ -3631,9 +3672,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -3646,7 +3690,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -3654,13 +3698,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -3676,7 +3720,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Protégée (arrêté 8 déc. 1988) ; native NE France (Rhin), aussi introduite (forme orfe dorée)."
+          "Citée à l'arrêté du 8 déc. 1988 (œufs et frayères) ; native du NE de la France (Rhin), aussi introduite (forme orfe dorée)."
         ]
       ]
     }
@@ -3752,9 +3796,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "cat1",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -3767,7 +3814,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -3775,13 +3822,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -3797,7 +3844,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats ; petite lamproie résidente non parasite (~15 cm)."
+          "Citée à l'arrêté du 8 déc. 1988 (œufs et frayères) + Directive Habitats an. II ; petite lamproie résidente non parasite (~15 cm)."
         ]
       ]
     }
@@ -4060,9 +4107,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -4075,7 +4125,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -4083,13 +4133,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -4105,7 +4155,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Rare et menacée ; œufs et frayères protégés + Directive Habitats — remise à l'eau."
+          "Rare et menacée ; citée à l'arrêté du 8 déc. 1988 (œufs et frayères) + Directive Habitats an. II — remise à l'eau conseillée."
         ]
       ]
     }
@@ -4121,9 +4171,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -4136,7 +4189,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -4144,13 +4197,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -4166,7 +4219,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Œufs et frayères protégés + Directive Habitats — remise à l'eau."
+          "Citée à l'arrêté du 8 déc. 1988 (œufs et frayères) + Directive Habitats an. II — remise à l'eau conseillée."
         ]
       ]
     }
@@ -5050,7 +5103,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce exotique envahissante (règl. UE 1143/2014) : remise à l'eau vivante interdite"
+          "Espèce exotique envahissante (règl. UE 1143/2014 · arrêté 14 fév. 2018) : remise à l'eau vivante interdite"
         ],
         [
           "Période",
@@ -5244,7 +5297,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce exotique envahissante (L432-10 code de l'environnement · absent de l'arrêté du 17 déc. 1985)"
+          "Espèce exotique envahissante (L432-10 code de l'environnement · absent de l'arrêté du 17 déc. 1985) : remise à l'eau vivante interdite"
         ],
         [
           "Période",
@@ -5375,7 +5428,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Période",
-          "Réglementation spéciale — vérifiez l'arrêté avant toute conservation"
+          "Régime spécial — voir l'arrêté préfectoral / de bassin"
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
@@ -5547,9 +5600,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Espèce d'intérêt communautaire",
+      "text": "Inscrite à l'annexe II de la directive Habitats, qui impose de désigner des sites de conservation et non d'interdire la capture ; l'arrêté du 8 décembre 1988 ne la vise pas. Aucun texte national n'interdit donc de la conserver, mais l'espèce est rare et un arrêté préfectoral peut la protéger localement : vérifiez-le, et privilégiez la remise à l'eau."
+    },
     "reg": {
       "rows": [
         [
@@ -5562,7 +5618,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Directive Habitats an. II (désignation de sites) — aucune interdiction nationale de capture"
         ],
         [
           "Période",
@@ -5570,13 +5626,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · Directive Habitats an. II"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -5592,7 +5648,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Directive Habitats An. II ; bouche infère, endémique franco-ibérique menacé. Remise à l'eau conseillée."
+          "Directive Habitats an. II et V ; absent de l'arrêté du 8 déc. 1988. Bouche infère, endémique franco-ibérique menacé. Remise à l'eau conseillée."
         ]
       ]
     }
@@ -6277,9 +6333,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -6292,7 +6351,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -6300,13 +6359,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -6322,7 +6381,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Endémique du Sud-Ouest (bassin de l'Adour) ; espèce protégée — remise à l'eau obligatoire."
+          "Endémique du Sud-Ouest (bassin de l'Adour) ; revalidée après 1988, elle hérite du statut de la vandoise commune (note OFB 2019) : arrêté du 8 déc. 1988, œufs et frayères."
         ]
       ]
     }
@@ -6338,9 +6397,12 @@ export const BASE_SPECIES: Species[] = [
     "mailleSub": "pas de maille nationale",
     "quota": "—",
     "quotaSub": "—",
-    "season": "toujours",
+    "season": "special",
     "depth": "base",
-    "protected": true,
+    "alert": {
+      "title": "Œufs et frayères protégés",
+      "text": "L'arrêté du 8 décembre 1988 interdit la destruction ou l'enlèvement des œufs et la dégradation des frayères ; il ne prononce aucune interdiction de capturer ou de conserver l'adulte. Mais l'arrêté préfectoral de votre département peut, lui, restreindre la conservation ou l'usage comme vif : vérifiez-le avant de garder la capture."
+    },
     "reg": {
       "rows": [
         [
@@ -6353,7 +6415,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Statut",
-          "Espèce protégée / menacée — remise à l'eau"
+          "Œufs et frayères protégés (arrêté 8 déc. 1988) — pas d'interdiction nationale de conserver l'adulte"
         ],
         [
           "Période",
@@ -6361,13 +6423,13 @@ export const BASE_SPECIES: Species[] = [
         ]
       ],
       "note": "Socle national ; un arrêté préfectoral peut être plus strict. Vérifiez localement.",
-      "src": "Legifrance R436-18 · R436-21 · statut de protection (voir remarque)"
+      "src": "Legifrance R436-18 · R436-21 · arrêté 8 déc. 1988 (œufs/frayères)"
     },
     "fish": {
       "rows": [
         [
           "À savoir",
-          "Espèce protégée ou menacée — à ne pas cibler."
+          "Espèce protégée ou réglementée — à ne pas cibler."
         ],
         [
           "Bon geste",
@@ -6383,7 +6445,7 @@ export const BASE_SPECIES: Species[] = [
         ],
         [
           "Remarque",
-          "Décrite par scission de la vandoise ; considérée protégée par extension (à vérifier). Bassins atlantiques SW + Méditerranée."
+          "Scindée de la vandoise commune ; la note OFB de 2019 (Poulet/Denys) lui attribue le statut de Leuciscus leuciscus, donc l'arrêté du 8 déc. 1988 : œufs et frayères. Bassins atlantiques SW + Méditerranée."
         ]
       ]
     }

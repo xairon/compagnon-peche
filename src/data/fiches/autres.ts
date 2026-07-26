@@ -20,7 +20,13 @@ import type { Fiche } from "./index";
 // Source : INPN (MNHN) et DORIS (FFESSM) pour l'identification, la biologie et
 // la répartition, complétés par FishBase et des sources halieutiques pour les
 // quelques espèces pêchées ou consommées.
-const SRC = "INPN (MNHN) · DORIS (FFESSM) — biologie et répartition";
+const SRC = "INPN (MNHN) · DORIS (FFESSM) — biologie et répartition ; techniques : fédérations de pêche";
+
+// Le statut légal n'est jamais écrit ici : il vient du générateur et des
+// modules de réglementation, et l'app l'affiche déjà en bandeau. Une fiche qui
+// le répète crée une seconde source pour une valeur de droit — l'une d'elles
+// était fausse (« capture et détention interdites » pour la lamproie de Planer,
+// quand l'arrêté cité ne protège que les œufs et les habitats).
 
 // Les vairons régionaux (basque, de Garonne, du Danube, du Languedoc) ont été
 // séparés du vairon commun par la génétique, pas par un usage différent : au
@@ -98,7 +104,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Zones courantes à fond de galets des rivières du bassin rhodanien, 30–450 m d'altitude"],
         ["Comportement", "Solitaire, immobile et camouflé le jour ; chasse au crépuscule"],
         ["Régime", "Invertébrés benthiques (vers, larves), probablement alevins"],
-        ["Statut", "Endémique du bassin du Rhône, en danger critique — remise à l'eau immédiate en cas de capture accidentelle"],
+        ["Conservation", "Endémique du bassin du Rhône, en danger critique d'extinction (UICN)"],
       ],
     },
   },
@@ -126,7 +132,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Cours d'eau lents, canaux et lacs du pourtour méditerranéen, sur fonds de galets"],
         ["Comportement", "Grégaire en juvénile, territoriale à l'âge adulte"],
         ["Longévité", "Jusqu'à 4 ans"],
-        ["Statut", "Œufs et frayères protégés ; seule blennie d'eau douce d'Europe, bassins méditerranéens"],
+        ["Répartition", "Seule blennie d'eau douce d'Europe ; bassins méditerranéens"],
       ],
     },
   },
@@ -154,7 +160,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Eaux calmes et végétalisées : étangs, canaux, lacs, rivières à faible courant"],
         ["Régime", "Surtout herbivore : phytoplancton, débris végétaux, un peu d'invertébrés"],
         ["Reproduction", "Avril–juin (jusqu'en août) : la femelle pond via un long ovipositeur à l'intérieur d'une moule d'eau douce vivante (anodonte, mulette) où les œufs se développent"],
-        ["Statut", "Espèce protégée, indissociable de la présence de moules d'eau douce"],
+        ["Écologie", "Indissociable de la présence de moules d'eau douce, où elle dépose ses œufs"],
       ],
     },
   },
@@ -186,7 +192,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Eaux vives et fraîches à fond de galets et graviers, aussi certains lacs d'altitude"],
         ["Comportement", "Sédentaire et territorial, caché le jour sous les pierres, chasse au crépuscule ; nageur médiocre, sans vessie natatoire"],
         ["Reproduction", "Le mâle prépare un nid dans les galets, la femelle y dépose 100 à 500 œufs"],
-        ["Statut", "Protégé, intérêt communautaire (Directive Habitats) ; forme un complexe de plusieurs espèces proches en Europe"],
+        ["Taxonomie", "Forme un complexe de plusieurs espèces proches en Europe"],
       ],
     },
   },
@@ -205,7 +211,7 @@ export const AUTRES: Record<string, Fiche> = {
       conf: [
         {
           n: "Chabot commun",
-          how: "Les deux espèces sont quasi indissociables à l'œil ; le critère le plus fiable reste le bassin versant. Le chabot fluviatile n'est aujourd'hui connu que dans une poignée de départements du centre et du centre-sud-ouest, quand le chabot commun occupe un territoire bien plus large jusqu'à l'axe Rhin-Rhône.",
+          how: "Les deux espèces sont quasi indissociables à l'œil ; le critère le plus fiable reste le bassin versant. Le chabot fluviatile occupe les bassins atlantiques, de la Garonne à l'Escaut (Loire, Seine, Somme) ; le chabot commun domine à l'est, sur l'axe Rhin-Rhône.",
         },
         {
           n: "Gobie de Kessler",
@@ -216,9 +222,9 @@ export const AUTRES: Record<string, Fiche> = {
     bio: {
       rows: [
         ["Habitat", "Systèmes fluviaux, plutôt que lacs et étangs"],
-        ["Statut taxonomique", "Séparée du chabot commun (Cottus gobio) en 2005 par étude génétique"],
+        ["Taxonomie", "Séparée du chabot commun (Cottus gobio) en 2005 par étude génétique"],
         ["Répartition", "Bassins du nord-ouest de l'Europe, dont une partie du bassin de la Seine"],
-        ["Statut", "Protégée comme le chabot commun"],
+        ["Conservation", "Populations localisées, sensibles à la qualité de l'eau"],
       ],
     },
   },
@@ -255,7 +261,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
         ["Répartition", "Endémique du bassin de l'Adour"],
-        ["Statut", "Quasi menacé (UICN NT, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+        ["Taxonomie", "Lignée cryptique du complexe Cottus gobio"],
+        ["Conservation", "Quasi menacé (UICN NT, 2023)"],
       ],
     },
   },
@@ -282,7 +289,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
         ["Répartition", "Endémique du Massif central"],
-        ["Statut", "Données insuffisantes (UICN DD, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+        ["Taxonomie", "Lignée cryptique du complexe Cottus gobio"],
+        ["Conservation", "Données insuffisantes (UICN DD, 2023)"],
       ],
     },
   },
@@ -309,7 +317,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau vifs et frais à fond de galets, comme les autres chabots"],
         ["Répartition", "Endémique des Pyrénées"],
-        ["Statut", "Quasi menacé (UICN NT, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+        ["Taxonomie", "Lignée cryptique du complexe Cottus gobio"],
+        ["Conservation", "Quasi menacé (UICN NT, 2023)"],
       ],
     },
   },
@@ -339,7 +348,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Résurgence karstique fraîche, sur trois kilomètres seulement, en amont de Montferrier-sur-Lez"],
         ["Répartition", "Endémique le plus restreint des chabots français — trois kilomètres de rivière, rien d'autre"],
-        ["Statut", "En danger critique (UICN CR, 2023) ; protégé, Directive Habitats, site Natura 2000 dédié — remise à l'eau immédiate en cas de capture accidentelle"],
+        ["Taxonomie", "Espèce à part entière (et non une simple lignée du complexe Cottus gobio)"],
+        ["Conservation", "En danger critique (UICN CR, 2023) ; site Natura 2000 dédié à cette espèce"],
       ],
     },
   },
@@ -366,7 +376,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Petits cours d'eau frais à fond de graviers, comme les autres chabots"],
         ["Répartition", "Bassins du Rhin et de la Meuse, en amont jusqu'à Mannheim (Allemagne)"],
-        ["Statut", "Préoccupation mineure (UICN LC, 2023) ; protégé, Directive Habitats — comme le chabot commun"],
+        ["Taxonomie", "Lignée cryptique du complexe Cottus gobio"],
+        ["Conservation", "Préoccupation mineure (UICN LC, 2023)"],
       ],
     },
   },
@@ -388,7 +399,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Lagunes côtières, eaux saumâtres à douces, embouchures, mares et fossés — exclusivement en Corse"],
         ["Régime", "Petits invertébrés"],
-        ["Statut", "Quasi menacé (UICN NT, 2022) ; endémique corse au sens français"],
+        ["Conservation", "Quasi menacé (UICN NT, 2022) ; endémique corse au sens français"],
       ],
     },
   },
@@ -424,7 +435,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Eaux stagnantes et boueuses, enfouie dans les sédiments le jour"],
         ["Comportement", "Peut respirer l'air atmosphérique par l'intestin pour survivre en eau très pauvre en oxygène"],
         ["Reproduction", "Avril–juin, jusqu'à 150 000 œufs déposés sur la végétation aquatique"],
-        ["Statut", "Rare et menacée, protégée, Directive Habitats"],
+        ["Conservation", "Rare et menacée sur l'ensemble de son aire française"],
       ],
     },
   },
@@ -451,7 +462,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau de plaine à courant lent, lacs, gravières"],
         ["Comportement", "Fouisseuse, s'enterre dans le sable ou la vase"],
-        ["Statut", "Protégée, Directive Habitats — œufs et frayères protégés"],
+        ["Conservation", "Populations fragmentées, en régression"],
       ],
     },
   },
@@ -578,7 +589,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Petits cours d'eau de montagne à faible pente, près des berges en eau calme sur graviers"],
         ["Régime", "Insectivore à tendance omnivore : plancton, algues"],
         ["Reproduction", "Avril–juin (jusqu'en août en altitude), migration vers des affluents graveleux"],
-        ["Statut", "Décrite en 2007 (Phoxinus bigerri), endémique du bassin Adour-Garonne"],
+        ["Taxonomie", "Décrite en 2007 (Phoxinus bigerri), endémique du bassin Adour-Garonne"],
       ],
     },
   },
@@ -597,7 +608,7 @@ export const AUTRES: Record<string, Fiche> = {
       conf: [
         {
           n: "Able de Heckel",
-          how: "L'able de Heckel a une ligne latérale interrompue et une bouche nettement tournée vers le haut ; le vairon a une ligne latérale complète et un corps plus trapu, tacheté.",
+          how: "Les deux ont une ligne latérale incomplète — ce critère ne les sépare pas. Le vairon est trapu, brun-vert marbré de sombre, avec une bouche terminale ; l'able de Heckel est mince, argenté et translucide, bouche nettement tournée vers le haut.",
         },
       ],
     },
@@ -652,7 +663,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Petits cours d'eau de montagne à faible pente, berges à faible courant, fond sableux ou graveleux"],
         ["Comportement", "Grégaire"],
         ["Reproduction", "Avril–juillet"],
-        ["Statut", "Décrit en 2020 (Phoxinus dragarum) ; peut s'hybrider avec d'autres vairons — espèce récente, littérature encore limitée"],
+        ["Taxonomie", "Décrit en 2020 (Phoxinus dragarum) ; peut s'hybrider avec d'autres vairons — espèce récente, littérature encore limitée"],
       ],
     },
   },
@@ -675,7 +686,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Répartition en France", "Bassin du Léman et du haut Rhin (première mention : Rupt de Mad, bassin Rhin-Moselle)"],
         ["Répartition européenne", "Allemagne, Autriche, Bulgarie, Macédoine du Nord, Serbie, Suisse — bassin du Danube"],
-        ["Statut taxonomique", "Longtemps confondu avec le vairon commun (Phoxinus phoxinus), revalidé en 2017"],
+        ["Taxonomie", "Longtemps confondu avec le vairon commun (Phoxinus phoxinus), revalidé en 2017"],
         ["Remarque", "Espèce à peine documentée en France ; toute identification de terrain doit rester prudente"],
       ],
     },
@@ -702,7 +713,7 @@ export const AUTRES: Record<string, Fiche> = {
     bio: {
       rows: [
         ["Répartition", "Bassins côtiers méditerranéens du Languedoc"],
-        ["Statut taxonomique", "Espèce cryptique du complexe Phoxinus, distinguée récemment par génétique et robe nuptiale"],
+        ["Taxonomie", "Espèce cryptique du complexe Phoxinus, distinguée récemment par génétique et robe nuptiale"],
         ["Remarque", "Littérature encore limitée sur cette espèce récemment décrite"],
       ],
     },
@@ -731,7 +742,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau clairs et peu profonds à faible courant, fond sableux ou graveleux ; très commun dans tout le bassin de la Loire"],
         ["Répartition", "Endémique des bassins de la Loire et de la Sèvre Niortaise ; introduit dans les bassins de la Garonne et du Rhône"],
-        ["Statut taxonomique", "Décrit en 2020, en même temps que le vairon de Garonne"],
+        ["Taxonomie", "Décrit en 2020, en même temps que le vairon de Garonne"],
       ],
     },
   },
@@ -876,7 +887,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Grands cours d'eau frais et bien oxygénés, lacs profonds, surtout à l'est et au nord-est"],
         ["Comportement", "Benthique et solitaire, strictement crépusculaire à nocturne"],
-        ["Statut", "En régression ; protégée par arrêté préfectoral dans plusieurs départements — vérifier localement"],
+        ["Conservation", "En régression marquée sur une grande partie de son aire française"],
       ],
     },
   },
@@ -1230,7 +1241,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Estuaires, lagunes, vasières côtières — toutes les côtes françaises"],
         ["Régime", "Petits invertébrés benthiques"],
         ["Reproduction", "Le mâle garde les œufs déposés dans une cavité ou sous une coquille"],
-        ["Statut", "Natif, préoccupation mineure au niveau mondial"],
+        ["Conservation", "Natif, préoccupation mineure au niveau mondial"],
       ],
     },
   },
@@ -1257,7 +1268,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Fonds sableux côtiers et estuariens, enfoui le jour"],
         ["Régime", "Petits invertébrés benthiques"],
-        ["Statut", "Natif, préoccupation mineure au niveau mondial ; données insuffisantes en France (Liste rouge nationale)"],
+        ["Conservation", "Natif, préoccupation mineure au niveau mondial ; données insuffisantes en France (Liste rouge nationale)"],
       ],
     },
   },
@@ -1280,7 +1291,7 @@ export const AUTRES: Record<string, Fiche> = {
         ["Habitat", "Très euryhalin : végétation ou détritus sur sable et vase, mer, estuaires et eau douce"],
         ["Régime", "Petits invertébrés, aspirés par le museau tubulaire"],
         ["Reproduction", "Le mâle féconde 10 à 60 œufs déposés dans sa poche ventrale et les porte 20 à 32 jours selon la température"],
-        ["Statut", "Préoccupation mineure au niveau mondial (UICN LC)"],
+        ["Conservation", "Préoccupation mineure au niveau mondial (UICN LC)"],
       ],
     },
   },
@@ -1314,7 +1325,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau vifs et frais à fond de graviers, comme la loche franche"],
         ["Répartition", "Bassin de l'Adour (France), Ebro et Cantabrique oriental (Espagne)"],
-        ["Statut taxonomique", "Revalidée en 2021 après avoir été considérée comme un synonyme"],
+        ["Taxonomie", "Revalidée en 2021 après avoir été considérée comme un synonyme"],
       ],
     },
   },
@@ -1341,7 +1352,7 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Cours d'eau vifs et frais à fond de graviers, comme la loche franche"],
         ["Répartition", "Endémique des bassins du Tech et de la Têt (Pyrénées-Orientales, Catalogne française)"],
-        ["Statut taxonomique", "Décrite en 2019 ; type collecté sur la Têt à Néfiach"],
+        ["Taxonomie", "Décrite en 2019 ; type collecté sur la Têt à Néfiach"],
       ],
     },
   },
@@ -1449,8 +1460,8 @@ export const AUTRES: Record<string, Fiche> = {
       rows: [
         ["Habitat", "Eaux calmes végétalisées, cours d'eau et zones estuariennes du Centre-Ouest"],
         ["Répartition", "Bassin de la Vienne, estuaire de la Gironde, affluents de la Dordogne, Charente, Sèvre Niortaise, Ligneron"],
-        ["Statut taxonomique", "Décrite en 1848, synonymisée puis revalidée en 2018 (Denys & al.)"],
-        ["Statut", "Quasi menacée (Liste rouge française, UICN NT)"],
+        ["Taxonomie", "Décrite en 1848, synonymisée puis revalidée en 2018 (Denys & al.)"],
+        ["Conservation", "Quasi menacée (Liste rouge française, UICN NT)"],
       ],
     },
   },

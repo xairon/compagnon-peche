@@ -56,8 +56,10 @@ describe("fiches — overlay descriptif", () => {
   });
 
   // Espèce synthétique, et non « la première du catalogue qui n'a pas de fiche » :
-  // depuis que les 58 espèces « base » sont toutes couvertes, un tel candidat
-  // n'existe plus — et le test tombait, alors que c'était une bonne nouvelle.
+  // depuis que les 129 espèces « base » sont toutes couvertes, un tel candidat
+  // n'existe plus dans les données réelles — c'est pour ça que ce test utilise
+  // un objet fabriqué plutôt qu'un .find() sur BASE_SPECIES, qui renverrait
+  // `undefined` et ferait planter le test au lieu de l'échouer proprement.
   it("withFiche laisse intacte une espèce sans overlay", () => {
     const inconnue: Species = {
       id: "espece-sans-fiche",
@@ -110,5 +112,81 @@ describe("fiches — overlay descriptif", () => {
       }
     }
     expect(inconnues).toEqual([]);
+  });
+});
+
+/**
+ * L'audit a montré que la garde précédente ne prouvait rien : elle vérifiait les
+ * clés de premier niveau de `Fiche`, que TypeScript impose déjà. Elle n'a donc
+ * pas vu qu'une fiche protégée portait une technique de pêche et une recette —
+ * et c'était l'une des quatre fiches écrites comme exemple de référence.
+ *
+ * On teste désormais le RÉSULTAT servi à l'écran.
+ */
+describe("aucune technique de pêche sur une espèce qu'on ne doit pas pêcher", () => {
+  it("aucune espèce protégée ne conserve de section « pêche » ou « cuisine »", () => {
+    const fautes = SPECIES.filter((sp) => sp.protected && (sp.fish || sp.cook)).map((sp) => sp.id);
+    expect(fautes).toEqual([]);
+  });
+
+  it("aucune espèce au régime spécial n'en conserve non plus", () => {
+    const fautes = SPECIES.filter((sp) => sp.season === "special" && (sp.fish || sp.cook)).map(
+      (sp) => sp.id,
+    );
+    expect(fautes).toEqual([]);
+  });
+
+  it("les espèces ordinaires gardent bien leurs sections", () => {
+    const sandre = SPECIES.find((s) => s.id === "sandre")!;
+    expect(sandre.fish).toBeDefined();
+    expect(sandre.cook).toBeDefined();
+  });
+});
+
+/**
+ * Une fiche ne doit pas affirmer de règle de droit en texte libre : c'est une
+ * seconde source pour une valeur légale, exactement la fracture que l'app a mis
+ * longtemps à refermer — et l'audit en a trouvé une FAUSSE (« capture et
+ * détention interdites » pour la lamproie de Planer, quand l'arrêté cité ne
+ * protège que les œufs et les habitats).
+ */
+describe("aucune affirmation de droit dans le texte d'une fiche", () => {
+  // Première version : une liste de tournures interdites. Elle a laissé passer
+  // deux affirmations sur cinq, parce qu'il suffit d'écrire « pêche de l'adulte
+  // fermée » au lieu de « pêche fermée » pour lui échapper. Chasser les
+  // formulations est un jeu perdu d'avance.
+  //
+  // La vraie règle est structurelle : une fiche décrit un animal, pas son
+  // régime juridique. Une ligne « Statut » dans la biologie n'a donc rien à y
+  // faire — c'est là que les cinq se cachaient. La conservation (UICN, tendance
+  // de population) reste légitime, sous son propre intitulé.
+  it("aucune ligne « Statut » dans la biologie d'une fiche", () => {
+    const fautes: string[] = [];
+    for (const [id, f] of Object.entries(FICHES)) {
+      for (const [k, v] of f.bio?.rows ?? []) {
+        if (/^statut/i.test(k)) fautes.push(`${id} → ${k} : « ${v.slice(0, 60)}… »`);
+      }
+    }
+    expect(fautes).toEqual([]);
+  });
+
+  const INTERDIT =
+    /capture (et détention )?interdite|détention interdite|pêche[^.]{0,25}(fermée|interdite)|sous moratoire|remise à l'eau|protégée? par arrêté|quota|arrêté du \d/i;
+
+  it("les sections descriptives ne prononcent pas d'interdiction", () => {
+    const fautes: string[] = [];
+    for (const [id, f] of Object.entries(FICHES)) {
+      const textes = [
+        f.ident?.summary,
+        ...(f.ident?.traits ?? []),
+        ...(f.ident?.conf ?? []).map((c) => c.how),
+        ...(f.bio?.rows ?? []).map(([, v]) => v),
+        f.cook?.note,
+      ].filter(Boolean) as string[];
+      for (const t of textes) {
+        if (INTERDIT.test(t)) fautes.push(`${id} → « ${t.slice(0, 70)}… »`);
+      }
+    }
+    expect(fautes).toEqual([]);
   });
 });

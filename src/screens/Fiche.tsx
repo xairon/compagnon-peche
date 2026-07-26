@@ -348,9 +348,6 @@ export function Fiche() {
               <span className="v">{v}</span>
             </div>
           ))}
-          {/* Cette app source ce qu'elle affirme ; une fiche rédigée à la main
-              ne fait pas exception. */}
-          {sp.ficheSrc && <div className="fiche-src">Source : {sp.ficheSrc}</div>}
         </>
       ),
     });
@@ -659,6 +656,11 @@ export function Fiche() {
             );
           })}
         </div>
+
+        {/* Au pied de la fiche, jamais dans une section : logée dans « Biologie »,
+            elle disparaissait sur toute fiche qui n'en a pas. Cette app source ce
+            qu'elle affirme — une fiche rédigée à la main ne fait pas exception. */}
+        {sp.ficheSrc && <div className="fiche-src">Source du contenu : {sp.ficheSrc}</div>}
 
         <div className="disclaimer">
           Outil d'aide — la réglementation applicable est celle de l'arrêté préfectoral en vigueur.

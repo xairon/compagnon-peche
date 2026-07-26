@@ -25,6 +25,11 @@ import type { Fiche } from "./index";
 
 const SRC = "INPN (MNHN) · DORIS (FFESSM) · FishBase · OFB — biologie et identification";
 
+// Le statut légal n'est jamais écrit ici : il vient du générateur et des
+// modules de réglementation, et l'app l'affiche déjà en bandeau. Une fiche qui
+// le répète crée une seconde source pour une valeur de droit — l'une d'elles
+// était fausse (« capture et détention interdites » pour la lamproie de Planer,
+// quand l'arrêté cité ne protège que les œufs et les habitats).
 export const MIGRATEURS: Record<string, Fiche> = {
   // ---------------------------------------------------------------------
   // Aloses — protégées au titre de la Directive Habitats, pêche de l'adulte
@@ -54,7 +59,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : grandit en mer, remonte les grands fleuves pour frayer"],
         ["Régime", "Planctonophage en mer ; ne s'alimente plus une fois entrée en rivière"],
         ["Reproduction", "Mai–juin, la nuit, en surface — frai bruyant et visible dit « bull »"],
-        ["Statut", "Population en fort déclin ; pêche de l'adulte fermée sur plusieurs bassins (dont Garonne-Dordogne)"],
+        ["Conservation", "Population en fort déclin sur l'ensemble des bassins français"],
       ],
     },
   },
@@ -86,7 +91,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : estuaires et côtes, remonte les fleuves atlantiques pour frayer"],
         ["Régime", "Planctonophage en mer ; jeûne durant la migration de reproduction"],
         ["Reproduction", "Mai–juillet, la nuit, en surface (« bull »)"],
-        ["Statut", "Population en fort déclin ; pêche de l'adulte très restreinte selon le bassin"],
+        ["Conservation", "Population en fort déclin sur les bassins français"],
       ],
     },
   },
@@ -100,7 +105,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         "Rangée de 4 à 8 taches sombres derrière l'opercule",
         "Dos bleu-vert métallique, flancs et ventre argentés",
         "Ventre caréné (scutelles)",
-        "Plus petite que la grande alose, absente du bassin méditerranéen",
+        "Plus petite que la grande alose, qui est elle absente du bassin méditerranéen",
       ],
       conf: [
         {
@@ -114,7 +119,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : Méditerranée et fleuves côtiers du Rhône au Roussillon"],
         ["Régime", "Planctonophage en mer ; jeûne durant la migration de reproduction"],
         ["Reproduction", "Avril–juin, la nuit, en surface"],
-        ["Statut", "Espèce endémique méditerranéenne, en déclin ; pêche de l'adulte restreinte selon le bassin"],
+        ["Conservation", "Endémique méditerranéenne, en déclin"],
       ],
     },
   },
@@ -152,7 +157,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : mer côtière puis grands fleuves pour la reproduction"],
         ["Régime", "Parasite en mer (se fixe sur d'autres poissons) ; jeûne en rivière"],
         ["Reproduction", "Printemps, nid de galets creusé en eau courante"],
-        ["Statut", "Population en déclin ; pêche traditionnelle réglementée par bassin, souvent sous moratoire"],
+        ["Conservation", "Population en fort déclin sur les bassins français"],
       ],
     },
   },
@@ -188,7 +193,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : estuaires et côtes, remonte les fleuves pour frayer"],
         ["Régime", "Parasite en mer et en estuaire (se fixe sur d'autres poissons) ; jeûne en rivière"],
         ["Reproduction", "Hiver–printemps, nid de galets creusé en eau courante"],
-        ["Statut", "Population en déclin ; pêche réglementée par bassin, souvent sous moratoire ou quota"],
+        ["Conservation", "Population en déclin sur les bassins français"],
       ],
     },
   },
@@ -220,7 +225,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Petits cours d'eau à fond meuble (sable, limon) où la larve reste enfouie plusieurs années"],
         ["Régime", "Larve filtreuse (détritus, micro-organismes) ; adulte non parasite, ne s'alimente plus"],
         ["Reproduction", "Mars–avril, sur substrat minéral, puis mort peu après la fraie"],
-        ["Statut", "Espèce protégée (arrêté du 8 décembre 1988 + Directive Habitats) — capture et détention interdites"],
+        ["Conservation", "Inscrite à la Directive Habitats ; populations fragmentées"],
       ],
     },
   },
@@ -266,7 +271,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Anadrome : estuaire de la Gironde et bassin Gironde-Garonne-Dordogne, seule population sauvage française"],
         ["Longévité", "Peut dépasser 100 ans, croissance très lente"],
         ["Reproduction", "Dernière reproduction naturelle constatée en 1994 ; programme de réintroduction en cours depuis 2007"],
-        ["Statut", "En danger critique d'extinction (UICN) — protection totale depuis 1982, capture et détention interdites"],
+        ["Conservation", "En danger critique d'extinction (UICN) — une seule population relictuelle en France"],
       ],
     },
   },
@@ -300,7 +305,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
       conf: [
         {
           n: "Esturgeon européen",
-          how: "C'est LA confusion à connaître : le sturio est en danger critique et strictement protégé depuis 1982, l'esturgeon sibérien ne l'est pas. Mais la distinction repose sur des comptages d'écussons qu'on ne fait pas au bord de l'eau. Traitez toute capture comme un esturgeon européen : remise à l'eau immédiate et déclaration sur sturio.eu.",
+          how: "C'est LA confusion à connaître : le sturio est en danger critique et strictement protégé, l'esturgeon sibérien ne l'est pas. Mais la distinction repose sur des comptages d'écussons qu'on ne fait pas au bord de l'eau. Traitez toute capture comme un esturgeon européen : relâchez-la immédiatement et déclarez-la sur sturio.eu.",
         },
         {
           n: "Sterlet",
@@ -313,7 +318,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Origine", "Sibérie (bassins de l'Ob à la Kolyma) ; élevé en France depuis 1989 pour le caviar d'Aquitaine"],
         ["Présence en France", "Uniquement par échappées d'élevage — Dordogne, Gironde, Charente-Maritime, et la Garonne après la rupture de digue de 1999"],
         ["Reproduction", "Aucune reproduction naturelle constatée en France à ce jour"],
-        ["Statut", "Non applicable sur la Liste rouge française (espèce introduite) ; en danger critique dans son aire d'origine"],
+        ["Conservation", "Non applicable sur la Liste rouge française (espèce introduite) ; en danger critique dans son aire d'origine"],
       ],
     },
   },
@@ -345,7 +350,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Origine", "Bassins de la mer Noire, de la Caspienne et de la Baltique ; introduit en France par l'aquaculture et des lâchers d'agrément"],
         ["Présence en France", "Sporadique, entièrement dépendante des échappées et des lâchers"],
         ["Reproduction", "Pas de reproduction naturelle établie en France"],
-        ["Statut", "Non applicable sur la Liste rouge française (espèce introduite)"],
+        ["Conservation", "Non applicable sur la Liste rouge française (espèce introduite)"],
       ],
     },
   },
@@ -662,7 +667,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat", "Surtout marin (fonds sableux ou rocheux du littoral), pénètre volontiers en eaux saumâtres, ports et parties terminales des fleuves côtiers"],
         ["Régime", "Invertébrés (crevettes, mollusques) chez le jeune, franchement piscivore à l'âge adulte"],
         ["Reproduction", "Printemps, en mer ; œufs pélagiques"],
-        ["Statut", "En régression sur les stocks du nord (Manche/Atlantique) ; suivi et quotas européens depuis le milieu des années 2010"],
+        ["Conservation", "En régression sur les stocks du nord (Manche/Atlantique), suivis de près depuis le milieu des années 2010"],
       ],
     },
   },
@@ -754,7 +759,7 @@ export const MIGRATEURS: Record<string, Fiche> = {
         ["Habitat d'origine", "Pacifique Nord ; cycle de vie le plus court des saumons du Pacifique (2 ans)"],
         ["Introduction", "Introduit massivement en Russie dès les années 1950 pour la pêche commerciale ; colonise l'Atlantique depuis"],
         ["Présence en France", "Premier signalement en 2017 (Canche, Pas-de-Calais) ; récidive en 2017, 2021 et 2023 en Normandie, Bretagne et dans le Nord"],
-        ["Statut", "Non applicable (UICN NA) — espèce introduite, en cours de colonisation surveillée"],
+        ["Conservation", "Non applicable (UICN NA) — espèce introduite, en cours de colonisation surveillée"],
       ],
     },
   },
