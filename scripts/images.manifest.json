@@ -1158,5 +1158,62 @@
       "file_page_url": "https://commons.wikimedia.org/wiki/File:Quenelle_de_brochet_sauce_Nantua.jpg"
     }
   ],
-  "techniques": []
+  "techniques": [],
+  "knotSteps": [
+    {
+      "id": "sang",
+      "steps": [
+        {
+          "filename": "File:BloodKnot_HowTo.jpg",
+          "author": "Chris 73",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:BloodKnot_HowTo.jpg"
+        }
+      ]
+    },
+    {
+      "id": "albright",
+      "steps": [
+        {
+          "filename": "File:Albright_knot_diagram_retouched.png",
+          "author": "LadyofHats (original) · retouché par Dfred",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Albright_knot_diagram_retouched.png"
+        }
+      ]
+    },
+    {
+      "id": "chaise",
+      "steps": [
+        {
+          "filename": "File:Bowline_in_four_steps.png",
+          "author": "Luis Dantas",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
+        }
+      ]
+    },
+    {
+      "id": "palomar",
+      "steps": [
+        {
+          "filename": "File:PalomarKnotSequence.jpg",
+          "author": "Vaughan Pratt",
+          "license": "CC BY-SA 3.0",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
+        }
+      ]
+    },
+    {
+      "id": "boucle",
+      "steps": [
+        {
+          "filename": "File:Surgeon's_Loop_knot.svg",
+          "author": "LadyofHats",
+          "license": "Domaine public",
+          "file_page_url": "https://commons.wikimedia.org/wiki/File:Surgeon's_Loop_knot.svg"
+        }
+      ]
+    }
+  ]
 }
