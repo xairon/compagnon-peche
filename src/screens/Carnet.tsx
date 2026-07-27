@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useStore, type CarnetSeg } from "../store";
+import type { CarnetSeg } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { Media } from "../components/Media";
 import { ProfileHeader } from "../components/ProfileHeader";

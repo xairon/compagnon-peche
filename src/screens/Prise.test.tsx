@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
-import { StoreProvider, useStore } from "../store";
+import { StoreProvider } from "../store";
+import { useStore } from "../store-hooks";
 import { Prise } from "./Prise";
 import { useEffect } from "react";
 import type { DeptId } from "../data/regulation";

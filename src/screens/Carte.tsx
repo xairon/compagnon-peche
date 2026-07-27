@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { norm, uid, isoDay } from "../lib/helpers";
 import {

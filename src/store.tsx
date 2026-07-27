@@ -1,14 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  type ReactNode,
-} from "react";
+import { useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
 import type { Catch, Species, Spot, GearItem, Profile, PersonalRecipe, CrayfishSession } from "./types";
 import type { DeptId } from "./data/regulation";
+import { StateCtx, ActionsCtx } from "./store-context";
 import {
   loadCatches,
   saveCatches,
@@ -169,7 +162,7 @@ function reducer(state: AppState, patch: Patch): AppState {
   return { ...state, ...p };
 }
 
-interface Store {
+export interface Store {
   state: AppState;
   set: (patch: Patch) => void;
   nav: (screen: Screen, extra?: Partial<AppState>) => void;
@@ -197,12 +190,6 @@ interface Store {
 
 /** Actions are the store minus its state — a referentially STABLE object. */
 export type Actions = Omit<Store, "state">;
-
-// Split contexts: state changes on every dispatch, actions never do. Components
-// that only fire actions (useActions) don't re-render on state changes, and the
-// action references are stable so child memoization and effect deps hold.
-const StateCtx = createContext<AppState | null>(null);
-const ActionsCtx = createContext<Actions | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -452,20 +439,4 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       <StateCtx.Provider value={state}>{children}</StateCtx.Provider>
     </ActionsCtx.Provider>
   );
-}
-
-/** Full store (state + actions). Re-renders on every state change. */
-export function useStore(): Store {
-  const state = useContext(StateCtx);
-  const actions = useContext(ActionsCtx);
-  if (!state || !actions) throw new Error("useStore must be used within StoreProvider");
-  return { state, ...actions };
-}
-
-/** Actions only — never re-renders on state changes (stable references). Use in
- *  components that fire actions but don't read state. */
-export function useActions(): Actions {
-  const actions = useContext(ActionsCtx);
-  if (!actions) throw new Error("useActions must be used within StoreProvider");
-  return actions;
 }

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
-import { Icon, ICONS } from "../components/Icon";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { HoldButton } from "../components/HoldButton";
 import { quotaToday, norm } from "../lib/helpers";

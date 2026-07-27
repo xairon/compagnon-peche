@@ -1,5 +1,7 @@
-import { useStore, type Tab } from "../store";
-import { Icon, NAV_ICONS, ICONS } from "./Icon";
+import type { Tab } from "../store";
+import { useStore } from "../store-hooks";
+import { Icon } from "./Icon";
+import { NAV_ICONS, ICONS } from "./icons-data";
 
 const LEFT: [Tab, string][] = [
   ["accueil", "Accueil"],

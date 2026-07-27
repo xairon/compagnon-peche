@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { RECIPES } from "../data/recipes";
-import { Icon, ICONS } from "../components/Icon";
-import { Media, hasMedia } from "../components/Media";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
+import { Media } from "../components/Media";
+import { hasMedia } from "../components/media-helpers";
 import { norm, uid, isoDay } from "../lib/helpers";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
 import { isQuotaError } from "../lib/storage";

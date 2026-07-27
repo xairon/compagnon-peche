@@ -1,6 +1,8 @@
-import { useStore, type Screen } from "../store";
+import type { Screen } from "../store";
+import { useStore } from "../store-hooks";
 import { DEPARTEMENTS } from "../data/regulation";
-import { Icon, ICONS } from "../components/Icon";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
 
 export function Outils() {
   const { state, nav } = useStore();

@@ -1,4 +1,4 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { DAY_PARTS, dayPart, type DayPart } from "../lib/helpers";
 import { analysePrises, silenceMessage, BIAS_NOTE } from "../lib/analysePrises";

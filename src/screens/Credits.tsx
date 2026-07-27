@@ -1,8 +1,8 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { KNOTS } from "../data/knots";
 import { SPECIES_MEDIA } from "../data/media";
-import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/Media";
+import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/media-helpers";
 
 function nameForSpecies(id: string): string {
   return SPECIES.find((s) => s.id === id)?.name || idFallback(id);

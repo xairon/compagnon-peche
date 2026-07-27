@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { CAT_LABEL } from "../data/gear";
 import { usePhotoUrl } from "../lib/photos";

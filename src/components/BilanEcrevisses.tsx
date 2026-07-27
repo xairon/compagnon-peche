@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { ECREVISSES, PECHABLES, crayfishById } from "../data/ecrevisses";
 import { addTally, tallyTotal } from "../lib/ecrevisses";
 import type { CrayfishSession } from "../types";

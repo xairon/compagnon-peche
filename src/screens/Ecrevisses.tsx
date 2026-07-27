@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { BalanceCard } from "../components/BalanceCard";
 import { BilanEcrevisses } from "../components/BilanEcrevisses";
 import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";

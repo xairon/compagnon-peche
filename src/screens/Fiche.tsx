@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { DEPARTEMENTS, DEPT_REG, localRegRows } from "../data/regulation";
-import { Icon, ICONS, SEC_ICONS } from "../components/Icon";
-import { Media, confusionMediaId } from "../components/Media";
+import { Icon } from "../components/Icon";
+import { ICONS, SEC_ICONS } from "../components/icons-data";
+import { Media } from "../components/Media";
+import { confusionMediaId } from "../components/media-helpers";
 import { Gallery } from "../components/Gallery";
 import { ImgSlot } from "../components/ImgSlot";
 import { Glossed } from "../components/Glossed";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { get, set as idbSet } from "idb-keyval";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { uid } from "../lib/helpers";
 import { GEAR_CATEGORIES, CAT_LABEL, GEAR_GUIDE, type GearCategory } from "../data/gear";
 import type { GearItem } from "../types";

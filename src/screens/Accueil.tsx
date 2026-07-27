@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES, CURATED_IDS } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { Media } from "../components/Media";
@@ -84,6 +84,13 @@ export function Accueil() {
   useEffect(() => {
     let alive = true;
     const ac = new AbortController();
+    // Resets loading/err/water immediately on a pt change so the home screen
+    // doesn't show the previous location's weather/water while the new fetch
+    // is in flight. Deriving this instead (tagging state with the pt it was
+    // fetched for, like Briefing's useFetch) would mean threading that
+    // comparison through every meteo/onde/water read below — for the home
+    // screen's own data effect, the eslint-disable is the safer change.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setErr(false);
     setWater(null);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { CAT_LABEL } from "../data/gear";
 import { norm, uid, isoDay } from "../lib/helpers";
@@ -8,7 +8,8 @@ import { locate, locateMessage } from "../lib/locate";
 import { isQuotaError, getLastExportAt, storageInfo } from "../lib/storage";
 import { shouldSuggestBackup } from "../lib/backup-reminder";
 import { getFreshConditions } from "../lib/conditionsCache";
-import { Icon, ICONS } from "./Icon";
+import { Icon } from "./Icon";
+import { ICONS } from "./icons-data";
 import type { Catch } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));

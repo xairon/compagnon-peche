@@ -1,6 +1,8 @@
-import { useStore } from "../store";
-import { Icon, ICONS } from "../components/Icon";
-import { Media, hasMedia } from "../components/Media";
+import { useStore } from "../store-hooks";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
+import { Media } from "../components/Media";
+import { hasMedia } from "../components/media-helpers";
 import { findRecipe } from "../lib/recipes";
 import { TECHNIQUES } from "../data/techniques";
 import { enterCuisine } from "../lib/wakelock";

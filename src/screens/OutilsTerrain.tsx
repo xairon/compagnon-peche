@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { Icon } from "../components/Icon";
 import { sunTimes } from "../lib/astro";
 import { hhmm } from "../lib/geo";

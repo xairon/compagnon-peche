@@ -1,8 +1,10 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { TECHNIQUES, SAFETY } from "../data/techniques";
 import { SPECIES } from "../data/species";
-import { Icon, ICONS } from "../components/Icon";
-import { Media, hasMedia } from "../components/Media";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
+import { Media } from "../components/Media";
+import { hasMedia } from "../components/media-helpers";
 
 const CAT: { id: string; label: string }[] = [
   { id: "abattage", label: "Abattage" },

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
 import { isQuotaError } from "../lib/storage";
 import { fishingCardStatus, daysUntilCardExpiry } from "../lib/carte-peche";

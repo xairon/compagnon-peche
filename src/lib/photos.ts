@@ -44,12 +44,9 @@ export async function deletePhoto(key: string): Promise<void> {
 export function usePhotoUrl(key: string | undefined | null): string | null {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
+    if (!key) return; // nothing to load — the return below hides any stale `url` already
     let revoked = false;
     let current: string | null = null;
-    if (!key) {
-      setUrl(null);
-      return;
-    }
     loadPhoto(key).then((blob) => {
       if (revoked) return;
       if (blob) {
@@ -64,7 +61,9 @@ export function usePhotoUrl(key: string | undefined | null): string | null {
       if (current) URL.revokeObjectURL(current);
     };
   }, [key]);
-  return url;
+  // Gated here rather than cleared via setState when `key` goes falsy: same
+  // effect, no synchronous setState at the top of the effect body.
+  return key ? url : null;
 }
 
 /**

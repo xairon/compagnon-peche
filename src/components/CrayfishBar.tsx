@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { barStatus, currentSession, fmtDuration } from "../lib/ecrevisses";
 
 /**

@@ -1,7 +1,8 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-import { useStore } from "./store";
+import { useStore } from "./store-hooks";
 import { BottomNav } from "./components/BottomNav";
-import { Icon, ICONS } from "./components/Icon";
+import { Icon } from "./components/Icon";
+import { ICONS } from "./components/icons-data";
 import { Accueil } from "./screens/Accueil";
 import { Especes } from "./screens/Especes";
 import { Identify } from "./screens/Identify";

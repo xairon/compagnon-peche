@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { effectiveMaille } from "../lib/maille";
 import { SPECIES } from "../data/species";
 

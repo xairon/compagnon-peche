@@ -1,4 +1,4 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { Media } from "../components/Media";
 import { speciesStatus } from "../lib/statut";
 import type { Species } from "../types";

@@ -38,30 +38,46 @@ interface Async<T> {
   error: boolean;
   stale: boolean;
 }
+// `fetchedKey` tags which `key` the rest of the record was resolved for.
+// `loading`/`error` are derived by comparing it to the current `key` instead
+// of being reset with a synchronous setState at the top of the effect: same
+// result (a key change immediately shows loading, old data included, until
+// the new fetch resolves — the effect never touches `loading`/`error`
+// directly), no setState before the async boundary.
+interface FetchRecord<T> {
+  fetchedKey: string | null;
+  data: T | null;
+  error: boolean;
+  stale: boolean;
+}
 function useFetch<T>(key: string, fn: (s: AbortSignal) => Promise<T>, deps: unknown[]): Async<T> {
-  const [st, setSt] = useState<Async<T>>({
-    loading: true,
+  const [rec, setRec] = useState<FetchRecord<T>>({
+    fetchedKey: null,
     data: (CACHE.get(key) as T) ?? null,
     error: false,
     stale: false,
   });
   useEffect(() => {
     const ac = new AbortController();
-    setSt((p) => ({ ...p, loading: true, error: false }));
     fn(ac.signal)
       .then((data) => {
         CACHE.set(key, data);
-        setSt({ loading: false, data, error: false, stale: false });
+        setRec({ fetchedKey: key, data, error: false, stale: false });
       })
       .catch((e) => {
         if ((e as Error).name === "AbortError") return;
         const cached = CACHE.get(key) as T | undefined;
-        setSt({ loading: false, data: cached ?? null, error: cached == null, stale: cached != null });
+        setRec({ fetchedKey: key, data: cached ?? null, error: cached == null, stale: cached != null });
       });
     return () => ac.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-  return st;
+  return {
+    loading: rec.fetchedKey !== key,
+    data: rec.data,
+    error: rec.fetchedKey === key && rec.error,
+    stale: rec.stale,
+  };
 }
 
 const trendIcon = (t: Trend) => (t === "rising" ? "↗" : t === "falling" ? "↘" : "→");

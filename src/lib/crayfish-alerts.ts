@@ -8,7 +8,7 @@
 // so it never re-renders the app just to tick.
 
 import { useEffect, useRef } from "react";
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { notifyBalance } from "./notify";
 import { requestWake, releaseWake } from "./wakelock";
 import { currentSession, dueAt, dueBalances, markNotified, remainingSec } from "./ecrevisses";

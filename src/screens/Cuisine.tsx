@@ -1,4 +1,4 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { findRecipe } from "../lib/recipes";
 import { exitCuisine } from "../lib/wakelock";
 

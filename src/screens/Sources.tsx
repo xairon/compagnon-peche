@@ -1,4 +1,4 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { SOURCES } from "../data/regulation";
 
 export function Sources() {

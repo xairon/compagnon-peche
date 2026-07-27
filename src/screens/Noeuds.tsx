@@ -1,7 +1,9 @@
-import { useStore } from "../store";
+import { useStore } from "../store-hooks";
 import { KNOTS } from "../data/knots";
-import { Icon, ICONS } from "../components/Icon";
-import { Media, ALL_KNOT_MEDIA } from "../components/Media";
+import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
+import { Media } from "../components/Media";
+import { ALL_KNOT_MEDIA } from "../components/media-helpers";
 
 export function Noeuds() {
   const { nav, back } = useStore();
