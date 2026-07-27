@@ -145,4 +145,16 @@ export const KNOTS: Knot[] = [
       "Laisser les deux extrémités libres pour un frétillement maximal à la coulée.",
     ],
   },
+  {
+    id: "anglaise",
+    cat: "montage",
+    name: "Montage anglaise",
+    use: "Pêche au coup classique, gardon, brème, tanche",
+    when: "Flotteur waggler fixé par le bas seulement : lancer précis et discret, plombée dégressive pour une descente naturelle de l'esche.",
+    steps: [
+      "Fixer le flotteur anglaise (waggler) par le bas uniquement, sur le corps de ligne.",
+      "Répartir les plombs de plantée en dégressif vers l'hameçon, un gros plomb près du flotteur.",
+      "Terminer par un ou deux plombs fins juste au-dessus de l'hameçon, pour l'équilibrage final.",
+    ],
+  },
 ];
