@@ -120,5 +120,30 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       species: "Espèces d'estuaire (flet, mulet) en zone amphihaline",
     },
   ],
-  fil: [],
+  fil: [
+    {
+      id: "nylon",
+      name: "Nylon (monofilament)",
+      summary: "Fil élastique et économique, le plus polyvalent pour débuter — flotte légèrement, absorbe les à-coups.",
+      usage: "Corps de ligne au coup ou aux leurres pour un budget serré. Se détend avec le temps et le soleil : à renouveler régulièrement (une fois par saison en usage régulier).",
+    },
+    {
+      id: "fluorocarbone",
+      name: "Fluorocarbone",
+      summary: "Quasi invisible sous l'eau (indice de réfraction proche de celui de l'eau), résistant à l'abrasion, coule.",
+      usage: "En bas de ligne devant une tresse ou un nylon pour la discrétion, ou en corps de ligne complet en pêche fine et méfiante.",
+    },
+    {
+      id: "tresse",
+      name: "Tresse",
+      summary: "Fibres tressées, très fine à résistance égale, sans élasticité — transmet chaque touche et chaque mouvement du leurre.",
+      usage: "Corps de ligne aux leurres pour la sensibilité et la puissance de ferrage, presque toujours complétée par un bas de ligne fluorocarbone pour la discrétion.",
+    },
+    {
+      id: "bas-de-ligne-acier",
+      name: "Bas de ligne acier / titane",
+      summary: "Câble métallique gainé ou torsadé, seul matériau que les dents ou l'abrasion ne peuvent pas trancher.",
+      usage: "Indispensable devant un vif ou un leurre pour le brochet (dents) et le silure (abrasion) — un fluorocarbone, même épais, peut être sectionné net.",
+    },
+  ],
 };

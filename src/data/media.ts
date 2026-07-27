@@ -1359,5 +1359,17 @@ export const GEAR_MEDIA: Record<string, MediaEntry> = {
     "author": "Ria Wagemaker / Ecomare",
     "license": "CC BY-SA 4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ecomare_-_wadpier_in_hand_(wadpier-familieprogramma-krassekeet-1348-rw).jpg"
+  },
+  "nylon": {
+    "file": "assets/gear/nylon.webp",
+    "author": "Bernhard Kuemel (Darsie42)",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fischerknoten_auf_Angelleine_lose.jpg"
+  },
+  "tresse": {
+    "file": "assets/gear/tresse.webp",
+    "author": "George Chernilevsky",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fishing_lines_2025_G1.jpg"
   }
 };
