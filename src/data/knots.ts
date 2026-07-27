@@ -157,4 +157,16 @@ export const KNOTS: Knot[] = [
       "Terminer par un ou deux plombs fins juste au-dessus de l'hameçon, pour l'équilibrage final.",
     ],
   },
+  {
+    id: "feeder",
+    cat: "montage",
+    name: "Montage feeder",
+    use: "Brème, carpe, gardon en rivière ou plan d'eau",
+    when: "Le panier (ou la cage) amorce en continu autour de l'hameçon posé au fond — efficace sur poste précis, surtout en eau courante.",
+    steps: [
+      "Fixer un panier feeder coulissant (ou une cage) en tête de ligne, avec une butée en caoutchouc.",
+      "Nouer un émerillon à agrafe pour limiter le vrillage et faciliter les changements de bas de ligne.",
+      "Monter un bas de ligne de 20 à 50 cm avec l'hameçon, amorcé dans le panier au posé.",
+    ],
+  },
 ];

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 190" font-family="-apple-system, system-ui, Segoe UI, sans-serif">
+  <rect width="160" height="190" fill="#ffffff"/>
+  <line x1="80" y1="10" x2="80" y2="150" stroke="#1a201c" stroke-width="2"/>
+  <circle cx="80" cy="20" r="5" fill="none" stroke="#1a201c" stroke-width="1.4"/>
+  <rect x="66" y="45" width="28" height="34" rx="4" fill="none" stroke="#1d6e42" stroke-width="2"/>
+  <g stroke="#1d6e42" stroke-width="1.4"><line x1="70" y1="52" x2="90" y2="52"/><line x1="70" y1="60" x2="90" y2="60"/><line x1="70" y1="68" x2="90" y2="68"/></g>
+  <rect x="74" y="82" width="12" height="6" fill="#4a5d52"/>
+  <text x="80" y="184" text-anchor="middle" font-size="11" fill="#3a3e36">1. Panier coulissant + butée caoutchouc</text>
+</svg>
