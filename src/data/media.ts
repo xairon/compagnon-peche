@@ -1323,5 +1323,41 @@ export const GEAR_MEDIA: Record<string, MediaEntry> = {
     "author": "Mike Cline",
     "license": "CC BY-SA 3.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:SaltwaterJigHook.jpg"
+  },
+  "ver-de-terre": {
+    "file": "assets/gear/ver-de-terre.webp",
+    "author": "Username4wikipedia",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lumbricus_terrestris_about_2_ft_long_.jpg"
+  },
+  "asticot": {
+    "file": "assets/gear/asticot.webp",
+    "author": "Donald Trung Quoc Don",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Maggots_for_fishing,_Winschoten_(2020)_01.jpg"
+  },
+  "teigne": {
+    "file": "assets/gear/teigne.webp",
+    "author": "ImagePerson",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mealworm_Beetle_Tenebrio_molitor_larva_04.jpg"
+  },
+  "mais-doux": {
+    "file": "assets/gear/mais-doux.webp",
+    "author": "Gaurav Dhwaj Khadka",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Corn_Kernel.jpg"
+  },
+  "bouillette": {
+    "file": "assets/gear/bouillette.webp",
+    "author": "Davem0sad",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Selection_of_Boilies.jpg"
+  },
+  "ver-marin": {
+    "file": "assets/gear/ver-marin.webp",
+    "author": "Ria Wagemaker / Ecomare",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ecomare_-_wadpier_in_hand_(wadpier-familieprogramma-krassekeet-1348-rw).jpg"
   }
 };
