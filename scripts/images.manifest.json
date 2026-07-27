@@ -1159,6 +1159,57 @@
     }
   ],
   "techniques": [],
+  "gear": [
+    {
+      "id": "leurre-souple",
+      "filename": "File:Twister 2008 G01.jpg",
+      "author": "George Chernilevsky",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Twister_2008_G01.jpg"
+    },
+    {
+      "id": "poisson-nageur",
+      "filename": "File:Verschiedene Crankbaits.jpg",
+      "author": "Danndorfer1914",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Verschiedene_Crankbaits.jpg"
+    },
+    {
+      "id": "cuiller-tournante",
+      "filename": "File:Spinner (Köder).jpg",
+      "author": "Frank-Christian Baum",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Spinner_(K%C3%B6der).jpg"
+    },
+    {
+      "id": "cuiller-ondulante",
+      "filename": "File:Verschiedene Blinker.jpg",
+      "author": "Danndorfer1914",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Verschiedene_Blinker.jpg"
+    },
+    {
+      "id": "spinnerbait",
+      "filename": "File:Spinnerbait.png",
+      "author": "Danndorfer1914",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Spinnerbait.png"
+    },
+    {
+      "id": "popper-stickbait",
+      "filename": "File:Zwei Wobbler für das Angeln an der Oberfläche.jpg",
+      "author": "Danndorfer1914",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Zwei_Wobbler_f%C3%BCr_das_Angeln_an_der_Oberfl%C3%A4che.jpg"
+    },
+    {
+      "id": "jig",
+      "filename": "File:SaltwaterJigHook.jpg",
+      "author": "Mike Cline",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:SaltwaterJigHook.jpg"
+    }
+  ],
   "knotSteps": [
     {
       "id": "sang",

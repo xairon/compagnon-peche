@@ -1281,4 +1281,47 @@ export const RECIPE_MEDIA: Record<string, MediaEntry> = {
 
 export const TECHNIQUE_MEDIA: Record<string, MediaEntry> = {};
 
-export const GEAR_MEDIA: Record<string, MediaEntry> = {};
+export const GEAR_MEDIA: Record<string, MediaEntry> = {
+  "leurre-souple": {
+    "file": "assets/gear/leurre-souple.webp",
+    "author": "George Chernilevsky",
+    "license": "Domaine public",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Twister_2008_G01.jpg"
+  },
+  "poisson-nageur": {
+    "file": "assets/gear/poisson-nageur.webp",
+    "author": "Danndorfer1914",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Verschiedene_Crankbaits.jpg"
+  },
+  "cuiller-tournante": {
+    "file": "assets/gear/cuiller-tournante.webp",
+    "author": "Frank-Christian Baum",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spinner_(K%C3%B6der).jpg"
+  },
+  "cuiller-ondulante": {
+    "file": "assets/gear/cuiller-ondulante.webp",
+    "author": "Danndorfer1914",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Verschiedene_Blinker.jpg"
+  },
+  "spinnerbait": {
+    "file": "assets/gear/spinnerbait.webp",
+    "author": "Danndorfer1914",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spinnerbait.png"
+  },
+  "popper-stickbait": {
+    "file": "assets/gear/popper-stickbait.webp",
+    "author": "Danndorfer1914",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zwei_Wobbler_f%C3%BCr_das_Angeln_an_der_Oberfl%C3%A4che.jpg"
+  },
+  "jig": {
+    "file": "assets/gear/jig.webp",
+    "author": "Mike Cline",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:SaltwaterJigHook.jpg"
+  }
+};
