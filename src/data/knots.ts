@@ -169,4 +169,16 @@ export const KNOTS: Knot[] = [
       "Monter un bas de ligne de 20 à 50 cm avec l'hameçon, amorcé dans le panier au posé.",
     ],
   },
+  {
+    id: "cheveu",
+    cat: "montage",
+    name: "Montage cheveu",
+    use: "Carpe, présentation de bouillette",
+    when: "L'appât pend librement sous l'hameçon plutôt que d'être piqué dessus : la carpe l'aspire avec l'hameçon, qui se plante seul à l'éjection — la base de la pêche moderne de la carpe.",
+    steps: [
+      "Nouer l'hameçon avec un nœud sans nœud (knotless knot), en laissant un cheveu de fil libre sous la hampe.",
+      "Fixer la bouillette sur le cheveu à l'aide d'une aiguille à amorce, puis bloquer avec un stop-appât.",
+      "Ajuster la longueur du cheveu pour que la bouillette pende juste sous la pointe de l'hameçon.",
+    ],
+  },
 ];

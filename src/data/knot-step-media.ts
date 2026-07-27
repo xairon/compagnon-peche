@@ -47,4 +47,9 @@ export const LOCAL_KNOT_STEPS: Record<string, MediaEntry[]> = {
     { file: "assets/knots/feeder-2.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
     { file: "assets/knots/feeder-3.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
   ],
+  cheveu: [
+    { file: "assets/knots/cheveu-1.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+    { file: "assets/knots/cheveu-2.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+    { file: "assets/knots/cheveu-3.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+  ],
 };
