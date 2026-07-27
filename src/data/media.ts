@@ -668,6 +668,14 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pungitius_laevis.jpg"
     }
   ],
+  "epinochette-neuf-epines": [
+    {
+      "file": "assets/species/epinochette-neuf-epines.webp",
+      "author": "B. Schoenmakers",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pungitius_pungitius_(Gasterosteidae)_-_(length_3_cm),_Elst_(Gld),_the_Netherlands.jpg"
+    }
+  ],
   "loche-franche": [
     {
       "file": "assets/species/loche-franche.webp",
