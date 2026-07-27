@@ -445,6 +445,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "barbeau-meridional": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Petit barbeau trapu à la robe brun-jaune marbrée de taches sombres sur le dos et les flancs — une livrée que le barbeau fluviatile n'a pas. Deux paires de barbillons péribuccaux, comme tous les barbeaux.",
+      traits: [
+        "Corps trapu, robe brun-jaune tachetée de sombre (dos et flancs)",
+        "Deux paires de barbillons autour de la bouche",
+        "3ᵉ rayon de la nageoire dorsale peu ou pas denté sur son bord postérieur",
+        "Petite taille : 20 cm en moyenne, 27 cm maximum connu",
+      ],
+      conf: [
+        {
+          n: "Barbeau fluviatile",
+          how: "Le barbeau fluviatile est bien plus grand (jusqu'à 90 cm), à robe unie sans taches marquées, et son 3ᵉ rayon de nageoire dorsale est nettement denté sur son bord postérieur — celui du barbeau méridional ne l'est pas ou à peine.",
+        },
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Cours supérieurs et moyens à eau vive, claire et bien oxygénée, sur sable et graviers (5–25 °C)"],
@@ -458,6 +474,26 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   blageon: {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Petit cyprinidé argenté au corps fuselé et au dos nettement convexe, museau court, bouche petite en position basse. Une bande sombre longe le corps de l'œil à la base de la queue, se prolongeant sur le lobe caudal.",
+      traits: [
+        "Corps allongé, dos nettement convexe",
+        "Bande longitudinale sombre de l'œil à la queue, visible aussi sur la caudale",
+        "Bouche petite, infère, sans barbillon",
+        "Taille courante 15 cm, maximum connu 25 cm",
+      ],
+      conf: [
+        {
+          n: "Vandoise",
+          how: "La vandoise a un corps plus élancé et un dos moins convexe, avec une bande latérale bien moins marquée ; celle du blageon se prolonge nettement sur la nageoire caudale.",
+        },
+        {
+          n: "Blageon italien",
+          how: "Lignée sœur très proche à l'œil : le blageon occupe le Rhône et l'Est/Sud-Est du territoire, le blageon italien seulement les Alpes-Maritimes (bassins frontaliers avec l'Italie). La répartition tranche.",
+        },
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Parties moyennes des rivières claires à courant vif et fond de graviers (10–20 °C), en bancs"],
@@ -472,6 +508,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   toxostome: {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Cyprinidé svelte à bouche infère cartilagineuse, en fente transversale, adaptée au broutage des algues sur les pierres — comme le hotu, mais en plus petit et plus fin. Flancs argentés, tache sombre discrète à la base de la caudale.",
+      traits: [
+        "Bouche infère, cartilagineuse, en fente transversale",
+        "Corps svelte, museau plus effilé que celui du hotu",
+        "Tache sombre discrète à la base de la nageoire caudale",
+        "Jusqu'à 30 cm, bien moins massif que le hotu adulte",
+      ],
+      conf: [
+        {
+          n: "Hotu",
+          how: "Le hotu est nettement plus massif et trapu à taille égale, avec une lèvre inférieure cartilagineuse plus large et rectiligne ; le toxostome garde un corps svelte et un museau plus pointu.",
+        },
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Petites rivières à eau claire sur fond de galets et graviers"],
@@ -486,6 +538,21 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "vandoise-rostree": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "La plus grande des vandoises françaises, reconnaissable à son museau plus pointu et saillant que celui de la vandoise commune — le trait qui lui vaut son nom. Corps fuselé et argenté, dos gris-vert.",
+      traits: [
+        "Museau plus pointu et saillant que la vandoise commune",
+        "Corps fuselé, argenté, dos gris-vert",
+        "Nettement plus grande : jusqu'à 40 cm, contre ~25–30 cm pour la vandoise commune",
+      ],
+      conf: [
+        {
+          n: "Vandoise",
+          how: "La vandoise commune a un museau plus court et arrondi, et ne dépasse guère 30 cm ; la vandoise rostrée a un museau nettement plus pointu et peut atteindre 40 cm.",
+        },
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Secteurs courants, à eau claire et fraîche, avec des fosses profondes"],
@@ -501,6 +568,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "vandoise-du-bearn": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Silhouette de vandoise : corps fuselé et argenté, dos gris-vert, nageoire anale légèrement concave. Lignée endémique reconnue par la génétique, sans trait visuel propre établi.",
+      traits: [
+        "Corps fuselé, argenté, dos gris-vert",
+        "Nageoire anale légèrement concave, comme les autres vandoises",
+        "Aucun caractère visuel établi ne la distingue des vandoises voisines",
+        "Taille jusqu'à 28 cm",
+      ],
+      conf: [
+        {
+          n: "Vandoise",
+          how: "Aucune distinction visuelle établie par les sources consultées : cette lignée se reconnaît à sa répartition, exclusive au bassin de l'Adour.",
+        },
+      ],
+    },
     bio: {
       rows: [
         ["Habitat", "Ruisseaux et rivières à courant, eau claire et fraîche, avec des fosses profondes"],
@@ -514,6 +597,21 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "chevesne-catalan": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Cyprinidé très proche du chevesne commun, dont il a longtemps été considéré comme une simple population avant sa reconnaissance comme espèce à part en 1999. Silhouette classique du genre Squalius : corps fuselé, tête large, bouche large et terminale.",
+      traits: [
+        "Silhouette de chevesne : corps fuselé, tête large, bouche large et terminale",
+        "Plus petit à maturité que le chevesne commun (~13–20 cm contre souvent 30 cm et plus)",
+        "Distinction fiable au comptage d'écailles (ligne latérale) ou à la génétique, pas à l'œil",
+      ],
+      conf: [
+        {
+          n: "Chevesne",
+          how: "Aucun caractère visuel fiable ne les sépare sur le terrain : le chevesne catalan se reconnaît surtout à sa localisation (seuls les bassins du Tech et de l'Agly, en France) et à sa plus petite taille adulte.",
+        },
+      ],
+    },
     fish: {
       rows: [
         ["Prise", "Capture accessoire en pêchant le chevesne : coup, ultra-léger, mouche sèche"],
@@ -533,6 +631,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "goujon-occitan": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Silhouette classique du goujon : corps cylindrique, museau pointu, une paire de barbillons aux commissures de la bouche, flancs clairs tachetés de sombre. Rien ne le distingue visuellement du goujon commun — c'est une lignée cryptique reconnue par la génétique.",
+      traits: [
+        "Corps cylindrique, museau pointu, bouche infère avec une paire de barbillons",
+        "Flancs clairs tachetés de sombre, ligne latérale continue",
+        "Aucun caractère visuel ne le distingue du goujon commun",
+        "Taille jusqu'à ~13 cm",
+      ],
+      conf: [
+        {
+          n: "Goujon",
+          how: "Aucune différence visuelle fiable : seule la répartition tranche — bassin de la Garonne et fleuves méditerranéens entre Rhône et Pyrénées pour cette lignée.",
+        },
+      ],
+    },
     fish: {
       rows: [
         ["Techniques", "Pêche au coup au fond, en grattant le substrat — comme le goujon commun"],
@@ -554,6 +668,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "goujon-auvergne": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Silhouette classique du goujon : corps cylindrique, museau pointu, une paire de barbillons aux commissures de la bouche, flancs clairs tachetés de sombre. Rien ne le distingue visuellement du goujon commun — c'est une lignée cryptique reconnue par la génétique.",
+      traits: [
+        "Corps cylindrique, museau pointu, bouche infère avec une paire de barbillons",
+        "Flancs clairs tachetés de sombre, ligne latérale continue",
+        "Aucun caractère visuel ne le distingue du goujon commun",
+        "Le plus grand des goujons régionaux français : jusqu'à ~15 cm",
+      ],
+      conf: [
+        {
+          n: "Goujon",
+          how: "Aucune différence visuelle fiable : cette lignée se reconnaît à sa répartition — les hauts bassins de la Loire, de la Dordogne et du Lot — pas à l'aspect, identique à celui du goujon commun.",
+        },
+      ],
+    },
     fish: {
       rows: [
         ["Techniques", "Pêche au coup au fond, en grattant le substrat — comme le goujon commun"],
@@ -575,6 +705,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   "goujon-ukraine": {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Silhouette classique du goujon : corps cylindrique, museau pointu, une paire de barbillons péribuccaux. Comme les autres lignées régionales françaises, rien ne le distingue visuellement du goujon commun — seuls sa répartition et son comportement plus nocturne l'identifient.",
+      traits: [
+        "Corps cylindrique, museau pointu, une paire de barbillons péribuccaux",
+        "Flancs tachetés de sombre, comme le goujon commun",
+        "Plus actif la nuit que les autres lignées de goujons",
+        "Petite taille : jusqu'à ~11 cm",
+      ],
+      conf: [
+        {
+          n: "Goujon",
+          how: "Aucune différence visuelle fiable : cette lignée se reconnaît à sa répartition (Rhin, Meuse) plutôt qu'à l'aspect, identique à celui du goujon commun.",
+        },
+      ],
+    },
     fish: {
       rows: [
         ["Techniques", "Pêche au coup au fond ; espèce nocturne, plus active en fin de journée"],
@@ -597,6 +743,22 @@ export const CYPRINIDES: Record<string, Fiche> = {
 
   vimbe: {
     ficheSrc: SRC,
+    ident: {
+      summary:
+        "Cyprinidé svelte au museau pointu et proéminent, nettement en surplomb d'une petite bouche infère — la silhouette caractéristique du genre Vimba. Dos gris-bleuté, flancs argentés, carène ventrale entre les nageoires pelviennes et l'anus.",
+      traits: [
+        "Museau pointu et proéminent, en net surplomb de la bouche infère",
+        "Carène ventrale entre les nageoires pelviennes et l'anus",
+        "Nageoire caudale profondément fourchue",
+        "Mâle en fraie : livrée sombre, base des nageoires paires et anale rouge-orangé",
+      ],
+      conf: [
+        {
+          n: "Hotu",
+          how: "Le hotu a un museau arrondi, non saillant, au-dessus d'une large lèvre inférieure cartilagineuse rectiligne ; le vimbe a un museau pointu qui surplombe nettement une petite bouche, sans lèvre cartilagineuse élargie.",
+        },
+      ],
+    },
     fish: {
       rows: [
         ["Techniques", "Pêche au coup et au feeder, appâts posés sur le fond"],
