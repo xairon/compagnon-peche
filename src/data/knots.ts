@@ -133,4 +133,16 @@ export const KNOTS: Knot[] = [
       "Ajouter 40 à 70 cm de fluorocarbone et un hameçon texan avec un leurre souple.",
     ],
   },
+  {
+    id: "wacky",
+    cat: "montage",
+    name: "Montage wacky",
+    use: "Black-bass à faible profondeur, coulée lente",
+    when: "Le ver souple plie en son milieu et frétille de partout à la chute — très efficace en tirs précis dans les postes, herbiers et bordures.",
+    steps: [
+      "Prendre un ver souple droit (stick bait), sans tête plombée.",
+      "Piquer l'hameçon (weedless ou simple) perpendiculairement, en plein milieu du ver.",
+      "Laisser les deux extrémités libres pour un frétillement maximal à la coulée.",
+    ],
+  },
 ];
