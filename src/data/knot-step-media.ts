@@ -27,4 +27,9 @@ export const LOCAL_KNOT_STEPS: Record<string, MediaEntry[]> = {
     { file: "assets/knots/paternoster-2.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
     { file: "assets/knots/paternoster-3.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
   ],
+  carolina: [
+    { file: "assets/knots/carolina-1.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+    { file: "assets/knots/carolina-2.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+    { file: "assets/knots/carolina-3.svg", author: "Compagnon de pêche", license: "Schéma original", sourceUrl: "" },
+  ],
 };

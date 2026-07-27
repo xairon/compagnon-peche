@@ -121,4 +121,16 @@ export const KNOTS: Knot[] = [
       "Monter le bas de ligne esché boucle-dans-boucle sur la potence.",
     ],
   },
+  {
+    id: "carolina",
+    cat: "montage",
+    name: "Montage carolina",
+    use: "Black-bass et perche sur le fond, prospection large",
+    when: "Plomb qui reste au contact du fond pendant que le leurre, plus loin sur le bas de ligne, garde une nage libre — idéal fonds durs et pentes.",
+    steps: [
+      "Enfiler un plomb olive coulissant sur le corps de ligne, puis une perle anti-choc.",
+      "Nouer un émerillon en bout de ligne pour bloquer le plomb et la perle.",
+      "Ajouter 40 à 70 cm de fluorocarbone et un hameçon texan avec un leurre souple.",
+    ],
+  },
 ];

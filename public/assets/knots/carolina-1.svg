@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 190" font-family="-apple-system, system-ui, Segoe UI, sans-serif">
+  <rect width="160" height="190" fill="#ffffff"/>
+  <line x1="80" y1="10" x2="80" y2="150" stroke="#1a201c" stroke-width="2"/>
+  <circle cx="80" cy="20" r="5" fill="none" stroke="#1a201c" stroke-width="1.4"/>
+  <ellipse cx="80" cy="60" rx="10" ry="16" fill="#3a3e36"/>
+  <circle cx="80" cy="86" r="5" fill="none" stroke="#9a6a12" stroke-width="1.8"/>
+  <text x="80" y="184" text-anchor="middle" font-size="11" fill="#3a3e36">1. Plomb olive coulissant + perle</text>
+</svg>
