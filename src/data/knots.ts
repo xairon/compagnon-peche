@@ -74,6 +74,18 @@ export const KNOTS: Knot[] = [
     ],
   },
   {
+    id: "chaise",
+    cat: "noeud",
+    name: "Nœud de chaise",
+    use: "Boucle fixe et solide en bout de ligne",
+    when: "Amarrer une embarcation, fixer une ligne à un point fixe (piquet, anneau) — une boucle qui ne glisse jamais et se défait pourtant facilement après tension.",
+    steps: [
+      "Former une petite boucle sur le brin dormant, environ 30 cm avant le bout.",
+      "Faire passer le bout du fil dans cette boucle, par en dessous.",
+      "Passer le bout derrière le brin dormant puis le repasser dans la petite boucle, dans le sens inverse ; humecter et serrer en tenant le brin dormant.",
+    ],
+  },
+  {
     id: "dropshot",
     cat: "montage",
     name: "Drop shot",
