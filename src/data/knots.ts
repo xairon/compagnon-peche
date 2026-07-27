@@ -50,6 +50,18 @@ export const KNOTS: Knot[] = [
     ],
   },
   {
+    id: "sang",
+    cat: "noeud",
+    name: "Nœud de sang",
+    use: "Relier deux fils de diamètre proche",
+    when: "Le nœud de référence pour raccorder deux nylons ou deux fluorocarbones de diamètre similaire (bas de ligne, réparation de casse).",
+    steps: [
+      "Superposer les deux brins sur 15 cm, en sens opposés.",
+      "Enrouler chaque brin 5 à 6 fois autour de l'autre, en partant du centre vers l'extérieur.",
+      "Repasser les deux bouts au centre, en sens inverse l'un de l'autre, puis humecter et serrer progressivement les deux côtés.",
+    ],
+  },
+  {
     id: "dropshot",
     cat: "montage",
     name: "Drop shot",
