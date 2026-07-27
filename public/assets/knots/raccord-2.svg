@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 190" font-family="-apple-system, system-ui, Segoe UI, sans-serif">
+  <rect width="160" height="190" fill="#ffffff"/>
+  <path d="M20,86 h44" stroke="#4a5d52" stroke-width="2.4" fill="none"/>
+  <path d="M64,86 q30,0 30,-22 q0,-22 -30,-22" stroke="#4a5d52" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <g stroke="#1a201c" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M64,74 q8,-4 16,0 q8,4 16,0 q8,-4 16,0"/>
+    <path d="M64,86 q8,4 16,0 q8,-4 16,0 q8,4 16,0"/>
+    <path d="M64,98 q8,-4 16,0 q8,4 16,0 q8,-4 16,0"/>
+  </g>
+  <text x="80" y="184" text-anchor="middle" font-size="11" fill="#3a3e36">2. Enrouler 8-10 tours</text>
+</svg>
