@@ -1227,6 +1227,8 @@ export const KNOT_MEDIA: Record<string, MediaEntry> = {
   }
 };
 
+export const KNOT_STEP_MEDIA: Record<string, MediaEntry[]> = {};
+
 export const RECIPE_MEDIA: Record<string, MediaEntry> = {
   "quenelles-de-brochet": {
     "file": "assets/recipes/quenelles-de-brochet.webp",
