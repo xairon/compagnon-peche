@@ -62,6 +62,18 @@ export const KNOTS: Knot[] = [
     ],
   },
   {
+    id: "albright",
+    cat: "noeud",
+    name: "Albright",
+    use: "Relier deux fils de diamètre très différent",
+    when: "Backing/tresse épaisse vers bas de ligne fin, ou corps de ligne vers un fil beaucoup plus fin — là où le nœud de sang glisse.",
+    steps: [
+      "Former une boucle avec le fil le plus épais, la tenir entre deux doigts.",
+      "Passer le fil fin dans la boucle et l'enrouler 10 à 12 fois autour des deux brins de la boucle, en revenant vers l'ouverture.",
+      "Repasser le bout du fil fin dans la boucle par le même côté qu'à l'entrée, humecter et serrer progressivement en tenant les deux fils épais.",
+    ],
+  },
+  {
     id: "dropshot",
     cat: "montage",
     name: "Drop shot",
