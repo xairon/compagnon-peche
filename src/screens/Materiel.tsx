@@ -3,6 +3,8 @@ import { get, set as idbSet } from "idb-keyval";
 import { useStore } from "../store-hooks";
 import { uid } from "../lib/helpers";
 import { GEAR_CATEGORIES, CAT_LABEL, GEAR_GUIDE, type GearCategory } from "../data/gear";
+import { GEAR_CARDS } from "../data/gear-cards";
+import { Media } from "../components/Media";
 import type { GearItem } from "../types";
 
 interface Bundle {
@@ -303,6 +305,13 @@ export function Materiel() {
 
 export function GuideMateriel() {
   const { back } = useStore();
+  const [open, setOpen] = useState<string | null>(null);
+  const sections: { key: "leurre" | "appat" | "fil"; title: string }[] = [
+    { key: "leurre", title: "Leurres" },
+    { key: "appat", title: "Appâts naturels" },
+    { key: "fil", title: "Fils & lignes" },
+  ];
+
   return (
     <div className="screen">
       <div className="topbar">
@@ -312,24 +321,60 @@ export function GuideMateriel() {
         <div className="topbar-title">Guide — appâts, hameçons & leurres</div>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
-        {GEAR_GUIDE.map((sec) => (
-          <div key={sec.title} style={{ marginTop: 14 }}>
+        {sections.map(({ key, title }) => (
+          <div key={key} style={{ marginTop: 14 }}>
             <div className="serif" style={{ fontSize: 18, fontWeight: 700 }}>
-              {sec.title}
+              {title}
             </div>
-            {sec.intro && (
-              <div style={{ fontSize: 13, color: "#5a5e52", margin: "4px 0 8px", lineHeight: 1.5 }}>
-                {sec.intro}
-              </div>
-            )}
-            {sec.entries.map((e) => (
-              <div key={e.name} className="guide-row">
-                <div className="g-name">{e.name}</div>
-                <div className="g-detail">{e.detail}</div>
-              </div>
-            ))}
+            <div className="gear-card-grid">
+              {GEAR_CARDS[key].map((c) => {
+                const expanded = open === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={"gear-card" + (expanded ? " expanded" : "")}
+                    onClick={() => setOpen(expanded ? null : c.id)}
+                  >
+                    <Media kind="gear" id={c.id} placeholder={c.name} />
+                    <div className="gc-name">{c.name}</div>
+                    <div className="gc-summary">{c.summary}</div>
+                    {expanded && (
+                      <div className="gc-usage">
+                        <div>
+                          <b>Usage :</b> {c.usage}
+                        </div>
+                        {c.species && (
+                          <div style={{ marginTop: 4 }}>
+                            <b>Espèces :</b> {c.species}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         ))}
+
+        <div style={{ marginTop: 14 }}>
+          <div className="serif" style={{ fontSize: 18, fontWeight: 700 }}>
+            Hameçons — tailles
+          </div>
+          {GEAR_GUIDE[0].intro && (
+            <div style={{ fontSize: 13, color: "#5a5e52", margin: "4px 0 8px", lineHeight: 1.5 }}>
+              {GEAR_GUIDE[0].intro}
+            </div>
+          )}
+          {GEAR_GUIDE[0].entries.map((e) => (
+            <div key={e.name} className="guide-row">
+              <div className="g-name">{e.name}</div>
+              <div className="g-detail">{e.detail}</div>
+            </div>
+          ))}
+        </div>
+
         <div className="info" style={{ marginTop: 18 }}>
           Repères généraux pour débuter. Adaptez au poisson visé, à la saison et à la réglementation
           locale (certains appâts ou le vif peuvent être restreints).

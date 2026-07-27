@@ -5786,3 +5786,40 @@ button.card-row {
   padding-top: 8px;
   border-top: 1px solid var(--line);
 }
+
+.gear-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+.gear-card {
+  text-align: left;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  grid-column: span 1;
+}
+.gear-card.expanded {
+  grid-column: span 2;
+}
+.gc-name {
+  font-size: 14px;
+  font-weight: 650;
+  margin-top: 6px;
+}
+.gc-summary {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.gc-usage {
+  font-size: 13px;
+  color: var(--body);
+  line-height: 1.5;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-strong);
+}

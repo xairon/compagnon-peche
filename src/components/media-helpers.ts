@@ -1,7 +1,7 @@
 // Non-component media helpers, split out of Media.tsx so that file only
 // exports the Media component (react-refresh/only-export-components requires
 // a component file's exports to stay component-only).
-import { SPECIES_MEDIA, KNOT_MEDIA, RECIPE_MEDIA, TECHNIQUE_MEDIA } from "../data/media";
+import { SPECIES_MEDIA, KNOT_MEDIA, RECIPE_MEDIA, TECHNIQUE_MEDIA, GEAR_MEDIA } from "../data/media";
 import { LOCAL_KNOT_MEDIA } from "../data/knot-diagrams";
 
 /** Fetched knot diagrams plus hand-drawn originals for rigs Commons lacks. */
@@ -46,6 +46,7 @@ export const MEDIA_BY_KIND = {
   knot: ALL_KNOT_MEDIA,
   recipe: RECIPE_MEDIA,
   technique: TECHNIQUE_MEDIA,
+  gear: GEAR_MEDIA,
 };
 
 /** Media for a confusion species referenced by its French display name. */

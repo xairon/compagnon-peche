@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MEDIA_BY_KIND } from "./media-helpers";
 
 interface MediaProps {
-  kind: "species" | "knot" | "recipe" | "technique";
+  kind: "species" | "knot" | "recipe" | "technique" | "gear";
   id: string;
   placeholder: string;
   dark?: boolean;

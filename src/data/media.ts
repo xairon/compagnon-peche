@@ -1280,3 +1280,5 @@ export const RECIPE_MEDIA: Record<string, MediaEntry> = {
 };
 
 export const TECHNIQUE_MEDIA: Record<string, MediaEntry> = {};
+
+export const GEAR_MEDIA: Record<string, MediaEntry> = {};
