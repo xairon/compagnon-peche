@@ -662,6 +662,11 @@ export function Carte() {
     const sp = spots.find((s) => s.id === state.focusSpot);
     if (sp) {
       map.current?.flyTo({ center: [sp.lon, sp.lat], zoom: 14 });
+      // This effect exists to synchronize the map (an external system) with an
+      // external command (state.focusSpot set from the Carnet); closing panels
+      // and clearing the command are part of that same reaction, not derivable
+      // state — there's no render-time equivalent to a flyTo() side effect.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       closeAllPanels();
       setViewId(sp.id);
       set({ focusSpot: null });
@@ -679,10 +684,10 @@ export function Carte() {
   // immediately re-geocode and re-open the results dropdown over the map.
   const pickedLabel = useRef<string | null>(null);
   useEffect(() => {
-    if (q.trim().length < 3) {
-      setResults([]);
-      return;
-    }
+    // Short queries aren't cleared here: the dropdown below is gated on
+    // `q.trim().length >= 3` too, so stale results just stay hidden until a
+    // long-enough query overwrites them — no setState needed on this branch.
+    if (q.trim().length < 3) return;
     if (pickedLabel.current === q) {
       pickedLabel.current = null;
       return;
@@ -812,7 +817,7 @@ export function Carte() {
               ✕
             </button>
           )}
-          {results.length > 0 && (
+          {q.trim().length >= 3 && results.length > 0 && (
             <div className="carte-results">
               {results.map((p, i) => (
                 <button key={i} onClick={() => goTo(p)}>
