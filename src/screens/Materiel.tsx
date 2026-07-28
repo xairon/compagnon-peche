@@ -321,9 +321,13 @@ export function GuideMateriel() {
   };
 
   // Deep-link depuis une fiche espèce (ou une autre carte gear) : consomme
-  // gearFocusId une seule fois au montage, comme focusSpot le fait pour la
-  // Carte (voir Carte.tsx). Pas de setState synchrone en tête d'effet : on
-  // ne fait qu'ouvrir/scroller puis nettoyer l'état une fois consommé.
+  // gearFocusId une seule fois au montage. Le setState synchrone dans
+  // focusCard() est volontaire ici (pas le cas à éviter que la règle
+  // set-state-in-effect cible d'habitude) : GuideMateriel démonte/remonte à
+  // chaque navigation (contrairement à la Carte, montée en continu, dont le
+  // focusSpot se déclenche via un tableau de dépendances sur mapReady) —
+  // un effet à dépendances vides qui ne s'exécute qu'au montage est donc le
+  // bon outil, pas un contournement.
   useEffect(() => {
     if (state.gearFocusId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -385,8 +389,15 @@ export function GuideMateriel() {
                                 <span
                                   key={spId}
                                   role="button"
+                                  tabIndex={0}
                                   className="chip chip-sm"
                                   onClick={(e) => {
+                                    e.stopPropagation();
+                                    nav("fiche", { spId });
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key !== "Enter" && e.key !== " ") return;
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     nav("fiche", { spId });
                                   }}
@@ -407,8 +418,15 @@ export function GuideMateriel() {
                                   <span
                                     key={fId}
                                     role="button"
+                                    tabIndex={0}
                                     className="chip chip-sm"
                                     onClick={(e) => {
+                                      e.stopPropagation();
+                                      focusCard(fId);
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key !== "Enter" && e.key !== " ") return;
+                                      e.preventDefault();
                                       e.stopPropagation();
                                       focusCard(fId);
                                     }}
@@ -428,8 +446,15 @@ export function GuideMateriel() {
                                 <span
                                   key={l.id}
                                   role="button"
+                                  tabIndex={0}
                                   className="chip chip-sm"
                                   onClick={(e) => {
+                                    e.stopPropagation();
+                                    focusCard(l.id);
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key !== "Enter" && e.key !== " ") return;
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     focusCard(l.id);
                                   }}

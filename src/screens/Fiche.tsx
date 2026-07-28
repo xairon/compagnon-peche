@@ -236,14 +236,14 @@ export function Fiche() {
       render: () => (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {recommendedGear.map((c) => (
-            <span
+            <button
               key={c.id}
-              role="button"
+              type="button"
               className="chip chip-sm"
               onClick={() => nav("guide-materiel", { gearFocusId: c.id })}
             >
               {c.name}
-            </span>
+            </button>
           ))}
         </div>
       ),
