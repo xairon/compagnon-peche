@@ -7,6 +7,7 @@ import { findRecipe, speciesName } from "../lib/recipes";
 import { TECHNIQUES } from "../data/techniques";
 import { enterCuisine } from "../lib/wakelock";
 import { Glossed } from "../components/Glossed";
+import { IngredientList, StepList } from "../components/RecipeBody";
 
 const DIFF_LABEL = ["", "Facile", "Moyen", "Difficile"];
 
@@ -142,55 +143,16 @@ export function Recette() {
           </div>
         )}
 
-        <div className="label" style={{ margin: "20px 0 8px" }}>
-          Ingrédients
-        </div>
-        <div className="recipe-ing-card">
-          {rec.ing.map((t, i) => (
-            <div key={i} className="ing">
-              <span style={{ color: "#1D6E42" }}>—</span>
-              <span>{t}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="label" style={{ margin: "20px 0 10px" }}>
-          Préparation
-        </div>
-        {rec.steps.map((t, i) => (
-          <div key={i} className="step">
-            <div className="step-num">{i + 1}</div>
-            <div className="t">
-              <Glossed>{t}</Glossed>
-            </div>
-          </div>
-        ))}
+        <IngredientList items={rec.ing} card />
+        <StepList items={rec.steps} glossed />
 
         {rec.components?.map((c) => (
           <div key={c.title} style={{ marginTop: 20 }}>
             <div className="serif" style={{ fontSize: 16, fontWeight: 650 }}>
               {c.title}
             </div>
-            <div className="label" style={{ margin: "10px 0 6px" }}>
-              Ingrédients
-            </div>
-            {c.ing.map((t, i) => (
-              <div key={i} className="ing">
-                <span style={{ color: "#1D6E42" }}>—</span>
-                <span>{t}</span>
-              </div>
-            ))}
-            <div className="label" style={{ margin: "10px 0 6px" }}>
-              Préparation
-            </div>
-            {c.steps.map((t, i) => (
-              <div key={i} className="step">
-                <div className="step-num">{i + 1}</div>
-                <div className="t">
-                  <Glossed>{t}</Glossed>
-                </div>
-              </div>
-            ))}
+            <IngredientList items={c.ing} margin="10px 0 6px" />
+            <StepList items={c.steps} glossed margin="10px 0 6px" />
           </div>
         ))}
       </div>
