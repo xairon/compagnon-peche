@@ -22,7 +22,10 @@ export function EcrevissesIdent() {
         {ECREVISSES.map((e) => (
           <div key={e.id} className={"ecr-id" + (e.pechable ? "" : " protegee")}>
             <div className="ecr-id-ph">
-              <Media kind="crayfish" id={e.id} placeholder={e.name} />
+              {/* Six local images on this screen, no network cost — eager avoids
+                  the below-the-fold ones sitting unloaded behind the placeholder
+                  background, which reads as "no photo" (see Media's `eager` doc). */}
+              <Media kind="crayfish" id={e.id} placeholder={e.name} eager />
             </div>
             <div className="ecr-id-n">{e.name}</div>
             <div className="ecr-id-l">{e.latin}</div>

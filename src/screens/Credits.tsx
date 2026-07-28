@@ -1,16 +1,20 @@
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { KNOTS } from "../data/knots";
-import { SPECIES_MEDIA, GEAR_MEDIA } from "../data/media";
+import { SPECIES_MEDIA, GEAR_MEDIA, CRAYFISH_MEDIA } from "../data/media";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
 import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/media-helpers";
+import { crayfishById } from "../data/ecrevisses";
 
 function nameForSpecies(id: string): string {
   return SPECIES.find((s) => s.id === id)?.name || idFallback(id);
 }
 function nameForKnot(id: string): string {
   return KNOTS.find((k) => k.id === id)?.name || id;
+}
+function nameForCrayfish(id: string): string {
+  return crayfishById(id)?.name || id;
 }
 // Confusion-only species (grémille, carassin…) aren't in SPECIES; recover their
 // display name from the confusion name map.
@@ -52,6 +56,7 @@ export function Credits() {
     })),
   );
   const gearRows = Object.entries(GEAR_MEDIA).map(([id, m]) => ({ name: nameForGear(id), ...m }));
+  const crayfishRows = Object.entries(CRAYFISH_MEDIA).map(([id, m]) => ({ name: nameForCrayfish(id), ...m }));
 
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (
     <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid #ECE8DD" }}>
@@ -120,10 +125,20 @@ export function Credits() {
           </>
         )}
 
+        {crayfishRows.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 4px" }}>
+              Écrevisses
+            </div>
+            {crayfishRows.map(Row)}
+          </>
+        )}
+
         {speciesRows.length === 0 &&
           knotRows.length === 0 &&
           knotStepRows.length === 0 &&
-          gearRows.length === 0 && (
+          gearRows.length === 0 &&
+          crayfishRows.length === 0 && (
           <div style={{ color: "var(--muted)", fontSize: 14 }}>
             Les images seront créditées ici une fois embarquées.
           </div>

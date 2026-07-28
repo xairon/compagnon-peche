@@ -100,4 +100,15 @@ describe("photos écrevisses", () => {
     const orphelines = Object.keys(CRAYFISH_MEDIA).filter((id) => !ids.has(id));
     expect(orphelines).toEqual([]);
   });
+
+  it("chaque photo est créditable depuis l'écran Crédits (auteur, licence, id résolu)", () => {
+    // Le Crédits screen construit ses lignes à partir de CRAYFISH_MEDIA + crayfishById ;
+    // cette invariance données garantit qu'aucune photo n'y reste sans attribution
+    // (CC BY / CC BY-SA l'exigent) sans dépendre d'un test DOM.
+    for (const [id, m] of Object.entries(CRAYFISH_MEDIA)) {
+      expect(m.author.trim(), `${id}.author`).not.toBe("");
+      expect(m.license.trim(), `${id}.license`).not.toBe("");
+      expect(crayfishById(id), `${id} via crayfishById`).toBeDefined();
+    }
+  });
 });

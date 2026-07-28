@@ -117,7 +117,7 @@ export const ECREVISSES: Crayfish[] = [
       "Pêche fermée toute l'année dans l'Indre et la Creuse (arrêtés préfectoraux 2026). R436-10 prévoit une fenêtre de dix jours au maximum, que ces arrêtés n'ouvrent pas. L'arrêté du 21 juillet 1983 protège en outre son habitat. Loir-et-Cher : à vérifier sur l'arrêté en vigueur.",
     ident: {
       summary:
-        "La seule écrevisse autochtone encore régulièrement observée dans la région. Corps brun-olive, pinces rugueuses dont le dessous est blanc sale — d'où son nom.",
+        "La seule espèce réellement indigène encore régulièrement observée dans la région. Corps brun-olive, pinces rugueuses dont le dessous est blanc sale — d'où son nom.",
       traits: [
         "Une seule crête derrière l'œil (les autres en ont deux)",
         "Dessous des pinces blanc à beige",
