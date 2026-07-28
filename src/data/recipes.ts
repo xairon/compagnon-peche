@@ -516,7 +516,7 @@ export const RECIPES: Recipe[] = [
   // ── Préparations simples couvrant les petits blancs & salmonidés ──
   {
     id: "friture-poissons-blancs",
-    species: ["gardon", "ablette", "goujon", "rotengle", "gremille"],
+    species: ["gardon", "ablette", "goujon", "rotengle", "gremille", "carassin"],
     title: "Friture de poissons blancs",
     origin: "Bords de rivière (tradition)",
     source: "Préparation traditionnelle de friture (goujons, ablettes, gardons)",
@@ -539,6 +539,45 @@ export const RECIPES: Recipe[] = [
       "Chauffez l'huile à 180 °C ; plongez les poissons par petites poignées pour ne pas faire chuter la température.",
       "Cuisez 2 à 3 min jusqu'à ce qu'ils soient dorés et croustillants ; égouttez sur papier absorbant.",
       "Salez à la sortie, servez très chaud avec du citron.",
+    ],
+  },
+  // Les gros cyprinidés (brème, chevesne, hotu, barbeau) n'avaient aucune
+  // recette. La friture ne leur convient pas — c'est une préparation de PETITS
+  // poissons, et ceux-ci dépassent souvent 50 cm. La terrine est la réponse
+  // traditionnelle à leur vrai problème : une chair fade et truffée d'arêtes
+  // intramusculaires, que le hachage broie et que l'assaisonnement relève.
+  {
+    id: "terrine-cyprinides",
+    species: ["breme", "chevesne", "hotu", "barbeau"],
+    title: "Terrine de cyprinidés",
+    origin: "Bords de rivière (tradition)",
+    source: "Préparation traditionnelle des poissons blancs de rivière (hachage des arêtes)",
+    difficulty: 2,
+    prep: 45,
+    cook: 50,
+    rest: 720,
+    tools: ["Hachoir à grille fine", "Terrine", "Thermomètre sonde"],
+    safety:
+      "⚠️ BARBEAU : ses œufs (rogue) sont TOXIQUES — à ne JAMAIS incorporer (« choléra des barbeaux » : diarrhées, crampes). Videz soigneusement et jetez toute poche d'œufs. Le barbeau et la brème sont par ailleurs fortement bioaccumulateurs (PCB/dioxines) : ANSES 2 fois par mois maximum, 1 fois tous les 2 mois pour les publics sensibles. Cuisson à cœur obligatoire : 68 °C au thermomètre sonde.",
+    intro:
+      "Brème, chevesne, hotu et barbeau ont une chair fade et bourrée de fines arêtes en Y, qui les rend décevants au court-bouillon ou à la poêle. La terrine règle les deux problèmes d'un coup : le hachage à grille fine broie les arêtes intramusculaires, et l'assaisonnement apporte le goût que le poisson n'a pas. C'est la façon traditionnelle de ne pas gâcher une belle prise dont la chair, seule, ne vaut pas grand-chose.",
+    ing: [
+      "800 g de filets de cyprinidés désarêtés au mieux (brème, chevesne, hotu ou barbeau)",
+      "200 g de chair de poisson gras (saumon, truite) pour la liaison et le moelleux",
+      "2 œufs, 20 cl de crème épaisse",
+      "2 échalotes, 2 gousses d'ail, persil plat, aneth",
+      "Zeste d'un citron, muscade, sel, poivre",
+      "Beurre pour la terrine",
+    ],
+    steps: [
+      "Levez les filets et retirez la peau. Ces poissons portent des arêtes en Y que l'on ne peut pas toutes ôter : le hachage s'en chargera.",
+      "Passez les filets deux fois au hachoir à grille fine — c'est ce double passage qui rend les arêtes imperceptibles. Un mixeur ne les broie pas assez finement.",
+      "Suez les échalotes et l'ail hachés au beurre sans coloration, laissez refroidir.",
+      "Mélangez la chair hachée, les œufs, la crème, les échalotes, les herbes, le zeste et la muscade. Salez et poivrez généreusement : la chair est fade, elle demande plus d'assaisonnement qu'un poisson de caractère.",
+      "Faites cuire une cuillerée de l'appareil à la poêle et goûtez : c'est le seul moyen de rectifier l'assaisonnement avant cuisson.",
+      "Garnissez une terrine beurrée, tassez pour chasser les bulles, couvrez.",
+      "Cuisez au bain-marie à 160 °C pendant environ 50 minutes, jusqu'à 68 °C à cœur au thermomètre sonde.",
+      "Laissez refroidir puis reposer 12 h au réfrigérateur : la terrine se tranche mal à chaud et son goût se fait au repos.",
     ],
   },
   {
