@@ -1,6 +1,7 @@
 import { useStore } from "../store-hooks";
 import { TECHNIQUES, SAFETY } from "../data/techniques";
 import { SPECIES } from "../data/species";
+import { RECIPES } from "../data/recipes";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
@@ -80,6 +81,10 @@ export function TechniqueDetail() {
   const t = TECHNIQUES.find((x) => x.id === state.techId);
   if (!t) return null;
 
+  // Dérivé au rendu, jamais stocké en double (même règle que « Utilisé avec »
+  // côté fils dans GuideMateriel) : les recettes qui citent cette technique.
+  const usedByRecipes = RECIPES.filter((r) => r.techniques?.includes(t.id));
+
   return (
     <div className="screen">
       <div className="topbar">
@@ -141,6 +146,33 @@ export function TechniqueDetail() {
                 </div>
               );
             })}
+          </>
+        )}
+
+        {usedByRecipes.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 8px" }}>
+              Recettes qui l'emploient
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {usedByRecipes.map((r) => (
+                <span
+                  key={r.id}
+                  role="button"
+                  tabIndex={0}
+                  className="chip chip-sm"
+                  onClick={() => nav("recette", { recipeId: r.id })}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter" && e.key !== " ") return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nav("recette", { recipeId: r.id });
+                  }}
+                >
+                  {r.title}
+                </span>
+              ))}
+            </div>
           </>
         )}
 

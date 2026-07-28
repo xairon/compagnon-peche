@@ -3,7 +3,7 @@ import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { hasMedia } from "../components/media-helpers";
-import { findRecipe } from "../lib/recipes";
+import { findRecipe, speciesName } from "../lib/recipes";
 import { TECHNIQUES } from "../data/techniques";
 import { enterCuisine } from "../lib/wakelock";
 import { Glossed } from "../components/Glossed";
@@ -14,7 +14,7 @@ export function Recette() {
   const { state, nav, back } = useStore();
   const found = findRecipe(state.recipeId);
   if (!found) return null;
-  const { recipe: rec, speciesName } = found;
+  const { recipe: rec } = found;
 
   const techs = (rec.techniques || [])
     .map((id) => TECHNIQUES.find((t) => t.id === id))
@@ -38,7 +38,25 @@ export function Recette() {
         </div>
       </div>
       <div className="pad" style={{ paddingTop: 16 }}>
-        <div style={{ fontSize: 13, color: "var(--muted)" }}>{speciesName}</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {rec.species.map((spId) => (
+            <span
+              key={spId}
+              role="button"
+              tabIndex={0}
+              className="chip chip-sm"
+              onClick={() => nav("fiche", { spId })}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                e.stopPropagation();
+                nav("fiche", { spId });
+              }}
+            >
+              {speciesName(spId)}
+            </span>
+          ))}
+        </div>
 
         {/* v2 stat cards — real values only (difficulté / prépa / cuisson) */}
         <div className="recipe-stats">
@@ -63,6 +81,8 @@ export function Recette() {
             </div>
           </div>
         </div>
+
+        {rec.bivouac && <div className="bivouac-badge">🏕️ Au bord de l'eau</div>}
 
         {(rec.author || rec.source) && (
           <div style={{ fontSize: 12, color: "var(--faint)", marginTop: 4, lineHeight: 1.5 }}>
