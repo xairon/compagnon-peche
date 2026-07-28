@@ -5,6 +5,7 @@ import { uid } from "../lib/helpers";
 import { GEAR_CATEGORIES, CAT_LABEL, GEAR_GUIDE, type GearCategory } from "../data/gear";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { Media } from "../components/Media";
+import { SPECIES } from "../data/species";
 import type { GearItem } from "../types";
 
 interface Bundle {
@@ -304,13 +305,33 @@ export function Materiel() {
 }
 
 export function GuideMateriel() {
-  const { back } = useStore();
+  const { back, state, set, nav } = useStore();
   const [open, setOpen] = useState<string | null>(null);
   const sections: { key: "leurre" | "appat" | "fil"; title: string }[] = [
     { key: "leurre", title: "Leurres" },
     { key: "appat", title: "Appâts naturels" },
     { key: "fil", title: "Fils & lignes" },
   ];
+
+  const speciesName = (id: string) => SPECIES.find((s) => s.id === id)?.name ?? id;
+
+  const focusCard = (id: string) => {
+    setOpen(id);
+    document.getElementById(`gear-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  // Deep-link depuis une fiche espèce (ou une autre carte gear) : consomme
+  // gearFocusId une seule fois au montage, comme focusSpot le fait pour la
+  // Carte (voir Carte.tsx). Pas de setState synchrone en tête d'effet : on
+  // ne fait qu'ouvrir/scroller puis nettoyer l'état une fois consommé.
+  useEffect(() => {
+    if (state.gearFocusId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      focusCard(state.gearFocusId);
+      set({ gearFocusId: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="screen">
@@ -329,9 +350,14 @@ export function GuideMateriel() {
             <div className="gear-card-grid">
               {GEAR_CARDS[key].map((c) => {
                 const expanded = open === c.id;
+                // "Utilisé avec" n'existe que pour les fils : les leurres dont
+                // filIds cite cet id, calculé ici plutôt que stocké (jamais de
+                // duplication à l'envers — voir Global Constraints du plan).
+                const usedBy = key === "fil" ? GEAR_CARDS.leurre.filter((l) => l.filIds?.includes(c.id)) : [];
                 return (
                   <button
                     key={c.id}
+                    id={`gear-${c.id}`}
                     type="button"
                     className={"gear-card" + (expanded ? " expanded" : "")}
                     onClick={() => setOpen(expanded ? null : c.id)}
@@ -346,9 +372,72 @@ export function GuideMateriel() {
                         <div>
                           <b>Usage :</b> {c.usage}
                         </div>
-                        {c.species && (
+                        {c.hamecon && (
                           <div style={{ marginTop: 4 }}>
-                            <b>Espèces :</b> {c.species}
+                            <b>Hameçon :</b> {c.hamecon}
+                          </div>
+                        )}
+                        {c.species && c.species.length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            <b>Espèces :</b>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+                              {c.species.map((spId) => (
+                                <span
+                                  key={spId}
+                                  role="button"
+                                  className="chip chip-sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    nav("fiche", { spId });
+                                  }}
+                                >
+                                  {speciesName(spId)}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {c.filIds && c.filIds.length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            <b>Fil recommandé :</b>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+                              {c.filIds.map((fId) => {
+                                const f = GEAR_CARDS.fil.find((x) => x.id === fId);
+                                return (
+                                  <span
+                                    key={fId}
+                                    role="button"
+                                    className="chip chip-sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      focusCard(fId);
+                                    }}
+                                  >
+                                    {f?.name ?? fId}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                        {usedBy.length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            <b>Utilisé avec :</b>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+                              {usedBy.map((l) => (
+                                <span
+                                  key={l.id}
+                                  role="button"
+                                  className="chip chip-sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    focusCard(l.id);
+                                  }}
+                                >
+                                  {l.name}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         )}
                       </div>
