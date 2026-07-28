@@ -340,7 +340,12 @@ export function Fiche() {
               <div style={{ flex: 1 }}>
                 <div className="t">{r.title}</div>
                 <div className="s">
-                  {r.origin} · {DIFF_LABEL[r.difficulty]} · {r.prep + r.cook} min
+                  {/* `cook: 0` signale une cuisson volontairement non chiffrée (la
+                      stérilisation des conserves, dont un barème approximatif expose au
+                      botulisme). Additionner donnerait un total qui laisse croire que
+                      cette étape est comprise dedans. */}
+                  {r.origin} · {DIFF_LABEL[r.difficulty]} ·{" "}
+                  {r.cook ? `${r.prep + r.cook} min` : `${r.prep} min de préparation`}
                   {r.year ? ` · ${r.year}` : ""}
                 </div>
               </div>
