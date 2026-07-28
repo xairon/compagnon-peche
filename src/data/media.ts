@@ -1262,10 +1262,41 @@ export const RECIPE_MEDIA: Record<string, MediaEntry> = {
     "author": "Fryke27",
     "license": "CC BY-SA 3.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Quenelle_de_brochet_sauce_Nantua.jpg"
+  },
+  "truite-au-bleu": {
+    "file": "assets/recipes/truite-au-bleu.webp",
+    "author": "Arnaud 25",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Truite_au_bleu.JPG"
+  },
+  "truite-meuniere": {
+    "file": "assets/recipes/truite-meuniere.webp",
+    "author": "Arnaud 25",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Truite_meuni%C3%A8re.jpg"
+  },
+  "anguille-fumee": {
+    "file": "assets/recipes/anguille-fumee.webp",
+    "author": "Tasja",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gerookte_paling.jpeg"
   }
 };
 
-export const TECHNIQUE_MEDIA: Record<string, MediaEntry> = {};
+export const TECHNIQUE_MEDIA: Record<string, MediaEntry> = {
+  "sterilisation-arete": {
+    "file": "assets/techniques/sterilisation-arete.webp",
+    "author": "PtiBzh",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_de_la_conserverie_Alexis_Le_Gall_-_Autoclave_avec_son_panier_%C3%A0_conserve.jpg"
+  },
+  "desaretage-brochet": {
+    "file": "assets/techniques/desaretage-brochet.webp",
+    "author": "Jean-Pierre Bazard",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:D%C3%A9monstration_de_filetage_de_poisson_(4).JPG"
+  }
+};
 
 export const GEAR_MEDIA: Record<string, MediaEntry> = {
   "leurre-souple": {

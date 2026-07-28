@@ -1149,9 +1149,45 @@
       "author": "Fryke27",
       "license": "CC BY-SA 3.0",
       "file_page_url": "https://commons.wikimedia.org/wiki/File:Quenelle_de_brochet_sauce_Nantua.jpg"
+    },
+    {
+      "id": "truite-au-bleu",
+      "filename": "File:Truite au bleu.JPG",
+      "author": "Arnaud 25",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Truite_au_bleu.JPG"
+    },
+    {
+      "id": "truite-meuniere",
+      "filename": "File:Truite meunière.jpg",
+      "author": "Arnaud 25",
+      "license": "CC BY-SA 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Truite_meuni%C3%A8re.jpg"
+    },
+    {
+      "id": "anguille-fumee",
+      "filename": "File:Gerookte paling.jpeg",
+      "author": "Tasja",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Gerookte_paling.jpeg"
     }
   ],
-  "techniques": [],
+  "techniques": [
+    {
+      "id": "sterilisation-arete",
+      "filename": "File:Musée de la conserverie Alexis Le Gall - Autoclave avec son panier à conserve.jpg",
+      "author": "PtiBzh",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_de_la_conserverie_Alexis_Le_Gall_-_Autoclave_avec_son_panier_%C3%A0_conserve.jpg"
+    },
+    {
+      "id": "desaretage-brochet",
+      "filename": "File:Démonstration de filetage de poisson (4).JPG",
+      "author": "Jean-Pierre Bazard",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:D%C3%A9monstration_de_filetage_de_poisson_(4).JPG"
+    }
+  ],
   "gear": [
     {
       "id": "leurre-souple",
