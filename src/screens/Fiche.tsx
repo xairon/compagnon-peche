@@ -19,6 +19,8 @@ import { EDIBILITY } from "../data/edibility";
 import { IDENT } from "../data/identification";
 import { recipesForSpecies } from "../lib/recipes";
 import { SPECIES_ENRICHMENT } from "../data/species-enrichment";
+import { GEAR_CARDS } from "../data/gear-cards";
+import { CURATED_IDS } from "../data/species";
 
 const DIFF_LABEL = ["", "Facile", "Moyen", "Difficile"];
 
@@ -217,6 +219,33 @@ export function Fiche() {
             </div>
           ))}
         </>
+      ),
+    });
+  }
+  // Dérivé de GEAR_CARDS, jamais stocké côté espèce (voir Global Constraints
+  // du plan "liens-materiel-especes") : seulement les 25 espèces vedettes, et
+  // seulement si au moins une fiche gear cite cette espèce.
+  const recommendedGear = CURATED_IDS.has(sp.id)
+    ? [...GEAR_CARDS.leurre, ...GEAR_CARDS.appat].filter((c) => c.species?.includes(sp.id))
+    : [];
+  if (recommendedGear.length > 0) {
+    sections.push({
+      id: "materiel",
+      title: "Matériel recommandé",
+      sub: "Leurres et appâts pour cette espèce",
+      render: () => (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {recommendedGear.map((c) => (
+            <span
+              key={c.id}
+              role="button"
+              className="chip chip-sm"
+              onClick={() => nav("guide-materiel", { gearFocusId: c.id })}
+            >
+              {c.name}
+            </span>
+          ))}
+        </div>
       ),
     });
   }
