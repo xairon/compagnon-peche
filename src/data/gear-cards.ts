@@ -1,13 +1,20 @@
 /** Une fiche enrichie du guide matériel — leurres, appâts ou fils. Les
  *  hameçons (tailles) restent en tableau `GuideEntry[]` dans gear.ts : ce
  *  sont des plages de taille, pas des types distincts, la table est déjà la
- *  bonne représentation. */
+ *  bonne représentation.
+ *
+ *  `species`, `filIds` et `hamecon` sont la SEULE source de vérité de leurs
+ *  liens respectifs : une fiche espèce ne stocke jamais "je suis citée par
+ *  X" (elle le déduit en filtrant GEAR_CARDS), et une fiche fil ne stocke
+ *  jamais "ces leurres m'utilisent" (elle le déduit en scannant filIds). */
 export interface GuideCard {
   id: string;
   name: string;
   summary: string; // ce que c'est
   usage: string; // comment/quand l'utiliser (animation, montage, saison)
-  species?: string; // espèces ciblées, si pertinent
+  species?: string[]; // ids réels de SPECIES, tapables — jamais du texte libre
+  filIds?: string[]; // leurres uniquement : ids vers GEAR_CARDS.fil
+  hamecon?: string; // texte libre renvoyant à la table des tailles (ex. "N° 1 à 2/0") — pas un lien, la table n'a pas de fiches individuelles
 }
 
 export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {

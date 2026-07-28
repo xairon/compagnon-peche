@@ -107,6 +107,7 @@ export interface AppState {
   techId: string | null;
   justAdded: string | null; // slot of the catch just logged (for a brief confirmation)
   focusSpot: string | null; // spot id to fly to & open when the Carte mounts (from Carnet)
+  gearFocusId: string | null; // gear card id to scroll to & open when GuideMateriel mounts (from a fiche espèce or une autre carte gear)
   catchSlot: string | null; // slot of the catch shown on the prise-detail screen
   bilanSession: string | null; // crayfish session whose bilan the Écrevisses screen shows (from Carnet, to correct a closed one)
   // Département code (e.g. "37") detected by GPS when it falls OUTSIDE the app's
@@ -148,6 +149,7 @@ const initialState: AppState = {
   techId: null,
   justAdded: null,
   focusSpot: null,
+  gearFocusId: null,
   catchSlot: null,
   bilanSession: null,
   outOfZoneDept: null,
