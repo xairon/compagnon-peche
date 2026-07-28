@@ -99,12 +99,15 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     brochetMaille: "60 cm (1ʳᵉ et 2ᵉ cat.)",
     sandreMaille: "50 cm (2ᵉ cat.)",
     blackbassMaille: "30 cm (2ᵉ cat.)",
-    salmonideQuota: "6 salmonidés/jour (sous-limite truite fario à confirmer sur l'arrêté)",
-    carnassierQuota: "2ᵉ cat. : 3 carnassiers/jour dont 2 brochets ; 1ʳᵉ cat. : 2 brochets/jour",
+    salmonideQuota: "6 salmonidés/jour dont 2 truites fario maximum",
+    carnassierQuota: "3 carnassiers/jour dont 2 brochets maximum",
     notes: [
       "Brochet no-kill : tout brochet capturé du 14/03 au 24/04 doit être remis à l'eau.",
-      "Black-bass no-kill sur les retenues d'Eguzon, Roche-au-Moine et Roche-Bat-l'Aigue.",
-      "Saumon, truite de mer et alose interdits toute l'année ; anguille argentée interdite.",
+      "Sandre fermé du 26/01 au 24/04 en 2ᵉ catégorie (même fenêtre que le brochet).",
+      "Black-bass : la fédération indique « no-kill » ; son document ne dit pas explicitement si cela vise les seules retenues d'Eguzon, Roche-au-Moine et Roche-Bat-l'Aigue ou toute la 2ᵉ catégorie. Dans le doute, relâchez.",
+      "Truite arc-en-ciel : pêche autorisée toute l'année en 2ᵉ catégorie. L'app affiche la période de 1ʳᵉ catégorie, plus restrictive, car elle ne sait pas sur quelle catégorie d'eau vous êtes.",
+      "Anguille jaune : ouverte du 1ᵉʳ avril au 31 août en 1ʳᵉ catégorie, interdite en 2ᵉ. Anguille argentée interdite partout.",
+      "Saumon, truite de mer et alose interdits toute l'année.",
     ],
     source: "Arrêté préf. n° 36-2025-12-12-00002 (pêche 2026) · Fédération de pêche de l'Indre",
     url: "https://www.peche36.fr/667-taille-minimale-de-capture.htm",
@@ -221,6 +224,20 @@ export function localRegRows(
   if (BLACKBASS.has(spId)) {
     rows.push(["Maille black-bass", d.blackbassMaille]);
     rows.push(["Quota carnassiers", d.carnassierQuota]);
+  }
+  // Les migrateurs interdits n'entraient dans aucun groupe ci-dessus, donc leur
+  // fiche affichait « pas de spécificité départementale » — faux : l'arrêté les
+  // interdit explicitement. Une interdiction est la spécificité la plus utile à
+  // remonter.
+  if (spId === "anguille") {
+    rows.push(["Anguille jaune", "1ʳᵉ cat. : 1ᵉʳ avril → 31 août. 2ᵉ cat. : pêche interdite."]);
+    rows.push(["Anguille argentée", "Pêche interdite."]);
+  }
+  if (spId === "saumon-atlantique") {
+    rows.push(["Saumon & truite de mer", "Pêche interdite toute l'année."]);
+  }
+  if (spId === "grande-alose" || spId === "alose-feinte-atlantique" || spId === "alose-feinte-mediterraneenne") {
+    rows.push(["Alose", "Pêche interdite toute l'année."]);
   }
   return rows;
 }
