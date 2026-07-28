@@ -53,7 +53,10 @@ const CURATED: Species[] = [
       rows: [
         ["Maille", "40 cm (2ᵉ cat., national)"],
         ["Quota", "3 carnassiers/jour dont 2 brochets max"],
-        ["Période", "2ᵉ cat. : ouverte toute l'année"],
+        [
+          "Période",
+          "2ᵉ cat. : fermée pendant la fermeture spécifique du brochet (dernier dim. de janvier → dernier sam. d'avril)",
+        ],
         ["Horaires", "½ h avant lever → ½ h après coucher"],
       ],
       note: null,
