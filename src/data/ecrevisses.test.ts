@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { ECREVISSES, PECHABLES, crayfishById, REG_BALANCES, MAILLE_NOTE } from "./ecrevisses";
+import { CRAYFISH_MEDIA } from "./media";
 
 describe("données écrevisses", () => {
   it("couvre les six espèces attendues", () => {
@@ -81,5 +84,20 @@ describe("données écrevisses", () => {
   it("la maille de 9 cm n'est jamais présentée comme une autorisation", () => {
     expect(MAILLE_NOTE).toMatch(/9 cm/);
     expect(MAILLE_NOTE).toMatch(/ne se pêche pas|fermée/i);
+  });
+});
+
+describe("photos écrevisses", () => {
+  it("chaque photo référencée existe sous public/", () => {
+    const manquants = Object.entries(CRAYFISH_MEDIA)
+      .filter(([, m]) => !existsSync(join(process.cwd(), "public", m.file)))
+      .map(([id, m]) => `${id} → ${m.file}`);
+    expect(manquants).toEqual([]);
+  });
+
+  it("chaque photo pointe vers une espèce existante", () => {
+    const ids = new Set(ECREVISSES.map((e) => e.id));
+    const orphelines = Object.keys(CRAYFISH_MEDIA).filter((id) => !ids.has(id));
+    expect(orphelines).toEqual([]);
   });
 });
