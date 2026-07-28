@@ -1359,3 +1359,42 @@ export const GEAR_MEDIA: Record<string, MediaEntry> = {
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fishing_lines_2025_G1.jpg"
   }
 };
+
+export const CRAYFISH_MEDIA: Record<string, MediaEntry> = {
+  "pattes-blanches": {
+    "file": "assets/crayfish/pattes-blanches.webp",
+    "author": "David Gerke",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Austropotamobius_pallipes.jpg"
+  },
+  "pattes-grelles": {
+    "file": "assets/crayfish/pattes-grelles.webp",
+    "author": "Bjoertvedt",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Astacus_leptodactylus_02.jpg"
+  },
+  "pattes-rouges": {
+    "file": "assets/crayfish/pattes-rouges.webp",
+    "author": "Anna N Chapman",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:European_crayfish_(Astacus_astacus).jpg"
+  },
+  "signal": {
+    "file": "assets/crayfish/signal.webp",
+    "author": "Astacoides",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Signal_crayfish_female_Pacifastacus_leniusculus.JPG"
+  },
+  "americaine": {
+    "file": "assets/crayfish/americaine.webp",
+    "author": "Holger Krisp",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kamberkrebs_Faxonius_limosus_syn_Orconectes_limosus.jpg"
+  },
+  "louisiane": {
+    "file": "assets/crayfish/louisiane.webp",
+    "author": "MikeMurphy",
+    "license": "Domaine public",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Procambarus_clarkii.jpg"
+  }
+};

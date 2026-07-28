@@ -1259,6 +1259,50 @@
       "file_page_url": "https://commons.wikimedia.org/wiki/File:Fishing_lines_2025_G1.jpg"
     }
   ],
+  "crayfish": [
+    {
+      "id": "pattes-blanches",
+      "filename": "File:Austropotamobius pallipes.jpg",
+      "author": "David Gerke",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Austropotamobius_pallipes.jpg"
+    },
+    {
+      "id": "pattes-grelles",
+      "filename": "File:Astacus leptodactylus 02.jpg",
+      "author": "Bjoertvedt",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Astacus_leptodactylus_02.jpg"
+    },
+    {
+      "id": "pattes-rouges",
+      "filename": "File:European crayfish (Astacus astacus).jpg",
+      "author": "Anna N Chapman",
+      "license": "CC0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:European_crayfish_(Astacus_astacus).jpg"
+    },
+    {
+      "id": "signal",
+      "filename": "File:Signal crayfish female Pacifastacus leniusculus.JPG",
+      "author": "Astacoides",
+      "license": "CC BY-SA 3.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Signal_crayfish_female_Pacifastacus_leniusculus.JPG"
+    },
+    {
+      "id": "americaine",
+      "filename": "File:Kamberkrebs Faxonius limosus syn Orconectes limosus.jpg",
+      "author": "Holger Krisp",
+      "license": "CC BY 4.0",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Kamberkrebs_Faxonius_limosus_syn_Orconectes_limosus.jpg"
+    },
+    {
+      "id": "louisiane",
+      "filename": "File:Procambarus clarkii.jpg",
+      "author": "MikeMurphy",
+      "license": "Domaine public",
+      "file_page_url": "https://commons.wikimedia.org/wiki/File:Procambarus_clarkii.jpg"
+    }
+  ],
   "knotSteps": [
     {
       "id": "sang",
