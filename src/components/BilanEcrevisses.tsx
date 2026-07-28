@@ -21,7 +21,7 @@ export function BilanEcrevisses({
   session: CrayfishSession;
   onClose: () => void;
 }) {
-  const { set, updateCrayfishSession } = useStore();
+  const { set, nav, updateCrayfishSession } = useStore();
   const closed = session.fin !== null;
   const tally = session.tally;
   const note = session.note ?? "";
@@ -102,6 +102,10 @@ export function BilanEcrevisses({
             J'ai relevé une espèce protégée
           </button>
         )}
+
+        <button className="btn-light ecr-more" onClick={() => nav("ecrevisses-ident")}>
+          Laquelle ai-je relevée ?
+        </button>
 
         <div className="label" style={{ margin: "20px 0 8px" }}>
           Note

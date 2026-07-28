@@ -48,7 +48,8 @@ export type Screen =
   | "outils-terrain"
   | "mes-recettes"
   | "stockage"
-  | "ecrevisses";
+  | "ecrevisses"
+  | "ecrevisses-ident";
 
 // "prise" is not a tab — it's the central action button (a full flow), not a destination.
 // v2 nav: Accueil · Espèces · Prise(central) · Carte · Carnet. "Outils" is no

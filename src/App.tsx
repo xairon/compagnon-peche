@@ -42,6 +42,9 @@ const Techniques = lazy(() =>
 const TechniqueDetail = lazy(() =>
   import("./screens/Techniques").then((m) => ({ default: m.TechniqueDetail })),
 );
+const EcrevissesIdent = lazy(() =>
+  import("./screens/EcrevissesIdent").then((m) => ({ default: m.EcrevissesIdent })),
+);
 
 export function App() {
   const { state, set } = useStore();
@@ -143,6 +146,7 @@ export function App() {
         {s === "outils" && <Outils />}
         {s === "outils-terrain" && <OutilsTerrain />}
         {s === "ecrevisses" && <Ecrevisses />}
+        {s === "ecrevisses-ident" && <EcrevissesIdent />}
         {s === "mes-recettes" && <MesRecettes />}
         {s === "noeuds" && <Noeuds />}
         {s === "knot" && <KnotDetail />}

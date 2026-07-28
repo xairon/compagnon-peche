@@ -114,6 +114,7 @@ function Preparation({
   onStart: (s: CrayfishSession) => void;
   spots: Spot[];
 }) {
+  const { nav } = useStore();
   const [trempe, setTrempe] = useState(DEFAULT_INTERVAL_MIN);
   const [lieu, setLieu] = useState("");
   const [spotId, setSpotId] = useState("");
@@ -204,6 +205,10 @@ function Preparation({
 
         <button className="ecr-start" onClick={start}>
           Démarrer la séance
+        </button>
+
+        <button className="btn-light ecr-more" onClick={() => nav("ecrevisses-ident")}>
+          Reconnaître les écrevisses
         </button>
 
         <div className="ecr-reg">
