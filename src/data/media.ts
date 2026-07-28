@@ -1286,7 +1286,7 @@ export const GEAR_MEDIA: Record<string, MediaEntry> = {
     "file": "assets/gear/leurre-souple.webp",
     "author": "George Chernilevsky",
     "license": "Domaine public",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Twister_2008_G01.jpg"
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jig-Twister_lure_2009_G1.jpg"
   },
   "poisson-nageur": {
     "file": "assets/gear/poisson-nageur.webp",
@@ -1326,9 +1326,9 @@ export const GEAR_MEDIA: Record<string, MediaEntry> = {
   },
   "ver-de-terre": {
     "file": "assets/gear/ver-de-terre.webp",
-    "author": "Username4wikipedia",
-    "license": "CC BY-SA 4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lumbricus_terrestris_about_2_ft_long_.jpg"
+    "author": "Michael Linnenbach",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lumbricus_terrestris.JPG"
   },
   "asticot": {
     "file": "assets/gear/asticot.webp",

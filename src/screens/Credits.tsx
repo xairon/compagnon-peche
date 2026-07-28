@@ -1,7 +1,9 @@
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { KNOTS } from "../data/knots";
-import { SPECIES_MEDIA } from "../data/media";
+import { SPECIES_MEDIA, GEAR_MEDIA } from "../data/media";
+import { GEAR_CARDS } from "../data/gear-cards";
+import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
 import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/media-helpers";
 
 function nameForSpecies(id: string): string {
@@ -16,6 +18,13 @@ function idFallback(id: string): string {
   const hit = Object.entries(NAME_TO_ID).find(([, v]) => v === id);
   return hit ? hit[0] : id;
 }
+function nameForGear(id: string): string {
+  for (const cards of Object.values(GEAR_CARDS)) {
+    const hit = cards.find((c) => c.id === id);
+    if (hit) return hit.name;
+  }
+  return id;
+}
 
 export function Credits() {
   const { back } = useStore();
@@ -28,7 +37,21 @@ export function Credits() {
       sourceUrl: m.sourceUrl,
     })),
   );
-  const knotRows = Object.entries(ALL_KNOT_MEDIA).map(([id, m]) => ({ name: nameForKnot(id), ...m }));
+  // Ids with a per-step sequence (ALL_KNOT_STEP_MEDIA) now render that instead
+  // of the old single-photo overlay (see Noeuds.tsx's `hasLegacyDiagram`) — so
+  // exclude them here to only credit what's actually displayed.
+  const knotRows = Object.entries(ALL_KNOT_MEDIA)
+    .filter(([id]) => !ALL_KNOT_STEP_MEDIA[id])
+    .map(([id, m]) => ({ name: nameForKnot(id), ...m }));
+  const knotStepRows = Object.entries(ALL_KNOT_STEP_MEDIA).flatMap(([id, photos]) =>
+    photos.map((m, i) => ({
+      name: nameForKnot(id) + (photos.length > 1 ? ` (étape ${i + 1})` : ""),
+      author: m.author,
+      license: m.license,
+      sourceUrl: m.sourceUrl,
+    })),
+  );
+  const gearRows = Object.entries(GEAR_MEDIA).map(([id, m]) => ({ name: nameForGear(id), ...m }));
 
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (
     <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid #ECE8DD" }}>
@@ -79,7 +102,28 @@ export function Credits() {
           </>
         )}
 
-        {speciesRows.length === 0 && knotRows.length === 0 && (
+        {knotStepRows.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 4px" }}>
+              Nœuds & montages — étapes
+            </div>
+            {knotStepRows.map(Row)}
+          </>
+        )}
+
+        {gearRows.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 4px" }}>
+              Matériel
+            </div>
+            {gearRows.map(Row)}
+          </>
+        )}
+
+        {speciesRows.length === 0 &&
+          knotRows.length === 0 &&
+          knotStepRows.length === 0 &&
+          gearRows.length === 0 && (
           <div style={{ color: "var(--muted)", fontSize: 14 }}>
             Les images seront créditées ici une fois embarquées.
           </div>
