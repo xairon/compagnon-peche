@@ -42,7 +42,7 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       name: "Cuiller tournante",
       summary: "Une palette métallique tourne autour d'un axe, vibrations et flash très visibles de loin.",
       usage: "Lancer-ramener simple, vitesse constante pour que la palette tourne régulièrement. Efficace en eau claire ou légèrement teintée.",
-      species: ["truite-fario", "truite-arc-en-ciel", "perche", "chevesne"],
+      species: ["truite-fario", "truite-arc-en-ciel", "perche", "chevesne", "omble-fontaine"],
       filIds: ["fluorocarbone"],
       hamecon: "Triple d'origine, N° 8 à 4.",
     },
@@ -89,7 +89,7 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       name: "Ver de terre / lombric",
       summary: "L'appât naturel le plus polyvalent, disponible partout, efficace sur presque toutes les espèces.",
       usage: "Piqué une ou deux fois pour rester vivant et remuant, ou en paquet pour les grosses bouches. Bon toute l'année, particulièrement après la pluie.",
-      species: ["truite-fario", "truite-arc-en-ciel", "perche", "breme", "tanche", "anguille", "chevesne"],
+      species: ["truite-fario", "truite-arc-en-ciel", "perche", "breme", "tanche", "anguille", "chevesne", "barbeau", "carassin", "goujon", "gremille", "poisson-chat"],
       hamecon: "N° 10 à 4 selon la taille du ver et du poisson visé.",
     },
     {
@@ -97,7 +97,7 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       name: "Asticot & pinkie",
       summary: "Larve de mouche, petite et très remuante, l'appât de référence de la pêche au coup.",
       usage: "Piqué par le bout le plus épais pour rester vivant, en paquet de 2-3 pour les grosses touches ou seul pour la finesse. S'amorce facilement en accompagnement.",
-      species: ["gardon", "ablette", "breme"],
+      species: ["gardon", "ablette", "breme", "barbeau", "goujon", "hotu", "rotengle", "carassin", "perche-soleil"],
       hamecon: "N° 20 à 14, fins de fer.",
     },
     {
@@ -113,7 +113,7 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       name: "Maïs doux",
       summary: "Grain sucré en boîte, sélectif — filtre les petits poissons et cible les plus gros.",
       usage: "2 à 3 grains piqués sur l'hameçon, réserve du jus utilisable en amorçage. Économique et facile à transporter.",
-      species: ["carpe", "tanche", "gardon", "breme"],
+      species: ["carpe", "tanche", "gardon", "breme", "carassin"],
       hamecon: "N° 8 à 4.",
     },
     {
@@ -121,7 +121,7 @@ export const GEAR_CARDS: Record<"leurre" | "appat" | "fil", GuideCard[]> = {
       name: "Pain / pâte",
       summary: "Mie de pain ou pâte pétrie à la farine, moulée directement autour de l'hameçon.",
       usage: "Façonnée en boulette juste avant de pêcher, se ramollit vite dans l'eau donc à renouveler souvent. Aussi utile en amorçage de surface pour le chevesne.",
-      species: ["chevesne", "carpe", "gardon"],
+      species: ["chevesne", "carpe", "gardon", "rotengle", "hotu"],
       hamecon: "N° 8 à 4.",
     },
     {
