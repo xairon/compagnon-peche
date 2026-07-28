@@ -85,8 +85,8 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "oui",
     bones: "beaucoup",
     taste: "Chair blanche fine et maigre, très appréciée (quenelles, beurre blanc) ; peut être vaseux selon le milieu.",
-    prep: "Nombreuses arêtes en « Y » à retirer ; œufs (rogue) réputés indigestes/purgatifs, surtout en période de fraie.",
-    source: CULINARY,
+    prep: "Nombreuses arêtes en « Y » à retirer ; œufs (rogue) toxiques/purgatifs — ne consommez jamais les œufs, surtout en période de fraie.",
+    source: CULINARY + " · " + ICHTYOOTOX_BROCHET,
   },
   "brochet-aquitain": {
     status: "réglementé",
@@ -260,7 +260,7 @@ export const EDIBILITY: Record<string, Edible> = {
     bones: "beaucoup",
     taste: "Chair blanche correcte mais fade et bourrée d'arêtes.",
     anses: ANSES_TXT,
-    prep: "⚠️ ŒUFS (ROGUE) TOXIQUES — à ne JAMAIS consommer (« choléra des barbeaux » : diarrhées, crampes) ; écarter aussi la chair ventrale en période de fraie (mai-juillet).",
+    prep: "⚠️ ŒUFS (ROGUE) TOXIQUES — à ne JAMAIS consommer (« choléra des barbeaux » : diarrhées, crampes). Par précaution non sourcée (la source ci-dessous ne documente que les œufs), certains recommandent aussi d'écarter la chair ventrale en période de fraie (mai-juillet).",
     source: ANSES + " · SFMU",
   },
   goujon: {
@@ -333,12 +333,30 @@ export const EDIBILITY: Record<string, Edible> = {
     status: "oui",
     bones: "moyen",
     taste: "Chair blanche correcte ; goût pouvant être vaseux/estuarien selon le milieu (œufs séchés = poutargue).",
-    prep: "Euryhalin (estuaires, cours d'eau bas) ; meilleure qualité en eaux propres.",
-    source: CULINARY,
+    prep: "Euryhalin (estuaires, cours d'eau bas), milieu où les PCB se concentrent dans les sédiments : plusieurs estuaires sont sous arrêté préfectoral d'interdiction ou de limitation de consommation — vérifiez avant de consommer une prise ; meilleure qualité en eaux propres.",
+    source: ARRETE_PCB + " · " + CULINARY,
   },
-  "mulet-dore": { status: "oui", bones: "moyen", taste: "Chair blanche correcte ; qualité meilleure en eaux propres.", source: CULINARY },
-  "mulet-lippu": { status: "oui", bones: "moyen", taste: "Chair blanche correcte ; qualité meilleure en eaux propres.", source: CULINARY },
-  "mulet-cabot": { status: "oui", bones: "moyen", taste: "Chair blanche correcte ; qualité meilleure en eaux propres.", source: CULINARY },
+  "mulet-dore": {
+    status: "oui",
+    bones: "moyen",
+    taste: "Chair blanche correcte ; qualité meilleure en eaux propres.",
+    prep: "Poisson de fond d'estuaire, milieu où les PCB se concentrent dans les sédiments : plusieurs estuaires sont sous arrêté préfectoral d'interdiction ou de limitation de consommation — vérifiez avant de consommer une prise.",
+    source: ARRETE_PCB + " · " + CULINARY,
+  },
+  "mulet-lippu": {
+    status: "oui",
+    bones: "moyen",
+    taste: "Chair blanche correcte ; qualité meilleure en eaux propres.",
+    prep: "Poisson de fond d'estuaire, milieu où les PCB se concentrent dans les sédiments : plusieurs estuaires sont sous arrêté préfectoral d'interdiction ou de limitation de consommation — vérifiez avant de consommer une prise.",
+    source: ARRETE_PCB + " · " + CULINARY,
+  },
+  "mulet-cabot": {
+    status: "oui",
+    bones: "moyen",
+    taste: "Chair blanche correcte ; qualité meilleure en eaux propres.",
+    prep: "Poisson de fond d'estuaire, milieu où les PCB se concentrent dans les sédiments : plusieurs estuaires sont sous arrêté préfectoral d'interdiction ou de limitation de consommation — vérifiez avant de consommer une prise.",
+    source: ARRETE_PCB + " · " + CULINARY,
+  },
 
   // ── Invasives (comestibles mais ne pas relâcher vivantes) ────
   "perche-soleil": {

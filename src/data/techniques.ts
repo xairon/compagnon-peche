@@ -137,7 +137,7 @@ export const TECHNIQUES: Technique[] = [
     name: "Garum — fermentation zéro déchet",
     category: "conservation",
     summary:
-      "Condiment antique remis au goût du jour sur la Loire : une sauce lacto-fermentée d'une puissance umami exceptionnelle, obtenue en salant fortement chairs, viscères et carcasses. Idéale pour valoriser les excédents de pêche et les parures.",
+      "Condiment antique remis au goût du jour sur la Loire : une sauce fermentée par autolyse enzymatique d'une puissance umami exceptionnelle, obtenue en salant fortement chairs, viscères et carcasses. Idéale pour valoriser les excédents de pêche et les parures.",
     steps: [
       { title: "Composition", detail: "Environ 75 % de chair + viscères + carcasses de poissons, 25 % de sel marin." },
       { title: "Macération", detail: "En fût, à l'abri de la lumière, au moins un an : les enzymes digèrent les protéines en acides aminés." },
@@ -146,7 +146,7 @@ export const TECHNIQUES: Technique[] = [
     ],
     tools: ["Fût / bocal", "Sel marin"],
     safety:
-      "Le sel (≈ 25 %) inhibe les bactéries de putréfaction — ne réduisez pas cette proportion. Fermentation à l'abri de la lumière.",
+      "Le sel (≈ 25 %) inhibe les bactéries de putréfaction. Fermentation à l'abri de la lumière. Cette proportion de sel est celle de la tradition, pas un barème validé par une autorité sanitaire : contrairement à la stérilisation en conserve, aucun texte officiel ne l'encadre. Si vous vous écartez de la recette, vous n'avez aucun repère de sécurité — ne réduisez pas la salinité.",
     source: "Garum de Tours, réhabilité par le pêcheur Thierry Bouvet.",
     speciesNote: [
       ["gremille", "Petites espèces et « friture » sans usage direct : parfaites pour le garum."],
