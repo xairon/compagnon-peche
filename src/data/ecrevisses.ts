@@ -214,12 +214,15 @@ export function crayfishById(id: string): Crayfish | undefined {
 export const REG_BALANCES = [
   "6 balances au maximum par pêcheur (repère national) — jusqu'à 10 dans certains départements.",
   "Diamètre maximal d'une balance : 30 cm.",
+  "Espèces pêchables : 1ʳᵉ catégorie du 14/03 au 20/09, 2ᵉ catégorie toute l'année (Indre 2026). L'app ne sait pas sur quelle catégorie d'eau vous êtes — vérifiez.",
+  "Écrevisses à pattes blanches, rouges, grêles et des torrents : pêche fermée toute l'année (Indre et Creuse 2026).",
   "Périodes et cours d'eau autorisés : vérifiez l'arrêté préfectoral en vigueur.",
 ];
 
-export const REG_SOURCE = "Code de l'environnement, art. R436-23 à R436-29 · R432-5";
+export const REG_SOURCE =
+  "Code de l'environnement, art. R436-10 · R436-18 · R436-23 à R436-29 · R432-5 · arrêté du 21 juillet 1983 · arrêtés préfectoraux 2026 (36, 23)";
 
-/** The 9 cm figure exists (R436-18) but the species it targets is protected here:
- *  it is displayed WITH that caveat, never as a permission. */
+/** The 9 cm figure exists (R436-18) but the species it targets isn't fished
+ *  here: it is displayed WITH that caveat, never as a permission. */
 export const MAILLE_NOTE =
-  "Une maille de 9 cm figure au R436-18 pour l'écrevisse à pattes rouges, mais cette espèce est protégée dans les départements couverts (23 · 36 · 41) : elle ne se pêche pas. Les trois espèces pêchables n'ont pas de taille minimale.";
+  "Une maille de 9 cm figure au R436-18 pour l'écrevisse à pattes rouges, mais elle ne se pêche pas ici : les arrêtés préfectoraux 2026 de l'Indre et de la Creuse n'ouvrent aucun des dix jours que R436-10 rend possibles (Loir-et-Cher : à vérifier). Les trois espèces pêchables n'ont pas de taille minimale.";

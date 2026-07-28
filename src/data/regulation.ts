@@ -88,7 +88,7 @@ export const DEPT_REG: Record<DeptId, DeptReg> = {
     carnassierQuota: "2ᵉ cat. : 3 carnassiers/jour dont 2 brochets ; 1ʳᵉ cat. : 2 brochets/jour",
     notes: [
       "Fenêtre brochet expérimentale sur les lacs de Vassivière et St-Marc : remise à l'eau des brochets < 60 cm ou > 80 cm.",
-      "Écrevisses à pattes blanches/rouges protégées ; seules américaine/signal/Louisiane pêchables (transport vivant interdit).",
+      "Écrevisses à pattes blanches, rouges et grêles : pêche fermée toute l'année (R436-10, arrêté préfectoral) ; seules américaine/signal/Louisiane pêchables (transport vivant interdit).",
       "Pêche interdite sur le bassin du Cher (Tardes, Voueize et affluents).",
     ],
     source: "Arrêté préf. n° 23-2025-12-19-00001 (pêche 2026) · Fédération de pêche de la Creuse",

@@ -99,7 +99,7 @@ export function BilanEcrevisses({
 
         {!showAll && (
           <button className="btn-light ecr-more" onClick={() => setShowAll(true)}>
-            J'ai relevé une espèce protégée
+            J'ai relevé une espèce fermée
           </button>
         )}
 
