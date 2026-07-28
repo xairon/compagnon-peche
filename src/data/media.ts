@@ -1207,12 +1207,6 @@ export const KNOT_MEDIA: Record<string, MediaEntry> = {
     "license": "CC BY-SA 2.0 DE",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:KlammerknotenLose.JPG"
   },
-  "palomar": {
-    "file": "assets/knots/palomar.webp",
-    "author": "Vaughan Pratt",
-    "license": "CC BY-SA 3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
-  },
   "boucle": {
     "file": "assets/knots/boucle.webp",
     "author": "LadyofHats",
@@ -1250,14 +1244,6 @@ export const KNOT_STEP_MEDIA: Record<string, MediaEntry[]> = {
       "author": "Luis Dantas",
       "license": "CC BY-SA 3.0",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
-    }
-  ],
-  "palomar": [
-    {
-      "file": "assets/knots-steps/palomar-1.webp",
-      "author": "Vaughan Pratt",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
     }
   ],
   "boucle": [

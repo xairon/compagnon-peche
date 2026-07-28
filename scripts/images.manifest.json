@@ -1128,13 +1128,6 @@
       "file_page_url": "https://commons.wikimedia.org/wiki/File:KlammerknotenLose.JPG"
     },
     {
-      "id": "palomar",
-      "filename": "File:PalomarKnotSequence.jpg",
-      "author": "Vaughan Pratt",
-      "license": "CC BY-SA 3.0",
-      "file_page_url": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
-    },
-    {
       "id": "boucle",
       "filename": "File:Surgeon's Loop knot.svg",
       "author": "LadyofHats",
@@ -1297,17 +1290,6 @@
           "author": "Luis Dantas",
           "license": "CC BY-SA 3.0",
           "file_page_url": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
-        }
-      ]
-    },
-    {
-      "id": "palomar",
-      "steps": [
-        {
-          "filename": "File:PalomarKnotSequence.jpg",
-          "author": "Vaughan Pratt",
-          "license": "CC BY-SA 3.0",
-          "file_page_url": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
         }
       ]
     },
