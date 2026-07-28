@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { KNOTS } from "./knots";
 import { ALL_KNOT_STEP_MEDIA } from "./knot-diagrams";
 
@@ -25,5 +27,17 @@ describe("nœuds & montages — cohérence des données", () => {
       });
     }
     expect(fautes).toEqual([]);
+  });
+});
+
+describe("médias nœuds — fichiers réellement présents", () => {
+  it("chaque fichier référencé existe sous public/", () => {
+    const manquants: string[] = [];
+    for (const [id, entries] of Object.entries(ALL_KNOT_STEP_MEDIA)) {
+      entries.forEach((e, i) => {
+        if (!existsSync(join(process.cwd(), "public", e.file))) manquants.push(`${id}[${i}] → ${e.file}`);
+      });
+    }
+    expect(manquants).toEqual([]);
   });
 });
