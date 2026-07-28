@@ -23,7 +23,12 @@ const CURATED: Species[] = [
     mailleSub: "national",
     quota: "3 / jour",
     quotaSub: "carnassiers cumulés",
-    season: "toujours",
+    // Fermé avec le brochet : pendant la fermeture spécifique du brochet en 2ᵉ
+    // catégorie, le code de l'environnement interdit vif, poisson mort ou
+    // artificiel et leurres susceptibles de le capturer — soit exactement les
+    // méthodes du sandre. La FDPPMA 36 publie d'ailleurs pour le sandre la même
+    // fenêtre que pour le brochet. « toujours » affichait un faux feu vert.
+    season: "brochet",
     ident: {
       summary:
         "Corps fusiforme gris-vert barré de sombre, deux nageoires dorsales distinctes, dents « canines » caractéristiques. Œil vitreux.",

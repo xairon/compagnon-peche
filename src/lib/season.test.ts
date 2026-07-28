@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { SPECIES } from "../data/species";
 import { season } from "./season";
 import type { Species } from "../types";
 
@@ -28,6 +29,32 @@ describe("season — brochet (closed late Jan → late Apr)", () => {
   });
   it("closed mid-closure", () => {
     expect(season(pike, new Date(2026, 2, 15)).open).toBe(false); // mid-March
+  });
+});
+
+describe("fermeture des carnassiers en 2ᵉ catégorie", () => {
+  const sandre = SPECIES.find((s) => s.id === "sandre")!;
+  const brochet = SPECIES.find((s) => s.id === "brochet")!;
+
+  // Le code de l'environnement interdit vif/leurres susceptibles de prendre le
+  // brochet pendant sa fermeture en 2ᵉ cat. — ce sont exactement les méthodes du
+  // sandre, que la FDPPMA 36 ferme d'ailleurs sur la même fenêtre. Afficher
+  // « ouverte toute l'année » était un faux feu vert.
+  it("le sandre est fermé pendant la fermeture du brochet", () => {
+    const mars = new Date(2026, 2, 15); // 15 mars 2026, en pleine fermeture
+    expect(season(sandre, mars).open).toBe(false);
+    expect(season(brochet, mars).open).toBe(false);
+  });
+
+  it("le sandre est ouvert hors de cette fenêtre", () => {
+    const juillet = new Date(2026, 6, 15);
+    expect(season(sandre, juillet).open).toBe(true);
+  });
+
+  it("le libellé de fermeture ne parle pas que du brochet", () => {
+    const mars = new Date(2026, 2, 15);
+    // Un libellé « Brochet fermé » sur une fiche sandre est incompréhensible.
+    expect(season(sandre, mars).label).not.toContain("Brochet fermé");
   });
 });
 

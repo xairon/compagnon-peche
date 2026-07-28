@@ -28,6 +28,10 @@ function last(year: number, month: number, dow: number): Date {
 /**
  * Whether a species is in open season at `now`, computed from the national
  * category rules (F2117). Departmental arrêtés can differ — the UI says so.
+ *
+ * La règle "brochet" couvre aussi le sandre : pendant la fermeture du brochet en
+ * 2ᵉ catégorie, les méthodes qui prennent le sandre (vif, poisson mort ou
+ * artificiel, leurres) sont interdites par le code de l'environnement.
  */
 export function season(sp: Species, now: Date = new Date()): SeasonState {
   const y = now.getFullYear();
@@ -54,7 +58,7 @@ export function season(sp: Species, now: Date = new Date()): SeasonState {
     const o2 = last(y, 3, 6); // last Saturday of April
     return now <= c1 || now >= o2
       ? { open: true, label: "Pêche ouverte" }
-      : { open: false, label: "Brochet fermé" };
+      : { open: false, label: "Fermée (période brochet)" };
   }
 
   return { open: true, label: "Ouverte toute l'année" };
