@@ -336,7 +336,9 @@ export function GuideMateriel() {
                     className={"gear-card" + (expanded ? " expanded" : "")}
                     onClick={() => setOpen(expanded ? null : c.id)}
                   >
-                    <Media kind="gear" id={c.id} placeholder={c.name} />
+                    <div className="gear-card-img">
+                      <Media kind="gear" id={c.id} placeholder={c.name} />
+                    </div>
                     <div className="gc-name">{c.name}</div>
                     <div className="gc-summary">{c.summary}</div>
                     {expanded && (

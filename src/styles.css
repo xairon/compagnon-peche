@@ -5804,6 +5804,19 @@ button.card-row {
 .gear-card.expanded {
   grid-column: span 2;
 }
+/* .media-img fills its parent at 100% height — needs a parent with a real
+   height, same as every other Media usage in the app (.id-cand-img, .thumb,
+   .tech-photo…). Without this, height:100% resolves against an indefinite
+   grid-item height, the image renders at its intrinsic pixel size instead,
+   and the card's text overflows below its own (too-short) box into
+   whatever section comes next on the page. */
+.gear-card-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e7ece6;
+}
 .gc-name {
   font-size: 14px;
   font-weight: 650;
