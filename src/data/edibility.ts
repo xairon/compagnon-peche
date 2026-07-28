@@ -39,7 +39,7 @@ const MIGRATEUR =
 const ANSES_TXT =
   "Espèce fortement bioaccumulatrice (PCB/dioxines) : l'ANSES recommande de limiter à 2 fois/mois (population générale) et 1 fois tous les 2 mois pour les publics sensibles (femmes enceintes/allaitantes, enfants < 3 ans, filles et adolescentes).";
 const ANSES_ANGUILLE =
-  "Espèce TRÈS fortement bioaccumulatrice — la plus concernée par les PCB/dioxines : ANSES 2 fois/mois max (population générale), 1 fois tous les 2 mois pour les publics sensibles.";
+  "Espèce TRÈS fortement bioaccumulatrice — la plus concernée par les PCB/dioxines. L'ANSES en recommande une consommation exceptionnelle QUEL QUE SOIT LE BASSIN VERSANT (là où les autres espèces peuvent être assouplies en eau propre) : 2 fois/mois maximum en population générale, 1 fois tous les 2 mois pour les publics sensibles.";
 // The arrêté du 8 déc. 1988 protects eggs and spawning grounds; it never
 // forbids keeping the adult (the pike and the trout are on the same list).
 // Saying "capture interdite" here contradicted the law and the fiche.
@@ -284,7 +284,7 @@ export const EDIBILITY: Record<string, Edible> = {
     bones: "peu",
     taste: "Chair grasse et fine, historiquement très prisée (matelote, anguille fumée).",
     anses: ANSES_ANGUILLE,
-    prep: "En danger critique : pêche strictement encadrée (règlement européen anguille) — ne prélever que là où c'est légal.",
+    prep: "Sang cru toxique (ichtyohémotoxisme, comme la lamproie et le congre) : la toxine est détruite par la cuisson, mais évitez tout contact du sang avec une plaie ou les yeux pendant l'habillage, et ne goûtez jamais la chair crue. En danger critique par ailleurs : pêche strictement encadrée (règlement européen anguille) — ne prélever que là où c'est légal.",
     source: ANSES,
   },
   "grande-alose": {

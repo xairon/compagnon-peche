@@ -86,6 +86,8 @@ export const RECIPES: Recipe[] = [
     cook: 75,
     tools: ["Braisière", "Poissonnière"],
     techniques: ["degorgeage"],
+    safety:
+      "La carpe est un poisson fortement bioaccumulateur (PCB/dioxines) : l'ANSES recommande de n'en consommer que 2 fois par mois au maximum, 1 fois tous les 2 mois pour les publics sensibles. Vérifiez aussi qu'aucun arrêté préfectoral n'interdit la consommation sur votre secteur.",
     intro:
       "Pièce d'apparat braisée au vin rouge et dressée d'une garniture riche (quenelles, champignons, écrevisses, laitances). Codifiée au XIXe siècle (Gouffé, 1867), reprise par Escoffier. Le nom évoque le château de Chambord.",
     ing: [
@@ -193,7 +195,10 @@ export const RECIPES: Recipe[] = [
     source: "Technique traditionnelle de conserve stérilisée",
     difficulty: 3,
     prep: 40,
-    cook: 90,
+    // cook: 0 — volontaire. La stérilisation n'a PAS de durée ici (voir l'étape
+    // correspondante : un barème approximatif expose au botulisme). Afficher 90 min
+    // laissait croire que la stérilisation était couverte par ce chiffre.
+    cook: 0,
     tools: ["Cocotte en fonte", "Bocaux", "Autocuiseur / four"],
     techniques: ["sterilisation-arete"],
     safety:
@@ -339,6 +344,8 @@ export const RECIPES: Recipe[] = [
     cook: 60,
     tools: ["Tamis fin", "Poêle", "Chinois"],
     techniques: ["degorgeage"],
+    safety:
+      "La carpe est un poisson fortement bioaccumulateur (PCB/dioxines) : l'ANSES recommande de n'en consommer que 2 fois par mois au maximum, 1 fois tous les 2 mois pour les publics sensibles. Vérifiez aussi qu'aucun arrêté préfectoral n'interdit la consommation sur votre secteur.",
     intro:
       "Plat signature de Christophe Hay : relecture d'une recette historique de Chambord. La carpe est travaillée en deux textures (quenelle au beurre noisette + chair rôtie), escortée de la garniture classique écrevisses/champignons/truffe et d'une sauce au vin rouge de Cheverny.",
     ing: [
@@ -404,7 +411,7 @@ export const RECIPES: Recipe[] = [
     ],
     steps: [
       "Portionnez le dos de silure en pavés épais réguliers.",
-      "Confisez les pavés à basse température dans un corps gras aromatisé, chair juste nacrée.",
+      "Confisez les pavés dans un corps gras aromatisé à 62–65 °C pendant 25 à 30 minutes, jusqu'à ce que la chair atteigne 62 °C à cœur (thermomètre sonde). En dessous de cette température, « cuisson à cœur » n'est plus assurée.",
       "Colorez éventuellement une face au dressage.",
       "Nappez du jus d'écrevisse ; option : lit de crème de shiitakes.",
     ],
@@ -433,7 +440,8 @@ export const RECIPES: Recipe[] = [
     cook: 20,
     rest: 360,
     tools: ["Court-bouillon", "Terrine"],
-    safety: "Chair pochée à cœur ; conservez au froid, consommez sous quelques jours.",
+    safety:
+      "Chair pochée à cœur ; conservez au froid, consommez sous quelques jours. Le silure est fortement bioaccumulateur (PCB/dioxines) : ANSES 2 fois/mois maximum, 1 fois tous les 2 mois pour les publics sensibles.",
     intro: "Terrine simple qui valorise la chair ferme du silure, poisson de Loire abondant.",
     ing: [
       "Filets de silure",
@@ -462,7 +470,8 @@ export const RECIPES: Recipe[] = [
     cook: 10,
     bivouac: true,
     tools: ["Poêle"],
-    safety: "Cuisson complète recommandée (poisson d'eau douce).",
+    safety:
+      "Cuisson complète recommandée (poisson d'eau douce). Le silure est fortement bioaccumulateur (PCB/dioxines) : ANSES 2 fois/mois maximum, 1 fois tous les 2 mois pour les publics sensibles.",
     intro: "Recette familiale rapide mettant en avant la chair ferme du silure, façon escalope.",
     ing: [
       "Escalopes de silure (120–140 g, dans le dos du filet)",

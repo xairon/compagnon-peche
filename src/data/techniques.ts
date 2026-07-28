@@ -158,7 +158,7 @@ export const TECHNIQUES: Technique[] = [
 /** Sanitary reference surfaced on raw/cold-smoked recipes and in the technique guide. */
 export const SAFETY = {
   parasites:
-    "Les poissons d'eau douce peuvent héberger des parasites (nématodes type Anisakis, Gnathostoma ; trématodes). Consommés crus ou peu cuits, ils exposent à des parasitoses.",
+    "Le parasite documenté en eau douce française est le bothriocéphale (Diphyllobothrium latum), présent notamment dans la perche, le brochet et la lote des lacs subalpins (Léman). Consommés crus, marinés ou peu cuits, ces poissons exposent à la bothriocéphalose. La cuisson à cœur et la congélation (voir ci-dessous) neutralisent le parasite.",
   congelation:
     "Tout poisson destiné à être mangé cru (tartare, ceviche, sushi) ou fumé à froid (< 60 °C) doit être congelé à cœur : −20 °C pendant au moins 24 h, ou −35 °C pendant 15 h. L'acidité des marinades et le sel ne suffisent pas à tuer les parasites.",
   mucus:
