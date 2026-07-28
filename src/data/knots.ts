@@ -30,7 +30,7 @@ export const KNOTS: Knot[] = [
     cat: "noeud",
     name: "Raccord ligne / bas de ligne",
     use: "Relier tresse et fluorocarbone",
-    when: "Pour relier le corps de ligne (tresse) au bas de ligne (fluoro) sans agrafe — passe dans les anneaux.",
+    when: "Pour relier le corps de ligne (tresse) au bas de ligne (fluoro) sans agrafe — passe dans les anneaux. Diamètres proches : ce raccord suffit. Diamètres très différents (tresse épaisse vers fluoro fin) : préférez l'Albright, dont les tours supplémentaires empêchent le fil fin de glisser.",
     steps: [
       "Former une boucle avec le fluorocarbone.",
       "Enrouler la tresse 8 à 10 fois autour des deux brins de la boucle.",
@@ -45,7 +45,7 @@ export const KNOTS: Knot[] = [
     when: "Boucle rapide pour montages boucle-dans-boucle (pêche au coup, bas de ligne prêts).",
     steps: [
       "Doubler le fil sur 15 cm.",
-      "Faire deux nœuds simples successifs avec le fil doublé.",
+      "Faire un nœud simple avec le fil doublé, puis repasser la boucle une seconde fois dans le même nœud avant de serrer (c'est ce double passage qui fait le nœud de chirurgien).",
       "Humecter et serrer ; la boucle doit rester bien ronde.",
     ],
   },
@@ -104,7 +104,7 @@ export const KNOTS: Knot[] = [
     use: "Pêcher dans les obstacles sans accrocher",
     when: "Leurre souple anti-herbe pour brochet et bass dans le bois noyé et les herbiers.",
     steps: [
-      "Enfiler un plomb balle sur le fil, pointe vers le leurre.",
+      "Enfiler un plomb balle sur le fil, pointe vers la canne : la base plate vient se caler contre la tête du leurre.",
       "Nouer un hameçon texan (clinch ou palomar).",
       "Piquer le leurre par la tête puis rentrer la pointe dans le corps (anti-accroc).",
     ],
