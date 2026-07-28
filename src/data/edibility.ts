@@ -36,8 +36,15 @@ const SALMO = "Réglementation salmonicole (R436-18/19 · arrêtés préfectorau
 // the adults — whose take is governed by basin moratoria/arrêtés. Cite both honestly.
 const MIGRATEUR =
   "Arrêté 8 déc. 1988 (œufs/frayères) · moratoires & arrêtés de bassin (pêche de l'adulte)";
-const ANSES_TXT =
-  "Espèce fortement bioaccumulatrice (PCB/dioxines) : l'ANSES recommande de limiter à 2 fois/mois (population générale) et 1 fois tous les 2 mois pour les publics sensibles (femmes enceintes/allaitantes, enfants < 3 ans, filles et adolescentes).";
+// Source unique de l'avis ANSES, affiché à DEUX endroits de la fiche espèce :
+// la section Comestibilité (via EDIBILITY[id].anses) et la section Santé (via
+// species.ts, qui importe ces constantes). Elles vivaient en double, avec des
+// formulations divergentes — corriger l'une laissait l'autre fausse.
+export const ANSES_GEN =
+  "Espèce fortement bioaccumulatrice (PCB, dioxines, méthylmercure). Recommandation ANSES : 2 fois par mois maximum, en variant les espèces et les lieux de pêche.";
+export const ANSES_SENS =
+  "Publics sensibles (femmes en âge de procréer, enceintes ou allaitantes, enfants de moins de 3 ans, adolescentes) : 1 fois tous les 2 mois maximum.";
+const ANSES_TXT = `${ANSES_GEN} ${ANSES_SENS}`;
 const ANSES_ANGUILLE =
   "Espèce TRÈS fortement bioaccumulatrice — la plus concernée par les PCB/dioxines. L'ANSES en recommande une consommation exceptionnelle QUEL QUE SOIT LE BASSIN VERSANT (là où les autres espèces peuvent être assouplies en eau propre) : 2 fois/mois maximum en population générale, 1 fois tous les 2 mois pour les publics sensibles.";
 // The arrêté du 8 déc. 1988 protects eggs and spawning grounds; it never

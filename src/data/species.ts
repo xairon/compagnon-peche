@@ -1,13 +1,12 @@
 import type { Species } from "../types";
 import { BASE_SPECIES } from "./species-base";
 import { withFiche } from "./fiches";
+import { ANSES_GEN, ANSES_SENS } from "./edibility";
 
 // Shared health messages. Wording is taken from the ANSES fact sheet
 // "Poissons, conseils de consommation" — not paraphrased into a stronger claim.
-const ANSES_GEN =
-  "Espèce fortement bioaccumulatrice (PCB, dioxines, méthylmercure). Recommandation ANSES : 2 fois par mois maximum, en variant espèces et lieux de pêche.";
-const ANSES_SENS =
-  "Publics sensibles (femmes en âge de procréer, enceintes ou allaitantes, enfants de moins de 3 ans, adolescentes) : 1 fois tous les 2 mois maximum.";
+// ANSES_GEN / ANSES_SENS now live in edibility.ts, the single source shared
+// with the Comestibilité section — see the comment there.
 const POLLU_LOC =
   "Indépendamment de l'espèce : certains cours d'eau sont sous arrêté préfectoral d'interdiction de consommation (PCB). Vérifiez localement — dernière vérification des données : juillet 2026.";
 

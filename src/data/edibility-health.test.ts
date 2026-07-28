@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { EDIBILITY } from "./edibility";
+import { EDIBILITY, ANSES_GEN, ANSES_SENS } from "./edibility";
 import { BASE_SPECIES } from "./species-base";
+import { SPECIES } from "./species";
 
 // Regression for the audit finding: "base" species (auto-generated, no cuisine/
 // santé section) can still carry a real, sourced sanitary risk that their fiche
@@ -85,6 +86,24 @@ describe("lamproies pêchables — toxicité du sang cru (ichtyohémotoxisme)", 
  * espèce que la source ne nomme pas — serait pire, et c'est celui-là que les
  * deux derniers tests surveillent.
  */
+describe("avis ANSES — une seule source", () => {
+  // L'avis vivait en double : edibility.ts (onglet Comestibilité) et species.ts
+  // (onglet Santé). Deux textes, deux fichiers, deux onglets de la MÊME fiche —
+  // corriger l'un laissait l'autre faux.
+  it("le texte affiché en Santé vient bien des constantes d'edibility", () => {
+    const carpe = SPECIES.find((s) => s.id === "carpe")!;
+    const paras = carpe.sante!.paras;
+    expect(paras).toContain(ANSES_GEN);
+    expect(paras).toContain(ANSES_SENS);
+  });
+
+  it("le texte affiché en Comestibilité contient les deux mêmes phrases", () => {
+    const ed = EDIBILITY["carpe"];
+    expect(ed.anses).toContain(ANSES_GEN);
+    expect(ed.anses).toContain(ANSES_SENS);
+  });
+});
+
 describe("comestibilité — couverture et sourçage", () => {
   it("chaque espèce « base » a son entrée", () => {
     const sans = BASE_SPECIES.filter((s) => !EDIBILITY[s.id]).map((s) => s.id);
