@@ -149,6 +149,28 @@ export const TECHNIQUES: Technique[] = [
     speciesNote: [["grande-alose", "La stérilisation transforme le défaut (arêtes) en atout de texture."]],
   },
   {
+    id: "entaille-croisillons",
+    name: "Entailler en croisillons",
+    category: "preparation",
+    summary:
+      "Sur un petit poisson très arêté, entailler la chair en fines lignes parallèles jusqu'à l'arête centrale sectionne les petites arêtes intramusculaires, que la friture à très forte température dissout ensuite. S'applique au poisson entier, pas à un filet levé.",
+    steps: [
+      { title: "Poisson entier, écaillé et vidé", detail: "Cette technique se pratique sur le poisson entier, écaillé, vidé et bien séché — pas sur un filet." },
+      { title: "Entailles parallèles", detail: "Au couteau bien affûté, entaillez la chair en lignes parallèles espacées de moins de 4 mm, sur les deux flancs, jusqu'à l'arête centrale sans la sectionner." },
+      { title: "Croisillon sur les sujets très arêtés", detail: "Répétez en diagonale pour obtenir un quadrillage si le poisson est particulièrement arêté ; plus l'entaille est fine, plus les petites arêtes seront sectionnées." },
+      { title: "Friture immédiate à très forte température", detail: "Plongez sans attendre dans une huile à 180 °C ou plus : la chaleur intense dissout les fines arêtes sectionnées, qui deviennent imperceptibles à la dégustation." },
+    ],
+    tools: ["Couteau bien affûté", "Bain de friture"],
+    source: "Pratique documentée en Europe centrale et orientale pour les poissons d'eau douce très arêtés — aucune source consultée ne permet d'en confirmer une origine nationale plus précise.",
+    speciesNote: [
+      ["carassin", "Poisson idéal pour cette technique — petit, très arêté, se prête bien au quadrillage."],
+      ["brochet", "Réservée aux petits sujets (moins d'1 kg) ; sur un gros brochet, préférez le désarêtage ou le mixage en quenelles."],
+      ["barbeau", "Fonctionne sur les petits sujets. Ses œufs restent toxiques quel que soit le mode de cuisson — videz soigneusement avant toute préparation."],
+      ["breme", "Chair fine et arêtée : bon candidat pour l'entaille en croisillons."],
+      ["gardon", "Petit poisson blanc classique de cette préparation."],
+    ],
+  },
+  {
     id: "garum",
     name: "Garum — fermentation zéro déchet",
     category: "conservation",
