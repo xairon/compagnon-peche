@@ -3,7 +3,7 @@ import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { hasMedia } from "../components/media-helpers";
-import { findRecipe, speciesName } from "../lib/recipes";
+import { findRecipe, resolveSpeciesRef } from "../lib/recipes";
 import { TECHNIQUES } from "../data/techniques";
 import { enterCuisine } from "../lib/wakelock";
 import { Glossed } from "../components/Glossed";
@@ -27,7 +27,11 @@ export function Recette() {
         {hasMedia("recipe", rec.id) ? (
           <Media kind="recipe" id={rec.id} placeholder={rec.title} />
         ) : (
-          <Media kind="species" id={rec.species[0]} placeholder={rec.title} />
+          <Media
+            kind={resolveSpeciesRef(rec.species[0]).kind === "crayfish" ? "crayfish" : "species"}
+            id={rec.species[0]}
+            placeholder={rec.title}
+          />
         )}
         <div className="recipe-hero-grad" />
         <button className="back" onClick={back} aria-label="Retour">
@@ -40,23 +44,27 @@ export function Recette() {
       </div>
       <div className="pad" style={{ paddingTop: 16 }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {rec.species.map((spId) => (
-            <span
-              key={spId}
-              role="button"
-              tabIndex={0}
-              className="chip chip-sm"
-              onClick={() => nav("fiche", { spId })}
-              onKeyDown={(e) => {
-                if (e.key !== "Enter" && e.key !== " ") return;
-                e.preventDefault();
-                e.stopPropagation();
-                nav("fiche", { spId });
-              }}
-            >
-              {speciesName(spId)}
-            </span>
-          ))}
+          {rec.species.map((spId) => {
+            const ref = resolveSpeciesRef(spId);
+            const go = () => nav(ref.kind === "crayfish" ? "ecrevisses-ident" : "fiche", ref.kind === "crayfish" ? undefined : { spId });
+            return (
+              <span
+                key={spId}
+                role="button"
+                tabIndex={0}
+                className="chip chip-sm"
+                onClick={go}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter" && e.key !== " ") return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  go();
+                }}
+              >
+                {ref.name}
+              </span>
+            );
+          })}
         </div>
 
         {/* v2 stat cards — real values only (difficulté / prépa / cuisson) */}

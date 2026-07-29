@@ -3,6 +3,7 @@ import { useStore } from "../store-hooks";
 import { BalanceCard } from "../components/BalanceCard";
 import { BilanEcrevisses } from "../components/BilanEcrevisses";
 import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";
+import { CRAYFISH_RECIPES } from "../data/ecrevisses-recipes";
 import { wakeSupported } from "../lib/wakelock";
 import { askNotifyPermission, notifyPermission } from "../lib/notify";
 import {
@@ -210,6 +211,33 @@ function Preparation({
         <button className="btn-light ecr-more" onClick={() => nav("ecrevisses-ident")}>
           Reconnaître les écrevisses
         </button>
+
+        {CRAYFISH_RECIPES.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "16px 0 8px" }}>
+              Recettes
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 4 }}>
+              {CRAYFISH_RECIPES.map((r) => (
+                <span
+                  key={r.id}
+                  role="button"
+                  tabIndex={0}
+                  className="chip chip-sm"
+                  onClick={() => nav("recette", { recipeId: r.id })}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter" && e.key !== " ") return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nav("recette", { recipeId: r.id });
+                  }}
+                >
+                  {r.title}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
 
         <div className="ecr-reg">
           {REG_BALANCES.map((r) => (
