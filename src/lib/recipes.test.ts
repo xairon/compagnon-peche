@@ -47,6 +47,17 @@ describe("searchRecipes — texte", () => {
   it("une requête sans correspondance renvoie un tableau vide", () => {
     expect(searchRecipes("zzz-introuvable-zzz", {}, GUIDE, [perso()])).toEqual([]);
   });
+
+  it("trouve une recette du guide par le nom de l'espèce liée, même absent du titre", () => {
+    // "fario" n'apparaît dans aucun titre/intro/ingrédient de "Truite à la meunière" ou
+    // "Truite au bleu" — seul le nom de l'espèce liée ("Truite fario") le porte. C'est
+    // exactement ce que prefill le chip "D'après vos prises" dans CarnetRecettes quand
+    // on clique une suggestion truite-fario : la recherche doit trouver ces recettes.
+    const hits = searchRecipes("fario", {}, GUIDE, []);
+    const ids = hits.filter((h) => h.kind === "guide").map((h) => h.recipe.id);
+    expect(ids).toContain("truite-meuniere");
+    expect(ids).toContain("truite-au-bleu");
+  });
 });
 
 describe("searchRecipes — filtre espèce", () => {

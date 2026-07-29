@@ -54,15 +54,19 @@ export type RecipeHit =
   | { kind: "guide"; recipe: Recipe }
   | { kind: "perso"; recipe: PersonalRecipe };
 
-/** Texte cherchable d'une recette du guide : titre, intro, ingrédients, et les noms
+/** Texte cherchable d'une recette du guide : titre, intro, ingrédients, les noms
  *  des techniques liées (pour qu'une recherche sur "ikejime" trouve les recettes qui
- *  l'utilisent même si le mot n'apparaît nulle part ailleurs dans leur texte). */
+ *  l'utilisent même si le mot n'apparaît nulle part ailleurs dans leur texte), et les
+ *  noms des espèces liées (pour qu'une recherche sur "fario" trouve "Truite à la
+ *  meunière"/"Truite au bleu" même si "fario" n'apparaît dans aucun titre — c'est
+ *  notamment ce que prefill la suggestion "D'après vos prises" dans CarnetRecettes). */
 function guideHaystack(r: Recipe): string {
   const techNames = (r.techniques ?? [])
     .map((id) => TECHNIQUES.find((t) => t.id === id)?.name)
     .filter(Boolean)
     .join(" ");
-  return norm([r.title, r.intro ?? "", ...r.ing, techNames].join(" "));
+  const speciesNames = r.species.map((id) => resolveSpeciesRef(id).name).join(" ");
+  return norm([r.title, r.intro ?? "", ...r.ing, techNames, speciesNames].join(" "));
 }
 
 function persoHaystack(r: PersonalRecipe): string {
