@@ -100,7 +100,7 @@ describe("médias recettes/techniques — fichiers réellement présents", () =>
 });
 
 describe("couverture du corpus", () => {
-  it("compte actuellement 18 recettes", () => {
-    expect(RECIPES.length).toBe(18);
+  it("compte actuellement 20 recettes", () => {
+    expect(RECIPES.length).toBe(20);
   });
 });
