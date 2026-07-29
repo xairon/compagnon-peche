@@ -69,6 +69,22 @@ export const TECHNIQUES: Technique[] = [
     source: "Pratique issue de la valorisation ligérienne (chefs + IKEPODE).",
   },
   {
+    id: "lever-filet",
+    name: "Lever un filet",
+    category: "preparation",
+    summary:
+      "Le geste de base pour tout poisson rond (brochet, sandre, perche, silure, carpe…) : séparer deux filets de l'arête centrale au couteau à fileter. Toutes les autres techniques de préparation le supposent déjà acquis.",
+    steps: [
+      { title: "Poisson vidé, écaillé, séché", detail: "Posez le poisson à plat sur une planche stable, tête vers votre main non dominante." },
+      { title: "Incision derrière la tête", detail: "Incisez juste derrière les ouïes, en biais, jusqu'à sentir l'arête centrale, sans la trancher." },
+      { title: "Longer l'arête", detail: "Couchez la lame à plat contre l'arête centrale et tranchez vers la queue en gardant le fil au contact de l'os, en une seule passe si possible." },
+      { title: "Détacher et retourner", detail: "Séparez le filet au ras de la queue, retournez le poisson et répétez la même incision de l'autre côté." },
+      { title: "Parer", detail: "Retirez la cage thoracique (arêtes de ventre) au couteau ; passez les doigts le long du filet pour repérer d'éventuelles arêtes de ligne latérale restantes." },
+    ],
+    tools: ["Couteau à fileter souple", "Planche"],
+    source: "Technique de base du couteau à fileter, savoir-faire culinaire classique.",
+  },
+  {
     id: "desaretage-brochet",
     name: "Gérer les arêtes en Y (brochet)",
     category: "preparation",
