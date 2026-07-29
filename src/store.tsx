@@ -41,12 +41,10 @@ export type Screen =
   | "carte"
   | "materiel"
   | "guide-materiel"
-  | "techniques"
   | "technique"
   | "statistiques"
   | "prise-detail"
   | "outils-terrain"
-  | "mes-recettes"
   | "stockage"
   | "ecrevisses"
   | "ecrevisses-ident";

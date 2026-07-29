@@ -15,7 +15,6 @@ import { Statistiques } from "./screens/Statistiques";
 import { Outils } from "./screens/Outils";
 import { OutilsTerrain } from "./screens/OutilsTerrain";
 import { Ecrevisses } from "./screens/Ecrevisses";
-import { MesRecettes } from "./screens/MesRecettes";
 import { Noeuds, KnotDetail } from "./screens/Noeuds";
 import { Recette } from "./screens/Recette";
 import { Reglement } from "./screens/Reglement";
@@ -35,9 +34,6 @@ const Carte = lazy(() => import("./screens/Carte").then((m) => ({ default: m.Car
 const Materiel = lazy(() => import("./screens/Materiel").then((m) => ({ default: m.Materiel })));
 const GuideMateriel = lazy(() =>
   import("./screens/Materiel").then((m) => ({ default: m.GuideMateriel })),
-);
-const Techniques = lazy(() =>
-  import("./screens/Techniques").then((m) => ({ default: m.Techniques })),
 );
 const TechniqueDetail = lazy(() =>
   import("./screens/Techniques").then((m) => ({ default: m.TechniqueDetail })),
@@ -147,7 +143,6 @@ export function App() {
         {s === "outils-terrain" && <OutilsTerrain />}
         {s === "ecrevisses" && <Ecrevisses />}
         {s === "ecrevisses-ident" && <EcrevissesIdent />}
-        {s === "mes-recettes" && <MesRecettes />}
         {s === "noeuds" && <Noeuds />}
         {s === "knot" && <KnotDetail />}
         {s === "recette" && <Recette />}
@@ -158,7 +153,6 @@ export function App() {
         {s === "carte" && <Carte />}
         {s === "materiel" && <Materiel />}
         {s === "guide-materiel" && <GuideMateriel />}
-        {s === "techniques" && <Techniques />}
         {s === "technique" && <TechniqueDetail />}
       </Suspense>
       </ErrorBoundary>

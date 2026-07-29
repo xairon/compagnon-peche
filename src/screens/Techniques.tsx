@@ -1,80 +1,11 @@
 import { useStore } from "../store-hooks";
-import { TECHNIQUES, SAFETY } from "../data/techniques";
+import { TECHNIQUES } from "../data/techniques";
 import { SPECIES } from "../data/species";
 import { RECIPES } from "../data/recipes";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { hasMedia } from "../components/media-helpers";
-
-const CAT: { id: string; label: string }[] = [
-  { id: "abattage", label: "Abattage" },
-  { id: "preparation", label: "Préparation" },
-  { id: "conservation", label: "Conservation" },
-  { id: "cuisson", label: "Cuisson" },
-];
-
-export function Techniques() {
-  const { nav, back } = useStore();
-  return (
-    <div className="screen">
-      <div className="topbar">
-        <button className="back" onClick={back} aria-label="Retour">
-          ‹
-        </button>
-        <div>
-          <div className="topbar-title">Techniques & gestes</div>
-          <div className="h-sub">Abattage, préparation, conservation — sourcés</div>
-        </div>
-      </div>
-      <div style={{ padding: "6px 18px 26px" }}>
-        {CAT.map((c) => {
-          const items = TECHNIQUES.filter((t) => t.category === c.id);
-          if (!items.length) return null;
-          return (
-            <div key={c.id}>
-              <div className="label" style={{ margin: "14px 0 8px" }}>
-                {c.label}
-              </div>
-              {items.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  className="tile"
-                  onClick={() => nav("technique", { techId: t.id })}
-                >
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14.5, fontWeight: 600 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
-                      {t.steps.length} étape(s)
-                    </div>
-                  </div>
-                  <span style={{ color: "#C9C3B4" }}>›</span>
-                </button>
-              ))}
-            </div>
-          );
-        })}
-
-        <div className="label" style={{ margin: "20px 0 8px" }}>
-          Sécurité sanitaire
-        </div>
-        <div className="safety-card">
-          <p>
-            <b>Parasites.</b> {SAFETY.parasites}
-          </p>
-          <p>
-            <b>Congélation assainissante.</b> {SAFETY.congelation}
-          </p>
-          <p>
-            <b>Mucus.</b> {SAFETY.mucus}
-          </p>
-          <div className="source">Source : {SAFETY.source}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function TechniqueDetail() {
   const { state, nav, back } = useStore();
