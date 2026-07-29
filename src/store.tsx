@@ -58,7 +58,7 @@ export type Tab = "accueil" | "especes" | "carte" | "carnet";
 
 // Segment shown by the Carnet. In the store, not in the screen: closing a bilan
 // has to land on "Écrevisses", otherwise the session just closed isn't visible.
-export type CarnetSeg = "prises" | "spots" | "ecrevisses";
+export type CarnetSeg = "prises" | "spots" | "ecrevisses" | "recettes";
 
 export type PriseStep =
   | "statut"

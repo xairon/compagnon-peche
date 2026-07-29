@@ -11,6 +11,7 @@ import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
 import { upcomingSeasonReminders, type SeasonReminder } from "../lib/season-reminders";
 import type { Catch, CrayfishSession } from "../types";
+import { CarnetRecettes } from "../components/CarnetRecettes";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
 type Sort = "recent" | "size" | "species";
@@ -109,18 +110,27 @@ export function Carnet() {
           </div>
         </div>
 
-        {/* v2 segmented control: Prises · Spots · Statistiques */}
-        <div className="pf-seg">
-          <button className={seg === "prises" ? "on" : ""} onClick={() => setSeg("prises")}>
-            Prises
+        {/* v2 segmented control : 4 vues mutuellement exclusives. Statistiques navigue
+            ailleurs (ce n'est pas une vue de ce carnet) — elle vit donc à côté, pas dedans,
+            depuis que ce carnet est passé à 4 segments réels. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 16px" }}>
+          <div className="pf-seg" style={{ margin: 0, flex: 1 }}>
+            <button className={seg === "prises" ? "on" : ""} onClick={() => setSeg("prises")}>
+              Prises
+            </button>
+            <button className={seg === "spots" ? "on" : ""} onClick={() => setSeg("spots")}>
+              Spots · {spots.length}
+            </button>
+            <button className={seg === "ecrevisses" ? "on" : ""} onClick={() => setSeg("ecrevisses")}>
+              Écrevisses · {sessions.length}
+            </button>
+            <button className={seg === "recettes" ? "on" : ""} onClick={() => setSeg("recettes")}>
+              Recettes
+            </button>
+          </div>
+          <button className="link-inline" style={{ flexShrink: 0 }} onClick={() => nav("statistiques")}>
+            Stats ›
           </button>
-          <button className={seg === "spots" ? "on" : ""} onClick={() => setSeg("spots")}>
-            Spots · {spots.length}
-          </button>
-          <button className={seg === "ecrevisses" ? "on" : ""} onClick={() => setSeg("ecrevisses")}>
-            Écrevisses · {sessions.length}
-          </button>
-          <button onClick={() => nav("statistiques")}>Statistiques ›</button>
         </div>
 
         {seg === "prises" && (
@@ -202,6 +212,8 @@ export function Carnet() {
             ))}
           </div>
         )}
+
+        {seg === "recettes" && <CarnetRecettes />}
 
         <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 16, lineHeight: 1.5 }}>
           100 % local sur votre appareil. Aucune donnée n'est transmise.
