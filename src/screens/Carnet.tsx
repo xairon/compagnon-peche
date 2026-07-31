@@ -56,12 +56,12 @@ export function Carnet() {
 
   if (adding) {
     return (
-      <div className="screen">
+      <main className="screen">
         <div className="topbar">
           <button className="back" onClick={() => setAdding(false)} aria-label="Retour">
             ‹
           </button>
-          <div className="topbar-title">Nouvelle prise</div>
+          <h1 className="topbar-title">Nouvelle prise</h1>
         </div>
         <div className="pad">
           <CatchEditor
@@ -72,13 +72,17 @@ export function Carnet() {
             onCancel={() => setAdding(false)}
           />
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="pad">
+        {/* Le carnet n'a pas de barre de titre : son en-tête est le profil, qui
+            appartient à un autre lot. Le titre de l'écran existe donc pour la
+            navigation par titres sans rien changer à la mise en page. */}
+        <h1 className="sr-only">Mon carnet</h1>
         <ProfileHeader />
 
         {seasonReminders.length > 0 && (
@@ -117,20 +121,40 @@ export function Carnet() {
             depuis que ce carnet est passé à 4 segments réels. */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 16px" }}>
           <div className="pf-seg" style={{ margin: 0, flex: 1 }}>
-            <button className={seg === "prises" ? "on" : ""} onClick={() => setSeg("prises")}>
+            <button
+              className={seg === "prises" ? "on" : ""}
+              aria-pressed={seg === "prises"}
+              onClick={() => setSeg("prises")}
+            >
               Prises
             </button>
-            <button className={seg === "spots" ? "on" : ""} onClick={() => setSeg("spots")}>
+            <button
+              className={seg === "spots" ? "on" : ""}
+              aria-pressed={seg === "spots"}
+              onClick={() => setSeg("spots")}
+            >
               Spots · {spots.length}
             </button>
-            <button className={seg === "ecrevisses" ? "on" : ""} onClick={() => setSeg("ecrevisses")}>
+            <button
+              className={seg === "ecrevisses" ? "on" : ""}
+              aria-pressed={seg === "ecrevisses"}
+              onClick={() => setSeg("ecrevisses")}
+            >
               Écrevisses · {sessions.length}
             </button>
-            <button className={seg === "recettes" ? "on" : ""} onClick={() => setSeg("recettes")}>
+            <button
+              className={seg === "recettes" ? "on" : ""}
+              aria-pressed={seg === "recettes"}
+              onClick={() => setSeg("recettes")}
+            >
               Recettes
             </button>
           </div>
-          <button className="link-inline" style={{ flexShrink: 0 }} onClick={() => nav("statistiques")}>
+          <button
+            className="link-inline lien-commande"
+            style={{ flexShrink: 0 }}
+            onClick={() => nav("statistiques")}
+          >
             Stats ›
           </button>
         </div>
@@ -221,7 +245,7 @@ export function Carnet() {
           100 % local sur votre appareil. Aucune donnée n'est transmise.
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

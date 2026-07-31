@@ -6565,3 +6565,176 @@ button.card-row {
   color: #5a5e52;
   margin-top: 6px;
 }
+
+/* ============================================================
+   Lot G2 — structure & cibles tactiles (31/07/2026)
+   Ajouté EN FIN DE FICHIER : rien au-dessus n'est réécrit.
+   ============================================================ */
+
+/* Les titres d'écran étaient des <div> : `document.querySelectorAll('h1')`
+   rendait 0 sur toute l'app. Ils sont devenus des <h1>/<h2>, ce qui apporte
+   les marges et la taille par défaut du NAVIGATEUR (2em, 0.67em de marge) —
+   neutralisées ici pour que la mise en page reste ce qu'elle était.
+   Tout est en `:where()` : spécificité ZÉRO. Cette règle bat la feuille du
+   navigateur (styles d'auteur > styles UA, quelle que soit la spécificité) et
+   perd contre TOUTES les classes du fichier — .ac-hello garde ses 28 px et son
+   `margin-top: 4px`, .topbar-title ses 19 px, .hero .name .t ses 27 px.
+   Un premier essai posait `h1.ac-hello { font-size: inherit }` : plus
+   spécifique que `.ac-hello`, il ramenait le « Bonjour » de l'accueil de 28 px
+   à 16 px. Vérifié au navigateur après correction. */
+:where(h1, h2):where(.topbar-title, .h1, .ac-hello, .pd-title, .title, .t) {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* ---- Cibles tactiles : plancher à 44 px ----
+   Mesuré le 31/07/2026 sur ce fichier : 66 classes de commande ont une taille
+   CSS calculable, 28 tombaient sous 44 px — jusqu'à 27 px (.bal-opt) et 28 px
+   (.fed-go, .gds-cat, .pd-fiche, .bal-rm). Au bord de l'eau, avec des gants
+   mouillés, c'est la moitié d'un doigt.
+   Deux familles, traitées différemment pour ne rien déplacer :
+   1) commandes d'une seule ligne — min-height + centrage ;
+   2) cartes et rangées multi-lignes — min-height seul, le contenu garde son
+      flux (les centrer casserait leur mise en page).
+   Le mode gants (`.app-frame[data-big] …`) est déclaré plus haut avec une
+   spécificité supérieure : il continue de gagner partout où il s'applique. */
+
+/* 1) une seule ligne */
+.bal-opt,
+.bal-rm,
+.deptb-tout,
+.fed-go,
+.gds-cat,
+.mc-base,
+.mr-del,
+.mr-del-confirm,
+.pd-fiche,
+.sm-chip {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.deptb-tout {
+  min-width: 44px;
+}
+.mc-list {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.id-reset,
+.rgt-ouvrir {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Relevés au navigateur sur la fiche espèce : le rond « ‹ » du hero à 40 px
+   (`.hero .back` redéclare la taille, plus spécifique que `.back`), la pastille
+   de saison à 36 px, le lien « Règle » du repère à 28 px. */
+.hero .back {
+  width: 44px;
+  height: 44px;
+}
+.hero .season,
+.repere .link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.repere .link {
+  min-width: 44px;
+  justify-content: center;
+}
+
+/* boutons ronds à icône : 40 → 44 dans les deux dimensions */
+.back-round,
+.ce-photo-x,
+.gallery-nav,
+.pd-back,
+.ph-edit-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Intitulé d'un bloc de formulaire dont la commande N'EST PAS un champ de
+   saisie (le bouton « Position GPS »). Même rendu que `.field label`, sans
+   prétendre à une association que <label> ne peut pas tenir sur un bouton. */
+.field .field-lbl {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 6px;
+}
+
+/* Trois commandes que la mesure statique ne voyait pas (leur taille ne vient
+   pas d'une hauteur déclarée mais du flux), relevées au navigateur à 375 px :
+   les onglets du carnet à 35 px, les liens « › » d'en-tête de section à 18 px,
+   et le champ de recherche à 23 px dans une barre qui en fait 50 — toucher la
+   barre à côté du texte ne posait pas le curseur. */
+.pf-seg button {
+  min-height: 44px;
+}
+.ac-sec-h > button,
+.ac-cond-foot .carnet-link,
+.dash-quota .carnet-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.search input {
+  align-self: stretch;
+}
+/* `.link-inline` sert à deux choses : un mot souligné DANS une phrase (là où
+   la règle des 44 px ne s'applique pas — 2.5.8 exempte les cibles en ligne) et
+   une commande posée à côté d'un contrôle. Seule la seconde est agrandie, et
+   elle le dit. */
+.link-inline.lien-commande,
+.cp-lien-fnpf,
+.rgl-lien-fede {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+/* Écrevisses : les puces de trempe à 38 px, leur champ « libre » à 36 px et le
+   renvoi vers l'identification à 23 px. Le mode gants les redimensionne déjà
+   plus haut, avec une spécificité supérieure : il continue de gagner. */
+.ecr-chips button,
+.ecr-more {
+  min-height: 44px;
+}
+.ecr-chip-input input {
+  min-height: 40px;
+}
+.ecr-chip-input {
+  min-height: 44px;
+}
+
+/* 2) cartes et rangées : le contenu garde son flux */
+.carte-spot-btn,
+.deptb-main,
+.deptb-opt,
+.explain,
+.gds-item,
+.gear-card,
+.id-chip,
+.id-opt,
+.loc-gps,
+.mc-geopeche,
+.mc-layer,
+.mc-toggle,
+.official-jump,
+.pick-row,
+.recipe-link,
+.sheet-sp,
+.spot-row {
+  min-height: 44px;
+}

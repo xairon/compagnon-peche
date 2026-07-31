@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { CAT_LABEL } from "../data/gear";
@@ -59,6 +59,11 @@ export function CatchEditor({
   const gear = state.gear;
   const spots = state.spots;
   const fileRef = useRef<HTMLInputElement>(null);
+  // Préfixe d'identifiants pour lier chaque <label> à son champ. useId, et non
+  // un compteur : cet éditeur est monté deux fois dans l'app (ajout depuis le
+  // carnet, correction depuis le détail d'une prise), et deux `id` identiques
+  // renverraient les deux libellés vers le même champ.
+  const fid = useId();
 
   const [f, setF] = useState<FormState>(() => ({
     spid: initial?.spid ?? "sandre",
@@ -274,6 +279,7 @@ export function CatchEditor({
           <button
             key={s.id}
             className={"chip chip-sm" + (f.spid === s.id ? " chip-on" : "")}
+            aria-pressed={f.spid === s.id}
             onClick={() => up({ spid: s.id })}
           >
             {s.name}
@@ -284,37 +290,37 @@ export function CatchEditor({
       {/* Size + weight */}
       <div className="ce-row">
         <div className="field">
-          <label>Taille (cm)</label>
-          <input value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" />
+          <label htmlFor={`${fid}-taille`}>Taille (cm)</label>
+          <input id={`${fid}-taille`} value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" />
         </div>
         <div className="field">
-          <label>Poids (kg)</label>
-          <input value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" />
+          <label htmlFor={`${fid}-poids`}>Poids (kg)</label>
+          <input id={`${fid}-poids`} value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" />
         </div>
       </div>
 
       {/* Date + time */}
       <div className="ce-row">
         <div className="field">
-          <label>Date</label>
-          <input type="date" value={f.date} onChange={(e) => up({ date: e.target.value })} />
+          <label htmlFor={`${fid}-date`}>Date</label>
+          <input id={`${fid}-date`} type="date" value={f.date} onChange={(e) => up({ date: e.target.value })} />
         </div>
         <div className="field">
-          <label>Heure</label>
-          <input type="time" value={f.heure} onChange={(e) => up({ heure: e.target.value })} />
+          <label htmlFor={`${fid}-heure`}>Heure</label>
+          <input id={`${fid}-heure`} type="time" value={f.heure} onChange={(e) => up({ heure: e.target.value })} />
         </div>
       </div>
 
       {/* Place + spot + GPS */}
       <div className="field">
-        <label>Lieu</label>
-        <input value={f.place} onChange={(e) => up({ place: e.target.value })} placeholder="Loire, Blois" />
+        <label htmlFor={`${fid}-lieu`}>Lieu</label>
+        <input id={`${fid}-lieu`} value={f.place} onChange={(e) => up({ place: e.target.value })} placeholder="Loire, Blois" />
       </div>
       <div className="ce-row">
         {spots.length > 0 && (
           <div className="field">
-            <label>Spot lié</label>
-            <select value={f.spotId} onChange={(e) => up({ spotId: e.target.value })}>
+            <label htmlFor={`${fid}-spot`}>Spot lié</label>
+            <select id={`${fid}-spot`} value={f.spotId} onChange={(e) => up({ spotId: e.target.value })}>
               <option value="">— aucun —</option>
               {spots.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -325,8 +331,15 @@ export function CatchEditor({
           </div>
         )}
         <div className="field">
-          <label>Position GPS</label>
-          <button className="ce-gps" onClick={useGps}>
+          {/* Pas un <label> : la commande en dessous est un bouton, et un
+              <label> ne s'associe qu'à un champ de saisie. Le texte reste
+              affiché à l'identique et le bouton le cite par aria-labelledby,
+              donc l'intitulé est bien annoncé — mais rien ne fait croire à
+              une association qui n'existerait pas. */}
+          <span className="field-lbl" id={`${fid}-gps-lbl`}>
+            Position GPS
+          </span>
+          <button className="ce-gps" onClick={useGps} aria-labelledby={`${fid}-gps-lbl ${fid}-gps-btn`} id={`${fid}-gps-btn`}>
             {f.lat != null ? `📍 ${f.lat.toFixed(4)}, ${f.lon?.toFixed(4)}` : "📍 Utiliser ma position"}
           </button>
         </div>
@@ -344,6 +357,7 @@ export function CatchEditor({
               <button
                 key={g.id}
                 className={"chip chip-sm" + (f.gearIds.includes(g.id) ? " chip-on" : "")}
+                aria-pressed={f.gearIds.includes(g.id)}
                 onClick={() => toggleGear(g.id)}
               >
                 {g.name} <span style={{ opacity: 0.6 }}>· {CAT_LABEL[g.cat]}</span>
@@ -356,29 +370,37 @@ export function CatchEditor({
       {/* Bait + technique */}
       <div className="ce-row">
         <div className="field">
-          <label>Appât / leurre</label>
-          <input value={f.bait} onChange={(e) => up({ bait: e.target.value })} placeholder="Leurre souple 10 cm" />
+          <label htmlFor={`${fid}-appat`}>Appât / leurre</label>
+          <input id={`${fid}-appat`} value={f.bait} onChange={(e) => up({ bait: e.target.value })} placeholder="Leurre souple 10 cm" />
         </div>
         <div className="field">
-          <label>Technique</label>
-          <input value={f.technique} onChange={(e) => up({ technique: e.target.value })} placeholder="Linéaire au fond" />
+          <label htmlFor={`${fid}-technique`}>Technique</label>
+          <input id={`${fid}-technique`} value={f.technique} onChange={(e) => up({ technique: e.target.value })} placeholder="Linéaire au fond" />
         </div>
       </div>
 
       {/* Kept / released */}
       <div className="ce-kept">
-        <button className={f.kept ? "on-kept" : ""} onClick={() => up({ kept: true })}>
+        <button
+          className={f.kept ? "on-kept" : ""}
+          aria-pressed={f.kept}
+          onClick={() => up({ kept: true })}
+        >
           Gardé
         </button>
-        <button className={!f.kept ? "on-rel" : ""} onClick={() => up({ kept: false })}>
+        <button
+          className={!f.kept ? "on-rel" : ""}
+          aria-pressed={!f.kept}
+          onClick={() => up({ kept: false })}
+        >
           Relâché
         </button>
       </div>
 
       {/* Note */}
       <div className="field" style={{ marginTop: 12 }}>
-        <label>Note</label>
-        <textarea value={f.note} onChange={(e) => up({ note: e.target.value })} rows={2} placeholder="Conditions, souvenir, détail…" />
+        <label htmlFor={`${fid}-note`}>Note</label>
+        <textarea id={`${fid}-note`} value={f.note} onChange={(e) => up({ note: e.target.value })} rows={2} placeholder="Conditions, souvenir, détail…" />
       </div>
 
       {photoError && (

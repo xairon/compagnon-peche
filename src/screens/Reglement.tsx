@@ -33,12 +33,12 @@ export function Reglement() {
   }, [tiersOuvert, tiers]);
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Réglementation</div>
+        <h1 className="topbar-title">Réglementation</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         {/* Stale data outranks the department question: applying the right
@@ -138,7 +138,7 @@ export function Reglement() {
             Arrêté préfectoral annuel — valable pour {REG_YEAR}. À revérifier chaque début d'année.
           </div>
           <div style={{ marginTop: 10, fontSize: 13.5 }}>
-            <a href={dept.url} target="_blank" rel="noreferrer">
+            <a className="rgl-lien-fede" href={dept.url} target="_blank" rel="noreferrer">
               Réglementation complète — {dept.fede} ↗
             </a>
           </div>
@@ -180,6 +180,6 @@ export function Reglement() {
           département.
         </div>
       </div>
-    </div>
+    </main>
   );
 }

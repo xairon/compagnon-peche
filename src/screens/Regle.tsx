@@ -34,13 +34,13 @@ export function Regle() {
   const ticks = Array.from({ length: maxCm + 1 }, (_, i) => i);
 
   return (
-    <div className="regle-wrap">
+    <main className="regle-wrap">
       <div className="topbar" style={{ position: "relative", zIndex: 2, paddingBottom: 2 }}>
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
         <div>
-          <div className="topbar-title">Règle à l'écran</div>
+          <h1 className="topbar-title">Règle à l'écran</h1>
           <div className="h-sub">Posez le poisson contre l'écran, museau au 0</div>
         </div>
       </div>
@@ -99,6 +99,6 @@ export function Regle() {
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }

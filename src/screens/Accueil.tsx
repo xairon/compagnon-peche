@@ -204,13 +204,13 @@ export function Accueil() {
   const n = meteo?.now;
 
   return (
-    <div className="screen dash">
+    <main className="screen dash">
       <div className="pad" style={{ paddingTop: 22 }}>
         {/* Header */}
         <div className="ac-head">
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="ac-kicker">{today}</div>
-            <div className="ac-hello">Bonjour{p.name ? `, ${p.name}` : ""}</div>
+            <h1 className="ac-hello">Bonjour{p.name ? `, ${p.name}` : ""}</h1>
           </div>
           <button className="ac-avatar" onClick={() => goTab("carnet")} aria-label="Mon carnet">
             {avatar ? <img src={avatar} alt="" /> : <span>🎣</span>}
@@ -496,7 +496,7 @@ export function Accueil() {
           100 % sur votre appareil — jamais transmis.
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

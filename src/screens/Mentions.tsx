@@ -122,16 +122,16 @@ export function MentionsLegales({ identite }: { identite: Identite }) {
 export function Mentions() {
   const { back } = useStore();
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Mentions légales</div>
+        <h1 className="topbar-title">Mentions légales</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         <MentionsLegales identite={IDENTITE} />
       </div>
-    </div>
+    </main>
   );
 }

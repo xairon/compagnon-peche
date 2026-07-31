@@ -133,12 +133,12 @@ export function Guides() {
   }, []);
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Guides</div>
+        <h1 className="topbar-title">Guides</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         {err ? (
@@ -152,6 +152,6 @@ export function Guides() {
           <ListeGuides {...data} />
         )}
       </div>
-    </div>
+    </main>
   );
 }

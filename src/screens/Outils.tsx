@@ -54,9 +54,9 @@ export function Outils() {
   ];
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="pad">
-        <div className="h1">Outils</div>
+        <h1 className="h1">Outils</h1>
         {/* Ne s'affiche que sur iOS hors mode installé : Safari n'émet pas
             `beforeinstallprompt`, donc le bouton d'installation que lib/pwa.ts
             propose sur Android n'y apparaît jamais. */}
@@ -104,6 +104,6 @@ export function Outils() {
           datent des arrêtés {REG_YEAR} ; revérifiez chaque année.
         </div>
       </div>
-    </div>
+    </main>
   );
 }

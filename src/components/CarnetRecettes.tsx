@@ -98,6 +98,7 @@ export function CarnetRecettes() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Rechercher (titre, ingrédient, technique…)"
+          aria-label="Rechercher une recette ou une technique"
         />
         {q.length > 0 && (
           <button className="clear" onClick={() => setQ("")} aria-label="Effacer la recherche">

@@ -96,13 +96,13 @@ export function OutilsTerrain() {
   const activePreset = PRESETS.find((p) => p.id === active);
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">Outils de terrain</div>
+          <h1 className="topbar-title">Outils de terrain</h1>
           <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>Chronos & repères réglementaires</div>
         </div>
       </div>
@@ -190,6 +190,6 @@ export function OutilsTerrain() {
           réglementation applicable reste celle de l'arrêté préfectoral.
         </div>
       </div>
-    </div>
+    </main>
   );
 }

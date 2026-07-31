@@ -37,13 +37,13 @@ export function Identify() {
   );
 
   return (
-    <div className="screen id-screen">
+    <main className="screen id-screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">Identifier ma prise</div>
+          <h1 className="topbar-title">Identifier ma prise</h1>
           <div className="h-sub">
             {cands.length} espèce{cands.length > 1 ? "s" : ""} possible{cands.length > 1 ? "s" : ""}
             {!narrowed && ` · ${IDENTIFIER_COVERAGE} au catalogue`}
@@ -116,7 +116,7 @@ export function Identify() {
           adipeuse, bouche, dorsale, taille). {IDENTIFIER_COVERAGE} espèces couvertes.
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

@@ -31,13 +31,13 @@ export function Cuisine() {
   const cur = step > 0 ? flat[step - 1] : null;
 
   return (
-    <div className="cook">
+    <main className="cook">
       <div className="cook-head">
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="prog">
             {step === 0 ? "Ingrédients" : `${cur?.section} · étape ${step} sur ${n}`}
           </div>
-          <div className="title">{rec?.title}</div>
+          <h1 className="title">{rec?.title}</h1>
         </div>
         <button className="cook-x" onClick={exit} aria-label="Quitter le mode cuisine">
           ✕
@@ -88,6 +88,6 @@ export function Cuisine() {
           {step === 0 ? "Commencer ›" : step >= n ? "Terminé ✓" : "Suivant ›"}
         </button>
       </div>
-    </div>
+    </main>
   );
 }
