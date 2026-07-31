@@ -7,6 +7,7 @@ import {
   etatReserve,
   preparerReserve,
   onReserve,
+  doitPreparer,
   urlDe,
   reinitialiserReservePourTest,
 } from "./reserve-hors-ligne";
@@ -198,6 +199,34 @@ describe("preparerReserve", () => {
 
     expect(demandes.length).toBe(listerReserve().length);
     expect(a.presents).toBe(b.presents);
+  });
+});
+
+/**
+ * Quand la préparation a le droit de partir. La réserve pèse 5 132 Kio : la
+ * lancer pendant que le service worker installe encore le noyau (2 730 Kio)
+ * disputerait la bande passante à la seule chose qui décide de l'activation —
+ * exactement ce que la découpe cherche à accélérer.
+ */
+describe("doitPreparer", () => {
+  it("attend que le noyau soit en place, à la première visite", () => {
+    // Pas de contrôleur = le service worker n'a pas encore pris la page, donc
+    // le précache n'est pas fini.
+    expect(doitPreparer({ enLigne: true, controleParSW: false, force: false })).toBe(false);
+  });
+
+  it("part quand même si l'appelant sait que le noyau vient d'arriver", () => {
+    // `onOfflineReady` : le précache est terminé, le contrôleur peut encore
+    // manquer d'un battement de cil.
+    expect(doitPreparer({ enLigne: true, controleParSW: false, force: true })).toBe(true);
+  });
+
+  it("part aux visites suivantes, où le service worker contrôle déjà la page", () => {
+    expect(doitPreparer({ enLigne: true, controleParSW: true, force: false })).toBe(true);
+  });
+
+  it("ne tente rien hors ligne : 221 échecs ne remplissent rien", () => {
+    expect(doitPreparer({ enLigne: false, controleParSW: true, force: true })).toBe(false);
   });
 });
 

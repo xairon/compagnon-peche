@@ -175,6 +175,28 @@ async function menage(cache: Cache, attendus: Set<string>): Promise<void> {
   }
 }
 
+/**
+ * La préparation a-t-elle le droit de partir ?
+ *
+ * La réserve pèse 5 132 Kio. La lancer pendant que le service worker installe
+ * encore le noyau (2 730 Kio) disputerait la bande passante à la seule chose
+ * qui décide de l'activation — exactement ce que la découpe cherche à
+ * accélérer. L'absence de contrôleur est le signal disponible : tant que le
+ * service worker n'a pas pris la page, le précache n'est pas fini.
+ *
+ * `force` est le cas d'`onOfflineReady` : l'appelant SAIT que le précache
+ * vient d'aboutir, le contrôleur peut encore manquer d'un battement de cil.
+ */
+export function doitPreparer(ctx: {
+  enLigne: boolean;
+  controleParSW: boolean;
+  force: boolean;
+}): boolean {
+  // Hors ligne, 221 échecs ne remplissent rien et brûlent la batterie.
+  if (!ctx.enLigne) return false;
+  return ctx.force || ctx.controleParSW;
+}
+
 export interface OptionsPreparation {
   signal?: AbortSignal;
   /** Identité du build. Injectable pour les tests ; sinon celle de `build.ts`. */

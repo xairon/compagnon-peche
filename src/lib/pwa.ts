@@ -5,6 +5,7 @@
 import { useEffect, useReducer } from "react";
 import { registerSW } from "virtual:pwa-register";
 import {
+  doitPreparer,
   etatReserve,
   preparerReserve,
   onReserve,
@@ -66,9 +67,14 @@ function relireMaj(): void {
  * Déclenché en tâche de fond : la préparation ne doit pas disputer le lien à
  * l'écran que l'utilisateur est en train de regarder.
  */
-function preparerHorsLigne(): void {
+function preparerHorsLigne(force = false): void {
   const lancer = () => {
-    if (typeof navigator !== "undefined" && navigator.onLine === false) return;
+    const ok = doitPreparer({
+      enLigne: navigator.onLine !== false,
+      controleParSW: !!navigator.serviceWorker?.controller,
+      force,
+    });
+    if (!ok) return;
     etatReserve()
       .then((e) => (e.complete ? e : preparerReserve()))
       .catch(() => {});
@@ -119,7 +125,10 @@ export function initPwa() {
       // pas pour autant « hors-ligne prêt » — les illustrations manquent
       // encore. C'est `reserve` qui porte cette nuance, et rien d'autre ne doit
       // la remplacer par une promesse ronde.
-      preparerHorsLigne();
+      //
+      // `force` : c'est le seul moment où l'on SAIT que le précache vient
+      // d'aboutir, le contrôleur pouvant encore manquer d'un battement de cil.
+      preparerHorsLigne(true);
     },
   });
 
@@ -128,7 +137,9 @@ export function initPwa() {
   // serait jamais reprise.
   preparerHorsLigne();
   // Et à chaque retour du réseau, pour la même raison.
-  window.addEventListener("online", preparerHorsLigne);
+  // Enveloppé, jamais passé directement : `addEventListener` remettrait l'objet
+  // Event en premier argument, et `force` serait vrai à chaque retour de réseau.
+  window.addEventListener("online", () => preparerHorsLigne());
 
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
