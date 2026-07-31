@@ -177,16 +177,29 @@ export function priseView(
     const m = effectiveMaille(sp, dept);
     const has = m.cm > 0;
     const size = m.cm + " cm";
+    // A species can have no number and still be governed by a rule: the salmon
+    // under moratorium and two sturgeons carry maille "spéciale", the European
+    // sturgeon "Interdit". effectiveMaille keeps that wording in `label` for
+    // exactly this reason — flattening it to "no national size" and offering
+    // "sinon, à vous de décider" hands the angler a discretion the law does not
+    // give them. Every other screen already prints the label.
+    const special = !has && m.label !== null;
     return {
       ...V,
       tone: "warn",
-      banner: has ? "MESURER — " + size : undefined,
+      banner: has ? "MESURER — " + size : special ? "VÉRIFIER L'ARRÊTÉ" : undefined,
       kicker: m.aboveNational ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
-      title: has ? "Mesure-t-elle au moins " + size + " ?" : "Pas de taille légale nationale",
+      title: has
+        ? "Mesure-t-elle au moins " + size + " ?"
+        : special
+          ? `Maille : ${m.label} — réglementation spéciale`
+          : "Pas de taille légale nationale",
       paras: [
         has
           ? "Mesurez du bout du museau à l'extrémité de la queue. Sous la maille : remise à l'eau obligatoire, immédiate et soignée."
-          : "Aucune maille nationale pour cette espèce — un arrêté local peut en fixer une : vérifiez. Sinon, à vous de décider.",
+          : special
+            ? "Cette espèce ne relève pas d'une taille chiffrée mais d'une règle particulière (moratoire, interdiction, arrêté spécifique). Vérifiez l'arrêté en vigueur avant toute décision."
+            : "Aucune maille nationale pour cette espèce — un arrêté local peut en fixer une : vérifiez. Sinon, à vous de décider.",
         // Only claim "stricter than national" when it actually is: most arrêtés
         // restate the national figure, and saying otherwise contradicts itself.
         ...(m.aboveNational && dept && m.text
