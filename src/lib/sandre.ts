@@ -52,13 +52,30 @@ async function wfs(
   return r.json();
 }
 
+/**
+ * Une classe du réseau hydrographique (ordre de Strahler 1 à 5).
+ *
+ * Ne demandait autrefois que `CoursEau1`, c'est-à-dire les grands cours d'eau :
+ * 10 tronçons sur les 55 présents dans la boîte mesurée autour de Blois le
+ * 31/07/2026. Voir lib/reseau-hydro.ts pour le détail par classe et le coût.
+ */
+export const fetchCoursEau = (
+  classe: number,
+  w: number,
+  s: number,
+  e: number,
+  n: number,
+  signal?: AbortSignal,
+) => wfs(WFS, `CoursEau${classe}`, w, s, e, n, COUNT_RIVIERES, signal);
+
+/** Compatibilité : la seule première classe. */
 export const fetchRivers = (
   w: number,
   s: number,
   e: number,
   n: number,
   signal?: AbortSignal,
-) => wfs(WFS, "CoursEau1", w, s, e, n, COUNT_RIVIERES, signal);
+) => fetchCoursEau(1, w, s, e, n, signal);
 
 export const fetchWaterBodies = (
   w: number,

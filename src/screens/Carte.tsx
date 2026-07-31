@@ -12,7 +12,13 @@ import {
 } from "../lib/hubeau";
 import { troncature, texteTroncature, compteurWfs } from "../lib/troncature";
 import {
-  fetchRivers,
+  fusionnerCoursEau,
+  classesAuZoom,
+  texteClassesMasquees,
+  CLASSES_HYDRO,
+} from "../lib/reseau-hydro";
+import {
+  fetchCoursEau,
   fetchWaterBodies,
   fetchObstacles,
   obstacleInfo,
@@ -208,11 +214,30 @@ export function Carte() {
       source: "waterbodies",
       paint: { "fill-color": "#5b8fb0", "fill-opacity": 0.35, "fill-outline-color": "#356789" },
     });
+    // Trait plus fin à mesure que l'ordre de Strahler monte : un ruisseau et
+    // la Loire au même trait rendraient le réseau illisible dès qu'on charge
+    // les cinq classes. `Classe` vient du Sandre, elle n'est pas déduite.
     add({
       id: "rivers-line",
       type: "line",
       source: "rivers",
-      paint: { "line-color": "#2b6c8f", "line-width": ["interpolate", ["linear"], ["zoom"], 9, 1, 14, 3.5] },
+      paint: {
+        "line-color": "#2b6c8f",
+        "line-width": [
+          "*",
+          ["interpolate", ["linear"], ["zoom"], 9, 1, 14, 3.5],
+          [
+            "match",
+            ["to-string", ["get", "Classe"]],
+            "1", 1,
+            "2", 0.85,
+            "3", 0.7,
+            "4", 0.55,
+            "5", 0.45,
+            1,
+          ],
+        ],
+      },
     });
     // Loir-et-Cher parcours & reserves (Pilote41, clickable). Reserves under parcours.
     add({
@@ -337,8 +362,20 @@ export function Carte() {
     setStatus("Chargement des données…");
     setTroncatures([]);
     try {
-      const [rivers, bodies, stations, obstacles, access, gbif] = await Promise.all([
-        fetchRivers(w, s, e, n, signal).catch(() => empty()),
+      // Les cinq classes du Sandre, et non la seule première : la carte
+      // montrait 10 cours d'eau sur 55 dans la boîte mesurée autour de Blois,
+      // c'est-à-dire les fleuves sans les ruisseaux — précisément là où on
+      // pêche la truite. Les classes sont demandées selon le zoom (1,32 Mo pour
+      // les cinq, reteléchargés à chaque déplacement).
+      const classes = classesAuZoom(m.getZoom());
+      const [couches, bodies, stations, obstacles, access, gbif] = await Promise.all([
+        Promise.all(
+          CLASSES_HYDRO.map((c) =>
+            classes.includes(c)
+              ? fetchCoursEau(c, w, s, e, n, signal).catch(() => null)
+              : Promise.resolve(null),
+          ),
+        ),
         fetchWaterBodies(w, s, e, n, signal).catch(() => empty()),
         stationsInBbox(w, s, e, n, signal).catch(() => []),
         L.obstacles ? fetchObstacles(w, s, e, n, signal).catch(() => empty()) : Promise.resolve(empty()),
@@ -350,6 +387,8 @@ export function Carte() {
           : Promise.resolve([]),
       ]);
       if (signal.aborted) return; // a newer view superseded this one — don't write stale data
+      const reseau = fusionnerCoursEau(couches);
+      const rivers = reseau.fc;
       // Loir-et-Cher parcours/reserves: bundled offline snapshot (Pilote41), no fetch.
       dataRef.current.parcours41 = L.parcours ? PARCOURS41_SNAPSHOT : empty();
       dataRef.current.rivers = rivers as GeoJSON.FeatureCollection;
@@ -388,7 +427,7 @@ export function Carte() {
       const coupes = [
         texteTroncature(
           troncature({
-            numberMatched: compteurWfs(rivers),
+            numberMatched: reseau.numberMatched,
             rendus: rivers.features.length,
             plafond: COUNT_RIVIERES,
           }),
@@ -412,6 +451,9 @@ export function Carte() {
               "ouvrages",
             )
           : null,
+        // L'app coupe elle-même le réseau selon le zoom : le taire ferait lire
+        // une carte volontairement amputée comme une carte complète.
+        texteClassesMasquees(m.getZoom()),
       ].filter(Boolean) as string[];
       setTroncatures(coupes);
       const bits = [
