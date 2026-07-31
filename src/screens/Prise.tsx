@@ -21,7 +21,7 @@ function actStyle(kind: ActKind) {
 }
 
 export function Prise() {
-  const { state, set, nav, addCatch } = useStore();
+  const { state, set, nav, goTab, addCatch } = useStore();
   const [pq, setPq] = useState("");
   const [size, setSize] = useState("");
   const qt = quotaToday(state.catches);
@@ -66,7 +66,7 @@ export function Prise() {
 
   const handleAct = (act: string) => {
     if (act === "cancel" || act === "done") {
-      set({ prise: { sp: null, step: null }, screen: "especes", tab: "especes", stack: [] });
+      goTab("especes", { prise: { sp: null, step: null } });
     } else if (act === "ruler") {
       nav("regle");
     } else if (act === "tocarnet" && sp) {

@@ -84,7 +84,7 @@ function empty(): GeoJSON.FeatureCollection {
 }
 
 export function Carte() {
-  const { openSp, state, set, addSpot, updateSpot, removeSpot, startPrise } = useStore();
+  const { openSp, state, replace, addSpot, updateSpot, removeSpot, startPrise } = useStore();
   const spots = state.spots;
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -770,12 +770,15 @@ export function Carte() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       closeAllPanels();
       setViewId(sp.id);
-      set({ focusSpot: null });
+      // `replace` et non `set` : le vol est fait, on oublie la consigne en
+      // CORRIGEANT l'entrée d'historique. Une entrée de plus obligerait à deux
+      // gestes retour pour quitter une carte ouverte depuis le carnet.
+      replace({ focusSpot: null });
     } else if (state.hydrated) {
       // Spots are fully loaded and the target still isn't there → drop the stale
       // deep-link. If they haven't hydrated yet, keep it so this effect retries
       // once loadSpots() resolves (otherwise the fly-to is silently lost).
-      set({ focusSpot: null });
+      replace({ focusSpot: null });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.focusSpot, mapReady, spots, state.hydrated]);

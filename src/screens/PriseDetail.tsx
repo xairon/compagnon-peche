@@ -7,7 +7,7 @@ import { dayPart } from "../lib/helpers";
 import { CatchEditor } from "../components/CatchEditor";
 
 export function PriseDetail() {
-  const { state, back, openSp, updateCatch, removeCatch, set } = useStore();
+  const { state, back, goTab, openSp, updateCatch, removeCatch } = useStore();
   const c = state.catches.find((x) => x.slot === state.catchSlot) || null;
   const [editing, setEditing] = useState(false);
   const [arm, setArm] = useState(false);
@@ -108,8 +108,7 @@ export function PriseDetail() {
           <button
             className="pd-map"
             onClick={() => {
-              if (c.spotId) set({ focusSpot: c.spotId, screen: "carte", tab: "carte", stack: [] });
-              else set({ screen: "carte", tab: "carte", stack: [] });
+              goTab("carte", c.spotId ? { focusSpot: c.spotId } : undefined);
             }}
           >
             📍 Voir sur la carte

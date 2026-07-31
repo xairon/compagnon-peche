@@ -22,6 +22,15 @@ import { reportReadError } from "./lib/storage";
 import { readPrefs, writePrefs } from "./lib/prefs";
 import { frDate, isoDay, uid } from "./lib/helpers";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
+import { CTX_DEFAUT, contexteNettoye, ecranParent, ongletDe, versUrl } from "./lib/nav-conventions";
+import {
+  lirePoint,
+  memeEndroit,
+  patchDePoint,
+  pointDeEtat,
+  pointDepuisUrl,
+  type PointNav,
+} from "./lib/nav-historique";
 
 export type Screen =
   | "accueil"
@@ -84,7 +93,10 @@ export interface AppState {
   screen: Screen;
   tab: Tab;
   carnetSeg: CarnetSeg;
-  stack: Screen[];
+  // Il n'y a plus de pile de navigation dans l'état : c'est l'historique du
+  // navigateur qui la tient (voir lib/nav-historique.ts). Une pile maison en
+  // parallèle était une seconde vérité, que le geste retour d'Android ne
+  // consultait pas — et c'est exactement pour ça qu'il fermait l'app.
   q: string;
   filter: string;
   spId: string | null;
@@ -124,8 +136,6 @@ export interface AppState {
   loadOk: boolean; // false if reading stored data failed — persistence is suspended
 }
 
-const TABS: Tab[] = ["accueil", "especes", "carte", "carnet"];
-
 // Built at provider mount, not at module load: preferences are read
 // synchronously (see lib/prefs.ts) so the very first paint already quotes the
 // right arrêté and draws controls at the right size. Doing it at module scope
@@ -133,18 +143,20 @@ const TABS: Tab[] = ["accueil", "especes", "carte", "carnet"];
 // load, but not a provider remount, and untestable.
 const makeInitialState = (): AppState => {
   const prefs = readPrefs();
+  // Lien profond. Il est résolu ICI, avant le premier rendu, et pas dans un
+  // effet : sinon un lien partagé afficherait l'accueil le temps d'une frame
+  // avant de sauter sur la fiche, et cette frame parasite laisserait en plus
+  // une entrée d'historique de plus que d'écrans visités.
+  const lien = typeof window === "undefined" ? null : pointDepuisUrl(window.location.hash);
   return {
-    screen: "accueil",
-    tab: "accueil",
+    screen: lien?.screen ?? "accueil",
+    tab: lien?.tab ?? "accueil",
     carnetSeg: "prises",
-    stack: [],
     q: "",
     filter: "tous",
-    spId: null,
     open: { regle: true },
     recent: [],
     bigUI: prefs.bigUI,
-    cookStep: 0,
     listening: false,
     ans: {},
     prise: { sp: null, step: null },
@@ -158,14 +170,11 @@ const makeInitialState = (): AppState => {
     f: { sp: "sandre", taille: "", lieu: "", garde: false },
     dept: prefs.dept,
     deptChosen: prefs.deptChosen,
-    recipeId: null,
-    knotId: null,
-    techId: null,
     justAdded: null,
-    focusSpot: null,
-    gearFocusId: null,
-    catchSlot: null,
-    bilanSession: null,
+    // Les neuf champs de contexte de navigation en un seul endroit — soit ceux
+    // du lien profond, soit tous à zéro. Les lister un par un ici, c'était la
+    // porte ouverte à en oublier un au prochain écran ajouté.
+    ...(lien?.ctx ?? CTX_DEFAUT),
     outOfZoneDept: null,
     hydrated: false,
     loadOk: true,
@@ -182,9 +191,10 @@ function reducer(state: AppState, patch: Patch): AppState {
 export interface Store {
   state: AppState;
   set: (patch: Patch) => void;
+  replace: (patch: Patch) => void;
   nav: (screen: Screen, extra?: Partial<AppState>) => void;
   back: () => void;
-  goTab: (t: Tab) => void;
+  goTab: (t: Tab, extra?: Partial<AppState>) => void;
   startPrise: (place?: string) => void;
   openSp: (id: string) => void;
   addCatch: (sp: Species, kept: boolean, size?: string) => void;
@@ -310,33 +320,168 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     writePrefs({ dept: state.dept, deptChosen: state.deptChosen, bigUI: state.bigUI });
   }, [state.dept, state.deptChosen, state.bigUI]);
 
+  // ── Navigation ↔ historique du navigateur ────────────────────────────────
+  //
+  // `refHist` retient le DERNIER point synchronisé avec l'historique. Il sert à
+  // deux choses : savoir qu'un changement d'état vient d'être causé par un
+  // retour (auquel cas il ne faut surtout pas repousser l'entrée qu'on vient de
+  // dépiler), et savoir à quelle profondeur on se trouve.
+  const refHist = useRef<{ point: PointNav | null; remplacer: boolean }>({
+    point: null,
+    remplacer: true,
+  });
+
+  // L'endroit courant, dérivé du seul état qui compte pour la navigation.
+  // Mémoïsé pour que l'effet de synchronisation ne se déclenche pas à chaque
+  // frappe dans un champ de recherche ou à chaque prise ajoutée.
+  const { screen: ecranCourant, tab: ongletCourant } = state;
+  const { spId, recipeId, knotId, techId, catchSlot } = state;
+  const { focusSpot, gearFocusId, bilanSession, cookStep } = state;
+  const point = useMemo(
+    () =>
+      pointDeEtat(
+        {
+          screen: ecranCourant,
+          tab: ongletCourant,
+          spId,
+          recipeId,
+          knotId,
+          techId,
+          catchSlot,
+          focusSpot,
+          gearFocusId,
+          bilanSession,
+          cookStep,
+        },
+        0,
+      ),
+    [
+      ecranCourant,
+      ongletCourant,
+      spId,
+      recipeId,
+      knotId,
+      techId,
+      catchSlot,
+      focusSpot,
+      gearFocusId,
+      bilanSession,
+      cookStep,
+    ],
+  );
+
+  // Une entrée d'historique par endroit visité. L'effet vit ICI, dans le
+  // provider, et pas dans App : la frontière d'erreur d'App est keyée par
+  // l'écran et se remonte donc à chaque navigation — un effet posé sous elle
+  // se rejouerait et empilerait une entrée de trop par écran.
+  useEffect(() => {
+    const h = refHist.current;
+    if (memeEndroit(h.point, point)) {
+      // Déjà à cet endroit : c'est un retour qui vient de nous y remettre, ou
+      // un rendu sans changement de navigation. Rien à écrire.
+      h.remplacer = false;
+      return;
+    }
+    const profondeur =
+      h.point === null || h.remplacer ? h.point?.profondeur ?? 0 : h.point.profondeur + 1;
+    const suivant: PointNav = { ...point, profondeur };
+    const url = versUrl(suivant.screen, suivant.ctx);
+    // Le tout premier point REMPLACE l'entrée courante. Sans ça, l'app
+    // s'ouvrirait avec une entrée à elle sous les pieds, et le premier geste
+    // retour ne ferait que revenir à l'écran déjà affiché au lieu de quitter.
+    if (h.point === null || h.remplacer) window.history.replaceState({ nav: suivant }, "", url);
+    else window.history.pushState({ nav: suivant }, "", url);
+    refHist.current = { point: suivant, remplacer: false };
+  }, [point]);
+
+  // Le geste retour d'Android, le bouton retour du navigateur, et notre propre
+  // `back()` arrivent tous ici. L'entrée porte l'écran ET son contexte, donc le
+  // retour restitue exactement ce qu'on avait quitté — y compris le bilan
+  // d'écrevisses en cours de correction, que l'ancien `nav()` effaçait.
+  useEffect(() => {
+    const onPop = (e: PopStateEvent) => {
+      const p =
+        lirePoint(e.state) ??
+        pointDepuisUrl(window.location.hash) ?? {
+          screen: "accueil" as Screen,
+          tab: "accueil" as Tab,
+          ctx: { ...CTX_DEFAUT },
+          profondeur: 0,
+        };
+      // Marqué AVANT le dispatch : l'effet de synchronisation verra qu'on est
+      // déjà à cet endroit et n'ira pas repousser l'entrée dépilée.
+      refHist.current = { point: p, remplacer: false };
+      dispatch(patchDePoint(p));
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   const actions = useMemo<Actions>(() => {
     const set = (patch: Patch) => dispatch(patch);
-    // `bilanSession` is reset by default: navigating INTO the écrevisses module
-    // means "show me the session", never "re-open the bilan I left by the tab bar".
-    // The Carnet's "Corriger le bilan" passes it explicitly, and `extra` wins.
+    // Comme `set`, mais l'entrée d'historique courante est CORRIGÉE au lieu
+    // qu'une nouvelle soit empilée. Pour les changements qui touchent au
+    // contexte de navigation sans être un déplacement :
+    //   — un écran qui oublie le repère qu'il vient de consommer (la carte a
+    //     volé jusqu'au spot, le guide matériel a déplié la bonne carte) ;
+    //   — l'étape d'une recette guidée, qui doit se retrouver dans l'URL au
+    //     rechargement sans qu'il faille vingt gestes retour pour sortir.
+    // Sans ça, chacun de ces changements fabriquerait une entrée fantôme, et
+    // le geste retour d'Android donnerait l'impression de ne rien faire.
+    const replace: Store["replace"] = (patch) => {
+      refHist.current.remplacer = true;
+      dispatch(patch);
+    };
+    // Une navigation en avant efface TOUT le contexte que l'écran d'arrivée ne
+    // réclame pas (table dans lib/nav-conventions.ts), et l'appelant fournit
+    // celui qu'il réclame — `extra` passe en dernier, il gagne toujours.
+    // Avant, seul `bilanSession` était effacé : les huit autres identifiants
+    // traînaient d'écran en écran. Ce qui est perdu ici est repris par
+    // l'historique au retour, entrée par entrée.
+    //
+    // L'ONGLET, lui, ne bouge pas : ouvrir une recette depuis une fiche espèce
+    // laisse « Espèces » allumé, parce que c'est de là qu'on vient et que c'est
+    // là que le retour ramène. Seuls les liens profonds, qui n'ont pas
+    // d'origine à préserver, déduisent l'onglet de la table (`ongletDe`).
     const nav: Store["nav"] = (screen, extra) =>
-      dispatch((s) => ({ stack: [...s.stack, s.screen], screen, bilanSession: null, ...(extra || {}) }));
-    const back: Store["back"] = () =>
-      dispatch((s) => {
-        const st = [...s.stack];
-        const prev = st.pop() || "accueil";
-        return {
-          screen: prev,
-          stack: st,
-          tab: (TABS as string[]).includes(prev) ? (prev as Tab) : s.tab,
-        };
-      });
-    const goTab: Store["goTab"] = (t) => dispatch({ screen: t, tab: t, stack: [] });
+      dispatch({ ...contexteNettoye(screen), screen, ...(extra || {}) });
+    // Le retour est délégué au navigateur : il dépile SON entrée, l'événement
+    // `popstate` rend le point complet, et l'effet ci-dessous le réapplique.
+    // C'est ce qui fait que ce bouton et le geste retour d'Android font la même
+    // chose par construction, et non parce qu'on a pensé à les garder d'accord.
+    const back: Store["back"] = () => {
+      const h = refHist.current;
+      if (h.point && h.point.profondeur > 0) {
+        window.history.back();
+        return;
+      }
+      // Profondeur 0 : rien derrière. Soit on est à la racine et il n'y a rien
+      // à faire — le geste système sortira de l'app, ce qui est le comportement
+      // attendu et non un défaut. Soit l'app a été ouverte DIRECTEMENT sur un
+      // écran profond par un lien, et une flèche « ‹ » qui ferme l'app serait
+      // absurde : on replie sur l'écran parent, en REMPLAÇANT l'entrée pour ne
+      // pas fabriquer une profondeur qui piégerait le geste suivant.
+      const courant = stateRef.current.screen;
+      if (courant === "accueil") return;
+      const parent = ecranParent(courant);
+      h.remplacer = true;
+      dispatch({ ...contexteNettoye(parent), screen: parent, tab: ongletDe(parent) });
+    };
+    const goTab: Store["goTab"] = (t, extra) =>
+      dispatch({ ...contexteNettoye(t), screen: t, tab: t, ...(extra || {}) });
     // The central action: opens the full "prise" flow at its start, from anywhere.
     // An optional `place` (e.g. a spot name) pre-fills the catch location.
     const startPrise: Store["startPrise"] = (place) =>
-      dispatch({ screen: "prise", prise: { sp: null, step: null, place: place ?? null }, stack: [] });
+      dispatch({
+        ...contexteNettoye("prise"),
+        screen: "prise",
+        prise: { sp: null, step: null, place: place ?? null },
+      });
     const openSp: Store["openSp"] = (id) => {
       dispatch((s) => ({
         open: { regle: true },
         recent: [id, ...s.recent.filter((r) => r !== id)].slice(0, 5),
-        stack: [...s.stack, s.screen],
+        ...contexteNettoye("fiche"),
         screen: "fiche",
         spId: id,
       }));
@@ -360,9 +505,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         };
         return {
           catches: [entry, ...s.catches],
+          ...contexteNettoye("carnet"),
           screen: "carnet",
           tab: "carnet",
-          stack: [],
           prise: { sp: null, step: null },
           formOpen: false,
           justAdded: entry.slot,
@@ -434,6 +579,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dispatch((s) => ({ crayfish: s.crayfish.filter((c) => c.id !== id) }));
     return {
       set,
+      replace,
       nav,
       back,
       goTab,
