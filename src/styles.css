@@ -6485,3 +6485,24 @@ button.card-row {
 .mentions-bloc a {
   color: var(--green);
 }
+
+/* Aide à l'installation iOS (components/InstallIOS.tsx). Bloc informatif,
+   affiché seulement sur iOS hors mode installé — pas de cible tactile ici. */
+.install-ios {
+  margin-top: 14px;
+  background: var(--sand);
+  border-left: 3px solid var(--green);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.install-ios-titre {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.install-ios-corps {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #5a5e52;
+  margin-top: 6px;
+}

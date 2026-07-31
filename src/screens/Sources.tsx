@@ -58,8 +58,8 @@ export function Sources() {
           jamais transmis, pas de tracking. En revanche, la carte et la météo envoient votre position
           (ou la zone affichée) aux API publiques pour charger les données du lieu : IGN, Hub'Eau,
           Open-Meteo, OpenStreetMap/Overpass, GBIF et Sandre (Eaufrance). Si vous ouvrez la carte
-          « Officielle », celle-ci est fournie par Géopêche (FNPF) et reçoit alors votre adresse IP et
-          la zone consultée.
+          « Officielle », celle-ci est fournie par Géopêche et reçoit alors votre adresse IP et la
+          zone consultée.
         </div>
 
         {/* The build identity, so a report can be attached to a version. An

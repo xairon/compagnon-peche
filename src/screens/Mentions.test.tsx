@@ -89,6 +89,16 @@ describe("MentionsLegales", () => {
     expect(screen.getByText(/position|zone affichée/i)).toBeInTheDocument();
   });
 
+  it("n'attribue pas Géopêche à la FNPF, que la source ne nomme pas", () => {
+    // La formulation vient de l'écran Sources, qui écrivait « fournie par
+    // Géopêche (FNPF) ». geopeche.com/contact.php nomme « GEOPECHE - CREALEAD,
+    // Montpellier » et la FNPF n'y figure pas comme éditeur. Reprendre une
+    // formulation, c'est aussi en reprendre les erreurs.
+    render(<MentionsLegales identite={REMPLIE} />);
+
+    expect(document.body.textContent ?? "").not.toMatch(/FNPF/);
+  });
+
   it("porte la clause « ni conseil juridique ni avis médical »", () => {
     render(<MentionsLegales identite={REMPLIE} />);
 

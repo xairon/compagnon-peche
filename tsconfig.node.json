@@ -15,5 +15,12 @@
   //  · csp.ts        — la CSP, comparée aux listes d'hôtes de la carte
   //  · sw-delais.ts  — les délais du service worker, comparés à ceux de fetchT
   //  · net-bornes.ts — dont sw-delais dérive
-  "include": ["vite.config.ts", "src/lib/csp.ts", "src/lib/sw-delais.ts", "src/lib/net-bornes.ts"]
+  //  · manifest.ts   — le manifeste PWA, confronté au contenu réel de public/
+  "include": [
+    "vite.config.ts",
+    "src/lib/csp.ts",
+    "src/lib/sw-delais.ts",
+    "src/lib/net-bornes.ts",
+    "src/lib/manifest.ts"
+  ]
 }

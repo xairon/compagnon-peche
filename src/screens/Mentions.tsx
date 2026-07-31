@@ -71,8 +71,8 @@ export function MentionsLegales({ identite }: { identite: Identite }) {
           En revanche, la carte et la météo envoient votre position (ou la zone affichée) aux API
           publiques pour charger les données du lieu : IGN, Hub'Eau, Open-Meteo,
           OpenStreetMap/Overpass, GBIF et Sandre (Eaufrance). Si vous ouvrez la carte
-          « Officielle », celle-ci est fournie par Géopêche (FNPF) et reçoit alors votre adresse IP
-          et la zone consultée. Le détail des sources et de leurs licences est sur l'écran
+          « Officielle », celle-ci est fournie par Géopêche et reçoit alors votre adresse IP et la
+          zone consultée. Le détail des sources et de leurs licences est sur l'écran
           « Sources &amp; mentions ».
         </div>
         <div className="mentions-sec">
