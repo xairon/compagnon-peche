@@ -153,25 +153,40 @@ describe("polices précachées", () => {
   });
 });
 
-describe("défaut connu de scripts/fetch-fonts.mjs", () => {
+describe("chaque face couvre le latin de base", () => {
   /**
-   * CE TEST DOCUMENTE UN BOGUE, il ne le bénit pas.
+   * CE BLOC A REMPLACÉ UN TEST QUI FIGEAIT UN BOGUE.
    *
-   * Le décalage décrit dans `polices.ts` n'a pas seulement mal nommé les
-   * fichiers : le sous-ensemble « latin » (U+0000-00FF — donc é, è, à, ç, ù,
-   * tout le français courant) n'a été téléchargé que pour la DERNIÈRE face de
-   * la feuille de Google. L'italique 400 et le demi-gras 600 n'ont aucune face
-   * qui couvre le latin de base : ces textes s'affichent en Georgia, la police
-   * de repli, pendant que « 2ᵉ » à côté sort en Source Serif. Correction hors
-   * de ce lot : elle touche `scripts/fetch-fonts.mjs` et `src/fonts.css`.
+   * `scripts/fetch-fonts.mjs` appariait chaque `@font-face` avec le
+   * commentaire `/* subset *\/` du bloc SUIVANT — le commentaire précède son
+   * bloc dans la feuille de Google. Conséquence : le sous-ensemble « latin »
+   * (U+0000-00FF, donc é, è, à, ç, tout le français courant) n'était
+   * téléchargé que pour la DERNIÈRE face de la feuille. L'italique 400 et le
+   * demi-gras 600 n'avaient aucune face couvrant le latin de base et
+   * s'affichaient en Georgia, pendant que le « 2ᵉ » d'à côté sortait en
+   * Source Serif.
    *
-   * Quand ce sera fait, cette liste doit devenir vide et ce bloc disparaître.
+   * Le script apparie maintenant explicitement le commentaire et le bloc qui
+   * le suit. Ce test garde le résultat : plus aucune face orpheline.
    */
-  it("l'italique 400 et le 600 n'ont toujours pas de face latin de base", () => {
+  it("aucun style déclaré ne se retrouve sans face pour « é »", () => {
     const latinDeBase = 0x00e9; // é
     const orphelines = [...new Set(FACES.map((f) => `${f.style} ${f.poids}`))].filter(
       (cle) => !FACES.some((f) => `${f.style} ${f.poids}` === cle && couvre(f, latinDeBase)),
     );
-    expect(orphelines).toEqual(["italic 400", "normal 600"]);
+    expect(orphelines).toEqual([]);
+  });
+
+  it("chaque nom de fichier correspond à la plage qu'il déclare", () => {
+    // L'autre moitié du même bogue : les fichiers héritaient du nom du
+    // sous-ensemble d'après. Un fichier « …-latin.woff2 » qui ne couvrirait
+    // pas « é » signalerait que le décalage est revenu.
+    for (const f of FACES.filter((x) => x.fichier.endsWith("-latin.woff2"))) {
+      expect(couvre(f, 0x00e9), f.fichier).toBe(true);
+    }
+    for (const f of FACES.filter((x) => x.fichier.endsWith("-latin-ext.woff2"))) {
+      // U+1D49 « ᵉ » — l'exposant de « 2ᵉ catégorie », qui vit dans latin-ext.
+      expect(couvre(f, 0x1d49), f.fichier).toBe(true);
+    }
   });
 });
