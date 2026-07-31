@@ -15,6 +15,11 @@ import { SPECIES } from "../data/species";
  *
  * Ce test échoue si un moratoire redevient un feu vert.
  */
+// `priseView` reçoit désormais son horloge (voir lib/prise.ts). 15 juin 2026 :
+// la 1ʳᵉ catégorie et le brochet sont ouverts — la date la plus permissive, donc
+// celle qui met le plus à l'épreuve « aucun moratoire ne reçoit un feu vert ».
+const NOW = new Date(2026, 5, 15, 10, 0, 0);
+
 const sousMoratoire = SPECIES.filter((sp) =>
   JSON.stringify(sp.alert ?? "").toLowerCase().includes("moratoire"),
 );
@@ -26,7 +31,7 @@ describe("verdict — espèces sous moratoire", () => {
 
   it("aucune ne reçoit « PÊCHE OUVERTE »", () => {
     const feuxVerts = sousMoratoire
-      .map((sp) => ({ id: sp.id, v: priseView(sp, "statut", { c: 0, b: 0 }, "41") }))
+      .map((sp) => ({ id: sp.id, v: priseView(sp, "statut", { c: 0, b: 0 }, "41", NOW) }))
       .filter(({ v }) => v?.banner === "PÊCHE OUVERTE")
       .map(({ id }) => id);
     expect(feuxVerts).toEqual([]);
@@ -34,7 +39,7 @@ describe("verdict — espèces sous moratoire", () => {
 
   it("aucune n'est présentée avec un ton « good »", () => {
     const bons = sousMoratoire
-      .map((sp) => ({ id: sp.id, v: priseView(sp, "statut", { c: 0, b: 0 }, "41") }))
+      .map((sp) => ({ id: sp.id, v: priseView(sp, "statut", { c: 0, b: 0 }, "41", NOW) }))
       .filter(({ v }) => v?.tone === "good")
       .map(({ id }) => id);
     expect(bons).toEqual([]);
@@ -42,7 +47,7 @@ describe("verdict — espèces sous moratoire", () => {
 
   it("le saumon atlantique renvoie vers l'arrêté du bassin", () => {
     const sp = SPECIES.find((s) => s.id === "saumon-atlantique");
-    const v = priseView(sp, "statut", { c: 0, b: 0 }, "41");
+    const v = priseView(sp, "statut", { c: 0, b: 0 }, "41", NOW);
     expect((v?.paras.join(" ") + " " + v?.title).toLowerCase()).toMatch(/arrêté|vérifi/);
   });
 });

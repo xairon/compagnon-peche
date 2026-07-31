@@ -3,6 +3,11 @@ import { SPECIES } from "./species";
 import { speciesStatus } from "../lib/statut";
 import { priseView } from "../lib/prise";
 
+// `priseView` reçoit désormais son horloge (voir lib/prise.ts) : ces tests
+// portent sur le statut de protection, pas sur la date. Une date fixe où tout
+// est ouvert isole ce qu'ils mesurent du jour où la CI tourne.
+const NOW = new Date(2026, 5, 15, 10, 0, 0);
+
 /**
  * Le drapeau `protected` a UNE seule signification, et elle est lourde.
  *
@@ -119,7 +124,7 @@ describe("protection — la liste des espèces interdites de conservation", () =
 
   it("une espèce protégée déclenche le verdict rouge « ne pas conserver »", () => {
     for (const id of Object.keys(INTERDITES_DE_CONSERVATION)) {
-      const v = priseView(sp(id), "statut", { c: 0, b: 0 })!;
+      const v = priseView(sp(id), "statut", { c: 0, b: 0 }, undefined, NOW)!;
       expect(v.tone, id).toBe("bad");
       expect(v.banner, id).toBe("RELÂCHER");
     }
@@ -145,7 +150,7 @@ describe("protection — les espèces encadrées sans interdiction de conservati
     for (const id of Object.keys(ENCADREES_SANS_INTERDICTION)) {
       const s = sp(id);
       expect(speciesStatus(s).cls, id).not.toBe("good");
-      const v = priseView(s, "statut", { c: 0, b: 0 })!;
+      const v = priseView(s, "statut", { c: 0, b: 0 }, undefined, NOW)!;
       expect(v.tone, id).toBe("warn");
       expect(v.banner, id).toBe("RÉGLEMENTATION SPÉCIALE");
     }
@@ -153,7 +158,7 @@ describe("protection — les espèces encadrées sans interdiction de conservati
 
   it("elle ne leur fait pas dire non plus « à relâcher — ne pas conserver »", () => {
     for (const id of Object.keys(ENCADREES_SANS_INTERDICTION)) {
-      const v = priseView(sp(id), "statut", { c: 0, b: 0 })!;
+      const v = priseView(sp(id), "statut", { c: 0, b: 0 }, undefined, NOW)!;
       expect(v.banner, id).not.toBe("RELÂCHER");
     }
   });

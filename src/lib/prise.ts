@@ -45,15 +45,24 @@ const base = (): PriseView => ({
   actions: [],
 });
 
-/** The decision-flow card for the current species and step. Returns null when idle. */
+/**
+ * The decision-flow card for the current species and step. Returns null when idle.
+ *
+ * `now` is a parameter and never read from the clock here — same convention as
+ * src/lib/ecrevisses.ts and src/lib/carte-peche.ts. It is what makes the only
+ * verdicts that can change overnight (opening eve, opening day, the day after
+ * the close) testable at all; before that, `season(sp)` read `new Date()` deep
+ * inside and no test could reach a boundary except by waiting for it.
+ */
 export function priseView(
   sp: Species | undefined,
   step: PriseStep,
   quota: { c: number; b: number },
-  dept?: DeptId,
+  dept: DeptId | undefined,
+  now: Date,
 ): PriseView | null {
   if (!sp || !step) return null;
-  const seas = season(sp);
+  const seas = season(sp, now);
   const V = base();
 
   if (step === "statut") {

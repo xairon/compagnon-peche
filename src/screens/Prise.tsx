@@ -9,6 +9,7 @@ import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
 import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
+import { useNow } from "../lib/now";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
@@ -25,7 +26,12 @@ export function Prise() {
   const [size, setSize] = useState("");
   const qt = quotaToday(state.catches);
   const sp = SPECIES.find((s) => s.id === state.prise.sp);
-  const pv = priseView(sp, state.prise.step, qt, state.dept);
+  // The screen owns the clock; the engine never reads it (see lib/prise.ts).
+  // useNow re-renders on its own cadence, so a phone left open on the card
+  // crosses an opening or closing date instead of freezing on the verdict it
+  // computed when the screen was first mounted.
+  const now = new Date(useNow());
+  const pv = priseView(sp, state.prise.step, qt, state.dept, now);
   const choosing = !state.prise.step;
 
   const nq = norm(pq);
@@ -42,7 +48,7 @@ export function Prise() {
   // here: pressing ‹ after releasing a salmon landed on "Je garde", an offer the
   // angler never saw and that the moratorium warning had explicitly avoided.
   const shortcut =
-    !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp).open);
+    !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp, now).open);
   const step = state.prise.step;
   const isShortcutStep = shortcut && (step === "kill" || step === "release");
 
