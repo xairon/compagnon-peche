@@ -6,9 +6,12 @@ import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { lienSignalement } from "../lib/diagnostic";
 import { AideInstallIOS } from "../components/InstallIOS";
+import { usePwa } from "../lib/pwa";
+import { promesseHorsLigne } from "../lib/promesse-hors-ligne";
 
 export function Outils() {
   const { state, nav } = useStore();
+  const { reserve } = usePwa();
   const deptName = DEPARTEMENTS[state.dept].name;
 
   const rows: { title: string; sub: string; icon: string; to: Screen }[] = [
@@ -94,7 +97,10 @@ export function Outils() {
         </div>
 
         <div className="info" style={{ marginTop: 20 }}>
-          Hors-ligne — toutes les fiches restent disponibles. Les données réglementaires embarquées
+          {/* Même nuance qu'au bandeau hors-ligne d'App.tsx : depuis le
+              découpage du précache, les photos arrivent après le noyau. Le
+              texte et la réglementation, eux, sont là dès l'installation. */}
+          {promesseHorsLigne(reserve).texte}. Les données réglementaires embarquées
           datent des arrêtés {REG_YEAR} ; revérifiez chaque année.
         </div>
       </div>

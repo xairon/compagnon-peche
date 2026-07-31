@@ -27,6 +27,7 @@ import { CrayfishBar } from "./components/CrayfishBar";
 import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
+import { promesseHorsLigne } from "./lib/promesse-hors-ligne";
 import { useCrayfishAlerts } from "./lib/crayfish-alerts";
 import { requestPersist, onPersistError, onQuotaWarning, storageInfo } from "./lib/storage";
 
@@ -56,7 +57,7 @@ export function App() {
       return true;
     }
   });
-  const { needRefresh, applyUpdate } = usePwa();
+  const { needRefresh, applyUpdate, reserve } = usePwa();
   const [persistMsg, setPersistMsg] = useState<string | null>(null);
 
   // Balance alerts live here, not in the Écrevisses screen: one tap on the nav
@@ -158,8 +159,13 @@ export function App() {
       </Suspense>
       </ErrorBoundary>
 
+      {/* La phrase suit l'état RÉEL de la réserve. Depuis que le précache est
+          découpé (29 entrées au lieu de 250), « toutes les fiches restent
+          disponibles » n'est vrai qu'une fois les 221 illustrations descendues :
+          avant, le texte des fiches et la réglementation sont là, les photos
+          pas encore. Voir lib/promesse-hors-ligne.ts. */}
       {offline && showNav && (
-        <div className="offline">Hors-ligne — toutes les fiches restent disponibles</div>
+        <div className="offline">{promesseHorsLigne(reserve).texte}</div>
       )}
 
       {persistMsg && (
