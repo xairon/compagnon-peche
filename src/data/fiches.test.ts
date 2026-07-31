@@ -116,6 +116,50 @@ describe("fiches — overlay descriptif", () => {
 });
 
 /**
+ * Toxostome (Parachondrostoma toxostoma) et hotu (Chondrostoma nasus) se
+ * ressemblent, s'hybrident, et l'app les met explicitement face à face. Le seul
+ * critère qui les sépare en main est la FORME de la bouche infère :
+ *
+ *  - hotu     : fente TRANSVERSALE (droite), lèvre inférieure épaisse et cornée,
+ *               museau proéminent, nageoires rouge-orangé
+ *               → DORIS/FFESSM, fiche Chondrostoma nasus
+ *  - toxostome: fente ARQUÉE (en fer à cheval), lèvres dures et tranchantes mais
+ *               non épaissies, museau court, nageoires claires
+ *               → DORIS/FFESSM, fiche Chondrostoma toxostoma : « La bouche
+ *                 infère (= en position inférieure) est en fente arquée »
+ *
+ * La fiche du toxostome portait « en fente transversale », c'est-à-dire le
+ * caractère du hotu, sur l'écran même censé séparer les deux. Ce test fige les
+ * deux moitiés du critère et, surtout, interdit à chacune des deux fiches de
+ * porter le caractère de l'autre — c'est l'erreur réellement commise.
+ */
+describe("toxostome ≠ hotu — le critère de bouche n'est pas inversé", () => {
+  const texte = (id: string) => {
+    const sp = SPECIES.find((s) => s.id === id)!;
+    expect(sp, `${id} doit exister`).toBeDefined();
+    return [sp.ident?.summary ?? "", ...(sp.ident?.traits ?? [])].join(" ");
+  };
+
+  it("le toxostome a une bouche arquée, et ne porte pas « transversale »", () => {
+    const t = texte("toxostome");
+    expect(t).toMatch(/arquée|fer à cheval/i);
+    expect(t).not.toMatch(/transversale/i);
+  });
+
+  it("le hotu garde sa lèvre cornée", () => {
+    expect(texte("hotu")).toMatch(/cornée/i);
+  });
+
+  it("la confusion citée par le toxostome décrit bien la bouche du hotu", () => {
+    const sp = SPECIES.find((s) => s.id === "toxostome")!;
+    const versHotu = (sp.ident?.conf ?? []).find((c) => /hotu/i.test(c.n));
+    expect(versHotu, "le toxostome doit citer le hotu en confusion").toBeDefined();
+    expect(versHotu!.how).toMatch(/transversale|droite/i);
+    expect(versHotu!.how).toMatch(/cornée/i);
+  });
+});
+
+/**
  * L'audit a montré que la garde précédente ne prouvait rien : elle vérifiait les
  * clés de premier niveau de `Fiche`, que TypeScript impose déjà. Elle n'a donc
  * pas vu qu'une fiche protégée portait une technique de pêche et une recette —
