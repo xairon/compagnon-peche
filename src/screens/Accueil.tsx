@@ -9,7 +9,7 @@ import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
-import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { DeptBouton } from "../components/DeptBouton";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 import { usePhotoUrl } from "../lib/photos";
 import { fetchMeteo, weatherLabel, type Meteo, type MeteoHour } from "../lib/meteo";
@@ -218,18 +218,24 @@ export function Accueil() {
         </div>
 
         <RegPerimeeWarning dept={state.dept} style={{ marginTop: 10 }} />
-        {state.outOfZoneDept ? (
+        {/* Le département n'est pas une préférence d'affichage : c'est l'arrêté
+            préfectoral que tous les verdicts de l'app citent. Il a donc son
+            propre contrôle sur l'Accueil, et non un renvoi vers un autre écran.
+            Ce bouton remplace ici DeptDefautWarning — il porte le même
+            avertissement, avec le geste qui le résout. */}
+        <DeptBouton
+          dept={state.dept}
+          deptChosen={state.deptChosen}
+          outOfZoneDept={state.outOfZoneDept}
+          onChoose={(id) => set({ dept: id, deptChosen: true })}
+          onVoirTout={() => nav("reglement")}
+        />
+        {/* Conservé en plus du bouton : c'est le seul endroit qui dise quoi
+            faire quand on pêche hors des trois départements couverts — le
+            sélecteur, lui, n'a rien à proposer à ce pêcheur. */}
+        {state.outOfZoneDept && (
           <OutOfZoneWarning
             outOfZoneDept={state.outOfZoneDept}
-            activeDept={state.dept}
-            style={{ marginTop: 10 }}
-          />
-        ) : (
-          // Mutually exclusive on purpose: being outside the covered zone is
-          // the more specific problem, and stacking two banners about the same
-          // thing reads as noise.
-          <DeptDefautWarning
-            deptChosen={state.deptChosen}
             activeDept={state.dept}
             style={{ marginTop: 10 }}
           />

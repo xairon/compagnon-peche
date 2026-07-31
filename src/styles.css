@@ -6028,3 +6028,174 @@ button.card-row {
   font-size: 12.5px;
   line-height: 1.5;
 }
+
+/* ── Bouton département (Accueil) ─────────────────────────────────────────────
+   Le contrôle qui décide quel arrêté préfectoral l'app cite. Traité comme une
+   carte pleine largeur, pas comme une puce discrète : c'est la seule commande
+   de l'Accueil dont un mauvais réglage produit un verdict légalement faux. */
+.deptb {
+  margin-top: 12px;
+}
+.deptb-main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: start;
+  column-gap: 12px;
+  text-align: left;
+  padding: 11px 14px;
+  border-radius: 16px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  box-shadow: 0 6px 18px -14px rgba(20, 30, 25, 0.55);
+}
+.deptb-blason {
+  align-self: start;
+  margin-top: 2px;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: var(--green-tint);
+  color: var(--green-dark);
+  border: 1px solid var(--line-strong);
+}
+.deptb-txt {
+  display: block;
+  min-width: 0;
+}
+.deptb-titre {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--brass-ink);
+}
+.deptb-nom {
+  display: block;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 1px;
+}
+.deptb-detail {
+  display: block;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+  margin-top: 3px;
+}
+/* Sur sa propre ligne, pleine largeur : en colonne de droite, « Choisir mon
+   département » débordait de sa boîte de 92 px sur un écran de 375 px. */
+.deptb-cta {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line-strong);
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--green);
+  line-height: 1.3;
+}
+.deptb-cta::after {
+  content: "▾";
+  font-size: 11px;
+}
+.deptb-main[aria-expanded="true"] .deptb-cta::after {
+  content: "▴";
+}
+
+/* Non confirmé et hors zone : l'ambre du reste de l'app pour « à vérifier ». */
+.deptb--defaut .deptb-main,
+.deptb--hors-zone .deptb-main {
+  border-color: #e0cfa4;
+  background: var(--amber-bg);
+}
+.deptb--defaut .deptb-blason,
+.deptb--hors-zone .deptb-blason {
+  background: #fff;
+  color: var(--amber);
+  border-color: #e0cfa4;
+}
+.deptb--defaut .deptb-titre,
+.deptb--hors-zone .deptb-titre {
+  color: #6d4d0d;
+}
+.deptb--defaut .deptb-detail,
+.deptb--hors-zone .deptb-detail {
+  color: #6d4d0d;
+}
+.deptb--defaut .deptb-cta,
+.deptb--hors-zone .deptb-cta {
+  color: #6d4d0d;
+  font-weight: 700;
+  border-top-color: #e0cfa4;
+}
+
+.deptb-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.deptb-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+}
+.deptb-opt[aria-selected="true"] {
+  border-color: var(--green-dark);
+  background: var(--green-tint);
+}
+.deptb-opt-nom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+.deptb-coche {
+  color: var(--green);
+}
+.deptb-opt-reg {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.deptb-opt-reg .k {
+  flex: 0 0 96px;
+  color: var(--muted);
+}
+.deptb-opt-reg .v {
+  flex: 1;
+  color: var(--body);
+  font-weight: 600;
+}
+.deptb-tout {
+  align-self: flex-start;
+  padding: 8px 2px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--green);
+  background: none;
+  border: 0;
+}
