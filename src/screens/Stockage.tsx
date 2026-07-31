@@ -48,7 +48,7 @@ export function Stockage() {
     setImportErr(false);
     try {
       const r = await importData(file);
-      const total = r.catches + r.spots + r.gear + r.recipes + r.photos;
+      const total = r.catches + r.spots + r.gear + r.bundles + r.recipes + r.crayfish + r.photos;
       if (total === 0) {
         setImportMsg("Sauvegarde lue : tout y était déjà présent (rien à ajouter).");
       } else {
@@ -56,7 +56,9 @@ export function Stockage() {
           r.catches && `${r.catches} prise${r.catches > 1 ? "s" : ""}`,
           r.spots && `${r.spots} spot${r.spots > 1 ? "s" : ""}`,
           r.gear && `${r.gear} matériel`,
+          r.bundles && `${r.bundles} ensemble${r.bundles > 1 ? "s" : ""}`,
           r.recipes && `${r.recipes} recette${r.recipes > 1 ? "s" : ""}`,
+          r.crayfish && `${r.crayfish} séance${r.crayfish > 1 ? "s" : ""} écrevisses`,
           r.photos && `${r.photos} photo${r.photos > 1 ? "s" : ""}`,
         ].filter(Boolean);
         setImportMsg(`Restauré : ${parts.join(", ")}. Rechargement…`);

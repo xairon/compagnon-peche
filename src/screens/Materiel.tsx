@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { get, set as idbSet } from "idb-keyval";
 import { useStore } from "../store-hooks";
 import { uid } from "../lib/helpers";
+import { STORES } from "../lib/stores";
 import { GEAR_CATEGORIES, CAT_LABEL, GEAR_GUIDE, type GearCategory } from "../data/gear";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { Media } from "../components/Media";
@@ -32,7 +33,7 @@ export function Materiel() {
   );
 
   useEffect(() => {
-    get("fish-bundles")
+    get(STORES.bundles)
       .then((b) => setBundles((b as Bundle[]) || []))
       .catch(() => {
         /* IndexedDB unavailable (private mode, quota) — start empty */
@@ -43,7 +44,7 @@ export function Materiel() {
   const saveGear = (next: GearItem[]) => setGear(next); // store action persists
   const saveBundles = (next: Bundle[]) => {
     setBundles(next);
-    idbSet("fish-bundles", next);
+    idbSet(STORES.bundles, next);
   };
 
   const addGear = () => {

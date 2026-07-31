@@ -1,15 +1,16 @@
 import { get, set } from "idb-keyval";
 import type { Catch, Spot, GearItem, Profile, PersonalRecipe, CrayfishSession } from "../types";
 import { reportPersistError, clearPersistError } from "./storage";
+import { STORES } from "./stores";
 
 // The catch notebook lives 100% on the device (IndexedDB). Nothing is ever
 // transmitted — see the privacy note on the Sources screen.
-const KEY = "carnet:catches";
-const SPOTS_KEY = "carnet:spots";
-const GEAR_KEY = "fish-gear"; // shared with the Materiel screen (single source of truth)
-const PROFILE_KEY = "carnet:profile";
-const RECIPES_KEY = "carnet:recipes";
-const CRAYFISH_KEY = "carnet:crayfish";
+const KEY = STORES.catches;
+const SPOTS_KEY = STORES.spots;
+const GEAR_KEY = STORES.gear;
+const PROFILE_KEY = STORES.profile;
+const RECIPES_KEY = STORES.recipes;
+const CRAYFISH_KEY = STORES.crayfish;
 
 const EMPTY_PROFILE: Profile = { name: "", bio: "", region: "" };
 
