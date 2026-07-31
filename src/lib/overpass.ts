@@ -4,6 +4,7 @@
 
 import { distKm } from "./geo";
 import { fetchT } from "./net";
+import { CorpsTropGrand, lireJsonBorne, octetsMaxPour } from "./net-bornes";
 
 const ENDPOINT = "https://overpass-api.de/api/interpreter";
 
@@ -100,11 +101,22 @@ export async function fetchAccess(
   if (!r.ok) throw new Error("Overpass " + r.status);
 
   // A rejected query can still arrive as 200 with an XHTML body — observed on
-  // 31/07/2026 — so .json() failing is a refusal, not an empty area.
+  // 31/07/2026 — so a JSON failure is a refusal, not an empty area.
+  //
+  // Lecture bornée : c'est justement ce cas qui la rend nécessaire. Une réponse
+  // qui n'est pas celle qu'on a demandée n'a aucune raison d'avoir une taille
+  // raisonnable, et elle était chargée entièrement en mémoire sur un téléphone.
   let j: { elements?: unknown[]; remark?: string };
   try {
-    j = await r.json();
-  } catch {
+    j = (await lireJsonBorne(r, octetsMaxPour("overpass"))) as {
+      elements?: unknown[];
+      remark?: string;
+    };
+  } catch (e) {
+    // Un dépassement de borne n'est PAS un serveur occupé : la source a
+    // répondu, et beaucoup. Le déguiser en SourceOccupee ferait proposer un
+    // « réessayez plus tard » qui ne changerait rien.
+    if (e instanceof CorpsTropGrand) throw e;
     throw new SourceOccupee("réponse illisible");
   }
   // `remark` is how Overpass reports a failure *inside* a 200. Returning the

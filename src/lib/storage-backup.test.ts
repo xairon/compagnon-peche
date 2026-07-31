@@ -10,12 +10,23 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 // idb-keyval is mocked with a plain in-memory Map: the point is the shape of
 // the bundle and what comes back out, not IndexedDB itself.
 
-const { store } = vi.hoisted(() => ({ store: new Map<string, unknown>() }));
+const { store, illisibles } = vi.hoisted(() => ({
+  store: new Map<string, unknown>(),
+  // Clés dont la lecture doit échouer, pour rejouer une base présente mais
+  // illisible — la situation où l'app dit justement « exportez une sauvegarde ».
+  illisibles: new Set<string>(),
+}));
 vi.mock("idb-keyval", () => ({
-  get: vi.fn(async (k: string) => store.get(k)),
+  get: vi.fn(async (k: string) => {
+    if (illisibles.has(k)) throw new DOMException("Internal error", "UnknownError");
+    return store.get(k);
+  }),
   set: vi.fn(async (k: string, v: unknown) => void store.set(k, v)),
   del: vi.fn(async (k: string) => void store.delete(k)),
-  keys: vi.fn(async () => [...store.keys()]),
+  keys: vi.fn(async () => {
+    if (illisibles.has("*keys*")) throw new DOMException("Internal error", "UnknownError");
+    return [...store.keys()];
+  }),
   clear: vi.fn(async () => store.clear()),
 }));
 
@@ -67,6 +78,7 @@ const SESSION = { id: "s1", startedAt: 1_700_000_000_000, balances: [], species:
 
 beforeEach(() => {
   store.clear();
+  illisibles.clear();
   localStorage.clear();
   vi.restoreAllMocks();
   // jsdom's navigator has neither share nor canShare, so the share tests add
@@ -144,6 +156,108 @@ describe("le rappel de sauvegarde ne s'arme que sur un vrai succès", () => {
     await exportData();
 
     expect(getLastExportAt()).toBeNull();
+  });
+});
+
+/**
+ * Quand une lecture IndexedDB échoue, `store.tsx` suspend les écritures et la
+ * bannière dit : « l'enregistrement est suspendu […] exportez une sauvegarde ».
+ * Or `exportData` lisait les sept magasins d'un seul `Promise.all` : un seul
+ * refus faisait échouer l'export entier. L'app envoyait donc l'utilisateur vers
+ * une porte fermée, au moment précis où c'était sa seule issue.
+ */
+describe("export quand la base ne se laisse pas lire", () => {
+  it("produit quand même un fichier avec ce qui a pu être lu", async () => {
+    store.set(STORES.catches, [{ slot: "a" }]);
+    illisibles.add(STORES.spots);
+
+    const bundle = await exportedBundle();
+
+    expect(bundle.catches).toEqual([{ slot: "a" }]);
+  });
+
+  it("nomme les magasins illisibles au lieu de les rendre comme vides", async () => {
+    // Un magasin absent du fichier et un magasin vide se ressemblent une fois
+    // le téléphone perdu. Confondre les deux, c'est faire dire à la sauvegarde
+    // qu'il n'y avait pas de spots.
+    store.set(STORES.spots, [{ id: "s1" }]);
+    illisibles.add(STORES.spots);
+
+    const bundle = await exportedBundle();
+
+    expect(bundle.lecturesEchouees).toEqual(["spots"]);
+    expect(bundle.spots).toBeUndefined();
+  });
+
+  it("ne se dit pas « complète » quand elle ne l'est pas", async () => {
+    illisibles.add(STORES.gear);
+
+    const bundle = await exportedBundle();
+
+    expect(String(bundle.note)).not.toMatch(/sauvegarde locale complète/i);
+    expect(String(bundle.note)).toMatch(/incomplète/i);
+    expect(String(bundle.note)).toMatch(/gear/);
+  });
+
+  it("dit à l'appelant ce qui manque, pour que l'écran puisse le répéter", async () => {
+    illisibles.add(STORES.gear);
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:stub");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+
+    const res = await exportData();
+
+    expect(res.complet).toBe(false);
+    expect(res.lecturesEchouees).toEqual(["gear"]);
+  });
+
+  it("porte la mention jusque dans le nom du fichier", async () => {
+    // Le fichier survit à l'app : dans un gestionnaire de fichiers, six mois
+    // plus tard, le nom est tout ce qui reste pour savoir ce qu'il vaut.
+    illisibles.add(STORES.catches);
+    let nom = "";
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      nom = this.download;
+    });
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:stub");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+
+    await exportData();
+
+    expect(nom).toMatch(/incomplet/i);
+  });
+
+  it("n'arme pas le rappel de sauvegarde sur un export partiel", async () => {
+    // Le rappel est le seul coup de coude vers la sauvegarde. Le taire 14 jours
+    // sur un fichier amputé dit à l'utilisateur qu'il est couvert.
+    illisibles.add(STORES.catches);
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:stub");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+
+    await exportData();
+
+    expect(getLastExportAt()).toBeNull();
+  });
+
+  it("exporte le carnet même quand la liste des photos est illisible", async () => {
+    store.set(STORES.catches, [{ slot: "a" }]);
+    illisibles.add("*keys*");
+
+    const bundle = await exportedBundle();
+
+    expect(bundle.catches).toEqual([{ slot: "a" }]);
+    expect(bundle.lecturesEchouees).toEqual(["photos"]);
+  });
+
+  it("garde le rappel armé quand tout a été lu", async () => {
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:stub");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+
+    const res = await exportData();
+
+    expect(res.complet).toBe(true);
+    expect(getLastExportAt()).not.toBeNull();
   });
 });
 
