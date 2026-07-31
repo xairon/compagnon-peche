@@ -7,7 +7,7 @@
 
 import { distKm, boxAroundKm } from "./geo";
 import { fetchT } from "./net";
-import { choisirStation, DIST_MAX } from "./station";
+import { choisirStation, cleCours, DIST_MAX } from "./station";
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
 const HYDRO = "https://hubeau.eaufrance.fr/api/v2/hydrometrie";
@@ -197,6 +197,10 @@ export interface TempReading {
   dist: number; // km
   value: number; // °C
   date: string; // ISO
+  /** Libellé du cours d'eau publié par le réseau, ou "" s'il ne le dit pas. */
+  cours: string;
+  /** Clé de cours d'eau comparable (voir station.cleCours), ou undefined. */
+  coursCode?: string;
 }
 
 /** A water-temperature reading older than ~2 weeks is stale for a "current
@@ -216,17 +220,32 @@ export async function nearestTemp(
   const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
   const sUrl =
     `${TEMP}/station?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
-    `&size=100&fields=code_station,libelle_station,latitude,longitude`;
+    `&size=100&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,libelle_cours_eau,uri_cours_eau`;
   const sr = await fetchT(sUrl, { signal });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
-  let near: { code: string; nom: string; dist: number } | null = null;
+  let near: {
+    code: string;
+    nom: string;
+    dist: number;
+    cours: string;
+    coursCode?: string;
+  } | null = null;
   for (const d of sj.data || []) {
     const la = Number(d.latitude);
     const lo = Number(d.longitude);
     if (!Number.isFinite(la) || !Number.isFinite(lo)) continue;
     const dist = distKm(lat, lon, la, lo);
-    if (!near || dist < near.dist) near = { code: String(d.code_station), nom: String(d.libelle_station || ""), dist };
+    if (!near || dist < near.dist)
+      near = {
+        code: String(d.code_station),
+        nom: String(d.libelle_station || ""),
+        dist,
+        // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
+        // ici est précisément ce qui empêchait le troisième critère d'exister.
+        cours: String(d.libelle_cours_eau || ""),
+        coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
+      };
   }
   if (!near) return null;
   const cUrl =
@@ -241,7 +260,14 @@ export async function nearestTemp(
   // no timezone suffix — so parse as LOCAL (do NOT append "Z", that would shift
   // it by the UTC offset). heure_mesure_temp exists reliably on this endpoint.
   const iso = `${rec.date_mesure_temp}T${rec.heure_mesure_temp || "12:00:00"}`;
-  return { station: near.nom, dist: near.dist, value: Number(rec.resultat), date: iso };
+  return {
+    station: near.nom,
+    dist: near.dist,
+    value: Number(rec.resultat),
+    date: iso,
+    cours: near.cours,
+    coursCode: near.coursCode,
+  };
 }
 
 // Best available water temperature near a point. France has NO real-time river
@@ -255,6 +281,12 @@ export interface WaterTemp {
   station: string;
   dist: number; // km (0 if unknown)
   source: "thermie" | "physico";
+  /** Cours d'eau de la station, "" quand la source ne le publie pas.
+   *  `analyse_pc` n'a AUCUN champ de rattachement (vérifié le 31/07/2026 : ses
+   *  67 champs n'en portent pas) — d'où le "" sur la branche physico, qui vaut
+   *  « on ne sait pas », jamais « autre rivière ». */
+  cours: string;
+  coursCode?: string;
 }
 
 const Q_TEMP = "1301"; // Température de l'eau (°C) in the quality API
@@ -285,12 +317,26 @@ export async function waterTemp(
       station: String(a.libelle_station || ""),
       dist: Number.isFinite(la) && Number.isFinite(lo) ? distKm(lat, lon, la, lo) : 0,
       source: "physico" as const,
+      // analyse_pc ne publie pas le cours d'eau : ni libellé, ni code. Le nom
+      // de station l'embarque parfois en texte libre ("LA CISSE A AVERDON"),
+      // mais l'extraire serait deviner.
+      cours: "",
     };
   })().catch(() => null);
   // B) Dedicated thermie network (nearest station's latest reading).
   const thermieP: Promise<WaterTemp | null> = nearestTemp(lat, lon, signal)
     .then((t) =>
-      t ? { value: t.value, date: t.date, station: t.station, dist: t.dist, source: "thermie" as const } : null,
+      t
+        ? {
+            value: t.value,
+            date: t.date,
+            station: t.station,
+            dist: t.dist,
+            source: "thermie" as const,
+            cours: t.cours,
+            coursCode: t.coursCode,
+          }
+        : null,
     )
     .catch(() => null);
 
@@ -395,13 +441,28 @@ export async function nearestQuality(
   const sr = await fetchT(sUrl, { signal });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
-  let near: { code: string; nom: string; dist: number } | null = null;
+  let near: {
+    code: string;
+    nom: string;
+    dist: number;
+    cours: string;
+    coursCode?: string;
+  } | null = null;
   for (const d of sj.data || []) {
     const la = Number(d.latitude);
     const lo = Number(d.longitude);
     if (!Number.isFinite(la) || !Number.isFinite(lo)) continue;
     const dist = distKm(lat, lon, la, lo);
-    if (!near || dist < near.dist) near = { code: String(d.code_station), nom: String(d.libelle_station || ""), dist };
+    if (!near || dist < near.dist)
+      near = {
+        code: String(d.code_station),
+        nom: String(d.libelle_station || ""),
+        dist,
+        // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
+        // ici est précisément ce qui empêchait le troisième critère d'exister.
+        cours: String(d.libelle_cours_eau || ""),
+        coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
+      };
   }
   if (!near) return null;
   // One request; pick the latest non-null result per parameter of interest.

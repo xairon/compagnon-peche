@@ -12,6 +12,7 @@ import {
   type Trend,
 } from "../lib/hubeau";
 import { assessCrue, crueLabel } from "../lib/crue";
+import { descriptionMesure } from "../lib/mesure-eau";
 import { ondeEtat } from "../lib/onde";
 import { useNow } from "../lib/now";
 import {
@@ -295,8 +296,12 @@ export function Briefing({
                     ? `Station ${water.data.station.nom} · ${km(water.data.station.dist)}`
                     : "Pas de station hydrométrique à proximité (niveau/débit indisponibles)"}
                   {water.data.station && water.data.h && ` · relevé ${ago(water.data.h.date)}`}
+                  {/* Le cours d'eau apparaît ici quand le réseau le publie :
+                      c'est lui qui fait voir qu'une température vient du Cher
+                      alors qu'on pêche la Loire. Silence quand il ne le publie
+                      pas — ce n'est pas une anomalie de la station. */}
                   {temp.data
-                    ? ` · eau : ${temp.data.station} (${km(temp.data.dist)}) · relevé ${ago(temp.data.date)}`
+                    ? ` · eau : ${descriptionMesure({ station: temp.data.station, cours: temp.data.cours, dist: temp.data.dist })} · relevé ${ago(temp.data.date)}`
                     : !temp.loading && " · pas de capteur température à proximité"}
                   {temp.data && isStaleWaterTemp(temp.data.date) && (
                     <b style={{ color: "#b06e14" }}> — température ancienne, à titre indicatif</b>
