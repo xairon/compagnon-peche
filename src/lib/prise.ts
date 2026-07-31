@@ -33,6 +33,31 @@ const btn = (label: string, act: string, kind: ActKind = "default"): PriseAction
   kind,
 });
 
+/**
+ * The measured size, in centimetres, out of the free-text field — or null when
+ * the angler has not given one.
+ *
+ * The field is optional ("facultatif, pré-remplira le carnet"), so ABSENT and
+ * BELOW THE MAILLE are two different things and must stay that way: an empty
+ * field is not a small fish. Anything unreadable, zero or negative also returns
+ * null rather than a number, because a half-erased field must never be read as
+ * "0 cm" — that would condemn a perfectly legal fish.
+ */
+export function parseTaille(input: string | null | undefined): number | null {
+  if (input === null || input === undefined) return null;
+  const t = input.trim().replace(",", ".");
+  if (t === "") return null;
+  // Number("45 cm") is NaN — good: a size we cannot read is a size we don't have.
+  const n = Number(t);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return n;
+}
+
+/** French decimal notation, for a size we print back to the angler. */
+function cmLabel(n: number): string {
+  return String(n).replace(".", ",") + " cm";
+}
+
 const base = (): PriseView => ({
   bd: "#E6E2D8",
   kickFg: "#A8A495",
@@ -60,6 +85,7 @@ export function priseView(
   quota: { c: number; b: number },
   dept: DeptId | undefined,
   now: Date,
+  taille: number | null = null,
 ): PriseView | null {
   if (!sp || !step) return null;
   const seas = season(sp, now);
@@ -193,6 +219,81 @@ export function priseView(
     // "sinon, à vous de décider" hands the angler a discretion the law does not
     // give them. Every other screen already prints the label.
     const special = !has && m.label !== null;
+    // The whole point of this step, and what the app used to skip: it holds
+    // BOTH numbers — the size the angler typed and the size the arrêté sets —
+    // and never compared them. "Oui, elle fait la maille" stayed the big
+    // primary button with 45 cm entered for a 60 cm brochet.
+    //
+    // Three states, because the field is optional:
+    //   · null      — nothing measured. Assert nothing; keep asking.
+    //   · >= m.cm   — the app knows it makes the size.
+    //   · <  m.cm   — the app knows it does not, and must stop offering to keep it.
+    // The comparison only exists when there IS a number to compare against:
+    // `maille: "spéciale"` yields cm = 0, and "80 ≥ 0" would be a green light
+    // on a species under moratorium.
+    const mesuree = has ? taille : null;
+    const sousLaMaille = mesuree !== null && mesuree < m.cm;
+    const faitLaMaille = mesuree !== null && mesuree >= m.cm;
+    const deptLine =
+      // Only claim "stricter than national" when it actually is: most arrêtés
+      // restate the national figure, and saying otherwise contradicts itself.
+      m.aboveNational && dept && m.text
+        ? [
+            `${DEPARTEMENTS[dept].name} : ${m.text} — au-dessus du socle national (${sp.maille}). Vérifiez l'arrêté en vigueur.`,
+          ]
+        : m.local && dept && m.text
+          ? [`${DEPARTEMENTS[dept].name} : ${m.text}. Vérifiez l'arrêté en vigueur.`]
+          : [];
+
+    if (sousLaMaille) {
+      const mesure = cmLabel(mesuree);
+      return {
+        ...V,
+        bd: "#B33A2E",
+        kickFg: "#B33A2E",
+        titleFg: "#B33A2E",
+        tone: "bad",
+        banner: "SOUS LA MAILLE — RELÂCHER",
+        kicker: m.aboveNational ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
+        title: `${mesure} : sous la maille de ${size}`,
+        paras: [
+          `Vous avez mesuré ${mesure}, la maille est de ${size}. Remise à l'eau obligatoire, immédiate et soignée : conserver un poisson sous la maille est une infraction.`,
+          // Never trap the angler on a typo: the size field sits right below
+          // this card, so the way out is to correct the number, not to override
+          // a legal limit with a button.
+          "Erreur de mesure ? Corrigez la taille saisie ci-dessous — du bout du museau à l'extrémité de la queue.",
+          ...deptLine,
+        ],
+        note: sp.reg && sp.reg.note ? sp.reg.note : null,
+        actions: [
+          btn("Je relâche — les bons gestes", "release", "primary"),
+          btn("Mesurer — règle à l'écran", "ruler"),
+        ],
+      };
+    }
+
+    if (faitLaMaille) {
+      const mesure = cmLabel(mesuree);
+      return {
+        ...V,
+        tone: "good",
+        banner: "MAILLE ATTEINTE — " + mesure,
+        kicker: m.aboveNational ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
+        title: `${mesure} : la maille de ${size} est atteinte`,
+        paras: [
+          `Mesure prise du bout du museau à l'extrémité de la queue ? ${mesure} atteint la maille de ${size}. La maille n'est pas le seul filtre : le quota du jour vient ensuite.`,
+          ...deptLine,
+        ],
+        note: sp.reg && sp.reg.note ? sp.reg.note : null,
+        actions: [
+          btn("Continuer — vérifier le quota", "quota", "primary"),
+          // The angler measures better than the app: leave the door open.
+          btn("Je me suis trompé — elle est sous la maille", "release"),
+          btn("Mesurer — règle à l'écran", "ruler"),
+        ],
+      };
+    }
+
     return {
       ...V,
       tone: "warn",
@@ -209,15 +310,7 @@ export function priseView(
           : special
             ? "Cette espèce ne relève pas d'une taille chiffrée mais d'une règle particulière (moratoire, interdiction, arrêté spécifique). Vérifiez l'arrêté en vigueur avant toute décision."
             : "Aucune maille nationale pour cette espèce — un arrêté local peut en fixer une : vérifiez. Sinon, à vous de décider.",
-        // Only claim "stricter than national" when it actually is: most arrêtés
-        // restate the national figure, and saying otherwise contradicts itself.
-        ...(m.aboveNational && dept && m.text
-          ? [
-              `${DEPARTEMENTS[dept].name} : ${m.text} — au-dessus du socle national (${sp.maille}). Vérifiez l'arrêté en vigueur.`,
-            ]
-          : m.local && dept && m.text
-            ? [`${DEPARTEMENTS[dept].name} : ${m.text}. Vérifiez l'arrêté en vigueur.`]
-            : []),
+        ...deptLine,
       ],
       note: sp.reg && sp.reg.note ? sp.reg.note : null,
       actions: has

@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { StoreProvider } from "../store";
 import { useStore } from "../store-hooks";
 import { Prise } from "./Prise";
@@ -92,5 +93,95 @@ describe("Prise — toutes les surfaces annoncent la même maille", () => {
     renderAtMaille("black-bass", "41");
     await screen.findByText(/Mesure-t-elle au moins 30 cm/);
     expect(screen.queryByText(/au-dessus du socle national/)).not.toBeInTheDocument();
+  });
+});
+
+/**
+ * Le défaut le plus grave du parcours : l'écran demandait la taille, la
+ * stockait pour le carnet, et laissait « Oui, elle fait la maille » en gros
+ * bouton principal — même avec 45 cm saisis sous une maille de 60. La logique
+ * pure est couverte dans lib/prise.test.ts ; ce test existe parce que le champ
+ * de saisie et le verdict vivent dans deux endroits différents de cet écran, et
+ * que rien ne les reliait.
+ */
+describe("Prise — la taille saisie change le verdict à l'écran", () => {
+  it("45 cm sous une maille de 60 : le bouton « elle fait la maille » disparaît", async () => {
+    const user = userEvent.setup();
+    renderAtMaille("brochet", "41");
+    await screen.findByText(/Mesure-t-elle au moins 60 cm/);
+
+    await user.type(screen.getByPlaceholderText("≥ 60 cm"), "45");
+
+    expect(screen.queryByText(/Oui, elle fait la maille/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Je relâche/)).toBeInTheDocument();
+  });
+
+  it("45 cm sous une maille de 60 : la bannière rouge s'affiche", async () => {
+    const user = userEvent.setup();
+    renderAtMaille("brochet", "41");
+    await screen.findByText(/Mesure-t-elle au moins 60 cm/);
+
+    await user.type(screen.getByPlaceholderText("≥ 60 cm"), "45");
+
+    expect(screen.getByText(/SOUS LA MAILLE/)).toBeInTheDocument();
+  });
+
+  it("62 cm au-dessus de 60 : la maille est confirmée et le parcours continue", async () => {
+    const user = userEvent.setup();
+    renderAtMaille("brochet", "41");
+    await screen.findByText(/Mesure-t-elle au moins 60 cm/);
+
+    await user.type(screen.getByPlaceholderText("≥ 60 cm"), "62");
+
+    expect(screen.getByText(/MAILLE ATTEINTE/)).toBeInTheDocument();
+    expect(screen.getByText(/Continuer — vérifier le quota/)).toBeInTheDocument();
+  });
+
+  it("effacer la taille ramène la question, sans verdict inventé", async () => {
+    const user = userEvent.setup();
+    renderAtMaille("brochet", "41");
+    const champ = await screen.findByPlaceholderText("≥ 60 cm");
+
+    await user.type(champ, "45");
+    expect(screen.getByText(/SOUS LA MAILLE/)).toBeInTheDocument();
+
+    await user.clear(champ);
+
+    // Troisième état : rien de mesuré, donc rien d'affirmé.
+    expect(screen.getByText(/Mesure-t-elle au moins 60 cm/)).toBeInTheDocument();
+    expect(screen.queryByText(/SOUS LA MAILLE/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Oui, elle fait la maille/)).toBeInTheDocument();
+  });
+
+  it("le champ reste facultatif : sans saisie, le parcours est inchangé", async () => {
+    renderAtMaille("brochet", "41");
+    expect(await screen.findByText(/Oui, elle fait la maille/)).toBeInTheDocument();
+    expect(screen.queryByText(/SOUS LA MAILLE/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/MAILLE ATTEINTE/)).not.toBeInTheDocument();
+  });
+});
+
+/**
+ * Le garde-fou anti-tap accidentel avec des gants : « Je garde » est un
+ * HoldButton à maintien, pas un bouton simple. Il a été ajouté exprès et ce lot
+ * n'a aucune raison de le défaire — mais il touche aux actions du parcours,
+ * donc il doit le prouver.
+ */
+describe("Prise — « Je garde » reste un bouton à maintien", () => {
+  function AtChoix() {
+    const { set } = useStore();
+    useEffect(() => {
+      set({ dept: "41", deptChosen: true, prise: { sp: "brochet", step: "choix" } });
+    }, [set]);
+    return <Prise />;
+  }
+
+  it("l'action de mise à mort demande un maintien, jamais un simple tap", async () => {
+    render(
+      <StoreProvider>
+        <AtChoix />
+      </StoreProvider>,
+    );
+    expect(await screen.findByText(/Je garde — mise à mort propre · maintenez/)).toBeInTheDocument();
   });
 });

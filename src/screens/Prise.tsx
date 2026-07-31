@@ -7,7 +7,7 @@ import { Media } from "../components/Media";
 import { HoldButton } from "../components/HoldButton";
 import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
-import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
+import { priseView, parseTaille, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
 import { useNow } from "../lib/now";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
@@ -31,7 +31,10 @@ export function Prise() {
   // crosses an opening or closing date instead of freezing on the verdict it
   // computed when the screen was first mounted.
   const now = new Date(useNow());
-  const pv = priseView(sp, state.prise.step, qt, state.dept, now);
+  // The size field fed the carnet and nothing else: the card could announce a
+  // 60 cm maille while the angler had just typed 45 into the input right below
+  // it. The engine now receives the measurement and answers with it.
+  const pv = priseView(sp, state.prise.step, qt, state.dept, now, parseTaille(size));
   const choosing = !state.prise.step;
 
   const nq = norm(pq);

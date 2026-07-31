@@ -1,8 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { priseView } from "./prise";
+import { priseView, parseTaille } from "./prise";
 import type { Species } from "../types";
 import type { SeasonRule } from "../types";
 import { SPECIES } from "../data/species";
+import { effectiveMaille } from "./maille";
+import type { DeptId } from "../data/regulation";
 
 // Minimal species factory — only the fields priseView reads for the "statut" step.
 function sp(over: Partial<Species> & { season: SeasonRule }): Species {
@@ -144,6 +146,203 @@ describe("priseView — maille non chiffrée (moratoire, réglementation spécia
 
     expect(v?.paras.join(" ")).toMatch(/à vous de décider/i);
     expect(v?.banner).toBeUndefined();
+  });
+});
+
+/**
+ * Le défaut : l'app possédait les deux nombres — la taille saisie par le
+ * pêcheur et la maille de l'arrêté — et ne les rapprochait jamais. « Oui, elle
+ * fait la maille » restait le gros bouton principal avec 45 cm saisis pour un
+ * brochet dont la maille départementale est 60 cm.
+ *
+ * TROIS états, pas deux. La taille est facultative (« pré-remplira le carnet ») :
+ * une taille absente n'est pas une taille sous la maille, et l'app ne doit rien
+ * affirmer qu'elle ne sait pas.
+ */
+describe("priseView — la taille saisie confronte la maille", () => {
+  const brochet41 = (taille: number | null) =>
+    priseView(
+      sp({ id: "brochet", name: "Brochet", season: "brochet", maille: "50 cm" }),
+      "maille",
+      Q,
+      "41", // l'arrêté du Loir-et-Cher porte le brochet à 60 cm
+      NOW,
+      taille,
+    );
+
+  it("sans taille saisie, la question reste posée et « oui » reste l'action principale", () => {
+    const v = brochet41(null);
+    expect(v?.title).toMatch(/Mesure-t-elle au moins 60 cm/);
+    expect(v?.actions[0].kind).toBe("primary");
+    expect(v?.actions[0].label).toMatch(/Oui, elle fait la maille/);
+    // Rien n'est affirmé : ni bon, ni mauvais.
+    expect(v?.tone).toBe("warn");
+  });
+
+  it("45 cm pour une maille de 60 : « elle fait la maille » n'est plus proposé", () => {
+    const v = brochet41(45);
+    expect(v?.actions.map((a) => a.label).join(" ")).not.toMatch(/fait la maille/i);
+  });
+
+  it("45 cm pour une maille de 60 : le verdict passe au rouge", () => {
+    const v = brochet41(45);
+    expect(v?.tone).toBe("bad");
+    expect(v?.banner).toMatch(/SOUS LA MAILLE/);
+  });
+
+  it("45 cm pour une maille de 60 : relâcher devient l'action principale", () => {
+    const v = brochet41(45);
+    expect(v?.actions.find((a) => a.kind === "primary")?.label).toMatch(/relâche/i);
+  });
+
+  it("l'app cite les deux nombres, pour que le pêcheur puisse la contredire", () => {
+    const texte = (brochet41(45)?.title ?? "") + " " + (brochet41(45)?.paras.join(" ") ?? "");
+    expect(texte).toMatch(/45/);
+    expect(texte).toMatch(/60/);
+  });
+
+  it("elle dit comment se rattraper au lieu de bloquer sur une faute de frappe", () => {
+    const v = brochet41(45);
+    expect(v?.paras.join(" ")).toMatch(/corrigez/i);
+  });
+
+  it("62 cm pour une maille de 60 : la maille est confirmée, pas juste supposée", () => {
+    const v = brochet41(62);
+    expect(v?.tone).toBe("good");
+    expect(v?.actions.find((a) => a.kind === "primary")?.act).toBe("quota");
+  });
+
+  it("pile la maille passe : la loi fixe un minimum, pas un seuil strict", () => {
+    const v = brochet41(60);
+    expect(v?.tone).toBe("good");
+    expect(v?.actions.find((a) => a.kind === "primary")?.act).toBe("quota");
+  });
+
+  it("un demi-centimètre sous la maille reste sous la maille", () => {
+    const v = brochet41(59.5);
+    expect(v?.tone).toBe("bad");
+  });
+
+  it("même confirmée, la remise à l'eau reste offerte (le pêcheur mesure mieux que l'app)", () => {
+    const v = brochet41(62);
+    expect(v?.actions.map((a) => a.act)).toContain("release");
+  });
+
+  it("la règle à l'écran reste accessible dans les trois états", () => {
+    for (const t of [null, 45, 62]) {
+      expect(brochet41(t)?.actions.map((a) => a.act), `taille ${t}`).toContain("ruler");
+    }
+  });
+
+  it("les autres étapes ignorent la taille — elle ne concerne que la maille", () => {
+    const avec = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet" }), "quota", Q, "41", NOW, 45);
+    const sans = priseView(sp({ id: "brochet", name: "Brochet", season: "brochet" }), "quota", Q, "41", NOW, null);
+    expect(avec).toEqual(sans);
+  });
+});
+
+/**
+ * Le piège : `maille: "spéciale"` (saumon atlantique, esturgeons) donne
+ * `cm = 0`. Une comparaison numérique y répondrait « 40 ≥ 0, elle fait la
+ * maille » — un feu vert sur une espèce sous moratoire. Il n'y a pas de nombre
+ * à comparer : l'app ne doit rien conclure du tout.
+ */
+describe("priseView — taille saisie sur une espèce sans maille chiffrée", () => {
+  const saumon = (taille: number | null) =>
+    priseView(
+      sp({ id: "saumon-atlantique", name: "Saumon atlantique", season: "toujours", maille: "spéciale" }),
+      "maille",
+      Q,
+      "41",
+      NOW,
+      taille,
+    );
+
+  it("une taille saisie ne produit jamais de feu vert", () => {
+    expect(saumon(80)?.tone).not.toBe("good");
+    expect(saumon(80)?.tone).toBe("warn");
+  });
+
+  it("l'app ne prétend pas que la maille est atteinte", () => {
+    const texte = (saumon(80)?.title ?? "") + " " + (saumon(80)?.paras.join(" ") ?? "");
+    expect(texte).not.toMatch(/fait la maille|maille atteinte/i);
+  });
+
+  it("elle renvoie toujours à l'arrêté, taille ou pas", () => {
+    expect(saumon(80)?.banner).toMatch(/arrêté/i);
+    expect(saumon(null)?.banner).toMatch(/arrêté/i);
+  });
+
+  it("une espèce sans aucune règle n'est pas non plus jugée sur la taille", () => {
+    const carpe = (t: number | null) =>
+      priseView(sp({ id: "carpe-commune", name: "Carpe", season: "toujours", maille: "—" }), "maille", Q, "41", NOW, t);
+    expect(carpe(12)).toEqual(carpe(null));
+  });
+});
+
+/**
+ * La garde qui survit à ce correctif : elle ne connaît aucune espèce en
+ * particulier. Pour chaque espèce à maille chiffrée dans chacun des trois
+ * départements couverts, un centimètre sous la maille ne doit jamais ressortir
+ * en vert ni proposer de la garder.
+ */
+describe("priseView — aucune espèce sous la maille ne reçoit un feu vert", () => {
+  const DEPTS: DeptId[] = ["23", "36", "41"];
+
+  it("un centimètre sous la maille : ton rouge et action principale = relâcher", () => {
+    let couvertes = 0;
+    for (const d of DEPTS) {
+      for (const s of SPECIES) {
+        const cm = effectiveMaille(s, d).cm;
+        if (cm <= 0) continue;
+        couvertes++;
+        const v = priseView(s, "maille", Q, d, NOW, cm - 1);
+        expect(v?.tone, `${s.id} en ${d} (maille ${cm})`).toBe("bad");
+        expect(
+          v?.actions.find((a) => a.kind === "primary")?.act,
+          `${s.id} en ${d} (maille ${cm})`,
+        ).toBe("release");
+        expect(
+          v?.actions.map((a) => a.label).join(" "),
+          `${s.id} en ${d} (maille ${cm})`,
+        ).not.toMatch(/fait la maille/i);
+      }
+    }
+    // Sans ça, la boucle pourrait ne rien parcourir et le test ne rien prouver.
+    expect(couvertes).toBeGreaterThan(20);
+  });
+});
+
+/**
+ * Le champ est un `<input>` libre en `inputMode="numeric"` : ce qui en sort
+ * n'est pas un nombre. Une saisie illisible doit retomber sur « pas de taille »
+ * — le troisième état — et surtout jamais sur 0, qui serait « sous la maille »
+ * pour un pêcheur qui n'a rien mesuré.
+ */
+describe("parseTaille — du champ de saisie au nombre", () => {
+  it("un champ vide n'est pas une taille", () => {
+    expect(parseTaille("")).toBeNull();
+    expect(parseTaille("   ")).toBeNull();
+    expect(parseTaille(undefined)).toBeNull();
+  });
+
+  it("lit un entier", () => {
+    expect(parseTaille("45")).toBe(45);
+  });
+
+  it("accepte la virgule décimale française", () => {
+    expect(parseTaille("59,5")).toBe(59.5);
+  });
+
+  it("une saisie illisible n'est pas une taille", () => {
+    expect(parseTaille("abc")).toBeNull();
+    expect(parseTaille("45 cm et des poussières")).toBeNull();
+  });
+
+  it("zéro et les valeurs négatives ne sont pas des tailles", () => {
+    // Sinon un champ à moitié effacé condamnerait un poisson parfaitement légal.
+    expect(parseTaille("0")).toBeNull();
+    expect(parseTaille("-3")).toBeNull();
   });
 });
 
