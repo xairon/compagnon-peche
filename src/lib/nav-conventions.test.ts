@@ -26,6 +26,8 @@ const CTX_EXEMPLE = {
   gearFocusId: "hamecons",
   bilanSession: "ecr_9",
   cookStep: 3,
+  priseSp: "sandre",
+  priseStep: "maille",
 } as const;
 
 describe("table des routes", () => {
@@ -51,8 +53,8 @@ describe("table des routes", () => {
     expect([...CTX_CHAMPS].filter((c) => !reclames.has(c))).toEqual([]);
   });
 
-  it("compte neuf champs de contexte", () => {
-    expect(CTX_CHAMPS).toHaveLength(9);
+  it("compte onze champs de contexte", () => {
+    expect(CTX_CHAMPS).toHaveLength(11);
     expect(Object.keys(CTX_DEFAUT).sort()).toEqual([...CTX_CHAMPS].sort());
   });
 });

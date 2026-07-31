@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
+import { render, screen, within, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider } from "../store";
+import type { PriseStep, Store } from "../store";
 import { useStore } from "../store-hooks";
 import { Prise } from "./Prise";
 import { useEffect } from "react";
@@ -24,7 +25,7 @@ function AtMailleStep({ spId, dept }: { spId: string; dept: DeptId }) {
     // angler picked it. Without it the screen also shows DeptDefautWarning,
     // which names the same department and would make the assertions below
     // ambiguous — the warning has its own test.
-    set({ dept, deptChosen: true, prise: { sp: spId, step: "maille" } });
+    set({ dept, deptChosen: true, priseSp: spId, priseStep: "maille" });
   }, [set, spId, dept]);
   return <Prise />;
 }
@@ -171,7 +172,7 @@ describe("Prise — « Je garde » reste un bouton à maintien", () => {
   function AtChoix() {
     const { set } = useStore();
     useEffect(() => {
-      set({ dept: "41", deptChosen: true, prise: { sp: "brochet", step: "choix" } });
+      set({ dept: "41", deptChosen: true, priseSp: "brochet", priseStep: "choix" });
     }, [set]);
     return <Prise />;
   }
@@ -183,5 +184,95 @@ describe("Prise — « Je garde » reste un bouton à maintien", () => {
       </StoreProvider>,
     );
     expect(await screen.findByText(/Je garde — mise à mort propre · maintenez/)).toBeInTheDocument();
+  });
+});
+
+/**
+ * Le lot E a rendu le geste retour d'Android et le « ‹ » de l'app identiques
+ * partout — sauf ici. L'étape du parcours n'était pas un champ de contexte de
+ * navigation, donc le geste système sautait par-dessus les cinq questions d'un
+ * coup, alors que la flèche de l'écran en reculait d'une.
+ */
+describe("Prise — le geste retour recule d'une étape", () => {
+  let flow: Store;
+  function Parcours() {
+    const s = useStore();
+    useEffect(() => {
+      flow = s;
+    });
+    return <Prise />;
+  }
+  const monter = () =>
+    render(
+      <StoreProvider>
+        <Parcours />
+      </StoreProvider>,
+    );
+  const entrer = (sp: string, step: PriseStep) => {
+    act(() => flow.startPrise());
+    act(() => flow.set({ dept: "41", deptChosen: true, priseSp: sp, priseStep: step }));
+  };
+
+  // Réassigner le hash fait NAVIGUER jsdom : un `popstate` est mis en file et
+  // n'arrive qu'au premier `await` du test — c'est-à-dire après les entrées
+  // empilées par le parcours. Le provider le prendrait pour un vrai retour et
+  // remettrait sa profondeur à zéro. On vide la file avant de monter.
+  beforeEach(async () => {
+    window.location.hash = "";
+    await new Promise((r) => setTimeout(r, 0));
+  });
+
+  it("le geste système revient à l'étape précédente, pas à l'écran précédent", async () => {
+    monter();
+    entrer("brochet", "statut");
+    act(() => flow.set({ priseStep: "maille" }));
+    expect(await screen.findByText(/étape 2 \/ 5/)).toBeInTheDocument();
+
+    act(() => {
+      window.history.back();
+    });
+
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
+  });
+
+  it("après un raccourci, il revient au statut et non à « garder ou relâcher »", async () => {
+    // Le silure est invasif : le parcours saute de « statut » à la mise à mort,
+    // sans jamais offrir le choix. Reconstituer ce chemin à la main s'était déjà
+    // trompé une fois — le régime « special », ajouté plus tard, avait été
+    // oublié dans la liste des raccourcis, et le « ‹ » d'un saumon relâché
+    // proposait « Je garde ». L'historique ne peut pas se tromper : il rend
+    // l'entrée réellement quittée, pas celle qu'on déduit.
+    monter();
+    entrer("silure", "statut");
+    act(() => flow.set({ priseStep: "kill" }));
+    expect(screen.queryByText(/étape/)).not.toBeInTheDocument();
+
+    act(() => {
+      window.history.back();
+    });
+
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
+  });
+
+  it("un lien qui nomme une espèce inconnue ramène au choix d'espèce, jamais à une carte vide", async () => {
+    // Une étape sans poisson connu ne peut rien afficher : `priseView` rend
+    // `null`, et l'écran n'aurait plus ni carte ni liste — un cul-de-sac.
+    window.location.hash = "#/prise/nawak/maille";
+
+    monter();
+
+    expect(await screen.findByPlaceholderText(/Quelle est ta prise/)).toBeInTheDocument();
+  });
+
+  it("le « ‹ » de l'écran fait exactement la même chose", async () => {
+    const user = userEvent.setup();
+    monter();
+    entrer("brochet", "statut");
+    act(() => flow.set({ priseStep: "maille" }));
+    await screen.findByText(/étape 2 \/ 5/);
+
+    await user.click(screen.getByLabelText("Étape précédente"));
+
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
   });
 });

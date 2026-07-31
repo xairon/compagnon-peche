@@ -15,7 +15,16 @@
 // Ce module est la partie pure : extraire un point de l'état, comparer,
 // revenir. Le branchement sur `window.history` vit dans le StoreProvider.
 import type { Screen, Tab } from "../store";
-import { CTX_CHAMPS, CTX_DEFAUT, ROUTES, depuisUrl, ongletDe, type Ctx } from "./nav-conventions";
+import {
+  CTX_CHAMPS,
+  CTX_DEFAUT,
+  PRISE_ETAPES,
+  ROUTES,
+  depuisUrl,
+  ongletDe,
+  type Ctx,
+  type PriseEtape,
+} from "./nav-conventions";
 
 /** Ce qui est écrit dans `history.state.nav`, et rien d'autre. */
 export interface PointNav {
@@ -82,6 +91,11 @@ export function lirePoint(brut: unknown): PointNav | null {
     const v = source[champ];
     if (champ === "cookStep") {
       if (typeof v === "number" && Number.isFinite(v) && v >= 0) ctx.cookStep = Math.floor(v);
+    } else if (champ === "priseStep") {
+      // Même méfiance que pour l'URL : une entrée écrite par une version
+      // précédente peut nommer une étape que le parcours n'a plus.
+      if (v === null || (typeof v === "string" && PRISE_ETAPES.includes(v as PriseEtape)))
+        ctx.priseStep = v as PriseEtape | null;
     } else if (typeof v === "string" || v === null) {
       (ctx as Record<string, unknown>)[champ] = v;
     }

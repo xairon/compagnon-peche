@@ -495,10 +495,6 @@ export const STEP_ORDER: Record<string, number> = {
   release: 5,
 };
 
-export const PREV_STEP: Record<string, PriseStep> = {
-  maille: "statut",
-  quota: "maille",
-  choix: "quota",
-  kill: "choix",
-  release: "choix",
-};
+// PREV_STEP a disparu avec ce lot : le chemin de retour n'est plus déduit d'une
+// table parallèle mais dépilé de l'historique du navigateur, qui sait par où on
+// est réellement passé (y compris les raccourcis, que cette table oubliait).

@@ -24,13 +24,21 @@ import type { Screen, Tab } from "../store";
 export const TABS: readonly Tab[] = ["accueil", "especes", "carte", "carnet"];
 
 /**
- * Les champs de l'état qui désignent QUOI l'écran doit ouvrir. Neuf, contre
+ * Le vocabulaire des étapes du parcours « Ma prise », défini ICI parce que
+ * c'est un mot d'URL avant d'être un état : `#/prise/sandre/maille`. Le type
+ * `PriseStep` du store en découle, et non l'inverse — sinon la validation d'un
+ * lien devrait importer le store, qui importe déjà ce module.
+ */
+export const PRISE_ETAPES = ["statut", "maille", "quota", "choix", "kill", "release"] as const;
+
+/**
+ * Les champs de l'état qui désignent QUOI l'écran doit ouvrir. Onze, contre
  * vingt-sept écrans : la plupart des écrans n'en réclament aucun.
  *
- * Ne sont PAS du contexte de navigation, délibérément : `prise` (un parcours de
- * décision à moitié fait ne se partage pas), `ans` (réponses de l'identifieur),
- * `q` / `filter` (recherche en cours), `carnetSeg` (onglet interne du carnet).
- * Ils survivent aux navigations, comme aujourd'hui.
+ * Ne sont PAS du contexte de navigation, délibérément : `ans` (réponses de
+ * l'identifieur), `q` / `filter` (recherche en cours), `carnetSeg` (onglet
+ * interne du carnet), `prisePlace` (le spot d'où le parcours a été lancé, qui
+ * ne dit rien de l'endroit affiché). Ils survivent aux navigations.
  */
 export const CTX_CHAMPS = [
   "spId",
@@ -42,14 +50,17 @@ export const CTX_CHAMPS = [
   "gearFocusId",
   "bilanSession",
   "cookStep",
+  "priseSp",
+  "priseStep",
 ] as const;
 
 export type CtxChamp = (typeof CTX_CHAMPS)[number];
+export type PriseEtape = (typeof PRISE_ETAPES)[number];
 
 /** Le contexte de navigation complet, tel qu'il vit dans l'état du store. */
 export type Ctx = {
-  [K in Exclude<CtxChamp, "cookStep">]: string | null;
-} & { cookStep: number };
+  [K in Exclude<CtxChamp, "cookStep" | "priseStep">]: string | null;
+} & { cookStep: number; priseStep: PriseEtape | null };
 
 /** L'état « rien d'ouvert » — aussi la valeur de remise à zéro. */
 export const CTX_DEFAUT: Ctx = {
@@ -62,6 +73,8 @@ export const CTX_DEFAUT: Ctx = {
   gearFocusId: null,
   bilanSession: null,
   cookStep: 0,
+  priseSp: null,
+  priseStep: null,
 };
 
 /**
@@ -81,6 +94,8 @@ export const CTX_FACULTATIFS: readonly CtxChamp[] = [
   "gearFocusId",
   "bilanSession",
   "cookStep",
+  "priseSp",
+  "priseStep",
 ];
 
 export interface Route {
@@ -97,7 +112,22 @@ export const ROUTES: Record<Screen, Route> = {
   especes: { path: "especes" },
   identify: { path: "identifier", parent: "especes" },
   fiche: { path: "espece", ctx: ["spId"], parent: "especes" },
-  prise: { path: "prise" },
+  // Le parcours de décision est une SUITE d'endroits, pas un endroit unique :
+  // chacune de ses cinq questions mérite son entrée d'historique, pour que le
+  // geste retour d'Android recule d'une question au lieu de sortir du parcours
+  // — c'était le dernier écran où ce geste et le « ‹ » de l'app divergeaient.
+  //
+  // Pourquoi pas le même verdict que la cuisine, qui est UN endroit dont
+  // l'étape n'est qu'une correction (`replace`) : là-bas l'étape est une
+  // position de lecture, jusqu'à vingt, et sortir coûterait vingt gestes. Ici
+  // il y en a cinq au plus, et chacune est une RÉPONSE du pêcheur — reculer
+  // dessus, c'est défaire une décision, ce qu'un geste retour est censé faire.
+  //
+  // L'espèce voyage avec l'étape parce qu'une étape sans son poisson n'a
+  // aucune carte à afficher (`priseView` rend `null`) — même raison que
+  // `catchSlot`, sauf qu'ici les deux sont facultatifs : `#/prise` seul est le
+  // choix d'espèce, et c'est un lien valide.
+  prise: { path: "prise", ctx: ["priseSp", "priseStep"] },
   carnet: { path: "carnet" },
   outils: { path: "outils" },
   noeuds: { path: "noeuds", parent: "outils" },
@@ -108,7 +138,10 @@ export const ROUTES: Record<Screen, Route> = {
   "mentions-legales": { path: "mentions-legales", parent: "outils" },
   credits: { path: "credits", parent: "outils" },
   guides: { path: "guides", parent: "outils" },
-  regle: { path: "regle" },
+  // La règle graduée trace la maille d'UN poisson : celui que le parcours tient
+  // en main. Sans ce champ réclamé, `nav("regle")` depuis l'étape « maille »
+  // effacerait l'espèce et la règle mesurerait celle d'un autre.
+  regle: { path: "regle", ctx: ["priseSp"] },
   // Le seul écran à deux champs : la recette guidée ET l'étape en cours, pour
   // qu'un rechargement en pleine cuisine (les mains sales, l'écran qui s'éteint)
   // reprenne à l'étape 7 et pas au début.
@@ -222,6 +255,13 @@ export function depuisUrl(url: string): { screen: Screen; ctx: Ctx } | null {
     if (champ === "cookStep") {
       const n = Number(decodeURIComponent(brute));
       ctx.cookStep = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+    } else if (champ === "priseStep") {
+      // Une étape inventée n'a pas de carte : ni décision, ni choix d'espèce.
+      // On refuse l'URL entière plutôt que d'ouvrir le parcours au milieu de
+      // rien — l'appelant retombe sur l'accueil.
+      const e = decodeURIComponent(brute) as PriseEtape;
+      if (!PRISE_ETAPES.includes(e)) return null;
+      ctx.priseStep = e;
     } else {
       ctx[champ] = decodeURIComponent(brute);
     }
