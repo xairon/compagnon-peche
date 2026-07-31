@@ -4,6 +4,7 @@
 
 import { compass } from "./geo";
 import { fetchT } from "./net";
+import { lireJsonBorne, octetsMaxPour } from "./net-bornes";
 
 const BASE = "https://api.open-meteo.com/v1/forecast";
 
@@ -83,7 +84,7 @@ export async function fetchMeteo(lat: number, lon: number, signal?: AbortSignal)
     `&forecast_days=7&timezone=auto`;
   const r = await fetchT(`${BASE}?${params}`, { signal, source: "meteo" });
   if (!r.ok) throw new Error("Open-Meteo " + r.status);
-  return parseMeteo(await r.json());
+  return parseMeteo((await lireJsonBorne(r, octetsMaxPour("meteo"))) as Record<string, unknown>);
 }
 
 /**

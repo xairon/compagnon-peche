@@ -207,16 +207,18 @@ export async function geocode(q: string, signal?: AbortSignal): Promise<Place[]>
     { signal, source: "ign" },
   );
   if (!r.ok) throw new Error("geocode " + r.status);
-  const j = await r.json();
+  // Lecture bornée, comme le Sandre : le géocodeur est interrogé dès qu'on
+  // cherche une commune, souvent depuis un wifi inconnu — c'est l'appel le plus
+  // exposé au portail captif qui répond sa page d'accueil à la place du JSON.
+  const j = (await lireJsonBorne(r, octetsMaxPour("ign"))) as {
+    features?: { properties?: { label?: string }; geometry?: { coordinates?: number[] } }[];
+  };
   return (j.features || [])
-    .filter(
-      (f: { geometry?: { coordinates?: [number, number] } }) =>
-        Array.isArray(f.geometry?.coordinates) && f.geometry.coordinates.length >= 2,
-    )
-    .map((f: { properties: { label: string }; geometry: { coordinates: [number, number] } }) => ({
-      label: f.properties.label,
-      lon: f.geometry.coordinates[0],
-      lat: f.geometry.coordinates[1],
+    .filter((f) => Array.isArray(f.geometry?.coordinates) && f.geometry.coordinates.length >= 2)
+    .map((f) => ({
+      label: String(f.properties?.label ?? ""),
+      lon: f.geometry!.coordinates![0],
+      lat: f.geometry!.coordinates![1],
     }));
 }
 
@@ -235,8 +237,10 @@ export async function deptFromCoords(
       { signal, source: "ign" },
     );
     if (!r.ok) return null;
-    const j = await r.json();
-    const p = (j.features || [])[0]?.properties as { citycode?: string; context?: string } | undefined;
+    const j = (await lireJsonBorne(r, octetsMaxPour("ign"))) as {
+      features?: { properties?: { citycode?: string; context?: string } }[];
+    };
+    const p = (j.features || [])[0]?.properties;
     if (p?.citycode && p.citycode.length >= 2) {
       const cc = p.citycode;
       // Métropole = 2 digits (Corse "2A/2B" included); Outre-mer = 3 ("971"–"976").

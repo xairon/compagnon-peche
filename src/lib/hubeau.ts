@@ -7,8 +7,23 @@
 
 import { distKm, boxAroundKm } from "./geo";
 import { fetchT } from "./net";
+import { lireJsonBorne, octetsMaxPour } from "./net-bornes";
 import { choisirStation, cleCours, DIST_MAX, DIST_MAX_MEME_COURS } from "./station";
 import { parseAnalysePc } from "./analyse-pc";
+
+/**
+ * Ce que Hub'Eau rend : une enveloppe `{ data: [...] }`, quel que soit
+ * l'endpoint. Le contenu des enregistrements, lui, change d'un endpoint à
+ * l'autre, et chaque appelant ci-dessous nomme les champs qu'il lit et les
+ * convertit lui-même (`Number(...)`, `String(...)`).
+ *
+ * `any` est délibéré et localisé ici : c'est exactement ce que `r.json()`
+ * rendait avant que la lecture soit bornée. Le but du changement est de ne plus
+ * charger en mémoire une réponse anormale — pas de retyper toute la couche
+ * Hub'Eau au passage, ce qui serait un autre travail, avec ses propres risques.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ChargeHubeau = { data?: any[] };
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
 const HYDRO = "https://hubeau.eaufrance.fr/api/v2/hydrometrie";
@@ -48,7 +63,7 @@ export async function stationsInBbox(
     `&size=300&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
-  const j = await r.json();
+  const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   return (j.data || [])
     .filter((d: Record<string, unknown>) => Number.isFinite(Number(d.latitude)) && Number.isFinite(Number(d.longitude)))
     .map((d: Record<string, unknown>) => ({
@@ -73,7 +88,7 @@ export async function speciesAtStation(
     `&size=20000&sort=desc&fields=nom_commun_taxon,nom_latin_taxon,effectif_lot`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
-  const j = await r.json();
+  const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const map = new Map<string, StationSpecies>();
   for (const o of j.data || []) {
     const key = (o.nom_latin_taxon || o.nom_commun_taxon || "").toLowerCase();
@@ -119,7 +134,7 @@ export async function nearestHydroStation(
     `&en_service=true&size=200&format=json`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
-  const j = await r.json();
+  const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const cands: HydroStation[] = [];
   for (const d of j.data || []) {
     const la = Number(d.latitude_station ?? d.latitude);
@@ -163,7 +178,7 @@ export async function latestHydro(
     `&grandeur_hydro=${grandeur}&size=40&sort=desc&fields=date_obs,resultat_obs`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
-  const j = await r.json();
+  const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const obs: { date_obs: string; resultat_obs: number }[] = j.data || [];
   if (!obs.length) return null;
   // resultat_obs: H in mm → m, Q in L/s → m³/s. Both divide by 1000.
@@ -251,7 +266,7 @@ export async function nearestTemp(
     `&size=100&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,libelle_cours_eau,uri_cours_eau`;
   const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
-  const sj = await sr.json();
+  const sj = (await lireJsonBorne(sr, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const cands: {
     code: string;
     nom: string;
@@ -284,7 +299,7 @@ export async function nearestTemp(
     `&sort=desc&size=1&fields=date_mesure_temp,heure_mesure_temp,resultat`;
   const cr = await fetchT(cUrl, { signal, source: "hubeau" });
   if (!cr.ok && cr.status !== 206) throw new Error("Hub'Eau " + cr.status);
-  const cj = await cr.json();
+  const cj = (await lireJsonBorne(cr, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const rec = (cj.data || [])[0];
   if (!rec || rec.resultat == null) return null;
   // date_mesure_temp + heure_mesure_temp are French legal time (Europe/Paris),
@@ -368,7 +383,7 @@ export async function coursDesStationsPc(
     `&size=200&fields=code_station,libelle_station,code_cours_eau,nom_cours_eau,uri_cours_eau`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
-  const j = await r.json();
+  const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   // undefined en valeur = libellé abandonné pour cause de désaccord.
   const par = new Map<string, CoursStationPc | undefined>();
   for (const d of j.data || []) {
@@ -415,7 +430,14 @@ export async function waterTemp(
       `&fields=date_prelevement,resultat,libelle_station,latitude,longitude`;
     const r = await fetchT(url, { signal, source: "hubeau" });
     if (!r.ok && r.status !== 206) return [];
-    return parseAnalysePc(await r.json(), lat, lon);
+    return parseAnalysePc(
+      (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as {
+        count?: number;
+        data?: Record<string, unknown>[];
+      },
+      lat,
+      lon,
+    );
   })().catch(() => []);
   // A bis) Le rattachement des analyses, qui ne le portent pas. Une requête de
   //   plus, demandée UNIQUEMENT quand on sait sur quelle rivière on se tient :
@@ -485,7 +507,7 @@ export async function nearestOnde(
     `&size=150&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
   const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
-  const sj = await sr.json();
+  const sj = (await lireJsonBorne(sr, octetsMaxPour("hubeau"))) as ChargeHubeau;
   let near: { code: string; nom: string; cours: string; dist: number } | null = null;
   for (const d of sj.data || []) {
     const la = Number(d.latitude);
@@ -506,7 +528,7 @@ export async function nearestOnde(
     `&sort=desc&size=1&fields=date_observation,code_ecoulement,libelle_ecoulement`;
   const or = await fetchT(oUrl, { signal, source: "hubeau" });
   if (!or.ok && or.status !== 206) throw new Error("Hub'Eau " + or.status);
-  const oj = await or.json();
+  const oj = (await lireJsonBorne(or, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const rec = (oj.data || [])[0];
   if (!rec || !rec.code_ecoulement) return null;
   return {
@@ -563,7 +585,7 @@ export async function nearestQuality(
     `&size=150&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,nom_cours_eau,uri_cours_eau`;
   const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
-  const sj = await sr.json();
+  const sj = (await lireJsonBorne(sr, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const cands: {
     code: string;
     nom: string;
@@ -596,7 +618,7 @@ export async function nearestQuality(
     `&fields=code_parametre,resultat,date_prelevement`;
   const ar = await fetchT(aUrl, { signal, source: "hubeau" });
   if (!ar.ok && ar.status !== 206) throw new Error("Hub'Eau " + ar.status);
-  const aj = await ar.json();
+  const aj = (await lireJsonBorne(ar, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const rows: { code_parametre: string; resultat: number | null; date_prelevement: string }[] = aj.data || [];
   const out: QualityReading = {
     station: near.nom,
