@@ -64,6 +64,42 @@ describe("cohérence réglementaire dans l'interface", () => {
 });
 
 /**
+ * Attribution de la carte « Officielle ».
+ *
+ * L'écran Sources, l'écran Mentions et la liste des licences ont été corrigés
+ * ensemble — mais Carte.tsx, qui appartenait à un autre lot, a continué
+ * d'annoncer « Parcours & réglementation (FNPF) ». La correction d'un
+ * libellé ne protège pas ses copies : on garde donc la formule là où elle est
+ * écrite, dans tous les écrans à la fois.
+ *
+ * geopeche.com/contact.php ne nomme qu'un éditeur, « GEOPECHE - CREALEAD, 55,
+ * rue Saint Cléophas, 34070 MONTPELLIER » (31/07/2026). La FNPF reste citée
+ * ailleurs à bon droit — cartedepeche.fr est bien son canal de vente — d'où une
+ * garde de proximité : c'est le RAPPROCHEMENT des deux noms qui est faux.
+ */
+describe("attribution de la carte Géopêche", () => {
+  it("aucun écran ne rapproche Géopêche de la FNPF", () => {
+    const offenders: string[] = [];
+    for (const path of uiFiles()) {
+      const src = readFileSync(path, "utf8");
+      src.split("\n").forEach((line: string, i: number) => {
+        if (/g[ée]op[êe]che/i.test(line) && /FNPF/i.test(line)) {
+          offenders.push(`${path}:${i + 1} → ${line.trim()}`);
+        }
+      });
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("l'écran Carte nomme bien Géopêche là où il décrit la carte officielle", () => {
+    // Sans ceci, supprimer toute mention de la source ferait passer le test
+    // précédent : le silence n'est pas une attribution correcte.
+    const src = readFileSync("src/screens/Carte.tsx", "utf8");
+    expect(src).toContain("Parcours & réglementation (Géopêche)");
+  });
+});
+
+/**
  * La première version de cette garde ne cherchait que `{sp.maille}` en JSX —
  * elle n'a rien vu quand la grille d'espèces a transformé « Interdit » en
  * « Pas de maille », ni quand elle a affiché une pastille verte pour un
