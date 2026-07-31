@@ -8,7 +8,29 @@
 // « en règle jusqu'au 31 décembre » est une fausse assurance sur exactement le
 // document qu'un garde lui demandera.
 //
-// Aucun tarif n'est embarqué ici, délibérément — voir RECIPROCITES plus bas.
+// Aucun tarif n'est embarqué ici, délibérément — et la recherche a été refaite
+// au canal officiel le 31/07/2026 pour ne pas avoir à la refaire :
+//
+//  · cartedepeche.fr ne publie AUCUN tarif national millésimé. Ses pages
+//    éditoriales décrivent les six cartes sans donner de prix ; les seules
+//    valeurs servies sont des moyennes chargées en AJAX, accompagnées de leur
+//    propre avertissement — « Prix moyen indicatif calculé à l'échelle
+//    nationale. Des disparités peuvent être relevées localement » — et sans
+//    millésime. Elles varient d'ailleurs selon la saisie : 100 € ou 114 € pour
+//    la même carte « personne majeure », 17 € en valeur ponctuelle contre
+//    « entre 15 € et 20 € » en fourchette pour la journalière. Les deux
+//    chiffres contradictoires des sources secondaires étaient donc tous deux
+//    « officiels » : ce sont deux moyennes, pas un tarif.
+//  · La FNPF annonce 112 € pour l'interfédérale (page réciprocité, non datée)
+//    quand l'EHGO en annonce 114 € : deux canaux officiels qui se contredisent,
+//    aucun des deux millésimé 2026 dans son texte.
+//  · Le montant de la CPMA n'est chiffré nulle part sur le canal officiel.
+//  · Enfin, la FNPF ne fixe qu'un « tarif préconisé nationalement » : le prix
+//    payé dépend de l'AAPPMA choisie. Il n'existe donc pas de tarif national à
+//    embarquer, et un test interdit qu'un montant réapparaisse ici.
+//
+// Ce qui a pu être établi, en revanche, c'est la composition de l'EHGO — voir
+// phraseReciprocite plus bas.
 
 /** Absente = rien de renseigné (pas forcément une infraction : moins de 12 ans,
  *  ou le pêcheur n'a simplement pas rempli le champ).
@@ -134,15 +156,33 @@ export function statutCarte(c: CarteDePeche | undefined, now: Date): FishingCard
 
 /** Ce que l'app peut honnêtement dire d'un réseau de réciprocité.
  *
- *  Aucune de ces phrases ne donne de nombre de départements : les deux pages de
- *  coindepeche.fr consultées le 31/07/2026 se contredisent (EHGO 37 / CHI 39 /
- *  URNE 14 sur la page tarifs, EHGO 35 / CHI 32 / URNE 24 dans le guide). Un
- *  test échoue si un chiffre réapparaît ici. La liste faisant foi est celle de
- *  la fédération départementale et de cartedepeche.fr. */
+ *  Une seule de ces phrases donne un nombre de départements, et c'est la seule
+ *  pour laquelle le réseau lui-même le publie, daté. Les deux pages de
+ *  coindepeche.fr consultées le 31/07/2026 se contredisaient (EHGO 37 / CHI 39 /
+ *  URNE 14 sur la page tarifs, EHGO 35 / CHI 32 / URNE 24 dans le guide) ;
+ *  aller à la source a tranché pour l'EHGO et confirmé l'ignorance pour les
+ *  deux autres :
+ *
+ *  · EHGO — ehgo.fr écrit « 34 fédérations pour 37 départements (4 en région
+ *    parisienne) », sur un site qui se date de 2026 (« L'EHGO 2026 : 34
+ *    fédérations », actualités de juillet 2026). Les deux comptes se recoupent :
+ *    l'entrée « Île-de-France » vaut une fédération pour quatre départements.
+ *  · CHI — son site ne publie jamais son propre décompte, et ses pages de
+ *    présentation et de réciprocité répondaient 500 le 31/07/2026.
+ *  · URNE — le domaine urne-peche.fr n'existe plus (redirection « domaine
+ *    inconnu » de WordPress.com).
+ *  Pour ces deux-là, le seul chiffre officiel (CHI 36 / URNE 17, page
+ *  réciprocité de la FNPF) ne porte AUCUN millésime : un chiffre sans date
+ *  n'est pas un chiffre de la saison, et l'app n'en reprend rien. Un test
+ *  échoue si un nombre réapparaît dans leurs phrases.
+ *
+ *  Dans tous les cas la liste faisant foi reste celle de la fédération
+ *  départementale et de cartedepeche.fr : la réciprocité s'applique parcours
+ *  par parcours, et chaque fédération en exclut ce qu'elle veut. */
 export function phraseReciprocite(r: Reciprocite): string {
   switch (r) {
     case "EHGO":
-      return "Entente Halieutique du Grand Ouest — votre carte ouvre les parcours réciprocitaires des fédérations membres. La liste à jour est celle de votre fédération.";
+      return "Entente Halieutique du Grand Ouest — 34 fédérations pour 37 départements (chiffres publiés par ehgo.fr, saison 2026). Votre carte ouvre les parcours réciprocitaires des fédérations membres ; la liste à jour est celle de votre fédération.";
     case "CHI":
       return "Club Halieutique Interdépartemental — votre carte ouvre les parcours réciprocitaires des fédérations membres. La liste à jour est celle de votre fédération.";
     case "URNE":
