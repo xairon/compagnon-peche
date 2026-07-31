@@ -36,6 +36,17 @@ const OUTPUT = "application/json; subtype=geojson";
 /** Assez pour un confluent embrouillé ; 4 tronçons mesurés sur la boîte la plus
  *  chargée essayée (confluent Cisse/Loire, 1 km, 35,8 ko). */
 const COUNT = 50;
+/**
+ * Délai propre, plus court que celui de la source « sandre ».
+ *
+ * net-bornes.ts accorde 25 s au Sandre, budget calculé sur ~1 Mo de couche
+ * hydrographique. Ici la réponse fait 5 ko : appliquer le même délai ferait
+ * attendre le briefing une demi-minute pour une requête accessoire. Les
+ * températures et la qualité de l'eau attendent cette réponse — c'est elle qui
+ * leur dit sur quelle rivière chercher — donc elle ne doit pas les retenir.
+ * 8 s reste large pour 5 ko, y compris en 3G.
+ */
+const DELAI_MS = 8000;
 
 /** Les deux chiffres du choix ci-dessus, gardés lisibles pour qu'il reste
  *  discutable au lieu d'être enfoui dans un commentaire. */
@@ -81,7 +92,11 @@ export async function coursSousLePoint(
   signal?: AbortSignal,
 ): Promise<CoursDuPoint | null> {
   try {
-    const r = await fetchT(urlTronconsAutour(lat, lon), { signal, source: "sandre" });
+    const r = await fetchT(urlTronconsAutour(lat, lon), {
+      signal,
+      source: "sandre",
+      timeout: DELAI_MS,
+    });
     if (!r.ok) return null;
     const fc = (await lireJsonBorne(r, octetsMaxPour("sandre"))) as FeatureCollection;
     return coursDuPoint(fc, lat, lon);
