@@ -306,6 +306,16 @@ export const SOURCES: SourceEntry[] = [
     d: "peche36.fr · peche41.fr — repères pédagogiques, non normatifs.",
   },
   {
+    // Source de seconde main, et présentée comme telle. Le site qualifie
+    // lui-même ses fiches d'indicatives ; l'app ne s'en sert que pour les
+    // départements dont elle ne connaît pas l'arrêté. La date est recopiée à
+    // la main depuis src/data/reglementation-coindepeche.gen.ts (importer ce
+    // fichier ici ferait entrer 80 ko dans le premier chargement) ; un test de
+    // src/lib/reg-tiers.test.ts échoue si les deux divergent.
+    t: "coindepeche.fr — réglementation par département",
+    d: "96 fiches départementales, consultées le 31/07/2026. Données indicatives publiées par le site, pas des arrêtés préfectoraux : utilisées seulement pour les départements que l'app ne couvre pas, et jamais à la place d'un arrêté connu.",
+  },
+  {
     t: "Taxonomie & biologie",
     d: "TAXREF (MNHN), GBIF, Atlas des poissons d'eau douce de France (Keith et al., 2011).",
   },

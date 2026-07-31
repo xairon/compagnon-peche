@@ -6199,3 +6199,75 @@ button.card-row {
   background: none;
   border: 0;
 }
+
+/* ── Réglementation de seconde main (coindepeche.fr) ──────────────────────────
+   Volontairement plus sobre que les blocs d'arrêté au-dessus : la hiérarchie
+   visuelle doit refléter la hiérarchie des sources. */
+.rgt-ouvrir {
+  width: 100%;
+  text-align: left;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--line-strong);
+  background: #fff;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--green);
+}
+.rgt-sel {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  font-size: 15px;
+  color: var(--ink);
+}
+.rgt-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rgt-esp {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 13px;
+  background: var(--sand);
+}
+.rgt-esp-nom {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+.rgt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+}
+.rgt-grid .k {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rgt-grid .v {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--body);
+}
+.rgt-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--body);
+}
+.rgt-src {
+  margin-top: 11px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}

@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { REG_YEAR } from "../data/version";
 import { useStore } from "../store-hooks";
+import { chargerRegTiers, type RegTiers as RegTiersData } from "../lib/reg-tiers";
+import { RegTiers } from "../components/RegTiers";
 import { NATIONAL_SIZES, DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { MAILLE_NOTE } from "../data/ecrevisses";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
@@ -9,6 +12,25 @@ import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 export function Reglement() {
   const { state, set, back } = useStore();
   const dept = DEPARTEMENTS[state.dept];
+  // 80 ko de fiches tierces que la plupart des sessions n'ouvriront jamais :
+  // chargées à la demande, pas dans le premier rendu de tout le monde.
+  const [tiersOuvert, setTiersOuvert] = useState(false);
+  const [tiers, setTiers] = useState<RegTiersData | null>(null);
+  const [tiersErr, setTiersErr] = useState(false);
+
+  useEffect(() => {
+    if (!tiersOuvert || tiers) return;
+    let vivant = true;
+    chargerRegTiers().then(
+      (d) => vivant && setTiers(d),
+      // Un échec de chargement de module n'est pas « pas de données » : le
+      // dire, plutôt que d'afficher une liste vide.
+      () => vivant && setTiersErr(true),
+    );
+    return () => {
+      vivant = false;
+    };
+  }, [tiersOuvert, tiers]);
 
   return (
     <div className="screen">
@@ -122,6 +144,35 @@ export function Reglement() {
           </div>
         </div>
 
+
+        {/* L'app connaît l'arrêté de trois départements. Pour les autres elle
+            ne disait rien du tout ; elle peut désormais montrer une fiche de
+            seconde main, à condition de le dire dans ces mots. */}
+        <div className="label" style={{ margin: "18px 0 8px" }}>
+          Je pêche dans un autre département
+        </div>
+        {!tiersOuvert ? (
+          <button
+            className="rgt-ouvrir"
+            style={{ minHeight: 44 }}
+            onClick={() => setTiersOuvert(true)}
+          >
+            Voir la réglementation d'un autre département ›
+          </button>
+        ) : tiersErr ? (
+          <div className="ecr-warn">
+            Les fiches des autres départements n'ont pas pu être chargées. Ce n'est pas « aucune
+            donnée » : réessayez une fois en ligne.
+          </div>
+        ) : !tiers ? (
+          <div className="reg-note">Chargement des fiches…</div>
+        ) : (
+          <RegTiers
+            fiches={tiers.fiches}
+            consulteLe={tiers.consulteLe}
+            codeInitial={state.outOfZoneDept ?? tiers.fiches[0]?.code ?? ""}
+          />
+        )}
 
         <div className="disclaimer">
           Cette app est un outil d'aide. La réglementation applicable est celle de l'arrêté
