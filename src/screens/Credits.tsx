@@ -1,7 +1,16 @@
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { KNOTS } from "../data/knots";
-import { SPECIES_MEDIA, GEAR_MEDIA, CRAYFISH_MEDIA } from "../data/media";
+import {
+  SPECIES_MEDIA,
+  GEAR_MEDIA,
+  CRAYFISH_MEDIA,
+  RECIPE_MEDIA,
+  TECHNIQUE_MEDIA,
+} from "../data/media";
+import { licenceUrl } from "../lib/licences";
+import { RECIPES } from "../data/recipes";
+import { TECHNIQUES } from "../data/techniques";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
 import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/media-helpers";
@@ -28,6 +37,12 @@ function nameForGear(id: string): string {
     if (hit) return hit.name;
   }
   return id;
+}
+function nameForRecipe(id: string): string {
+  return RECIPES.find((r) => r.id === id)?.title || id;
+}
+function nameForTechnique(id: string): string {
+  return TECHNIQUES.find((t) => t.id === id)?.name || id;
 }
 
 export function Credits() {
@@ -57,12 +72,25 @@ export function Credits() {
   );
   const gearRows = Object.entries(GEAR_MEDIA).map(([id, m]) => ({ name: nameForGear(id), ...m }));
   const crayfishRows = Object.entries(CRAYFISH_MEDIA).map(([id, m]) => ({ name: nameForCrayfish(id), ...m }));
+  // Recipe and technique photos ship in the app and are displayed by
+  // Recette, Techniques and CarnetRecettes — they were never credited here,
+  // which for the CC BY-SA ones is a licence breach, not an omission.
+  const recipeRows = Object.entries(RECIPE_MEDIA).map(([id, m]) => ({ name: nameForRecipe(id), ...m }));
+  const techniqueRows = Object.entries(TECHNIQUE_MEDIA).map(([id, m]) => ({ name: nameForTechnique(id), ...m }));
 
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (
     <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid #ECE8DD" }}>
       <div style={{ fontSize: 14, fontWeight: 600 }}>{r.name}</div>
       <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
-        {r.author} — {r.license}
+        {r.author} —{" "}
+        {/* CC licences require the terms to be linked, not merely named. */}
+        {licenceUrl(r.license) ? (
+          <a href={licenceUrl(r.license) as string} target="_blank" rel="noreferrer">
+            {r.license}
+          </a>
+        ) : (
+          r.license
+        )}
         {r.sourceUrl && (
           <>
             {" · "}
@@ -134,11 +162,31 @@ export function Credits() {
           </>
         )}
 
+        {recipeRows.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 4px" }}>
+              Recettes
+            </div>
+            {recipeRows.map(Row)}
+          </>
+        )}
+
+        {techniqueRows.length > 0 && (
+          <>
+            <div className="label" style={{ margin: "18px 0 4px" }}>
+              Techniques
+            </div>
+            {techniqueRows.map(Row)}
+          </>
+        )}
+
         {speciesRows.length === 0 &&
           knotRows.length === 0 &&
           knotStepRows.length === 0 &&
           gearRows.length === 0 &&
-          crayfishRows.length === 0 && (
+          crayfishRows.length === 0 &&
+          recipeRows.length === 0 &&
+          techniqueRows.length === 0 && (
           <div style={{ color: "var(--muted)", fontSize: 14 }}>
             Les images seront créditées ici une fois embarquées.
           </div>

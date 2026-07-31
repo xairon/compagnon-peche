@@ -3,42 +3,34 @@
 // a component file's exports to stay component-only).
 import { SPECIES_MEDIA, KNOT_MEDIA, RECIPE_MEDIA, TECHNIQUE_MEDIA, GEAR_MEDIA, CRAYFISH_MEDIA } from "../data/media";
 import { LOCAL_KNOT_MEDIA } from "../data/knot-diagrams";
+import { SPECIES } from "../data/species";
+import { norm } from "../lib/helpers";
 
 /** Fetched knot diagrams plus hand-drawn originals for rigs Commons lacks. */
 export const ALL_KNOT_MEDIA = { ...KNOT_MEDIA, ...LOCAL_KNOT_MEDIA };
 
-/** French confusion-species display names → media ids. */
+/**
+ * Confusion-species display names → media ids, for names the catalogue does NOT
+ * already answer: shortened forms ("Carpe" for "Carpe commune"), photos whose
+ * id differs from the species id, and species with a photo but no Species entry
+ * (grémille, carassin).
+ *
+ * Everything a fiche calls by its catalogue name resolves through SPECIES — see
+ * confusionMediaId. Maintaining those by hand covered a third of the ~60 names
+ * the fiches cite, so most confusion blocks showed an empty frame beside the
+ * text while the photo was embedded and precached.
+ */
 export const NAME_TO_ID: Record<string, string> = {
-  Sandre: "sandre",
-  Brochet: "brochet",
-  Perche: "perche",
-  "Black-bass": "black-bass",
-  "Silure glane": "silure",
+  // Short forms: the fiche says "Silure", the catalogue says "Silure glane".
   Silure: "silure",
-  "Perche soleil": "perche-soleil",
-  "Poisson-chat": "poisson-chat",
-  "Truite fario": "truite-fario",
-  "Truite arc-en-ciel": "truite-arc-en-ciel",
-  "Carpe commune": "carpe",
   Carpe: "carpe",
-  Gardon: "gardon",
-  "Barbeau fluviatile": "barbeau",
-  Grémille: "gremille",
   Carassin: "carassin",
-  "Carassin commun": "carassin",
-  Rotengle: "rotengle",
-  "Brème commune": "breme",
-  Tanche: "tanche",
-  Ablette: "ablette",
-  Chevesne: "chevesne",
-  Hotu: "hotu",
-  Goujon: "goujon",
-  "Ombre commun": "ombre",
   Ombre: "ombre",
-  "Omble de fontaine": "omble-fontaine",
-  "Anguille européenne": "anguille",
   Anguille: "anguille",
-  Vandoise: "vandoise",
+  // Sea trout: cited when distinguishing the salmon, regulated (fishing closed
+  // all year here), photographed — but with no fiche of its own, so nothing in
+  // SPECIES answers the name.
+  "Truite de mer": "truite-de-mer",
 };
 
 export const MEDIA_BY_KIND = {
@@ -50,9 +42,18 @@ export const MEDIA_BY_KIND = {
   crayfish: CRAYFISH_MEDIA,
 };
 
-/** Media for a confusion species referenced by its French display name. */
+/** Catalogue names, normalised, so a fiche citing a species by its own name
+ *  needs no manual entry. Built once at module load. */
+const BY_SPECIES_NAME: Record<string, string> = Object.fromEntries(
+  SPECIES.map((s) => [norm(s.name), s.id]),
+);
+
+/** Media for a confusion species referenced by its French display name.
+ *  Manual aliases win — they exist precisely to override or extend. */
 export function confusionMediaId(name: string): string | null {
-  return NAME_TO_ID[name] ?? null;
+  const manuel = NAME_TO_ID[name] ?? NAME_TO_ID[name.trim()];
+  if (manuel) return manuel;
+  return BY_SPECIES_NAME[norm(name.trim())] ?? null;
 }
 
 /** Whether a locally-embedded image exists for this id/kind (to prefer it). */
