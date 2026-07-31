@@ -216,43 +216,76 @@ async function photoKeys(): Promise<string[]> {
  *  3 = crayfish sessions added to the bundle. */
 export const EXPORT_SCHEMA = 3;
 
+/** Ce qu'un export a réellement pu emporter. */
+export interface ExportResult {
+  /** Tous les magasins ont été lus. */
+  complet: boolean;
+  /** Noms des magasins que la base a refusé de rendre (`spots`, `photos`, …). */
+  lecturesEchouees: string[];
+}
+
 /** Download a full JSON backup — structured data AND photos (base64), so it can
- *  actually restore everything on a new device (see importData). */
-export async function exportData(): Promise<void> {
+ *  actually restore everything on a new device (see importData).
+ *
+ *  Chaque magasin est lu séparément, et un refus n'emporte pas les autres.
+ *  Ce n'est pas de la robustesse gratuite : quand une lecture échoue,
+ *  `store.tsx` suspend les écritures et la bannière dit « exportez une
+ *  sauvegarde ». Un export tout-ou-rien envoyait alors l'utilisateur vers une
+ *  porte fermée, au moment précis où c'était sa seule issue. */
+export async function exportData(): Promise<ExportResult> {
   // Derived from STORES rather than listed by hand: adding a store to the
   // registry puts it in the backup automatically, and no future store can be
   // forgotten here the way `carnet:crayfish` was.
   const names = Object.keys(STORES) as StoreName[];
-  const values = await Promise.all(names.map((n) => get(STORES[n])));
-  const stored = Object.fromEntries(
-    names.map((n, i) => [
-      n,
+  const lecturesEchouees: string[] = [];
+  const stored: Record<string, unknown> = {};
+  for (const n of names) {
+    try {
+      const v = await get(STORES[n]);
       // The profile is a single object; every other store is a list.
-      n === "profile" ? (values[i] ?? null) : (values[i] ?? []),
-    ]),
-  );
-  // Photos as data URLs so the backup is self-contained and restorable.
-  const photos: Record<string, string> = {};
-  for (const k of await photoKeys()) {
-    const b = await get<Blob>(k);
-    if (b instanceof Blob) {
-      try {
-        photos[k] = await blobToDataUrl(b);
-      } catch {
-        /* skip a single unreadable blob rather than failing the whole export */
-      }
+      stored[n] = n === "profile" ? (v ?? null) : (v ?? []);
+    } catch {
+      // Omis, pas rendu vide : un magasin absent et un magasin vide se
+      // ressemblent une fois le téléphone perdu, et confondre les deux ferait
+      // dire à la sauvegarde qu'il n'y avait rien.
+      lecturesEchouees.push(n);
     }
   }
+  // Photos as data URLs so the backup is self-contained and restorable.
+  const photos: Record<string, string> = {};
+  let cles: string[] = [];
+  try {
+    cles = await photoKeys();
+  } catch {
+    lecturesEchouees.push("photos");
+  }
+  for (const k of cles) {
+    try {
+      const b = await get<Blob>(k);
+      if (b instanceof Blob) photos[k] = await blobToDataUrl(b);
+    } catch {
+      /* skip a single unreadable blob rather than failing the whole export */
+    }
+  }
+  const complet = lecturesEchouees.length === 0;
   const data = {
     app: "compagnon-peche",
     schema: EXPORT_SCHEMA,
     exportedAtIso: new Date().toISOString(),
-    note: "Sauvegarde locale complète (carnet, spots, matériel, ensembles, profil, recettes, séances écrevisses ET photos). Restaurable via « Importer une sauvegarde ».",
+    note: complet
+      ? "Sauvegarde locale complète (carnet, spots, matériel, ensembles, profil, recettes, séances écrevisses ET photos). Restaurable via « Importer une sauvegarde »."
+      : `Sauvegarde locale INCOMPLÈTE : l'appareil a refusé de lire ${lecturesEchouees.join(", ")}. Le reste est bien là et reste restaurable via « Importer une sauvegarde », mais ce fichier ne remplace pas une sauvegarde entière.`,
+    ...(complet ? {} : { lecturesEchouees }),
     ...stored,
     photos,
   };
   const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-  const filename = `carnet-peche-${new Date().toISOString().slice(0, 10)}.json`;
+  // La mention part avec le fichier : dans un gestionnaire de fichiers, six
+  // mois plus tard, le nom est tout ce qui reste pour savoir ce qu'il vaut.
+  const jour = new Date().toISOString().slice(0, 10);
+  const filename = complet
+    ? `carnet-peche-${jour}.json`
+    : `carnet-peche-INCOMPLET-${jour}.json`;
 
   // Share sheet first, when the platform has one. This is not a nicety: in an
   // installed iOS PWA the anchor+blob download below is dropped silently — no
@@ -267,11 +300,11 @@ export async function exportData(): Promise<void> {
     } catch (e) {
       // The user dismissed the sheet: no backup was made, so leave the
       // reminder armed. Any other error is a real failure — surface it.
-      if (e instanceof Error && e.name === "AbortError") return;
+      if (e instanceof Error && e.name === "AbortError") return { complet, lecturesEchouees };
       throw e;
     }
-    setLastExportAt(Date.now());
-    return;
+    if (complet) setLastExportAt(Date.now());
+    return { complet, lecturesEchouees };
   }
 
   const url = URL.createObjectURL(blob);
@@ -285,8 +318,11 @@ export async function exportData(): Promise<void> {
   // Best available signal of "the user has a backup": we can't know whether
   // they actually kept the downloaded file, but a completed export resets
   // the reminder clock — that's the same tradeoff a "last saved" timestamp
-  // always makes.
-  setLastExportAt(Date.now());
+  // always makes. Un export amputé, lui, ne l'arme PAS : taire le rappel
+  // quatorze jours sur un fichier incomplet dirait à l'utilisateur qu'il est
+  // couvert alors qu'il ne l'est pas.
+  if (complet) setLastExportAt(Date.now());
+  return { complet, lecturesEchouees };
 }
 
 export interface ImportResult {
