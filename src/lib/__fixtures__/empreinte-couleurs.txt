@@ -1,0 +1,1040 @@
+#root|background|#e7e4d9
+.ac-avatar|background|#eef2ef
+.ac-avatar|border|1.5px solid #e6e2d8
+.ac-cond-foot .carnet-link|color|#1d6e42
+.ac-cond-foot .q|color|#3a3e36
+.ac-cond-foot|border-top|1px dashed #ece8dd
+.ac-cond-h .lbl|color|#726e62
+.ac-cond-h .slot|background|#e9f2ec
+.ac-cond-h .slot|color|#1d6e42
+.ac-cond-off|color|#6b675c
+.ac-cond|background|#ffffff
+.ac-cond|border|1px solid #ece8dd
+.ac-cond|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04), 0 14px 34px -22px rgba(20, 30, 25, 0.3)
+.ac-gps|background|#fbfaf7
+.ac-gps|border|1px solid #e6e2d8
+.ac-gps|color|#2b6c8f
+.ac-kicker|color|#7b6c45
+.ac-metric .k|color|#6b675c
+.ac-metric .s|color|#6b675c
+.ac-metric .v.ondev|color|#1d6e42
+.ac-metric|background|#fbfaf7
+.ac-metric|border|1px solid #f0ede3
+.ac-prise .chev|color|#6d8577
+.ac-prise .disc|background|#1d6e42
+.ac-prise .s|color|#9db4a6
+.ac-prise|background|#0f1f16
+.ac-prise|box-shadow|0 16px 30px -18px rgba(15, 31, 22, 0.7)
+.ac-prise|color|#fbfaf7
+.ac-sec-h > button|color|#1d6e42
+.ac-sec-h > span|color|#726e62
+.ac-spcard .img|background|#e3e0d3
+.ac-spcard .maille|background|rgba(15, 31, 22, 0.82)
+.ac-spcard .maille|color|#fbfaf7
+.ac-spcard .st|color|#1d6e42
+.ac-spcard|background|#ffffff
+.ac-spcard|border|1px solid #ece8dd
+.ac-spcard|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.ac-tool span|color|#22271f
+.ac-tool|background|#ffffff
+.ac-tool|border|1px solid #ece8dd
+.add-row|background|#ffffff
+.add-row|border|1.5px dashed #cfc9ba
+.add-row|color|#1d6e42
+.added-banner|background|#e9f2ec
+.added-banner|border|1px solid #b4d6c0
+.added-banner|color|#14532b
+.alert .txt|color|#7a2a21
+.alert|border|1.5px solid #b33a2e
+.app-frame|background|#fbfaf7
+.app-frame|border|1px solid rgba(0, 0, 0, 0.06)
+.app-frame|box-shadow|0 24px 70px rgba(20, 30, 25, 0.3)
+.back-round|background|#ffffff
+.back-round|border|1px solid #dedacb
+.back|color|#1a201c
+.bal-add-lbl|color|#6b675c
+.bal-add|border|1.5px dashed #cfc9ba
+.bal-add|color|#0f1f16
+.bal-card.bal-echue|background|#fdf3f1
+.bal-card.bal-echue|border-color|#b33a2e
+.bal-card.bal-trempe|border-color|#0f1f16
+.bal-card|background|#ffffff
+.bal-card|border|1.5px solid #e6e2d8
+.bal-echue .bal-time|color|#b33a2e
+.bal-lbl|color|#6b675c
+.bal-n|background|#f4f1e8
+.bal-n|color|#0f1f16
+.bal-opt|color|#6b675c
+.bal-rel|color|#7b6c45
+.bal-rm:hover, .bal-rm:focus-visible|background|#fdf3f1
+.bal-rm:hover, .bal-rm:focus-visible|color|#b33a2e
+.bal-rm|color|#6b675c
+.bal-sub|color|#6b675c
+.bal-time|color|#1a201c
+.bivouac-badge|background|#e9f2ec
+.bivouac-badge|color|#1d6e42
+.bl-etat|color|#8a5a1e
+.bl-main|color|#22271f
+.bl-sub|color|#6b675c
+.bm-extra|color|#6b675c
+.bm-label|color|#6b675c
+.bottom-nav|background|#fbfaf7
+.bottom-nav|border-top|1px solid #e6e2d8
+.brief-day .dp|color|#2f6fb0
+.brief-day .dt .lo|color|#6b675c
+.brief-day .dw|color|#6b675c
+.brief-day|background|#fbfaf7
+.brief-day|border|1px solid #ece8dd
+.brief-empty|color|#6b675c
+.brief-line|border-top|1px solid #f0ece2
+.brief-load|color|#6b675c
+.brief-metric|background|#fbfaf7
+.brief-metric|border|1px solid #ece8dd
+.brief-note|color|#6b675c
+.brief-sec|border-bottom|1px solid #ece8dd
+.brief-solunar|background|#f6f4ec
+.brief-solunar|color|#5a5e52
+.brief-src|color|#6b675c
+.brief-stale|color|#926511
+.btn-ghost|background|#ffffff
+.btn-ghost|border|1.5px solid #e6e2d8
+.btn-ghost|color|#3a3e36
+.btn-primary|background|#16281e
+.btn-primary|color|#fbfaf7
+.bundle-card|background|#ffffff
+.bundle-card|border|1px solid #e6e2d8
+.bundle-item|color|#3a3e36
+.bundle-target|color|#6b675c
+.card-row .chev|color|#95907f
+.card-row .s|color|#6b675c
+.card-row .t|color|#22271f
+.card-row|background|#ffffff
+.card-row|border|1px solid #ece8dd
+.card-row|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.carte-gps-btn|background|#0f1f16
+.carte-gps-btn|box-shadow|0 8px 24px -12px rgba(15, 31, 22, 0.5)
+.carte-legend .dot|background|#1d6e42
+.carte-legend .dot|border|1.5px solid #16281e
+.carte-legend .legend-spots|color|#926511
+.carte-legend|background|#fbfaf7
+.carte-legend|border-top|1px solid #ece8dd
+.carte-legend|color|#5a5e52
+.carte-locate|background|#16281e
+.carte-locate|border|1.5px solid #16281e
+.carte-locate|color|#fbfaf7
+.carte-mode-cap|color|#6b675c
+.carte-official|background|#e7e4d9
+.carte-placing button.ghost|border-color|rgba(255, 255, 255, 0.3)
+.carte-placing button|background|#1d6e42
+.carte-placing button|border|1px solid #8fbfa4
+.carte-placing button|color|#ffffff
+.carte-placing|background|#16281e
+.carte-placing|box-shadow|0 6px 18px rgba(20, 30, 25, 0.3)
+.carte-placing|color|#fbfaf7
+.carte-results button|background|#ffffff
+.carte-results button|border-bottom|1px solid #ece8dd
+.carte-results button|color|#1a201c
+.carte-results|background|#ffffff
+.carte-results|border|1px solid #e6e2d8
+.carte-results|box-shadow|0 10px 30px rgba(20, 30, 25, 0.16)
+.carte-screen|background|#e7e4d9
+.carte-search .clear|background|#ece8dd
+.carte-search .clear|color|#6b675c
+.carte-search input|background|#ffffff
+.carte-search input|border|1px solid #ece8dd
+.carte-search input|box-shadow|0 8px 24px -12px rgba(15, 31, 22, 0.35)
+.carte-searchrow|background|#fbfaf7
+.carte-searchrow|border-bottom|1px solid #ece8dd
+.carte-sheet::before|background|#dedacb
+.carte-sheet|background|#ffffff
+.carte-sheet|box-shadow|0 -10px 40px rgba(20, 30, 25, 0.25)
+.carte-spot-btn|background|#a76716
+.carte-spot-btn|box-shadow|0 6px 18px rgba(180, 110, 20, 0.4)
+.carte-spot-btn|color|#ffffff
+.carte-status|color|#6b675c
+.carte-troncature|color|#6d4d0d
+.catch-del.cancel|background|#ffffff
+.catch-del.cancel|border|1.5px solid #e6e2d8
+.catch-del.cancel|color|#6b675c
+.catch-del.confirm|background|#b33a2e
+.catch-del.confirm|border|1.5px solid #b33a2e
+.catch-del.confirm|color|#ffffff
+.catch-row.just-added|background|#e9f2ec
+.ce-actions .btn-light, .pd-actions .btn-light|background|#ffffff
+.ce-actions .btn-light, .pd-actions .btn-light|border|1.5px solid #e6e2d8
+.ce-actions .btn-light, .pd-actions .btn-light|color|#22271f
+.ce-gps-msg|color|#926511
+.ce-gps|background|#ffffff
+.ce-gps|border|1px solid #e6e2d8
+.ce-gps|color|#2b6c8f
+.ce-kept button.on-kept|background|#f7f1e2
+.ce-kept button.on-kept|border-color|#926511
+.ce-kept button.on-kept|color|#926511
+.ce-kept button.on-rel|background|#e9f2ec
+.ce-kept button.on-rel|border-color|#1d6e42
+.ce-kept button.on-rel|color|#1d6e42
+.ce-kept button|background|#ffffff
+.ce-kept button|border|1.5px solid #e6e2d8
+.ce-kept button|color|#3a3e36
+.ce-photo-add|background|#faf9f5
+.ce-photo-add|border|1.5px dashed #cfc9ba
+.ce-photo-add|color|#6b675c
+.ce-photo-x|background|rgba(20, 30, 25, 0.72)
+.ce-photo-x|color|#ffffff
+.cell-i, .season-i|color|#6b675c !important
+.cf-pill.due|background|#b33a2e
+.cf-pill.due|border-color|#b33a2e
+.cf-pill|background|#0f1f16
+.cf-pill|border|1.5px solid #0f1f16
+.cf-pill|box-shadow|0 4px 14px rgba(20, 30, 25, 0.22)
+.cf-pill|color|#fbfaf7
+.chip.chip-on|background|#e9f2ec
+.chip.chip-on|border-color|#1d6e42
+.chip.chip-on|color|#1d6e42
+.chip|background|#ffffff
+.chip|border|1px solid #e6e2d8
+.chip|color|#3a3e36
+.confusion .how|color|#5a5e52
+.confusion .h|color|#22271f
+.confusion .pair .cap|color|#5a5e52
+.confusion .pair .cim|background|#e3e0d3
+.confusion|background|#f4f1e8
+.cook-head .prog|color|#cfa85c
+.cook-ing|border-bottom|1px solid #24382c
+.cook-next|background|#1d6e42
+.cook-next|box-shadow|0 14px 28px -12px rgba(29, 110, 66, 0.8)
+.cook-next|color|#fbfaf7
+.cook-prev|border|1.5px solid #2e4234
+.cook-prev|color|#fbfaf7
+.cook-progress span.on|background|#6db08a
+.cook-progress span|background|#2e4234
+.cook-step-n|color|#3e5a48
+.cook-warn|background|#f7ecea
+.cook-warn|border|1px solid #e3c9c5
+.cook-warn|color|#8a3125
+.cook-x|border|1px solid #2e4234
+.cook-x|color|#fbfaf7
+.cook|background|#16281e
+.cook|color|#fbfaf7
+.cp-danger|background|#fbe9e6
+.cp-danger|color|#7d2118
+.cp-fin, .cp-recip|color|#6b675c
+.cp-nudge|color|#6b675c
+.cp-ok|color|#1d6e42
+.cp-type|color|#1a201c
+.cp-warn|background|#f7f1e2
+.cp-warn|color|#6d4d0d
+.ct-cap|color|#3a3e36
+.ct-img|background|#e3e0d3
+.ct-rel|background|rgba(29, 110, 66, 0.92)
+.ct-rel|color|#ffffff
+.cta-center|background|#16281e
+.cta-center|color|#fbfaf7
+.cta-dark .s|color|#9db4a6
+.cta-dark|background|#16281e
+.cta-dark|color|#fbfaf7
+.dash-astro|background|linear-gradient(160deg, #16281e, #0f1f16)
+.dash-astro|box-shadow|0 8px 22px -14px rgba(15, 31, 22, 0.6)
+.dash-astro|color|#eef2ec
+.dash-card-h .src|color|#6b675c
+.dash-card-h|color|#726e62
+.dash-chart-t.hi|fill|#b33a2e
+.dash-chart-t.lo|fill|#2b6c8f
+.dash-chart-x|fill|#6b675c
+.dash-map-bar .loc|color|#ffffff
+.dash-map-bar .ping|background|#6fe0a0
+.dash-map-bar .ping|box-shadow|0 0 0 4px rgba(111, 224, 160, 0.25)
+.dash-map|box-shadow|0 10px 26px -16px rgba(20, 30, 25, 0.5)
+.dash-metric .k|color|#6b675c
+.dash-metric .s|color|#6b675c
+.dash-metric .v|color|#16281e
+.dash-metric|background|#faf8f2
+.dash-metric|border|1px solid #efece2
+.dash-moon .il|color|#9db4a6
+.dash-moon .ph|color|#ffffff
+.dash-moon|border-top|1px solid rgba(255, 255, 255, 0.08)
+.dash-quota .carnet-link|color|#1d6e42
+.dash-quota|background|#faf8f2
+.dash-quota|border|1px solid #efece2
+.dash-quota|color|#3a3e36
+.dash-sun-lbl .ic|color|#e6c169
+.dash-sun-lbl .mid|color|#cfa85c
+.dash-sun-lbl b|color|#ffffff
+.dash-sun-lbl|color|#cdd9cf
+.dash-water-empty|color|#6b675c
+.dash-water|background|#ffffff
+.dash-water|border|1px solid #eceadf
+.dash-water|box-shadow|0 1px 3px rgba(20, 30, 25, 0.05)
+.dash-wtile .k|color|#5c727c
+.dash-wtile .s.stale|color|#926511
+.dash-wtile .s|color|#5c727c
+.dash-wtile .v .tr.falling|color|#b33a2e
+.dash-wtile .v .tr.rising|color|#1d6e42
+.dash-wtile .v .tr.stable|color|#5c727c
+.dash-wtile .v .u|color|#5c727c
+.dash-wtile .v|color|#14303b
+.dash-wtile|background|linear-gradient(180deg, #f3f8fa, #eef4f6)
+.dash-wtile|border|1px solid #dfeaef
+.dash-wx-cond .feels|color|#6b675c
+.dash-wx-cond .lbl|color|#3a3e36
+.dash-wx-off|color|#6b675c
+.dash-wx-temp .deg|color|#16281e
+.dash-wx-temp .unit|color|#6b675c
+.dash-wx|background|#ffffff
+.dash-wx|border|1px solid #eceadf
+.dash-wx|box-shadow|0 1px 3px rgba(20, 30, 25, 0.05)
+.dept-badge|background|#16281e
+.dept-badge|color|#fbfaf7
+.dept-sub|border-top|1px solid #ece8dd
+.dept-sub|color|#6b675c
+.deptb--defaut .deptb-blason, .deptb--hors-zone .deptb-blason|background|#ffffff
+.deptb--defaut .deptb-blason, .deptb--hors-zone .deptb-blason|border-color|#e0cfa4
+.deptb--defaut .deptb-blason, .deptb--hors-zone .deptb-blason|color|#926511
+.deptb--defaut .deptb-cta, .deptb--hors-zone .deptb-cta|border-top-color|#e0cfa4
+.deptb--defaut .deptb-cta, .deptb--hors-zone .deptb-cta|color|#6d4d0d
+.deptb--defaut .deptb-detail, .deptb--hors-zone .deptb-detail|color|#6d4d0d
+.deptb--defaut .deptb-main, .deptb--hors-zone .deptb-main|background|#f7f1e2
+.deptb--defaut .deptb-main, .deptb--hors-zone .deptb-main|border-color|#e0cfa4
+.deptb--defaut .deptb-titre, .deptb--hors-zone .deptb-titre|color|#6d4d0d
+.deptb-blason|background|#e9f2ec
+.deptb-blason|border|1px solid #e6e2d8
+.deptb-blason|color|#16281e
+.deptb-coche|color|#1d6e42
+.deptb-cta|border-top|1px solid #e6e2d8
+.deptb-cta|color|#1d6e42
+.deptb-detail|color|#6b675c
+.deptb-main|background|#ffffff
+.deptb-main|border|1.5px solid #e6e2d8
+.deptb-main|box-shadow|0 6px 18px -14px rgba(20, 30, 25, 0.55)
+.deptb-nom|color|#1a201c
+.deptb-opt-nom|color|#1a201c
+.deptb-opt-reg .k|color|#6b675c
+.deptb-opt-reg .v|color|#3a3e36
+.deptb-opt[aria-selected="true"]|background|#e9f2ec
+.deptb-opt[aria-selected="true"]|border-color|#16281e
+.deptb-opt|background|#ffffff
+.deptb-opt|border|1.5px solid #e6e2d8
+.deptb-titre|color|#7b6c45
+.deptb-tout|color|#1d6e42
+.disclaimer|color|#726e62
+.eb-btn|background|#16281e
+.eb-btn|color|#fbfaf7
+.eb-card p|color|#5a5e52
+.eb-card|background|#ffffff
+.eb-card|box-shadow|0 10px 40px rgba(20, 30, 25, 0.15)
+.eb-details|color|#6b675c
+.eb-report a|color|#16281e
+.eb|background|#e7e4d9
+.ecr-chip-input input|color|#3a3e36
+.ecr-chip-input|background|#ffffff
+.ecr-chip-input|border|1.5px solid #e6e2d8
+.ecr-chip-input|color|#6b675c
+.ecr-chips button.on|background|#0f1f16
+.ecr-chips button.on|border-color|#0f1f16
+.ecr-chips button.on|color|#fbfaf7
+.ecr-chips button|background|#ffffff
+.ecr-chips button|border|1.5px solid #e6e2d8
+.ecr-chips button|color|#3a3e36
+.ecr-id-cf|border-top|1px solid #e6e2d8
+.ecr-id-l|color|#6b675c
+.ecr-id-ph|background|#e7ece6
+.ecr-id-pr|color|#6b675c
+.ecr-id-st.ferme|color|#8c2f24
+.ecr-id-st|color|#3a3e36
+.ecr-id.protegee|background|#fdf3f1
+.ecr-id.protegee|border-color|#b33a2e
+.ecr-id|background|#ffffff
+.ecr-id|border|1.5px solid #e6e2d8
+.ecr-input|background|#ffffff
+.ecr-input|border|1.5px solid #e6e2d8
+.ecr-input|color|#1a201c
+.ecr-next|background|#f4f1e8
+.ecr-next|color|#3a3e36
+.ecr-poseall|background|#1d6e42
+.ecr-reg-note|background|#f7f1e2
+.ecr-reg-note|color|#6d4d0d
+.ecr-reg-src|color|#726e62
+.ecr-reg|color|#6b675c
+.ecr-row-body .btn-danger-ghost|background|#ffffff
+.ecr-row-body .btn-danger-ghost|border|1.5px solid #e3c9c5
+.ecr-row-body .btn-danger-ghost|color|#b33a2e
+.ecr-row-body .btn-danger|background|#b33a2e
+.ecr-row-body .btn-danger|border|1.5px solid #b33a2e
+.ecr-row-body .btn-danger|color|#ffffff
+.ecr-row-body .btn-light|background|#ffffff
+.ecr-row-body .btn-light|border|1.5px solid #e6e2d8
+.ecr-row-body .btn-light|color|#22271f
+.ecr-row-body .sub|color|#3a3e36
+.ecr-row-head .go|color|#6b675c
+.ecr-row-head .nm|color|#1a201c
+.ecr-row-head .sub|color|#6b675c
+.ecr-row-note|color|#6b675c
+.ecr-row|background|#ffffff
+.ecr-row|border|1px solid #e6e2d8
+.ecr-sheet-close|background|#0f1f16
+.ecr-sheet-close|color|#fbfaf7
+.ecr-sheet-in|background|#fbfaf7
+.ecr-sheet-row input|background|#ffffff
+.ecr-sheet-row input|border|1.5px solid #e6e2d8
+.ecr-sheet-row input|color|#1a201c
+.ecr-sheet-row|color|#3a3e36
+.ecr-sheet-t|color|#1a201c
+.ecr-sheet|background|rgba(20, 26, 22, 0.42)
+.ecr-sp-tx .l|color|#6b675c
+.ecr-sp-tx .n|color|#1a201c
+.ecr-sp-tx .w|color|#3a3e36
+.ecr-sp.protegee .w|color|#8c2f24
+.ecr-sp.protegee|background|#fdf3f1
+.ecr-sp.protegee|border-color|#b33a2e
+.ecr-sp|background|#ffffff
+.ecr-sp|border|1.5px solid #e6e2d8
+.ecr-start, .ecr-poseall, .ecr-finish|background|#0f1f16
+.ecr-start, .ecr-poseall, .ecr-finish|color|#fbfaf7
+.ecr-step button|background|#f4f1e8
+.ecr-step button|border|1.5px solid #e6e2d8
+.ecr-step button|color|#0f1f16
+.ecr-total|background|#e9f2ec
+.ecr-total|color|#16281e
+.ecr-tri-t|color|#16281e
+.ecr-tri-x|color|#3a3e36
+.ecr-tri|background|#eef4f0
+.ecr-tri|border|1.5px solid #16281e
+.ecr-undo-toast button|background|#0f1f16
+.ecr-undo-toast button|color|#fbfaf7
+.ecr-undo-toast|background|#16281e
+.ecr-undo-toast|box-shadow|0 6px 20px rgba(20, 30, 25, 0.35)
+.ecr-undo-toast|color|#fbfaf7
+.ecr-wake em|color|#6b675c
+.ecr-wake|color|#3a3e36
+.ecr-warn|background|#f7f1e2
+.ecr-warn|color|#6d4d0d
+.edible-anses|background|#f6efe0
+.edible-anses|border|1px solid #e7d8b6
+.edible-anses|color|#6a531a
+.edible-status.non|background|#f7ecea
+.edible-status.non|color|#8a3125
+.edible-status.oui|background|#e9f2ec
+.edible-status.oui|color|#1d6e42
+.edible-status.réglementé|background|#f6efe0
+.edible-status.réglementé|color|#87681d
+.empty-note|color|#6b675c
+.explain-t|color|#5a5e52
+.explain-x|color|#6b675c
+.explain|background|#f4f1e8
+.explain|border|1px solid #e6e2d8
+.fab|border|1px solid #e6e2d8
+.fab|box-shadow|0 4px 14px rgba(20, 30, 25, 0.18)
+.fed-approx|color|#926511
+.fed-dept-h|color|#0f1f16
+.fed-foot|color|#6b675c
+.fed-go|background|#f2f8f4
+.fed-go|border|1px solid #cfc9ba
+.fed-go|color|#1d6e42
+.fed-item-note|color|#6b675c
+.fed-item-n|color|#22271f
+.fed-item-s|color|#6b675c
+.fed-item|border-bottom|1px solid #ece8dd
+.fed-kind-h|color|#6b675c
+.fed-src|color|#1d6e42
+.fiche-cta button|background|#0f1f16
+.fiche-cta button|box-shadow|0 16px 30px -14px rgba(15, 31, 22, 0.75)
+.fiche-cta button|color|#fbfaf7
+.fiche-cta|background|linear-gradient(rgba(251, 250, 247, 0), #fbfaf7 42%)
+.fiche-src|border-top|1px solid #ece8dd
+.fiche-src|color|#726e62
+.fiche-varietes|color|#6b675c
+.field .field-lbl|color|#726e62
+.field input|background|#fbfaf7
+.field input|border|1px solid #e6e2d8
+.field input|color|#1a201c
+.field label|color|#726e62
+.field select, .field textarea|background|#ffffff
+.field select, .field textarea|border|1px solid #e6e2d8
+.flag.amber|background|rgba(154, 106, 18, 0.95)
+.form-card|background|#ffffff
+.form-card|border|1px solid #e6e2d8
+.g-detail|color|#5a5e52
+.gallery-cap|background|rgba(15, 31, 22, 0.72)
+.gallery-cap|color|#fbfaf7
+.gallery-dots .dot.on|background|#ffffff
+.gallery-dots .dot|background|rgba(255, 255, 255, 0.55)
+.gallery-dots .dot|box-shadow|0 0 3px rgba(0, 0, 0, 0.4)
+.gallery-nav|background|rgba(15, 31, 22, 0.42)
+.gallery-nav|color|#ffffff
+.gc-summary|color|#6b675c
+.gc-usage|border-top|1px solid #e6e2d8
+.gc-usage|color|#3a3e36
+.gds-badge|color|#7b6c45
+.gds-cat[aria-pressed="true"]|background|#16281e
+.gds-cat[aria-pressed="true"]|border-color|#16281e
+.gds-cat[aria-pressed="true"]|color|#fbfaf7
+.gds-cat|background|#ffffff
+.gds-cat|border|1.5px solid #e6e2d8
+.gds-cat|color|#3a3e36
+.gds-date|color|#6b675c
+.gds-desc|color|#3a3e36
+.gds-intro|color|#6b675c
+.gds-item|background|#ffffff
+.gds-item|border|1px solid #e6e2d8
+.gds-pied|color|#6b675c
+.gds-src|color|#6b675c
+.gds-titre|color|#1a201c
+.gear-card-img|background|#e7ece6
+.gear-card|background|#ffffff
+.gear-card|border|1px solid #e6e2d8
+.gear-row, .pick-row|border-bottom|1px solid #ece8dd
+.glossed|border-bottom|1px dotted #95907f
+.gr-del|color|#726e62
+.gr-detail|color|#6b675c
+.guide-row|border-bottom|1px solid #ece8dd
+.h-sub|color|#6b675c
+.h2|color|#1a201c
+.hero .back|background|rgba(251, 250, 247, 0.92)
+.hero .fade|background|linear-gradient(transparent, rgba(10, 16, 12, 0.62))
+.hero .name .hero-kicker|color|#cfa85c
+.hero .name .t|text-shadow|0 1px 8px rgba(0, 0, 0, 0.35)
+.hero .name|color|#ffffff
+.hero .season .season-i|color|#7b6c45
+.hero .season|background|rgba(251, 250, 247, 0.92)
+.hero|background|#43554b
+.hold-fill|background|rgba(255, 255, 255, 0.3)
+.id-cand-cap .lt|color|#6b675c
+.id-cand-cap .n|color|#22271f
+.id-cand-img|background|#e7ece6
+.id-cand-statut.bad|background|#fdf3f1
+.id-cand-statut.bad|color|#b33a2e
+.id-cand-statut.warn|background|#f7f1e2
+.id-cand-statut.warn|color|#926511
+.id-cand|background|#ffffff
+.id-cand|border|1px solid #e6e2d8
+.id-cand|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.id-chip|background|#0f1f16
+.id-chip|color|#fbfaf7
+.id-done, .id-foot|color|#6b675c
+.id-done|background|#e9f2ec
+.id-done|border|1px solid #cfe6d8
+.id-done|color|#2a6d48
+.id-grid.emphatic .id-cand|border-color|#cfe6d8
+.id-grid.emphatic .id-cand|box-shadow|0 6px 16px -12px rgba(29, 110, 66, 0.5)
+.id-intro|background|#faf8f2
+.id-intro|border|1px solid #efece2
+.id-intro|color|#6b675c
+.id-opt .cnt|background|#f6f1e4
+.id-opt .cnt|color|#7b6c45
+.id-opt .ic|color|#4a5d52
+.id-opt .tx .l|color|#22271f
+.id-opt .tx .sub|color|#6b675c
+.id-opt:hover|border-color|#cdbf9a
+.id-opt|background|#ffffff
+.id-opt|border|1.5px solid #e6e2d8
+.id-q-h .s|color|#6b675c
+.id-q-h .t|color|#1a1f18
+.id-res-h .n|color|#16281e
+.id-res-h span:first-child|color|#7b6c45
+.id-reset|background|#ffffff
+.id-reset|border|1px solid #e6e2d8
+.id-reset|color|#6b675c
+.img-slot.dark|background|#43554b
+.img-slot.dark|color|#b7c8be
+.img-slot|background|repeating-linear-gradient(
+    135deg,
+    #e6e3d7,
+    #e6e3d7 10px,
+    #e1ddd0 10px,
+    #e1ddd0 20px
+  )
+.img-slot|color|#5c635b
+.info|background|#f4f1e8
+.info|color|#5a5e52
+.ing|border-bottom|1px dashed #ece8dd
+.ing|color|#3a3e36
+.install-ios-corps|color|#5a5e52
+.install-ios-titre|color|#1a201c
+.install-ios|background|#f4f1e8
+.install-ios|border-left|3px solid #1d6e42
+.knot-diagram|background|#ffffff
+.knot-diagram|border|1px solid #e6e2d8
+.knot-slot|background|#efece1
+.knot-slot|border|1px dashed #d8d3c4
+.knot-step .cap|color|#3a3e36
+.knot-step .num|background|#16281e
+.knot-step .num|color|#fbfaf7
+.knot-step-img|background|#ffffff
+.knot-step-img|border|1px solid #e6e2d8
+.kv .k|color|#6b675c
+.kv .v|color|#22271f
+.kv|border-bottom|1px dashed #ece8dd
+.label|color|#7b6c45
+.li .b|color|#1d6e42
+.lic-mention, .lic-reserve, .lic-date|color|#6b675c
+.lic-nv|color|#6d4d0d
+.lic-reserve|color|#6d4d0d
+.lic-src|color|#1a201c
+.lic|border-left|2px solid #e6e2d8
+.link-inline|color|#1d6e42
+.li|color|#3a3e36
+.loc-gps|background|rgba(251, 250, 247, 0.92)
+.loc-gps|color|#16281e
+.maplibregl-map|background|#dfe6e2
+.mc-base.on|background|#e9f2ec
+.mc-base.on|border-color|#1d6e42
+.mc-base.on|color|#1d6e42
+.mc-base|background|#ffffff
+.mc-base|border|1.5px solid #e6e2d8
+.mc-base|color|#3a3e36
+.mc-geopeche|background|#0f1f16
+.mc-geopeche|color|#fbfaf7
+.mc-group-sep|background|#ece8dd
+.mc-label|color|#6b675c
+.mc-layer .mc-dot|border|1.5px solid #cfc9ba
+.mc-layer.on .mc-dot|background|#1d6e42
+.mc-layer.on .mc-dot|border-color|#1d6e42
+.mc-layer.on .mc-dot|box-shadow|inset 0 0 0 2px #ffffff
+.mc-layer.on|background|#f2f8f4
+.mc-layer.on|border-color|#1d6e42
+.mc-layer|background|#ffffff
+.mc-layer|border|1px solid #ece8dd
+.mc-layer|color|#3a3e36
+.mc-list|background|#f2f8f4
+.mc-list|border|1px solid #ece8dd
+.mc-list|color|#1d6e42
+.mc-note|color|#6b675c
+.mc-panel|background|#ffffff
+.mc-panel|border|1px solid #ece8dd
+.mc-panel|box-shadow|0 8px 24px rgba(20, 30, 25, 0.2)
+.mc-sublabel|color|#6b675c
+.mc-toggle|background|#ffffff
+.mc-toggle|border|1px solid #e6e2d8
+.mc-toggle|box-shadow|0 2px 8px rgba(20, 30, 25, 0.15)
+.mc-toggle|color|#22271f
+.mentions-bloc a|color|#1d6e42
+.mentions-bloc|background|#f4f1e8
+.mentions-bloc|color|#1a201c
+.mentions-sec|color|#5a5e52
+.minimap-attr|background|rgba(15, 31, 22, 0.5)
+.minimap-attr|color|#ffffff
+.minimap-grad|background|linear-gradient(rgba(15, 31, 22, 0) 45%, rgba(15, 31, 22, 0.55))
+.minimap-pin .dot|background|#1d6e42
+.minimap-pin .dot|border|2px solid #ffffff
+.minimap-pin .dot|box-shadow|0 1px 4px rgba(0, 0, 0, 0.4)
+.minimap-pin .pulse|background|rgba(29, 110, 66, 0.35)
+.minimap|background|#e7ece6
+.mr-badge|background|rgba(176, 138, 62, 0.92)
+.mr-badge|color|#ffffff
+.mr-create|background|#0f1f16
+.mr-create|box-shadow|0 8px 20px -12px rgba(15, 31, 22, 0.65)
+.mr-create|color|#fbfaf7
+.mr-del-confirm|background|#b33a2e
+.mr-del-confirm|color|#ffffff
+.mr-del|background|#ffffff
+.mr-del|border|1px solid #e2c9c4
+.mr-del|color|#b33a2e
+.mr-guide-thumb|background|#f6f1e4
+.mr-hero-ph|background|linear-gradient(135deg, #16281e, #0f1f16)
+.mr-kicker|color|#7b6c45
+.mr-noimg|background|#f6f1e4
+.mr-note|color|#6b675c
+.muted|color|#6b675c
+.nav-prise .disc|background|#1d6e42
+.nav-prise .disc|border|3px solid #fbfaf7
+.nav-prise .disc|box-shadow|0 6px 16px rgba(29, 110, 66, 0.4)
+.nav-prise .lbl|color|#1d6e42
+.nav-prise.on .disc|background|#16281e
+.note|background|#f7f1e2
+.note|color|#926511
+.official-banner a|color|#1d6e42
+.official-banner|background|#fbfaf7
+.official-banner|border-bottom|1px solid #ece8dd
+.official-banner|color|#5a5e52
+.official-jump|background|#f2f8f4
+.official-jump|border|1px solid #ece8dd
+.official-jump|color|#1d6e42
+.official-offline button|background|#ffffff
+.official-offline button|border|1.5px solid #1d6e42
+.official-offline button|color|#1d6e42
+.official-offline|color|#6b675c
+.offline|background|#16281e
+.offline|box-shadow|0 6px 20px rgba(20, 30, 25, 0.25)
+.offline|color|#fbfaf7
+.onb2-cta|background|#16281e
+.onb2-cta|box-shadow|0 10px 22px -12px rgba(22, 40, 30, 0.65)
+.onb2-cta|color|#fbfaf7
+.onb2-dept-btn[aria-pressed="true"]|background|#16281e
+.onb2-dept-btn[aria-pressed="true"]|border-color|#16281e
+.onb2-dept-btn[aria-pressed="true"]|color|#fbfaf7
+.onb2-dept-btn|background|#fbfaf7
+.onb2-dept-btn|border|1.5px solid #e6e2d8
+.onb2-dept-btn|color|#1a201c
+.onb2-dept-hint|color|#6b675c
+.onb2-dept-h|color|#726e62
+.onb2-foot|color|#726e62
+.onb2-frame img|border|1px solid #e6e2d8
+.onb2-frame|background|#ffffff
+.onb2-frame|border|1px solid #16281e
+.onb2-frame|box-shadow|0 12px 34px -16px rgba(22, 40, 30, 0.55)
+.onb2-hint|color|#6b675c
+.onb2-install|color|#1d6e42
+.onb2-kicker|color|#726e62
+.onb2-lede|color|#6b675c
+.onb2-plate .pl|color|#726e62
+.onb2-plate .sci|color|#3a3e36
+.onb2-plate figcaption|border-top|1px solid #ece8dd
+.onb2-rule|background|#e6e2d8
+.onb2-sheet|background|#fbfaf7
+.onb2-sheet|border|1px solid #e6e2d8
+.onb2-sheet|box-shadow|0 1px 0 #ffffff inset, 0 22px 55px -24px rgba(22, 40, 30, 0.5)
+.onb2-title|color|#1a201c
+.onb2-toc-h|color|#726e62
+.onb2-toc-row .lt|color|#22271f
+.onb2-toc-row .rn|color|#926511
+.onb2-toc-row|border-bottom|1px solid #ece8dd
+.onb2|background|#e7e4d9
+.onde-state.bad|background|#f7e9e6
+.onde-state.bad|color|#b33a2e
+.onde-state.good|background|#e6f0e9
+.onde-state.good|color|#1d6e42
+.onde-state.warn|background|#f7f1e2
+.onde-state.warn|color|#7a5a12
+.onde-state|background|#eef1ee
+.onde-state|color|#3a3e36
+.ot-count-lbl|color|#7b6c45
+.ot-count-time|color|#16281e
+.ot-count.done|background|#e9f2ec
+.ot-count.done|border-color|#1d6e42
+.ot-count|background|#ffffff
+.ot-count|border|1.5px solid #0f1f16
+.ot-legal-h|color|#cfa85c
+.ot-legal-note|border-top|1px solid rgba(255, 255, 255, 0.08)
+.ot-legal-note|color|#8fa697
+.ot-legal-sub b|color|#ffffff
+.ot-legal-sub|color|#d3ddd4
+.ot-legal-time span|color|#a9bdb0
+.ot-legal|background|#0f1f16
+.ot-legal|box-shadow|0 10px 24px -14px rgba(15, 31, 22, 0.7)
+.ot-legal|color|#eef2ec
+.ot-timer .dur|background|#f6f1e4
+.ot-timer .dur|color|#7b6c45
+.ot-timer .ic|background|#f6f1e4
+.ot-timer .tx .s|color|#6b675c
+.ot-timer .tx .t|color|#22271f
+.ot-timer|background|#ffffff
+.ot-timer|border|1px solid #ece8dd
+.ot-timer|box-shadow|0 1px 2px rgba(20, 40, 30, 0.04)
+.pd-back|background|rgba(251, 250, 247, 0.94)
+.pd-back|box-shadow|0 2px 8px rgba(20, 30, 25, 0.18)
+.pd-block:has(.pd-note)|background|#f4f1e8
+.pd-fiche|background|#e9f2ec
+.pd-fiche|color|#1d6e42
+.pd-lbl|color|#6b675c
+.pd-map|background|#ffffff
+.pd-map|border|1.5px solid #e6e2d8
+.pd-map|color|#2b6c8f
+.pd-noimg|color|#5c635b
+.pd-note|color|#3a3e36
+.pd-photo|background|#dfe6e2
+.pd-r .k|color|#6b675c
+.pd-r .v|color|#22271f
+.pd-rows|background|#ffffff
+.pd-rows|border|1px solid #eceadf
+.pd-rows|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.pd-r|border-bottom|1px solid #f4f1e8
+.pd-tag.kept|background|#926511
+.pd-tag.rel|background|#1d6e42
+.pd-tag|color|#ffffff
+.persist-warn button|background|rgba(255, 255, 255, 0.95)
+.persist-warn button|color|#b33a2e
+.persist-warn|background|#b33a2e
+.persist-warn|box-shadow|0 6px 20px rgba(20, 30, 25, 0.35)
+.persist-warn|color|#ffffff
+.pf-quick button|background|#f3f1ea
+.pf-quick button|border|1px solid #ece8dd
+.pf-quick button|color|#3a3e36
+.pf-seg button.on|background|#ffffff
+.pf-seg button.on|box-shadow|0 1px 2px rgba(20, 30, 25, 0.08)
+.pf-seg button.on|color|#0f1f16
+.pf-seg button|color|#6b675c
+.pf-seg|background|#f4f1e8
+.pf-seg|border|1px solid #ece8dd
+.pf-sort|background|#ffffff
+.pf-sort|border|1px solid #e6e2d8
+.pf-stat .l|color|#6b675c
+.pf-stat .n|color|#16281e
+.pf-stats|border|1px solid #ece8dd
+.pf-stat|border-right|1px solid #ece8dd
+.ph-avatar-edit|background|#16281e
+.ph-avatar|background|#eef2ef
+.ph-avatar|border|2px solid #e6e2d8
+.ph-bio|color|#5a5e52
+.ph-card-danger|background|rgba(179, 58, 46, 0.08)
+.ph-card-danger|border|1px solid #b33a2e
+.ph-card-danger|color|#b33a2e
+.ph-card-nudge|color|#6b675c
+.ph-card-warn|background|#f7f1e2
+.ph-card-warn|color|#926511
+.ph-card|color|#6b675c
+.ph-edit-btn|background|#ffffff
+.ph-edit-btn|border|1px solid #e6e2d8
+.ph-edit-btn|color|#4a5d52
+.ph-region|color|#6b675c
+.pick-box.on|background|#1d6e42
+.pick-box.on|border-color|#1d6e42
+.pick-box|border|1.5px solid #cfc9ba
+.pick-box|color|#ffffff
+.pill-btn|background|#16281e
+.pill-btn|color|#fbfaf7
+.popup-official|background|#f2f8f4
+.popup-official|border|1px solid #cfc9ba
+.popup-official|color|#1d6e42
+.prise-card|background|#ffffff
+.prise-grid-btn|background|#ffffff
+.prise-grid-btn|border|1px solid #e6e2d8
+.prise-grid-btn|color|#22271f
+.prise-place|background|#f7f1e2
+.prise-place|border|1px solid #e6dcc0
+.prise-place|color|#7a5a12
+.pstep.on|background|#1d6e42
+.pstep|background|#e6e2d8
+.quota-bar .txt|color|#3a3e36
+.quota-bar|background|#ffffff
+.quota-bar|border|1px solid #e6e2d8
+.recipe-hero .back|background|rgba(251, 250, 247, 0.92)
+.recipe-hero-cap|color|#ffffff
+.recipe-hero-grad|background|linear-gradient(rgba(15, 31, 22, 0.08), rgba(15, 31, 22, 0.62))
+.recipe-hero-kicker|color|#cfa85c
+.recipe-hero-title|text-shadow|0 1px 8px rgba(0, 0, 0, 0.35)
+.recipe-hero|background|#43554b
+.recipe-ing-card .ing|border-bottom|1px solid #f4f1e8
+.recipe-ing-card|background|#ffffff
+.recipe-ing-card|border|1px solid #eceadf
+.recipe-ing-card|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.recipe-intro|background|#f4f1e8
+.recipe-intro|color|#3a3e36
+.recipe-link .s|color|#6b675c
+.recipe-link|background|#ffffff
+.recipe-link|border|1px solid #e6e2d8
+.recipe-stat .k|color|#6b675c
+.recipe-stat .v|color|#22271f
+.recipe-stat|background|#ffffff
+.recipe-stat|border|1px solid #eceadf
+.recipe-stat|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.reg-block|background|#ffffff
+.reg-block|border|1px solid #e6e2d8
+.reg-block|color|#3a3e36
+.reg-note|color|#726e62
+.reg-row|border-bottom|1px solid #f0ede3
+.reg-table|background|#ffffff
+.reg-table|border|1px solid #e6e2d8
+.regle-wrap|background|#fbfaf7
+.repere .link|color|#1d6e42
+.repere .txt|color|#5a5e52
+.repere|background|#f4f1e8
+.rgt-esp-nom|color|#1a201c
+.rgt-esp|background|#f4f1e8
+.rgt-esp|border|1px solid #ece8dd
+.rgt-grid .k|color|#6b675c
+.rgt-grid .v|color|#3a3e36
+.rgt-note|color|#3a3e36
+.rgt-ouvrir|background|#ffffff
+.rgt-ouvrir|border|1.5px dashed #e6e2d8
+.rgt-ouvrir|color|#1d6e42
+.rgt-sel|background|#ffffff
+.rgt-sel|border|1.5px solid #e6e2d8
+.rgt-sel|color|#1a201c
+.rgt-src|color|#6b675c
+.round-btn|background|#ffffff
+.round-btn|border|1px solid #e6e2d8
+.round-btn|color|#1a201c
+.safety-card .source|color|#726e62
+.safety-card p|color|#3a3e36
+.safety-card|background|#ffffff
+.safety-card|border|1px solid #e6e2d8
+.save-btn|background|#1d6e42
+.save-btn|color|#ffffff
+.screen-loading|color|#6b675c
+.search .clear|background|#ece8dd
+.search .clear|color|#6b675c
+.search input|color|#1a201c
+.search|background|#ffffff
+.search|border|1px solid #e6e2d8
+.season-reminder-row.closing|background|#f7f1e2
+.season-reminder-row.closing|color|#926511
+.season-reminder-row|background|#f4f1e8
+.season-reminder-row|color|#5a5e52
+.sec-body p|color|#3a3e36
+.sec-head .chev|color|#95907f
+.sec-sub|color|#6b675c
+.sec-title|color|#22271f
+.sec|border-bottom|1px solid #ece8dd
+.sheet-cat|background|#e9f2ec
+.sheet-cat|color|#16281e
+.sheet-code a|color|#1d6e42
+.sheet-code|color|#6b675c
+.sheet-head|border-bottom|1px solid #ece8dd
+.sheet-note|color|#6b675c
+.sheet-sp .sp-eff|color|#6b675c
+.sheet-sp .sp-go|color|#1d6e42
+.sheet-sp|border-bottom|1px solid #ece8dd
+.sheet-src|color|#6b675c
+.sheet-sub|color|#6b675c
+.sheet-x|color|#6b675c
+.sm-chip|background|#ffffff
+.sm-chip|border|1px solid #e6e2d8
+.sm-chip|color|#3a3e36
+.sommaire|background|rgba(251, 250, 247, 0.95)
+.sommaire|border-bottom|1px solid #ece8dd
+.source|color|#726e62
+.sp-latin|color|#6b675c
+.sp-pill.bad|background|#fbeae7
+.sp-pill.bad|color|#b33a2e
+.sp-pill.good|background|#e9f2ec
+.sp-pill.good|color|#1d6e42
+.sp-pill.neutral|background|#f4f1e8
+.sp-pill.neutral|color|#3a3e36
+.spot-actions .btn-danger-ghost|background|#ffffff
+.spot-actions .btn-danger-ghost|border|1.5px solid #e3c9c5
+.spot-actions .btn-danger-ghost|color|#b33a2e
+.spot-actions .btn-danger|background|#b33a2e
+.spot-actions .btn-danger|border|1.5px solid #b33a2e
+.spot-actions .btn-danger|color|#ffffff
+.spot-actions .btn-light|background|#ffffff
+.spot-actions .btn-light|border|1.5px solid #e6e2d8
+.spot-actions .btn-light|color|#22271f
+.spot-block|border-bottom|1px solid #ece8dd
+.spot-form .chip.chip-on|background|#e9f2ec
+.spot-form .chip.chip-on|border-color|#1d6e42
+.spot-form .chip.chip-on|color|#1d6e42
+.spot-form textarea|background|#ffffff
+.spot-form textarea|border|1px solid #e6e2d8
+.spot-lbl|color|#6b675c
+.spot-row .go|color|#926511
+.spot-row .sub|color|#6b675c
+.spot-row|border-bottom|1px solid #ece8dd
+.spot-sheet .sheet-sub.link|color|#2b6c8f
+.spot-val|color|#3a3e36
+.spots-h|color|#6b675c
+.spots-section|border-top|1px solid #ece8dd
+.st-bar-fill|background|#16281e
+.st-bar-x|color|#6b675c
+.st-card.fir .st-l|color|#9db4a6
+.st-card.fir .st-n|color|#fbfaf7
+.st-card.fir|background|#0f1f16
+.st-card.fir|border-color|#0f1f16
+.st-card.fir|box-shadow|0 8px 20px -14px rgba(15, 31, 22, 0.6)
+.st-card|background|#ffffff
+.st-card|border|1px solid #eceadf
+.st-card|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
+.st-cond-row|background|#f4f1e8
+.st-cond-s|color|#3d3a30
+.st-cond-trad|color|#6b675c
+.st-cond-t|color|#4a4638
+.st-l|color|#6b675c
+.st-n.green|color|#1d6e42
+.st-note|color|#6b675c
+.st-n|color|#16281e
+.st-part-fill|background|#2b6c8f
+.st-part-l|color|#3a3e36
+.st-part-n|color|#6b675c
+.st-part-track|background|#f0ede4
+.st-sp-bar|background|#f0ede4
+.st-sp-fill|background|#d8e6dd
+.st-sp-meta|color|#6b675c
+.st-sp-name|color|#22271f
+.st-sub|color|#6b675c
+.step .t|color|#3a3e36
+.step-num|background|#ece8dd
+.step-num|color|#1a201c
+.stg-bar|background|#ece8dd
+.stg-btn.danger-ghost|border-color|#e3c9c5
+.stg-btn.danger-ghost|color|#b33a2e
+.stg-btn.danger|background|#b33a2e
+.stg-btn.danger|color|#ffffff
+.stg-btn.dark|background|#16281e
+.stg-btn.dark|color|#fbfaf7
+.stg-btn|background|#ffffff
+.stg-btn|border|1.5px solid #e6e2d8
+.stg-btn|color|#22271f
+.stg-card.ok|background|#e9f2ec
+.stg-card.ok|border-color|#bfd5c7
+.stg-card.warn|background|#f7f1e2
+.stg-card.warn|border-color|#e6dcc0
+.stg-card|border|1px solid #ece8dd
+.stg-count .l|color|#6b675c
+.stg-count|border|1px solid #ece8dd
+.stg-danger|border-top|1px solid #ece8dd
+.stg-fill|background|#2b6c8f
+.stg-lbl|color|#6b675c
+.stg-note|color|#6b675c
+.stg-p|color|#5a5e52
+.stg-sub|color|#6b675c
+.tech-chip|background|#ffffff
+.tech-chip|border|1px solid #e6e2d8
+.tech-chip|color|#1d6e42
+.tech-photo|background|#e7ece6
+.tech-step .num|background|#16281e
+.tech-step .num|color|#fbfaf7
+.tech-step .td|color|#3a3e36
+.tech-step .tmeta .goal|color|#1d6e42
+.tech-step .tmeta|color|#6b675c
+.tech-step|border-bottom|1px solid #ece8dd
+.thumb .flag|background|rgba(179, 58, 46, 0.95)
+.thumb .flag|color|#ffffff
+.thumb|background|#e3e0d3
+.tick-label|color|#1a201c
+.tick-major|background|#1a201c
+.tick-minor|background|#726e62
+.tile|background|#ffffff
+.tile|border|1px solid #e6e2d8
+.tip-bubble|background|#22271f
+.tip-bubble|box-shadow|0 10px 30px rgba(20, 30, 25, 0.32)
+.tip-bubble|color|#f4f1e8
+.update-toast button:active|background|#21713f
+.update-toast button|background|#27864d
+.update-toast button|color|#ffffff
+.update-toast|background|#16281e
+.update-toast|box-shadow|0 6px 20px rgba(20, 30, 25, 0.35)
+.update-toast|color|#fbfaf7
+.verdict .cell-i|color|#7b6c45
+.verdict .cell.cell-active|background|#f4f1e8
+.verdict .cell|background|#ffffff
+.verdict .cell|border-right|1px solid #eee7da
+.verdict .k|color|#6b675c
+.verdict .sub|color|#726e62
+.verdict-banner.bad|background|#fbeae7
+.verdict-banner.bad|border|1.5px solid #e6b3ac
+.verdict-banner.bad|color|#9a2f24
+.verdict-banner.good|background|#e9f2ec
+.verdict-banner.good|border|1.5px solid #b4d6c0
+.verdict-banner.good|color|#14532b
+.verdict-banner.warn|background|#f7f1e2
+.verdict-banner.warn|border|1.5px solid #e2c894
+.verdict-banner.warn|color|#7a540e
+.verdict|background|#ffffff
+.verdict|border|1px solid #e6e2d8
+:root|--amber-bg|#f7f1e2
+:root|--amber|#926511
+:root|--backdrop|#e7e4d9
+:root|--body|#3a3e36
+:root|--brass-ink|#7b6c45
+:root|--brass|#b08a3e
+:root|--faint|#726e62
+:root|--fir|#0f1f16
+:root|--green-dark|#16281e
+:root|--green-tint|#e9f2ec
+:root|--green|#1d6e42
+:root|--ink-2|#22271f
+:root|--ink|#1a201c
+:root|--line-strong|#e6e2d8
+:root|--line|#ece8dd
+:root|--muted|#6b675c
+:root|--paper|#fbfaf7
+:root|--red|#b33a2e
+:root|--sand|#f4f1e8
+:where(button, a, input, select, [role="button"], [tabindex]):focus-visible|outline|2px solid #1d6e42
+@keyframes cf-pulse >> 0%, 100%|box-shadow|0 4px 14px rgba(179, 58, 46, 0.35)
+@keyframes cf-pulse >> 50%|box-shadow|0 4px 20px rgba(179, 58, 46, 0.75)
+@keyframes flashAdded >> 0%|background|#cdebd8
+@keyframes flashAdded >> 100%|background|#e9f2ec
+a|color|#1d6e42
+button.card-row|border-bottom|1px solid #ece8dd
+html, body|background|#e7e4d9
+html, body|color|#1a201c
