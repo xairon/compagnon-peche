@@ -21,7 +21,7 @@ export function BilanEcrevisses({
   session: CrayfishSession;
   onClose: () => void;
 }) {
-  const { set, nav, updateCrayfishSession } = useStore();
+  const { nav, goTab, updateCrayfishSession } = useStore();
   const closed = session.fin !== null;
   const tally = session.tally;
   const note = session.note ?? "";
@@ -53,7 +53,9 @@ export function BilanEcrevisses({
       fin: s.fin ?? Date.now(),
     }));
     // Land on the Écrevisses segment, so the session just closed is in view.
-    set({ screen: "carnet", tab: "carnet", stack: [], carnetSeg: "ecrevisses", bilanSession: null });
+    // `bilanSession` n'est plus remis à null à la main : le carnet ne réclame
+    // pas ce champ, la convention de navigation l'efface pour tout le monde.
+    goTab("carnet", { carnetSeg: "ecrevisses" });
   };
 
   return (

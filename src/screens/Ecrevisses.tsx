@@ -35,7 +35,7 @@ const UNDO_MS = 5000;
 const INTERVALS = [10, 15, 20, 30];
 
 export function Ecrevisses() {
-  const { state, set, back, addCrayfishSession, saveCrayfishSession } = useStore();
+  const { state, nav, back, addCrayfishSession, saveCrayfishSession } = useStore();
   const session = currentSession(state.crayfish);
 
   // One tick per second while a session is running, for the DISPLAY only: every
@@ -74,12 +74,13 @@ export function Ecrevisses() {
     return (
       <BilanEcrevisses
         session={bilan}
-        onClose={() => {
-          set({ bilanSession: null });
-          // Correcting a closed session: "‹" goes back where it was asked from
-          // (the Carnet), not to the preparation screen of a brand new session.
-          if (bilan.fin !== null) back();
-        }}
+        // Un seul geste : dépiler. Le bilan est une entrée d'historique à part
+        // entière, donc revenir ramène TOUJOURS là où il a été demandé — la
+        // séance si on l'a terminée, le carnet si on venait le corriger. Avant,
+        // il fallait effacer `bilanSession` à la main PUIS dépiler, et les deux
+        // se contrariaient dès que l'historique devenait la référence : le
+        // dépilement rouvrait le bilan que l'effacement venait de fermer.
+        onClose={back}
       />
     );
   }
@@ -90,7 +91,9 @@ export function Ecrevisses() {
         session={session}
         now={now}
         onSave={saveCrayfishSession}
-        onFinish={() => set({ bilanSession: session.id })}
+        // `nav` et non `set` : ouvrir le bilan est un déplacement, il lui faut
+        // son entrée d'historique pour que le geste retour puisse l'annuler.
+        onFinish={() => nav("ecrevisses", { bilanSession: session.id })}
         onBack={back}
       />
     );

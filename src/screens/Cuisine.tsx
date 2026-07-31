@@ -3,7 +3,7 @@ import { findRecipe } from "../lib/recipes";
 import { exitCuisine } from "../lib/wakelock";
 
 export function Cuisine() {
-  const { state, set, back } = useStore();
+  const { state, replace, back } = useStore();
   const found = findRecipe(state.recipeId);
   const rec = found?.recipe;
 
@@ -21,7 +21,11 @@ export function Cuisine() {
   const step = Math.min(Math.max(state.cookStep, 0), n);
 
   const exit = () => exitCuisine(back);
-  const goto = (v: number) => set({ cookStep: Math.min(Math.max(v, 0), n) });
+  // `replace` : l'étape est dans l'URL (donc un rechargement, les mains sales et
+  // l'écran qui s'est éteint, reprend au bon endroit), mais elle ne fabrique pas
+  // une entrée d'historique par étape — sortir d'une recette de vingt étapes ne
+  // doit pas demander vingt gestes retour. La sortie, c'est « ‹ Quitter ».
+  const goto = (v: number) => replace({ cookStep: Math.min(Math.max(v, 0), n) });
   const next = () => (step >= n ? exit() : goto(step + 1));
   const prev = () => (step === 0 ? exit() : goto(step - 1));
   const cur = step > 0 ? flat[step - 1] : null;

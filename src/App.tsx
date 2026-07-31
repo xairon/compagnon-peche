@@ -47,7 +47,7 @@ const EcrevissesIdent = lazy(() =>
 const Guides = lazy(() => import("./screens/Guides").then((m) => ({ default: m.Guides })));
 
 export function App() {
-  const { state, set } = useStore();
+  const { state, set, nav } = useStore();
   const [offline, setOffline] = useState(!navigator.onLine);
   const [onboarded, setOnboarded] = useState(() => {
     try {
@@ -165,7 +165,7 @@ export function App() {
       {persistMsg && (
         <div className="persist-warn" role="alert">
           <span>{persistMsg}</span>
-          <button onClick={() => set({ screen: "stockage" })}>Gérer</button>
+          <button onClick={() => nav("stockage")}>Gérer</button>
         </div>
       )}
 
@@ -173,7 +173,7 @@ export function App() {
       {!persistMsg && quotaWarn && (
         <div className="persist-warn" role="status">
           <span>Stockage bientôt plein — sauvegardez vos données pour ne rien perdre.</span>
-          <button onClick={() => set({ screen: "stockage" })}>Gérer</button>
+          <button onClick={() => nav("stockage")}>Gérer</button>
         </div>
       )}
 

@@ -305,7 +305,7 @@ export function Materiel() {
 }
 
 export function GuideMateriel() {
-  const { back, state, set, nav } = useStore();
+  const { back, state, replace, nav } = useStore();
   const [open, setOpen] = useState<string | null>(null);
   const sections: { key: "leurre" | "appat" | "fil"; title: string }[] = [
     { key: "leurre", title: "Leurres" },
@@ -332,7 +332,9 @@ export function GuideMateriel() {
     if (state.gearFocusId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       focusCard(state.gearFocusId);
-      set({ gearFocusId: null });
+      // La carte est dépliée : la consigne est consommée. On CORRIGE l'entrée
+      // d'historique au lieu d'en empiler une (même raison que la carte).
+      replace({ gearFocusId: null });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

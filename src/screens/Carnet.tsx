@@ -17,7 +17,7 @@ const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
 type Sort = "recent" | "size" | "species";
 
 export function Carnet() {
-  const { state, set, nav, addCatchFull, removeCrayfishSession } = useStore();
+  const { state, set, nav, goTab, addCatchFull, removeCrayfishSession } = useStore();
   const catches = state.catches;
   const spots = state.spots;
   const sessions = [...state.crayfish].sort((a, b) => b.debut - a.debut);
@@ -42,8 +42,10 @@ export function Carnet() {
     return () => clearTimeout(t);
   }, [state.justAdded, set]);
 
-  const openSpotOnMap = (id: string) =>
-    set({ focusSpot: id, screen: "carte", tab: "carte", stack: [] });
+  // Par `goTab` et non par un `set({ screen, tab, … })` en direct : c'est ce qui
+  // met l'entrée dans l'historique du navigateur, sans quoi le geste retour
+  // depuis la carte fermerait l'app au lieu de revenir au carnet.
+  const openSpotOnMap = (id: string) => goTab("carte", { focusSpot: id });
 
   const sorted = [...catches].sort((a, b) => {
     if (sort === "size") return b.n - a.n;
