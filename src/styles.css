@@ -9,7 +9,12 @@
   --faint: #726e62;
   --green: #1d6e42;
   --green-dark: #16281e;
-  --amber: #9a6a12;
+  /* Ambre = avertissement. Assombri de 1,7 % de luminosité HSL (teinte et
+     saturation inchangées) : sur --amber-bg il mesurait 4,19:1, sous les 4,5:1
+     d'AA, et c'est la couleur des phrases qu'il ne faut PAS rater au bord de
+     l'eau. Il passe désormais sur les quatre fonds où il est posé : --amber-bg
+     4,55, --sand 4,54, --paper 4,92, tuile d'eau 4,62. */
+  --amber: #926511;
   --red: #b33a2e;
   --line: #ece8dd;
   --line-strong: #e6e2d8;
@@ -18,8 +23,15 @@
   --green-tint: #e9f2ec;
   /* v2 refonte accents */
   --fir: #0f1f16; /* deep fir green — dark surfaces & CTAs */
-  --brass: #b08a3e; /* editorial brass accent */
-  --brass-ink: #8a7a4e; /* letterspaced kicker labels */
+  /* Accent décoratif SEULEMENT : 3,07:1 sur --paper, ce qui suffit pour un
+     filet ou une pastille (1.4.11) mais pas pour du texte. Pour un cartouche
+     en capitales, prendre --brass-ink. */
+  --brass: #b08a3e;
+  /* Cartouches en capitales espacées. Assombri de 4,7 % de luminosité HSL :
+     il mesurait 4,04:1 sur --paper et 3,74:1 sur la crème #f6f1e4, deux fois
+     sous AA, pour des libellés déjà petits (10,5–12 px) et très espacés.
+     Après : --paper 4,94, crème 4,57, #fff 5,16, --sand 4,57, --amber-bg 4,58. */
+  --brass-ink: #7b6c45;
 }
 
 /* Visible keyboard focus (was absent everywhere). */
@@ -390,7 +402,9 @@ a:hover {
   padding: 8px;
   font-size: 11px;
   line-height: 1.3;
-  color: #8b9389;
+  /* 2,33:1 sur la bande la plus sombre du damier (#e1ddd0). Ce texte dit ce que
+     la photo manquante aurait montré : 4,56:1 maintenant. */
+  color: #5c635b;
   background: repeating-linear-gradient(
     135deg,
     #e6e3d7,
@@ -400,7 +414,8 @@ a:hover {
   );
 }
 .img-slot.dark {
-  color: #9db4a6;
+  /* Sur fond sombre, il faut éclaircir : 3,60:1 → 4,55:1 (+9 % de luminosité). */
+  color: #b7c8be;
   background: #43554b;
 }
 .media-img {
@@ -512,7 +527,9 @@ a:hover {
   border-radius: 50%;
 }
 .hero .season .season-i {
-  color: #9a978c;
+  /* Même ⓘ, même rôle que dans la barre de verdict : était 2,80:1 sur la
+     pastille (papier à 92 % par-dessus la photo), 4,94:1 en laiton. */
+  color: var(--brass-ink);
   font-size: 11px;
 }
 .hero .fade {
@@ -616,15 +633,26 @@ a:hover {
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #9a978c;
+  /* était #9a978c : 2,93:1 sur la cellule blanche, 2,59:1 sur la cellule
+     ouverte. --muted est le gris secondaire déjà employé partout ailleurs,
+     et il passe (5,65 et 5,00) sans ajouter une teinte de plus. */
+  color: var(--muted);
   margin-bottom: 4px;
   display: inline-flex;
   align-items: center;
   gap: 3px;
 }
+/* Ce ⓘ était à 1,86:1 sur la cellule blanche et 1,65:1 sur la cellule ouverte
+   — le pire contraste de la feuille. Et ce n'est pas qu'un problème de lecture :
+   la cellule EST un <button>, mais rien d'autre que ce glyphe ne le montre.
+   Un affordage à 1,65:1, c'est une commande invisible.
+   Il prend le laiton plutôt qu'un gris : c'est l'accent de l'app, il distingue
+   le ⓘ du libellé qu'il suit, et il passe AA (5,16 sur #fff, 4,57 sur --sand).
+   La vraie affordance (contour, surface, libellé « pourquoi ? ») reste à faire
+   et appartient au lot G2 — ici on ne corrige que le contraste. */
 .verdict .cell-i {
   font-size: 9px;
-  color: #c2beb2;
+  color: var(--brass-ink);
 }
 .explain {
   border: 1px solid var(--line-strong);
@@ -645,7 +673,8 @@ a:hover {
 .explain-x {
   border: none;
   background: transparent;
-  color: #9a978c;
+  /* était #9a978c : 2,59:1 sur --sand, pour le seul moyen de refermer l'encart. */
+  color: var(--muted);
   font-size: 13px;
   cursor: pointer;
   padding: 2px 4px;
@@ -671,7 +700,9 @@ a:hover {
   display: inline;
 }
 .glossed {
-  border-bottom: 1px dotted #a9a597;
+  /* Ce pointillé est le seul signe qu'un terme ouvre une bulle : 2,36:1 avant,
+     3,06:1 maintenant (1.4.11). */
+  border-bottom: 1px dotted #95907f;
 }
 .tip-i {
   width: 12px;
@@ -773,7 +804,10 @@ a:hover {
   margin-top: 1px;
 }
 .sec-head .chev {
-  color: #c9c3b4;
+  /* Chevron : élément non textuel porteur d'information (1.4.11, seuil 3:1).
+     Il était à 1,68:1 sur --paper, soit invisible au soleil alors qu'il est le
+     seul signe qu'une section se déplie. #95907f garde le gris chaud à 3,06:1. */
+  color: #95907f;
   font-size: 17px;
   transition: transform 0.18s;
   margin-left: auto;
@@ -935,7 +969,8 @@ a:hover {
   margin-top: 1px;
 }
 .card-row .chev {
-  color: #c9c3b4;
+  /* Idem : 1,68:1 → 3,06:1 (1.4.11). */
+  color: #95907f;
   font-size: 17px;
 }
 .tile {
@@ -1798,7 +1833,10 @@ a:hover {
   align-items: center;
   gap: 8px;
   border: none;
-  background: #e08a1e;
+  /* Blanc sur #e08a1e : 2,68:1. C'est un 14 px gras, donc du texte NORMAL au
+     sens de 1.4.3 (le seuil de 3:1 ne commence qu'à 18,66 px gras) — il fallait
+     4,5:1. Teinte inchangée, luminosité HSL baissée de 12,6 % : 4,57:1. */
+  background: #a76716;
   color: #fff;
   border-radius: 100px;
   padding: 11px 18px;
@@ -1844,8 +1882,11 @@ a:hover {
   border-color: rgba(255, 255, 255, 0.3);
   background: transparent;
 }
+/* #b06e14 était posé à cinq endroits, tous sur --paper, tous à 3,96:1. C'est
+   la même intention que --amber (repère, péremption, approximation) : un seul
+   jeton, 4,92:1, plutôt qu'un orange parallèle qui ne passait pas. */
 .carte-legend .legend-spots {
-  color: #b06e14;
+  color: var(--amber);
   font-weight: 600;
 }
 .spot-sheet .sheet-sub.link {
@@ -1985,7 +2026,7 @@ a:hover {
   text-overflow: ellipsis;
 }
 .spot-row .go {
-  color: #b06e14;
+  color: var(--amber);
   font-weight: 700;
   font-size: 16px;
   flex-shrink: 0;
@@ -2115,7 +2156,7 @@ a:hover {
 .brief-stale {
   font-size: 11px;
   font-weight: 500;
-  color: #b06e14;
+  color: var(--amber);
   margin-left: 6px;
 }
 .brief-load {
@@ -2281,7 +2322,8 @@ a:hover {
 }
 .edible-status.réglementé {
   background: #f6efe0;
-  color: #8a6a1e;
+  /* 4,41:1, il manquait un cheveu ; −0,6 % de luminosité HSL suffit (4,55:1). */
+  color: #87681d;
 }
 .edible-status.non {
   background: #f7ecea;
@@ -2652,10 +2694,12 @@ a:hover {
   background: #fff;
   color: #3a3e36;
 }
+/* Recopie littérale de l'ancien ambre : elle échappait au jeton et restait à
+   4,19:1 alors que --amber était corrigé. Passer par le jeton (4,55:1). */
 .ce-kept button.on-kept {
-  border-color: #9a6a12;
-  background: #f7f1e2;
-  color: #9a6a12;
+  border-color: var(--amber);
+  background: var(--amber-bg);
+  color: var(--amber);
 }
 .ce-kept button.on-rel {
   border-color: #1d6e42;
@@ -2698,7 +2742,8 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a29a;
+  /* 2,10:1 sur #dfe6e2 ; même gris que .img-slot, 4,88:1. */
+  color: #5c635b;
   font-size: 14px;
 }
 .pd-back {
@@ -2726,7 +2771,7 @@ a:hover {
   color: #fff;
 }
 .pd-tag.kept {
-  background: #9a6a12;
+  background: var(--amber);
 }
 .pd-tag.rel {
   background: #1d6e42;
@@ -3359,7 +3404,9 @@ a:hover {
 }
 .update-toast button {
   border: none;
-  background: #2e9e5b;
+  /* Blanc sur #2e9e5b : 3,41:1 pour un 13 px gras. Teinte conservée,
+     luminosité HSL −6 % : 4,56:1. */
+  background: #27864d;
   color: #fff;
   border-radius: 100px;
   padding: 11px 16px; /* ≥44px tap target */
@@ -3368,7 +3415,8 @@ a:hover {
   font-weight: 600;
 }
 .update-toast button:active {
-  background: #268a4f;
+  /* Reste plus sombre que le repos, sinon l'appui ne se voit plus (6,00:1). */
+  background: #21713f;
   transform: scale(0.97);
 }
 
@@ -3484,7 +3532,7 @@ a:hover {
 /* Geolocation feedback in the catch editor */
 .ce-gps-msg {
   font-size: 12.5px;
-  color: #9a6a12;
+  color: var(--amber);
   margin-top: 8px;
 }
 
@@ -3949,7 +3997,8 @@ a:hover {
 .gr-del {
   border: none;
   background: transparent;
-  color: #b9b3a4;
+  /* 2,00:1 pour le seul bouton qui supprime une ligne de gréement → 4,88:1. */
+  color: var(--faint);
   font-size: 14px;
   padding: 4px 6px;
   flex-shrink: 0;
@@ -4554,7 +4603,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--brass-ink, #8a7a4e);
+  color: var(--brass-ink);
 }
 .ot-count-time {
   font-family: "Source Serif 4", Georgia, serif;
@@ -4598,7 +4647,7 @@ button.card-row {
   flex-shrink: 0;
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--brass-ink, #8a7a4e);
+  color: var(--brass-ink);
   background: #f6f1e4;
   border-radius: 999px;
   padding: 5px 11px;
@@ -4658,7 +4707,9 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--brass, #b08a3e);
+  /* --brass est un accent décoratif (3,07:1) : pour un cartouche en capitales,
+     c'est --brass-ink qu'il faut (4,94:1). */
+  color: var(--brass-ink);
   margin-bottom: 4px;
 }
 .mr-hero-img { width: 100%; height: 100%; object-fit: cover; }
@@ -4891,20 +4942,26 @@ button.card-row {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: #6e8894;
+  /* Les trois gris-bleus de cette tuile (#6e8894 à 3,37:1, #5f7580 à 4,35:1,
+     #94a29a à 2,40:1) tombaient tous sous AA sur l'extrémité sombre du dégradé
+     (#eef4f6). Un seul les remplace, à 4,55:1, ce qui évite d'inventer trois
+     nuances là où une suffit. */
+  color: #5c727c;
   font-weight: 600;
   white-space: nowrap;
   /* No overflow:hidden here — these labels are short and fixed, and clipping
      would swallow the info-tooltip bubble that opens below the label (.tip). */
 }
 .dash-wtile .v { font-size: 20px; font-weight: 700; color: #14303b; margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
-.dash-wtile .v .u { font-size: 12px; font-weight: 600; color: #6e8894; }
+.dash-wtile .v .u { font-size: 12px; font-weight: 600; color: #5c727c; }
 .dash-wtile .v .tr { font-size: 15px; margin-left: 1px; }
 .dash-wtile .v .tr.rising { color: #1d6e42; }
 .dash-wtile .v .tr.falling { color: #b33a2e; }
-.dash-wtile .v .tr.stable { color: #94a29a; }
-.dash-wtile .s { font-size: 10.5px; color: #5f7580; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dash-wtile .s.stale { color: #b06e14; font-weight: 600; }
+.dash-wtile .v .tr.stable { color: #5c727c; }
+.dash-wtile .s { font-size: 10.5px; color: #5c727c; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* « périmé » est un avertissement : il prend l'ambre du reste de l'app
+   (3,72:1 → 4,62:1) au lieu d'un orange isolé qui ne passait nulle part. */
+.dash-wtile .s.stale { color: var(--amber); font-weight: 600; }
 .dash-water-empty { font-size: 12px; color: var(--muted); margin-top: 10px; }
 
 /* Sun & moon */
@@ -5044,7 +5101,7 @@ button.card-row {
   flex-shrink: 0;
   font-size: 12px;
   font-weight: 700;
-  color: var(--brass-ink, #8a7a4e);
+  color: var(--brass-ink);
   background: #f6f1e4;
   border-radius: 100px;
   min-width: 26px;
@@ -5073,7 +5130,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--brass-ink, #8a7a4e);
+  color: var(--brass-ink);
 }
 .id-res-h .n { font-size: 13px; font-weight: 700; color: #16281e; }
 .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -5150,7 +5207,7 @@ button.card-row {
 .fed-item-n { font-size: 14px; font-weight: 600; color: #22271f; }
 .fed-item-s { font-size: 12px; color: #6b675c; margin-top: 2px; line-height: 1.35; }
 .fed-item-note { font-size: 11.5px; color: #6b675c; margin-top: 2px; font-style: italic; }
-.fed-approx { color: #b06e14; font-weight: 600; }
+.fed-approx { color: var(--amber); font-weight: 600; }
 .fed-item-actions {
   display: flex;
   flex-direction: column;
@@ -5451,7 +5508,9 @@ button.card-row {
 .ecr-reg-src {
   margin-top: 8px;
   font-size: 11px;
-  color: #a8a495;
+  /* 2,39:1 — une mention de source doit rester lisible pour être vérifiable.
+     --faint est le gris tertiaire déjà en place ailleurs (4,88:1). */
+  color: var(--faint);
 }
 .ecr-sheet {
   /* absolute, like .carte-sheet : la feuille reste dans le cadre 390×820 au
