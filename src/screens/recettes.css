@@ -1,0 +1,262 @@
+/*
+ * Écran « Cuisine & recettes ».
+ *
+ * Fichier dédié, importé par `Recettes.tsx` : rien de ce lot n'entre dans
+ * `styles.css`, dont l'empreinte de couleurs est vérifiée par un test
+ * (`lib/empreinte-couleurs.test.ts`) et qui appartient au chantier thème sombre.
+ *
+ * Les couleurs passent par les variables déjà déclarées par `styles.css`
+ * (--muted, --faint, --line, --paper, --red, --amber…) plutôt que par des
+ * valeurs en dur, pour que la tokenisation du thème sombre les emporte sans
+ * repasser ici. Les seules valeurs littérales restantes sont des teintes de
+ * fond translucides (rgba), qui se recalculent sur le fond réel.
+ *
+ * Règle de taille : toute cible tactile fait au moins 44 px de haut. Les rangées
+ * de filtres défilent horizontalement plutôt que de passer à la ligne — sur
+ * 375 px, quatre lignes de puces empilées repoussaient les résultats hors écran.
+ */
+
+.rcz-pad {
+  padding-bottom: 34px;
+}
+
+/* Enveloppe des sous-écrans (éditeur, fiche d'une recette personnelle) : elle
+   n'existe que pour porter le `<main>` et le `<h1>` que ces deux composants ne
+   portent pas. Elle ne défile pas elle-même — c'est le `.screen` qu'ils rendent
+   à l'intérieur qui garde le défilement. */
+.rcz-sous-ecran {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.rcz-search {
+  margin-top: 4px;
+}
+
+.rcz-label {
+  margin: 16px 0 7px;
+  font-size: 12px;
+}
+
+/* Rangée de filtres : un seul rang, qui défile. `scrollbar-width: none` parce
+   qu'au doigt on ne vise pas une barre de 4 px. */
+.rcz-chips {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+}
+.rcz-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.rcz-chip {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 22px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--body);
+  font-size: 13.5px;
+  font-weight: 550;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rcz-chip[aria-pressed="true"] {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: var(--paper);
+}
+
+/* La puce des invasives n'est pas un filtre comme les autres : elle mène aux
+   espèces que l'app INTERDIT de remettre vivantes à l'eau. */
+.rcz-chip-alerte {
+  border-color: var(--amber);
+}
+.rcz-chip-alerte[aria-pressed="true"] {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.rcz-note-invasive {
+  margin: 9px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(200, 162, 74, 0.14);
+  border: 1px solid var(--amber);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+.rcz-reset {
+  margin-top: 12px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.rcz-count {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rcz-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rcz-item {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.rcz-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rcz-thumb {
+  flex: 0 0 auto;
+  width: 62px;
+  height: 62px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--line);
+}
+.rcz-thumb .media-img,
+.rcz-thumb .img-slot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rcz-noimg {
+  font-size: 24px;
+}
+
+.rcz-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.rcz-title {
+  font-size: 14.5px;
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.rcz-meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.rcz-src {
+  font-size: 11.5px;
+  color: var(--faint);
+  line-height: 1.35;
+}
+
+.rcz-badge {
+  align-self: flex-start;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 11px;
+  background: rgba(29, 110, 66, 0.12);
+  color: var(--green);
+}
+
+.rcz-chev {
+  flex: 0 0 auto;
+  color: var(--faint);
+  font-size: 19px;
+}
+
+/* Les deux blocs qui ne se replient jamais.
+   Ils sont HORS du bouton : une consigne sanitaire de quatre lignes n'a rien à
+   faire dans le nom accessible d'une cible tactile, et elle doit rester lisible
+   sans avoir à ouvrir la recette. */
+.rcz-regime {
+  margin: 2px 0 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border-left: 3px solid var(--amber);
+  background: rgba(200, 162, 74, 0.12);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+.rcz-safety {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border-left: 3px solid var(--red);
+  background: rgba(179, 58, 46, 0.08);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--body);
+}
+/* Le mot en gras reste à l'encre du texte : la couleur est portée par le filet
+   et la teinte de fond, qui ne dépendent d'aucun contraste de petit texte. */
+.rcz-regime b,
+.rcz-safety b {
+  color: var(--ink);
+}
+
+.rcz-create {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 50px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--green);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rcz-create-note {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}

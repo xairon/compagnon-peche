@@ -14,7 +14,21 @@ export function Outils() {
   const { reserve } = usePwa();
   const deptName = DEPARTEMENTS[state.dept].name;
 
-  const rows: { title: string; sub: string; icon: string; to: Screen }[] = [
+  // « recettes » n'appartient pas encore au type `Screen` : sa déclaration vit
+  // dans src/store.tsx et son rendu dans src/App.tsx, tous deux hors de ce lot.
+  // Les deux lignes à poser sont dans le rapport ; le type le dit plutôt que de
+  // le cacher derrière un cast muet.
+  type Destination = Screen | "recettes";
+
+  const rows: { title: string; sub: string; icon: string; to: Destination }[] = [
+    // En tête, et pas en bas : c'est la seule porte d'entrée du module cuisine
+    // hors de la fiche d'une espèce précise.
+    {
+      title: "Cuisine & recettes",
+      sub: "Recherche : espèce, technique, difficulté, temps, bivouac — + vos recettes",
+      icon: ICONS.pot,
+      to: "recettes",
+    },
     { title: "Mon matériel", sub: "Équipement, ensembles, guide appâts/hameçons", icon: ICONS.peche, to: "materiel" },
     { title: "Outils de terrain", sub: "Horaires légaux du jour + chronos (balances, saignée…)", icon: ICONS.regle, to: "outils-terrain" },
     { title: "Écrevisses", sub: "Séance de balances : chronos individuels, alertes, bilan", icon: ICONS.regle, to: "ecrevisses" },
@@ -66,7 +80,7 @@ export function Outils() {
         <AideInstallIOS />
         <div className="section-list" style={{ marginTop: 16 }}>
           {rows.map((r) => (
-            <button key={r.title} type="button" className="card-row" onClick={() => nav(r.to)}>
+            <button key={r.title} type="button" className="card-row" onClick={() => nav(r.to as Screen)}>
               <Icon d={r.icon} size={21} stroke="#4A5D52" />
               <div style={{ flex: 1 }}>
                 <div className="t">{r.title}</div>

@@ -50,9 +50,21 @@ export function RecipeEditor({
   const shownPhoto = photoPreview || existingPhoto;
 
   const nq = norm(spq);
+  // La garde de `data/peche-interdite.ts`, jusqu'ici absente d'ici : le
+  // sélecteur offrait tout le catalogue, esturgeon européen et apron du Rhône
+  // compris. Lier SA recette à une espèce protégée faisait ensuite afficher
+  // « Ma recette · Esturgeon européen » — la seule phrase de l'app qui aurait
+  // présenté une espèce protégée comme quelque chose qu'on cuisine.
+  //
+  // Le régime spécial (anguille, aloses) n'est PAS retiré : ces espèces restent
+  // légalement pêchables selon le bassin, et le corpus embarqué garde leurs
+  // recettes. Les cacher ici serait plus strict que la loi.
+  const choisissables = SPECIES.filter((s) => !s.protected);
   const spMatches = nq
-    ? SPECIES.filter((s) => norm(s.name).includes(nq) || norm(s.latin).includes(nq)).slice(0, 14)
-    : SPECIES.slice(0, 10);
+    ? choisissables
+        .filter((s) => norm(s.name).includes(nq) || norm(s.latin).includes(nq))
+        .slice(0, 14)
+    : choisissables.slice(0, 10);
   const toggleSp = (id: string) =>
     setSpecies((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 

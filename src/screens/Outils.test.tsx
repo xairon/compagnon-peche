@@ -33,6 +33,18 @@ const rendre = () =>
     </StoreProvider>,
   );
 
+describe("Outils — accès au module cuisine", () => {
+  // Signalé à l'usage : « on a toujours aucun vrai module de cuisine/recette
+  // avec moteur de recherche etc ? je le vois pas accessible ailleurs que dans
+  // la fiche d'un poisson spécifique ? » — la recherche existait, au 4ᵉ segment
+  // de « Mon carnet », sans aucun lien depuis l'Accueil ni depuis ici.
+  it("propose une ligne « Cuisine & recettes » qui mène à l'écran dédié", () => {
+    rendre();
+    const ligne = screen.getByText(/Cuisine & recettes/).closest("button");
+    expect(ligne).not.toBeNull();
+  });
+});
+
 describe("Outils — département actif", () => {
   it("affiche le département du store, pas une valeur figée", () => {
     rendre();
