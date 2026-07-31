@@ -2,24 +2,12 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Content-Security-Policy (defense-in-depth). Injected only in the built HTML —
-// NOT in dev, where Vite's HMR needs inline/eval and a ws: connection. Scripts are
-// restricted to 'self' (no inline script ships in prod); connect/img/frame are
-// whitelisted to the exact third parties the app talks to. `data:`/`blob:` are
-// needed for photo blobs and the backup import (fetch on a data: URL).
-const CSP = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  "font-src 'self'",
-  "img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com https://data.geopf.fr",
-  "worker-src 'self' blob:",
-  "connect-src 'self' data: blob: https://hubeau.eaufrance.fr https://services.sandre.eaufrance.fr https://data.geopf.fr https://api.open-meteo.com https://api.gbif.org https://overpass-api.de https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com",
-  "frame-src https://map.geopeche.com",
-  "manifest-src 'self'",
-].join("; ");
+// The policy itself lives in src/lib/csp.ts so csp.test.ts can check it against
+// the map's own source lists — a host missing here is invisible in dev (the
+// policy is build-only) and blanks a layer for every user in production.
+import { cspHeader } from "./src/lib/csp";
+
+const CSP = cspHeader();
 
 const cspPlugin: Plugin = {
   name: "inject-csp",
@@ -88,6 +76,20 @@ export default defineConfig({
             options: {
               cacheName: "carto-basemap",
               expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // DDT MapServer overlays (réserves de pêche, catégorie piscicole) —
+            // see lib/parcours.ts. Cache-first like the other raster layers:
+            // these are regulatory boundaries, they change once a year at most,
+            // and a blank layer reads as "no reserve here" rather than as a
+            // missing tile. Modest quota — the layers are off by default.
+            urlPattern: /^https:\/\/ogc\.geo-ide\.developpement-durable\.gouv\.fr\/.*/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "wms-parcours",
+              expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
