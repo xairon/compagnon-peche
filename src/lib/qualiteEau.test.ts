@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   classeO2,
   classeSaturationO2,
+  sursaturationO2,
   classePh,
   classeGlobale,
   classeLabel,
@@ -52,6 +53,36 @@ describe("classeSaturationO2 — seuils SEQ-Eau v2 (%)", () => {
   });
   it("10% → mauvais", () => {
     expect(classeSaturationO2(10)).toBe("mauvais");
+  });
+
+  it("reste fidèle à la grille au-dessus de 100 %, qui n'y pose aucune borne", () => {
+    // Vérifié sur la grille officielle (p. 2, « Taux de saturation en oxygène (%) » :
+    // 90 / 70 / 50 / 30) : SEQ-Eau v2 ne borne QUE le déficit. Inventer une
+    // borne haute et la présenter comme SEQ-Eau serait fabriquer une source.
+    expect(classeSaturationO2(224)).toBe("tres_bon");
+  });
+});
+
+describe("sursaturationO2 — ce que la grille ne couvre pas", () => {
+  // Mesuré sur Hub'Eau v2, département 41, 500 analyses du paramètre 1312 :
+  // 127 au-dessus de 110 %, 91 au-dessus de 120 %, maximum 224 %. Une eau à
+  // 224 % de saturation est en pleine efflorescence algale — production diurne
+  // massive, donc anoxie nocturne et poisson qui décroche. La grille la classe
+  // « très bonne » parce qu'elle a été bâtie pour détecter le manque d'oxygène,
+  // pas l'excès. L'app ne peut ni contredire la grille ni se taire.
+  it("ne signale rien dans la plage que la grille sait juger", () => {
+    expect(sursaturationO2(95)).toBe(false);
+    expect(sursaturationO2(60)).toBe(false);
+  });
+
+  it("signale une sursaturation franche", () => {
+    expect(sursaturationO2(224)).toBe(true);
+    expect(sursaturationO2(130)).toBe(true);
+  });
+
+  it("ne se déclenche pas sur une variation diurne ordinaire", () => {
+    // Un cours d'eau sain oscille couramment autour de 100-110 % l'après-midi.
+    expect(sursaturationO2(110)).toBe(false);
   });
 });
 

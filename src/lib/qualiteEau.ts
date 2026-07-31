@@ -36,13 +36,40 @@ export function classeO2(mgL: number): QualiteClasse {
   return "mauvais";
 }
 
-/** Taux de saturation en oxygène (%) — seuils SEQ-Eau v2 p.2. */
+/** Taux de saturation en oxygène (%) — seuils SEQ-Eau v2 p.2 (90 / 70 / 50 / 30).
+ *
+ *  La grille ne pose QUE des bornes basses : elle est faite pour mesurer le
+ *  déficit en oxygène. Une sursaturation reste donc classée « très bon », ce
+ *  qui est fidèle à la source — voir sursaturationO2() pour ce qu'elle laisse
+ *  de côté. Ne pas y ajouter de borne haute en la présentant comme SEQ-Eau :
+ *  ce serait fabriquer une source. */
 export function classeSaturationO2(pct: number): QualiteClasse {
   if (pct >= 90) return "tres_bon";
   if (pct >= 70) return "bon";
   if (pct >= 50) return "moyen";
   if (pct >= 30) return "mediocre";
   return "mauvais";
+}
+
+/** Seuil de sursaturation retenu par l'application — PAS un seuil SEQ-Eau.
+ *  Un cours d'eau sain dépasse couramment 100 % l'après-midi ; au-delà de
+ *  120 % la production photosynthétique domine, ce qui signe une eau eutrophe. */
+export const SURSATURATION_PCT = 120;
+
+/**
+ * Sursaturation marquée en oxygène — le signal que la grille SEQ-Eau ne donne pas.
+ *
+ * Mesuré sur Hub'Eau (département 41, 500 analyses du paramètre 1312) : 91
+ * valeurs au-dessus de 120 %, maximum 224 %. Une eau à ce niveau est en
+ * efflorescence algale : production massive le jour, consommation nocturne qui
+ * vide l'oxygène avant l'aube — le moment où le poisson décroche. La grille la
+ * classe « très bonne », faute de borne haute.
+ *
+ * Rendu à part plutôt qu'en déclassant la classe : l'app affiche le verdict
+ * SEQ-Eau tel quel ET la réserve, sans réécrire la source.
+ */
+export function sursaturationO2(pct: number): boolean {
+  return pct > SURSATURATION_PCT;
 }
 
 /** pH — seuils SEQ-Eau v2 p.4 ("Acidification") : bandes emboîtées autour de

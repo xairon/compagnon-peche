@@ -17,6 +17,7 @@ import { useNow } from "../lib/now";
 import {
   classeO2,
   classeSaturationO2,
+  sursaturationO2,
   classePh,
   classeGlobale,
   classeLabel,
@@ -330,7 +331,18 @@ export function Briefing({
                     <Metric label="Oxygène dissous" value={`${quality.data.o2.toFixed(1)} mg/L`} extra={classeLabel(classeO2(quality.data.o2)).word} />
                   )}
                   {quality.data.sat != null && (
-                    <Metric label="Saturation O₂" value={`${Math.round(quality.data.sat)} %`} extra={classeLabel(classeSaturationO2(quality.data.sat)).word} />
+                    <Metric
+                      label="Saturation O₂"
+                      value={`${Math.round(quality.data.sat)} %`}
+                      // SEQ-Eau ne borne que le déficit : 224 % y est « très
+                      // bon ». On garde le verdict de la grille et on ajoute la
+                      // réserve, plutôt que de réécrire la source.
+                      extra={
+                        sursaturationO2(quality.data.sat)
+                          ? "sursaturation — eau eutrophe, oxygène qui chute la nuit"
+                          : classeLabel(classeSaturationO2(quality.data.sat)).word
+                      }
+                    />
                   )}
                   {quality.data.ph != null && (
                     <Metric label="pH" value={quality.data.ph.toFixed(1)} extra={classeLabel(classePh(quality.data.ph)).word} />
@@ -360,24 +372,29 @@ export function Briefing({
           {meteo.data && (
             <>
               <div className="brief-grid">
-                <Metric label={weatherLabel(meteo.data.now.code).icon + " Ciel"} value={`${Math.round(meteo.data.now.temp)} °C`} extra={weatherLabel(meteo.data.now.code).label} />
-                <Metric label="Vent" value={`${Math.round(meteo.data.now.wind)} km/h`} extra={`${meteo.data.now.windCompass}${meteo.data.now.gust ? ` · raf. ${Math.round(meteo.data.now.gust)}` : ""}`} />
+                <Metric label={weatherLabel(meteo.data.now.code).icon + " Ciel"} value={mes(meteo.data.now.temp, " °C")} extra={weatherLabel(meteo.data.now.code).label} />
+                <Metric label="Vent" value={mes(meteo.data.now.wind, " km/h")} extra={`${meteo.data.now.windCompass}${meteo.data.now.gust ? ` · raf. ${Math.round(meteo.data.now.gust)}` : ""}`} />
                 <Metric
-                  label="Pression"
-                  value={`${Math.round(meteo.data.now.pressure)} hPa`}
+                  label="Pression au niveau de la mer"
+                  value={mes(meteo.data.now.pressure, " hPa")}
                   extra={`${meteo.data.pressureTrend === "rising" ? "↗" : meteo.data.pressureTrend === "falling" ? "↘" : "→"} ${meteo.data.pressureDelta > 0 ? "+" : ""}${meteo.data.pressureDelta}/3h`}
                 />
-                <Metric label="Pluie / nuages" value={`${meteo.data.now.precip} mm`} extra={`${meteo.data.now.cloud}% nuages`} />
+                <Metric label="Pluie / nuages" value={`${meteo.data.now.precip} mm`} extra={mes(meteo.data.now.cloud, "% nuages")} />
               </div>
               <div className="brief-days">
                 {meteo.data.days.map((d) => (
                   <div className="brief-day" key={d.date}>
-                    <span className="dw">{dayShort(d.date)}</span>
+                    {/* Day name AND date: with past_days leaking into `daily`
+                        the row read "jeu ven sam dim lun mar mer jeu" — two
+                        Thursdays and nothing to notice it by. */}
+                    <span className="dw">
+                      {dayShort(d.date)} {d.date.slice(8, 10)}
+                    </span>
                     <span className="di">{weatherLabel(d.code).icon}</span>
                     <span className="dt">
-                      {Math.round(d.tmax)}° <span className="lo">{Math.round(d.tmin)}°</span>
+                      {mes(d.tmax, "°")} <span className="lo">{mes(d.tmin, "°")}</span>
                     </span>
-                    <span className="dp">{d.precip > 0 ? `${d.precip.toFixed(0)}mm` : ""}</span>
+                    <span className="dp">{d.precip && d.precip > 0 ? `${d.precip.toFixed(0)}mm` : ""}</span>
                   </div>
                 ))}
               </div>
@@ -474,6 +491,12 @@ function Metric({ label, value, extra }: { label: string; value: string; extra?:
       {extra && <div className="bm-extra">{extra}</div>}
     </div>
   );
+}
+
+/** A measurement the model may not have produced. Renders "—" rather than a
+ *  rounded null, which reads as a genuine zero. */
+function mes(v: number | null | undefined, unite = "", decimales = 0): string {
+  return v == null ? "—" : `${v.toFixed(decimales)}${unite}`;
 }
 
 function fmtQ(m3s: number): string {

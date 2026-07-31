@@ -46,6 +46,12 @@ const TOOLS: { icon: string; label: string; to: Screen }[] = [
   { icon: "M12 4v17M5 6h14M7 6l-3 7a3.5 3.5 0 0 0 6 0zM17 6l-3 7a3.5 3.5 0 0 0 6 0z", label: "Réglementation", to: "reglement" },
 ];
 
+/** A model value that may be absent. Renders "—" instead of a rounded null:
+ *  Math.round(null) is 0, and 0 °C or 0 hPa are readings a pêcheur would act on. */
+function mesure(v: number | null | undefined): string {
+  return v == null ? "—" : String(Math.round(v));
+}
+
 interface Water {
   station?: string;
   flow?: HydroReading | null;
@@ -123,7 +129,10 @@ export function Accueil() {
   useEffect(() => {
     if (!meteo && !water) return;
     setConditions({
-      pressure: meteo?.now.pressure,
+      // `?? undefined` and not `?? 0`: the cache stamps a catch with the
+      // conditions of the moment, and a missing pressure must stay missing
+      // rather than be recorded as a reading of zero.
+      pressure: meteo?.now.pressure ?? undefined,
       pressureTrend: meteo?.pressureTrend,
       moonPhase: moon.phase,
       waterTemp: water?.temp?.value,
@@ -261,13 +270,17 @@ export function Accueil() {
             <>
               <div className="dash-wx-top">
                 <div className="dash-wx-temp">
-                  <span className="deg">{n ? Math.round(n.temp) : loading ? "…" : "—"}</span>
+                  {/* `n` is an object and always truthy, so a null temperature
+                      used to reach Math.round and render as a real "0 °C". */}
+                  <span className="deg">
+                    {n?.temp != null ? Math.round(n.temp) : loading ? "…" : "—"}
+                  </span>
                   <span className="unit">°C</span>
                 </div>
                 <div className="dash-wx-cond">
                   <div className="emoji">{wl ? wl.icon : ""}</div>
                   <div className="lbl">{wl ? wl.label : loading ? "Chargement…" : "—"}</div>
-                  {n && <div className="feels">Ressenti {Math.round(n.feels)}°</div>}
+                  {n?.feels != null && <div className="feels">Ressenti {Math.round(n.feels)}°</div>}
                 </div>
               </div>
 
@@ -277,31 +290,31 @@ export function Accueil() {
                 <div className="dash-metrics">
                   <Metric
                     k="Vent"
-                    v={`${Math.round(n.wind)}`}
+                    v={`${mesure(n.wind)}`}
                     s={`km/h ${n.windCompass}`}
                     tip="Vent moyen à 10 m du sol, avec sa direction. Source : Open-Meteo (modèle météo)."
                   />
                   <Metric
                     k="Rafales"
-                    v={`${Math.round(n.gust)}`}
+                    v={`${mesure(n.gust)}`}
                     s="km/h"
                     tip="Rafales de vent maximales. Source : Open-Meteo."
                   />
                   <Metric
                     k="Humidité"
-                    v={`${Math.round(n.humidity)}`}
+                    v={`${mesure(n.humidity)}`}
                     s="%"
                     tip="Humidité relative de l'air. Source : Open-Meteo."
                   />
                   <Metric
                     k="Pression"
-                    v={`${Math.round(n.pressure)}`}
+                    v={`${mesure(n.pressure)}`}
                     s={`hPa ${trendArrow(meteo!.pressureTrend)}`}
                     tip="Pression atmosphérique au niveau de la mer, avec la tendance sur 3 h (↑ hausse, ↓ baisse). Une pression qui chute annonce souvent une meilleure activité. Source : Open-Meteo."
                   />
                   <Metric
                     k="Couvert"
-                    v={`${Math.round(n.cloud)}`}
+                    v={`${mesure(n.cloud)}`}
                     s="% ciel"
                     tip="Part du ciel couverte par les nuages. Source : Open-Meteo."
                   />
