@@ -18,6 +18,29 @@ export function boxAround(lat: number, lon: number, d: number) {
   return { w: lon - d, s: lat - d, e: lon + d, n: lat + d };
 }
 
+/**
+ * A bounding box that really covers `km` in every direction.
+ *
+ * A degree of longitude is 111 km at the equator and 75 km at Blois, so a box
+ * expressed in degrees is an ellipse in kilometres — narrower east-west, and
+ * more so the further north. Every caller asked for degrees and then filtered
+ * the answer in kilometres, which meant the query stopped short of the radius
+ * the app went on to report having searched.
+ */
+export function boxAroundKm(lat: number, lon: number, km: number) {
+  // 2 % over, because 111,32 km/° is a spherical average and the Earth is not
+  // one: at Ajaccio the plain formula lands 30 m short of a 30 km radius. A box
+  // slightly larger than asked costs a few extra features; one slightly smaller
+  // lets the app claim it searched ground it never looked at.
+  km *= 1.02;
+  const dLat = km / 111.32;
+  // Meridians converge to nothing at the poles; clamp so the box stays finite
+  // instead of spanning the globe. France never comes close, but a division by
+  // ~0 would turn a 20 km query into a worldwide one.
+  const dLon = km / (111.32 * Math.max(Math.cos((lat * Math.PI) / 180), 0.05));
+  return { w: lon - dLon, s: lat - dLat, e: lon + dLon, n: lat + dLat };
+}
+
 /** Compass point (16-wind) for a bearing in degrees. */
 const COMPASS = [
   "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",

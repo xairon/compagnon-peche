@@ -27,9 +27,14 @@ import {
 } from "../lib/qualiteEau";
 import { fetchMeteo, weatherLabel, type Meteo } from "../lib/meteo";
 import { sunTimes, moonIllumination, moonTimes, moonPhaseName, solunar } from "../lib/astro";
-import { fetchObstacles, obstacleInfo } from "../lib/sandre";
-import { fetchAccess, nearestByKind, accessIcon, accessLabel } from "../lib/overpass";
-import { boxAround, distKm, hhmm, ago } from "../lib/geo";
+import { fetchObstacles, obstacleInfo, passeTexte } from "../lib/sandre";
+import { fetchAccess, nearestByKind, accessIcon, accessLabel, SourceOccupee } from "../lib/overpass";
+import { boxAroundKm, distKm, hhmm, ago } from "../lib/geo";
+
+// The radius the briefing searches for nearby features — and the one it names
+// when it finds none. Both used to be written separately, in degrees on one
+// side and "~5 km" on the other, so the panel claimed a radius it never swept.
+const RAYON_KM = 5;
 
 // A tiny fetch hook with per-key caching, so re-opening a point offline still
 // shows the last known data (flagged stale) instead of an error.
@@ -39,6 +44,9 @@ interface Async<T> {
   data: T | null;
   error: boolean;
   stale: boolean;
+  /** Set when the failure has a cause worth naming — a source that refused,
+   *  rather than a generic fetch error we could only describe vaguely. */
+  message: string | null;
 }
 // `fetchedKey` tags which `key` the rest of the record was resolved for.
 // `loading`/`error` are derived by comparing it to the current `key` instead
@@ -51,6 +59,7 @@ interface FetchRecord<T> {
   data: T | null;
   error: boolean;
   stale: boolean;
+  message: string | null;
 }
 function useFetch<T>(key: string, fn: (s: AbortSignal) => Promise<T>, deps: unknown[]): Async<T> {
   const [rec, setRec] = useState<FetchRecord<T>>({
@@ -58,18 +67,25 @@ function useFetch<T>(key: string, fn: (s: AbortSignal) => Promise<T>, deps: unkn
     data: (CACHE.get(key) as T) ?? null,
     error: false,
     stale: false,
+    message: null,
   });
   useEffect(() => {
     const ac = new AbortController();
     fn(ac.signal)
       .then((data) => {
         CACHE.set(key, data);
-        setRec({ fetchedKey: key, data, error: false, stale: false });
+        setRec({ fetchedKey: key, data, error: false, stale: false, message: null });
       })
       .catch((e) => {
         if ((e as Error).name === "AbortError") return;
         const cached = CACHE.get(key) as T | undefined;
-        setRec({ fetchedKey: key, data: cached ?? null, error: cached == null, stale: cached != null });
+        setRec({
+          fetchedKey: key,
+          data: cached ?? null,
+          error: cached == null,
+          stale: cached != null,
+          message: e instanceof SourceOccupee ? e.message : null,
+        });
       });
     return () => ac.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +95,17 @@ function useFetch<T>(key: string, fn: (s: AbortSignal) => Promise<T>, deps: unkn
     data: rec.data,
     error: rec.fetchedKey === key && rec.error,
     stale: rec.stale,
+    message: rec.message,
   };
+}
+
+/** The fallback when a fetch failed and nothing named the cause. It used to say
+ *  "connexion requise" unconditionally, which is a claim about the user's
+ *  network — often wrong, and it sent them to check their signal while the
+ *  actual refusal came from the server. */
+function indisponible(): string {
+  const horsLigne = typeof navigator !== "undefined" && navigator.onLine === false;
+  return horsLigne ? "Indisponible hors-ligne." : "Source momentanément indisponible.";
 }
 
 const trendIcon = (t: Trend) => (t === "rising" ? "↗" : t === "falling" ? "↘" : "→");
@@ -167,11 +193,11 @@ export function Briefing({
     };
   }, [lat, lon]);
 
-  // ---- Obstacles (ROE, nearest 3 within ~5 km) ----
+  // ---- Obstacles (ROE, nearest 3 within RAYON_KM) ----
   const obstacles = useFetch(
     `roe:${key}`,
     async (s) => {
-      const { w, s: so, e, n } = boxAround(lat, lon, 0.05);
+      const { w, s: so, e, n } = boxAroundKm(lat, lon, RAYON_KM);
       const fc = await fetchObstacles(w, so, e, n, s);
       return (fc.features || [])
         .map((f) => {
@@ -181,19 +207,24 @@ export function Briefing({
           return { info: obstacleInfo(f.properties), dist: distKm(lat, lon, c[1], c[0]) };
         })
         .filter((x): x is { info: ReturnType<typeof obstacleInfo>; dist: number } => !!x)
+        // The box covers the radius, so its corners reach past it; without this
+        // the panel could list an obstacle at 6,8 km under a "5 km" heading.
+        .filter((x) => x.dist <= RAYON_KM)
         .sort((a, b) => a.dist - b.dist)
         .slice(0, 3);
     },
     [key],
   );
 
-  // ---- Access (OSM, nearest per kind within ~5 km) ----
+  // ---- Access (OSM, nearest per kind within RAYON_KM) ----
   const access = useFetch(
     `access:${key}`,
     async (s) => {
-      const { w, s: so, e, n } = boxAround(lat, lon, 0.05);
+      const { w, s: so, e, n } = boxAroundKm(lat, lon, RAYON_KM);
       const pts = await fetchAccess(w, so, e, n, s);
-      return nearestByKind(pts, lat, lon).slice(0, 4);
+      return nearestByKind(pts, lat, lon)
+        .filter((a) => a.dist <= RAYON_KM)
+        .slice(0, 4);
     },
     [key],
   );
@@ -439,15 +470,15 @@ export function Briefing({
                   <div className="bl-main">
                     <b>{o.info.name}</b> · {o.info.type}
                     {o.info.height ? ` · ${o.info.height}` : ""}
+                    {o.info.etat ? <span className="bl-etat"> · {o.info.etat.toLowerCase()}</span> : null}
                   </div>
                   <div className="bl-sub">
-                    {km(o.dist)}
-                    {o.info.pass ? ` · passe : ${o.info.pass}` : " · pas de passe à poissons"}
+                    {km(o.dist)} · {passeTexte(o.info)}
                   </div>
                 </div>
               ))
             ) : (
-              <div className="brief-empty">Aucun ouvrage recensé dans ~5 km.</div>
+              <div className="brief-empty">Aucun ouvrage au ROE dans {RAYON_KM} km.</div>
             ))}
         </Section>
 
@@ -466,7 +497,7 @@ export function Briefing({
                 </div>
               ))
             ) : (
-              <div className="brief-empty">Aucun accès référencé (OSM) dans ~5 km.</div>
+              <div className="brief-empty">Aucun accès cartographié (OSM) dans {RAYON_KM} km.</div>
             ))}
         </Section>
 
@@ -488,7 +519,7 @@ function Section<T>({ title, state, children }: { title: string; state: Async<T>
         {state.stale && <span className="brief-stale">· hors-ligne (dernier relevé)</span>}
       </div>
       {state.loading && !state.data && <div className="brief-load">Chargement…</div>}
-      {state.error && <div className="brief-empty">Indisponible (connexion requise).</div>}
+      {state.error && <div className="brief-empty">{state.message ?? indisponible()}</div>}
       {children}
     </div>
   );

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { distKm, boxAround, compass, ago, hhmm } from "./geo";
+import { distKm, boxAround, boxAroundKm, compass, ago, hhmm } from "./geo";
 
 describe("distKm", () => {
   it("is 0 for identical points", () => {
@@ -16,6 +16,52 @@ describe("distKm", () => {
 describe("boxAround", () => {
   it("builds a symmetric lon/lat box", () => {
     expect(boxAround(47, 1, 0.5)).toEqual({ w: 0.5, s: 46.5, e: 1.5, n: 47.5 });
+  });
+});
+
+// A box measured in degrees is not a box measured in kilometres: a degree of
+// longitude is 111 km at the equator and 75 km at Blois. Every caller asked for
+// a box in degrees and then filtered the result in kilometres, so the query
+// stopped short of the radius the app went on to claim it had searched —
+// boxAround(47.6, 1.3, 0.22) reaches 24,5 km north but only 16,5 km east, while
+// DIST_MAX.hydro says 20. "Aucune station dans 20 km" was said without looking.
+describe("boxAroundKm", () => {
+  const côtés = (lat: number, lon: number, km: number) => {
+    const b = boxAroundKm(lat, lon, km);
+    return {
+      nord: distKm(lat, lon, b.n, lon),
+      sud: distKm(lat, lon, b.s, lon),
+      est: distKm(lat, lon, lat, b.e),
+      ouest: distKm(lat, lon, lat, b.w),
+    };
+  };
+
+  it("couvre le rayon demandé dans les quatre directions", () => {
+    for (const [nom, d] of Object.entries(côtés(47.59, 1.33, 20))) {
+      expect(d, `côté ${nom}`).toBeGreaterThanOrEqual(20);
+    }
+  });
+
+  it("tient aussi à Dunkerque, où les méridiens se resserrent", () => {
+    expect(côtés(51.03, 2.37, 20).est).toBeGreaterThanOrEqual(20);
+  });
+
+  it("tient aussi à Ajaccio", () => {
+    expect(côtés(41.92, 8.74, 30).est).toBeGreaterThanOrEqual(30);
+  });
+
+  it("ne balaie pas beaucoup plus large que demandé", () => {
+    // Elle doit couvrir le rayon, pas tripler le volume de la réponse.
+    const c = côtés(47.59, 1.33, 20);
+    expect(c.est).toBeLessThan(20 * 1.6);
+    expect(c.nord).toBeLessThan(20 * 1.6);
+  });
+
+  it("reste finie au pôle plutôt que de renvoyer une boîte infinie", () => {
+    const b = boxAroundKm(90, 0, 20);
+
+    expect(Number.isFinite(b.e)).toBe(true);
+    expect(Number.isFinite(b.w)).toBe(true);
   });
 });
 

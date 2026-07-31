@@ -2234,6 +2234,12 @@ a:hover {
   color: #6b675c;
   margin-top: 1px;
 }
+/* État de l'ouvrage quand il n'est pas simplement « existant » : 20 des 129
+   ouvrages ROE autour de Blois sont détruits en tout ou partie. */
+.bl-etat {
+  color: #8a5a1e;
+  font-weight: 600;
+}
 .brief-src {
   font-size: 11px;
   color: #6b675c;

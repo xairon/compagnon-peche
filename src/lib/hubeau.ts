@@ -5,9 +5,9 @@
 // This module also exposes real-time HYDROMETRY (water level & flow) and water
 // TEMPERATURE for the "briefing" panel — all Hub'Eau, free, no key, CORS OK.
 
-import { distKm, boxAround } from "./geo";
+import { distKm, boxAroundKm } from "./geo";
 import { fetchT } from "./net";
-import { choisirStation } from "./station";
+import { choisirStation, DIST_MAX } from "./station";
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
 const HYDRO = "https://hubeau.eaufrance.fr/api/v2/hydrometrie";
@@ -101,13 +101,13 @@ export interface HydroStation {
   dist: number; // km from the queried point
 }
 
-/** Nearest in-service hydrometry station to a point (or null if none within ~25 km). */
+/** Nearest in-service hydrometry station, or null if none within DIST_MAX.hydro. */
 export async function nearestHydroStation(
   lat: number,
   lon: number,
   signal?: AbortSignal,
 ): Promise<HydroStation | null> {
-  const { w, s, e, n } = boxAround(lat, lon, 0.22);
+  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.hydro);
   const url =
     `${HYDRO}/referentiel/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&en_service=true&size=200&format=json`;
@@ -207,13 +207,13 @@ export function isStaleWaterTemp(iso: string): boolean {
   return Date.now() - t > 14 * 86400000;
 }
 
-/** Nearest recent water-temperature reading, or null if no sensor within ~30 km. */
+/** Nearest recent water-temperature reading, or null if none within DIST_MAX.temperature. */
 export async function nearestTemp(
   lat: number,
   lon: number,
   signal?: AbortSignal,
 ): Promise<TempReading | null> {
-  const { w, s, e, n } = boxAround(lat, lon, 0.3);
+  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
   const sUrl =
     `${TEMP}/station?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=100&fields=code_station,libelle_station,latitude,longitude`;
@@ -264,7 +264,7 @@ export async function waterTemp(
   lon: number,
   signal?: AbortSignal,
 ): Promise<WaterTemp | null> {
-  const { w, s, e, n } = boxAround(lat, lon, 0.35);
+  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
   // A) Physico-chemical param 1301 — the most recent sample the API returns in the
   //    box (its `sort=desc` is not guaranteed by date, so we always show the date).
   const physicoP: Promise<WaterTemp | null> = (async () => {
@@ -324,7 +324,7 @@ export async function nearestOnde(
   lon: number,
   signal?: AbortSignal,
 ): Promise<OndeReading | null> {
-  const { w, s, e, n } = boxAround(lat, lon, 0.28);
+  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.onde);
   const sUrl =
     `${ONDE}/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=150&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
@@ -388,7 +388,7 @@ export async function nearestQuality(
   lon: number,
   signal?: AbortSignal,
 ): Promise<QualityReading | null> {
-  const { w, s, e, n } = boxAround(lat, lon, 0.28);
+  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.qualite);
   const sUrl =
     `${QUALITE}/station_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=150&fields=code_station,libelle_station,latitude,longitude`;

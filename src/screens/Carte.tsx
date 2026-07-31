@@ -15,6 +15,7 @@ import {
   fetchWaterBodies,
   fetchObstacles,
   obstacleInfo,
+  passeTexte,
   geocode,
   riverName,
   type Place,
@@ -531,7 +532,9 @@ export function Carte() {
       popup.current
         ?.setLngLat(ev.lngLat)
         .setHTML(
-          `<b>${esc(o.name)}</b><br>${esc(o.type)}${o.height ? " · " + esc(o.height) : ""}<br>${o.pass ? "Passe : " + esc(o.pass) : "Pas de passe à poissons"}`,
+          `<b>${esc(o.name)}</b><br>${esc(o.type)}${o.height ? " · " + esc(o.height) : ""}` +
+            (o.etat ? `<br>État : ${esc(o.etat)}` : "") +
+            `<br>${esc(passeTexte(o))}`,
         )
         .addTo(m);
     });

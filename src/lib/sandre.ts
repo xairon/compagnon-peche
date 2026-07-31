@@ -66,23 +66,99 @@ export const fetchObstacles = (
   signal?: AbortSignal,
 ) => wfs(OBS, "sa:ObstEcoul", w, s, e, n, 200, signal);
 
-/** Human-readable obstacle type + fish-pass note from ROE properties. */
-export function obstacleInfo(p: Record<string, unknown>): {
+/**
+ * What the ROE says about fish passage at an obstacle.
+ *
+ * Three states, not two. The nomenclature carries an explicit code 0 "Absence
+ * de passe" so that "none" can be *recorded*; a blank field therefore means the
+ * survey did not answer, not that the answer is no. Measured around Blois: 117
+ * of 129 obstacles blank, 9 marked "Absence de passe", 3 with a named device.
+ * Reading blank as "no" invents a negative fact on 91 % of them.
+ */
+export type Franchissement = "oui" | "non" | "inconnu";
+
+export interface ObstacleInfo {
   name: string;
   type: string;
+  /** Measured drop, else the ROE height class, else "". */
   height: string;
+  /** The device(s) the ROE names, when it names any. */
   pass: string | null;
-} {
-  const name = String(p.NomPrincipalObstEcoul || p.CdObstEcoul || "Ouvrage");
-  const type = String(p.LbTypeOuvrage || "Obstacle");
-  const h = p.HautChutEtObstEcoul;
-  const height = h != null && h !== "" ? `${Number(h).toFixed(2)} m de chute` : "";
-  const passRaw = p.LbTypeDispFranchPiscicole1;
-  const pass =
-    passRaw && String(passRaw).trim() && !/aucun|sans|absence|inexistant|non\s|pas de/i.test(String(passRaw))
-      ? String(passRaw)
-      : null;
-  return { name, type, height, pass };
+  franchissement: Franchissement;
+  /** État de l'ouvrage when it is anything other than plainly "Existant". */
+  etat: string | null;
+  /** False only when the ROE says the structure is entirely destroyed. */
+  debout: boolean;
+  /** Date the ROE record was last updated — half of them predate 2016. */
+  maj: string | null;
+}
+
+const str = (v: unknown): string => (v == null ? "" : String(v).trim());
+
+/** "De 0.5m à inférieure à 1m" → "0,5 à 1 m de chute". Numbers out of the
+ *  label rather than a table keyed on its exact wording, which would break the
+ *  day Sandre re-phrases a class. */
+function classeHauteur(label: string): string {
+  const n = label.match(/\d+(?:[.,]\d+)?/g);
+  if (!n || /indétermin/i.test(label)) return "";
+  const fr = (x: string) => x.replace(".", ",");
+  if (n.length >= 2) return `${fr(n[0])} à ${fr(n[1])} m de chute`;
+  if (/inférieur/i.test(label)) return `moins de ${fr(n[0])} m de chute`;
+  if (/supérieur/i.test(label)) return `plus de ${fr(n[0])} m de chute`;
+  return `${fr(n[0])} m de chute`;
+}
+
+/** Human-readable obstacle description from ROE properties. */
+export function obstacleInfo(p: Record<string, unknown>): ObstacleInfo {
+  const name = str(p.NomPrincipalObstEcoul) || str(p.CdObstEcoul) || "Ouvrage";
+  const type = str(p.LbTypeOuvrage) || "Obstacle";
+
+  const h = Number(str(p.HautChutEtObstEcoul));
+  const height =
+    str(p.HautChutEtObstEcoul) !== "" && Number.isFinite(h)
+      ? `${h} m de chute`
+      : classeHauteur(str(p.LbHautChutClObstEcoul));
+
+  // Five ranks in the ROE. A named device at any rank answers the question;
+  // code "0" is the source's own way of saying there is none.
+  const dispositifs: string[] = [];
+  let absenceDite = false;
+  for (let i = 1; i <= 5; i++) {
+    const code = str(p[`CdTypeDispFranchPiscicole${i}`]);
+    const label = str(p[`LbTypeDispFranchPiscicole${i}`]);
+    if (!code && !label) continue;
+    if (code === "0" || /^absence/i.test(label)) absenceDite = true;
+    else if (label) dispositifs.push(label);
+  }
+  const franchissement: Franchissement = dispositifs.length
+    ? "oui"
+    : absenceDite
+      ? "non"
+      : "inconnu";
+
+  const etatBrut = str(p.LbEtOuvrage);
+  const etat = etatBrut && !/^existant$/i.test(etatBrut) ? etatBrut : null;
+
+  return {
+    name,
+    type,
+    height,
+    pass: dispositifs.length ? dispositifs.join(" + ") : null,
+    franchissement,
+    // Unknown state is not destruction: absent → assumed standing, as the map
+    // has always shown it.
+    debout: !/détruit entièrement/i.test(etatBrut),
+    etat,
+    maj: str(p.DateMAJObstEcoul) || null,
+  };
+}
+
+/** The one place the passability sentence is written, so map and briefing
+ *  cannot drift apart on what the ROE was made to say. */
+export function passeTexte(o: ObstacleInfo): string {
+  if (o.franchissement === "oui") return `passe : ${o.pass}`;
+  if (o.franchissement === "non") return "pas de passe à poissons";
+  return "passe à poissons non renseignée";
 }
 
 export interface Place {
