@@ -41,6 +41,81 @@ export function boxAroundKm(lat: number, lon: number, km: number) {
   return { w: lon - dLon, s: lat - dLat, e: lon + dLon, n: lat + dLat };
 }
 
+/** Longueur d'un degré sur la sphère de rayon 6371 km — celle de distKm. */
+const KM_PAR_DEGRE = (Math.PI * 6371) / 180;
+
+/**
+ * Distance en kilomètres d'un point à une polyligne, ou `null` si la géométrie
+ * ne situe rien.
+ *
+ * Pourquoi pas simplement le sommet le plus proche : le Sandre échantillonne
+ * ses axes très inégalement. Mesuré le 31/07/2026 sur `sa:TronconHydrographique`
+ * autour de Blois, l'écart reste faible (161 m au segment contre 165 m au
+ * sommet), mais un tronçon rectiligne de plusieurs kilomètres n'a que deux
+ * sommets, et le point qui se tient au milieu serait alors déclaré à des
+ * kilomètres d'une rivière qu'il touche.
+ *
+ * `null` et non `Infinity` : un tronçon dont on ne sait pas lire la géométrie
+ * n'est pas « très loin », il est illisible. Rendre un nombre laisserait
+ * l'appelant comparer à un seuil et croire avoir répondu.
+ *
+ * Projection locale plate (equirectangulaire) : à l'échelle du kilomètre en
+ * France, l'erreur devant la haversine est de l'ordre du millième — et la
+ * question posée est « à moins de N mètres ? », pas une mesure géodésique.
+ * Les coordonnées sont en [lon, lat], l'ordre GeoJSON du Sandre.
+ */
+export function distKmPolyligne(lat: number, lon: number, geometry: unknown): number | null {
+  const g = geometry as { type?: string; coordinates?: unknown } | null | undefined;
+  if (!g || !Array.isArray(g.coordinates)) return null;
+  const lignes: unknown[] =
+    g.type === "LineString"
+      ? [g.coordinates]
+      : g.type === "MultiLineString"
+        ? g.coordinates
+        : [];
+  // Un Point, un Polygon ou un type inconnu ne sont pas des polylignes : on ne
+  // les convertit pas en silence, on dit qu'on ne sait pas.
+  if (!lignes.length) return null;
+
+  // Échelle locale, calculée une fois : combien de kilomètres vaut un degré ici.
+  // MÊME sphère que distKm (R = 6371 km), sinon les deux fonctions se
+  // contredisent : avec la moyenne usuelle de 111,32 km/°, l'écart atteignait
+  // 8,5 m sur 7,5 km — 0,11 %, invisible mais gratuit.
+  const kx = KM_PAR_DEGRE * Math.cos((lat * Math.PI) / 180);
+  const ky = KM_PAR_DEGRE;
+  let best = Infinity;
+  for (const l of lignes) {
+    if (!Array.isArray(l)) continue;
+    const pts: [number, number][] = [];
+    for (const p of l) {
+      if (!Array.isArray(p) || !Number.isFinite(Number(p[0])) || !Number.isFinite(Number(p[1])))
+        continue;
+      pts.push([(Number(p[0]) - lon) * kx, (Number(p[1]) - lat) * ky]);
+    }
+    if (!pts.length) continue;
+    // Une ligne réduite à un sommet est une position, pas un segment : la
+    // distance à ce sommet reste la bonne réponse.
+    if (pts.length === 1) best = Math.min(best, Math.hypot(pts[0][0], pts[0][1]));
+    for (let i = 0; i + 1 < pts.length; i++) {
+      best = Math.min(best, distSegment(pts[i], pts[i + 1]));
+    }
+  }
+  return Number.isFinite(best) ? best : null;
+}
+
+/** Distance de l'origine au segment [a, b], en coordonnées locales (km). */
+function distSegment(a: [number, number], b: [number, number]): number {
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const len2 = dx * dx + dy * dy;
+  // Segment dégénéré (deux sommets confondus) : pas de division par zéro, la
+  // projection vaut le sommet.
+  let t = len2 === 0 ? 0 : -(a[0] * dx + a[1] * dy) / len2;
+  // La perpendiculaire n'existe que sur le segment ; au-delà, c'est un bout.
+  t = t < 0 ? 0 : t > 1 ? 1 : t;
+  return Math.hypot(a[0] + t * dx, a[1] + t * dy);
+}
+
 /** Compass point (16-wind) for a bearing in degrees. */
 const COMPASS = [
   "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",

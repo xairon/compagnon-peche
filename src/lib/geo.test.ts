@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { distKm, boxAround, boxAroundKm, compass, ago, hhmm } from "./geo";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { distKm, distKmPolyligne, boxAround, boxAroundKm, compass, ago, hhmm } from "./geo";
 
 describe("distKm", () => {
   it("is 0 for identical points", () => {
@@ -62,6 +64,98 @@ describe("boxAroundKm", () => {
 
     expect(Number.isFinite(b.e)).toBe(true);
     expect(Number.isFinite(b.w)).toBe(true);
+  });
+});
+
+// Distance d'un point à une polyligne — le chaînon qui manquait pour savoir sur
+// quel cours d'eau se tient le pêcheur. Le sommet le plus proche ne suffit pas :
+// le Sandre publie des axes très inégalement échantillonnés, et un tronçon qui
+// passe à 20 m peut n'avoir son premier sommet qu'à 800 m.
+//
+// Les géométries Sandre sont en [lon, lat] et arrivent en LineString COMME en
+// MultiLineString — les deux ont été observées le 31/07/2026 dans une même
+// réponse sa:TronconHydrographique autour de Blois.
+describe("distKmPolyligne", () => {
+  const ligne = (pts: [number, number][]) => ({ type: "LineString", coordinates: pts });
+
+  it("est nulle sur un sommet de la ligne", () => {
+    expect(distKmPolyligne(47.5, 1.3, ligne([[1.3, 47.5], [1.4, 47.5]]))!).toBeCloseTo(0, 6);
+  });
+
+  it("mesure jusqu'au SEGMENT, pas jusqu'au sommet le plus proche", () => {
+    // Deux sommets à 0,1° l'un de l'autre, le point juste au-dessus du milieu.
+    // Le sommet le plus proche est à ~4,2 km ; le segment, lui, passe à 1,1 km.
+    const d = distKmPolyligne(47.51, 1.35, ligne([[1.3, 47.5], [1.4, 47.5]]))!;
+    const sommet = Math.min(distKm(47.51, 1.35, 47.5, 1.3), distKm(47.51, 1.35, 47.5, 1.4));
+
+    expect(d).toBeCloseTo(distKm(47.51, 1.35, 47.5, 1.35), 2);
+    expect(d).toBeLessThan(sommet / 3);
+  });
+
+  it("s'arrête aux extrémités : au-delà du segment, c'est le sommet qui compte", () => {
+    // Projection hors du segment — la perpendiculaire n'existe pas, la réponse
+    // est la distance au bout de la ligne.
+    const d = distKmPolyligne(47.5, 1.5, ligne([[1.3, 47.5], [1.4, 47.5]]))!;
+
+    expect(d).toBeCloseTo(distKm(47.5, 1.5, 47.5, 1.4), 2);
+  });
+
+  it("lit les coordonnées en [lon, lat], comme le Sandre les publie", () => {
+    // Si l'ordre était inversé, ce point tomberait à des centaines de km.
+    expect(distKmPolyligne(47.5, 1.3, ligne([[1.3, 47.5], [1.3, 47.6]]))!).toBeLessThan(0.01);
+  });
+
+  it("prend la plus proche des parties d'un MultiLineString", () => {
+    const multi = {
+      type: "MultiLineString",
+      coordinates: [
+        [[2.0, 47.5], [2.1, 47.5]],
+        [[1.3, 47.5], [1.4, 47.5]],
+      ],
+    };
+
+    expect(distKmPolyligne(47.5, 1.35, multi)!).toBeLessThan(0.01);
+  });
+
+  it("rend null — pas zéro, pas l'infini — quand la géométrie ne situe rien", () => {
+    // Un tronçon qu'on ne sait pas placer n'est ni proche ni lointain : il est
+    // illisible, et le dire est le seul état honnête.
+    expect(distKmPolyligne(47.5, 1.3, null)).toBeNull();
+    expect(distKmPolyligne(47.5, 1.3, undefined)).toBeNull();
+    expect(distKmPolyligne(47.5, 1.3, { type: "Point", coordinates: [1.3, 47.5] })).toBeNull();
+    expect(distKmPolyligne(47.5, 1.3, ligne([]))).toBeNull();
+    expect(distKmPolyligne(47.5, 1.3, { type: "MultiLineString", coordinates: [] })).toBeNull();
+  });
+
+  it("accepte une ligne réduite à un point plutôt que de diviser par zéro", () => {
+    const d = distKmPolyligne(47.5, 1.3, ligne([[1.4, 47.5]]))!;
+
+    expect(d).toBeCloseTo(distKm(47.5, 1.3, 47.5, 1.4), 4);
+  });
+
+  it("retrouve les distances mesurées sur la vraie couche Sandre à Blois", () => {
+    // Réponse RÉELLE de sa:TronconHydrographique, boîte de 1 km autour de
+    // 47,586 / 1,336 (Blois), capturée le 31/07/2026. Trois tronçons, trois
+    // cours d'eau : la Loire à 161 m, un ruisseau à 1051 m, les Mées à 1302 m.
+    // C'est exactement le cas que l'ancien coursDuPoint jugeait « ambigu ».
+    const fc = JSON.parse(
+      readFileSync(
+        fileURLToPath(new URL("./__fixtures__/sandre-troncon-blois.json", import.meta.url)),
+        "utf8",
+      ),
+    );
+    const m = fc.features
+      .map((f: { properties: Record<string, string>; geometry: unknown }) => ({
+        cours: f.properties.CdCoursEau,
+        m: Math.round(distKmPolyligne(47.586, 1.336, f.geometry)! * 1000),
+      }))
+      .sort((a: { m: number }, b: { m: number }) => a.m - b.m);
+
+    expect(m).toEqual([
+      { cours: "----0000", m: 161 },
+      { cours: "K4795300", m: 1051 },
+      { cours: "K4475000", m: 1302 },
+    ]);
   });
 });
 
