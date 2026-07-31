@@ -10,7 +10,8 @@
 
 ## Global Constraints
 
-- **Le thème clair ne change pas.** Aucune retouche esthétique n'est glissée dans ce chantier. La seule exception autorisée est la fusion de quasi-doublons décrite en Tâche 3, et uniquement dans les limites qui y sont fixées.
+- **Le thème clair ne change pas.** Aucune retouche esthétique n'est glissée dans ce chantier. La seule exception **visuelle** autorisée est la fusion de quasi-doublons décrite en Tâche 3, et uniquement dans les limites qui y sont fixées. L'empreinte de référence n'est régénérée que par les tâches qui le prévoient explicitement (3, 6, 9) ; toute autre tâche qui la fait bouger a un bug.
+- **La duplication de la résolution du thème entre `src/lib/theme.ts` et le script inline d'`index.html` est délibérée**, arbitrée avant exécution. Le script doit être synchrone et précéder le bundle pour supprimer le flash blanc au lancement : il ne peut donc rien importer. `src/lib/theme-dom.test.ts` est ce qui rend cette duplication tenable. Ne pas la « corriger ».
 - **Langue.** Commentaires et messages de commit en français, comme tout le dépôt. Les identifiants de code restent en anglais quand le fichier autour est en anglais (`styles.css` mélange les deux : suivre le voisinage immédiat).
 - **Seuils de contraste.** 4,5:1 pour le texte, 3:1 pour le non-texte (WCAG 1.4.11). Identiques dans les deux thèmes.
 - **Nommage des jetons par rôle, jamais par teinte.** `--line-strong`, pas `--beige-fonce`.
