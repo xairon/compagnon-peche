@@ -69,6 +69,33 @@ export const PREFIXES_RESERVE: readonly string[] = [
 export const CACHE_RESERVE = "reserve-hors-ligne";
 
 /**
+ * Les polices que le précache n'a pas à descendre — 71,5 Kio sur les 431 Kio
+ * de `assets/fonts`.
+ *
+ * Décidé sur la plage `unicode-range` déclarée dans `src/fonts.css`, jamais
+ * sur le nom du fichier : le nom ment, `lib/polices.ts` explique pourquoi.
+ * Ces trois-là sont déclarées avec la plage VIETNAMIENNE (U+1EA0-1EF9, U+20AB,
+ * Ă/Đ/Ơ/Ư et les marques combinantes). `polices.test.ts` confronte chaque
+ * plage au texte que l'app affiche vraiment — analyseur TypeScript, chaînes et
+ * texte JSX seulement — et n'y trouve aucun de ces points de code.
+ *
+ * Elles restent LIVRÉES dans `dist/` et déclarées dans `fonts.css` : rien
+ * n'est retiré à l'app, seule l'installation bloquante cesse de les descendre.
+ * Si un jour un texte vietnamien apparaît en ligne, le navigateur ira les
+ * chercher comme n'importe quel autre asset.
+ *
+ * Le sous-ensemble latin-ext, lui, RESTE au précache : c'est lui qui porte
+ * `ᵉ` (U+1D49) et `ʳ` (U+02B3), donc « 2ᵉ catégorie » et « 1ʳᵉ catégorie »,
+ * qui sont partout dans la réglementation. Le retirer au motif qu'il « sert
+ * rarement » aurait cassé exactement le vocabulaire le plus fréquent.
+ */
+export const POLICES_HORS_PRECACHE: readonly string[] = [
+  "ss4-italic-400-latin-ext.woff2",
+  "ss4-normal-600-latin-ext.woff2",
+  "ss4-normal-700-latin-ext.woff2",
+];
+
+/**
  * `workbox.globIgnores`. Dérivé des préfixes plutôt que réécrit à la main : un
  * dossier ajouté à la réserve mais resté précaché serait téléchargé deux fois.
  *
@@ -79,6 +106,10 @@ export const CACHE_RESERVE = "reserve-hors-ligne";
 export const GLOB_IGNORES_PRECACHE: readonly string[] = [
   "**/assets/species/**",
   ...PREFIXES_RESERVE.map((p) => `**/${p}**`),
+  // Les polices dont aucun caractère de l'app ne déclenche le téléchargement.
+  // Contrairement à la réserve, celles-ci ne sont PAS reprises derrière : rien
+  // ne les demandera jamais hors ligne, il n'y a donc rien à rendre disponible.
+  ...POLICES_HORS_PRECACHE.map((f) => `**/assets/fonts/${f}`),
 ];
 
 const echappe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
