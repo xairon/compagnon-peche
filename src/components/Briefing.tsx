@@ -321,11 +321,22 @@ export function Briefing({
               </div>
             ) : (
               <>
-                {qGlobal && (
-                  <div className={"verdict-banner " + classeLabel(qGlobal).tone} style={{ marginBottom: 10 }}>
-                    <span className="vb-word">Qualité {classeLabel(qGlobal).word.toLowerCase()}</span>
-                  </div>
-                )}
+                {/* The coloured verdict is the one thing a reader takes away,
+                    and it carried no date: at Blois it read « Qualité très
+                    bonne » from a sample of 05/12/2006. Past the freshness
+                    threshold the banner goes and the date takes its place —
+                    the individual measurements stay below, each dated. */}
+                {qGlobal &&
+                  (isStaleQuality(quality.data.date) ? (
+                    <div className="brief-note" style={{ marginBottom: 10 }}>
+                      Pas de verdict : l'analyse la plus récente de cette station date du{" "}
+                      {frShort(quality.data.date)}.
+                    </div>
+                  ) : (
+                    <div className={"verdict-banner " + classeLabel(qGlobal).tone} style={{ marginBottom: 10 }}>
+                      <span className="vb-word">Qualité {classeLabel(qGlobal).word.toLowerCase()}</span>
+                    </div>
+                  ))}
                 <div className="brief-grid">
                   {quality.data.o2 != null && (
                     <Metric label="Oxygène dissous" value={`${quality.data.o2.toFixed(1)} mg/L`} extra={classeLabel(classeO2(quality.data.o2)).word} />

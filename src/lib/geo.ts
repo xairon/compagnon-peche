@@ -37,7 +37,14 @@ export function ago(iso: string, now: Date = new Date()): string {
   const h = Math.round(min / 60);
   if (h < 24) return `il y a ${h} h`;
   const d = Math.round(h / 24);
-  return `il y a ${d} j`;
+  if (d < 45) return `il y a ${d} j`;
+  // Past a few weeks, days stop being readable: "il y a 714 j" is a number
+  // nobody converts into "the summer before last", and that reading was being
+  // shown as the current water temperature.
+  const mois = Math.round(d / 30.44);
+  if (mois < 18) return `il y a ${mois} mois`;
+  const ans = Math.floor(d / 365.25);
+  return ans <= 1 ? "il y a un an" : `il y a ${ans} ans`;
 }
 
 /** Local HH:MM for a Date (or "—" if invalid/null). */

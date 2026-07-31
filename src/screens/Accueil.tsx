@@ -3,6 +3,7 @@ import { useStore } from "../store-hooks";
 import { SPECIES, CURATED_IDS } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { ondeEtat, ondeTropLoin } from "../lib/onde";
+import { fraicheur } from "../lib/fraicheur";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
@@ -29,7 +30,7 @@ import { isPlainlyOpen } from "../lib/statut";
 import { locate, locateMessage } from "../lib/locate";
 import { deptFromCoords } from "../lib/sandre";
 import { setConditions } from "../lib/conditionsCache";
-import { useNow, isStale } from "../lib/now";
+import { useNow } from "../lib/now";
 import { effectiveMaille } from "../lib/maille";
 import type { Screen } from "../store";
 
@@ -338,27 +339,40 @@ export function Accueil() {
             {water?.station && <span className="src">{water.station}</span>}
           </div>
           <div className="dash-water-grid">
-            <WaterTile
-              k={water?.flow ? "Débit" : "Niveau"}
-              val={
-                water?.flow
-                  ? `${water.flow.value.toFixed(1)}`
-                  : water?.level
-                    ? `${water.level.value.toFixed(2)}`
-                    : "—"
-              }
-              unit={water?.flow ? "m³/s" : water?.level ? "m" : ""}
-              trend={water?.flow?.trend || water?.level?.trend}
-              when={water?.flow?.date || water?.level?.date}
-              tip="Débit (m³/s) ou hauteur d'eau à l'échelle (m) du cours d'eau, avec la tendance. Une crue trouble l'eau et disperse le poisson ; un étiage le concentre. Source : Hub'Eau / OFB (station hydrométrique la plus proche)."
-            />
+            {(() => {
+              // Hydrometry is the ONE genuinely real-time source here, so the
+              // tile reads as live — and it was showing a Loire discharge from
+              // ten days earlier with no way to tell. Past AGE_MAX.hydro the
+              // number goes and only its date remains.
+              const hydro = water?.flow || water?.level;
+              const f = fraicheur(hydro?.date, "hydro", now);
+              const perime = !!hydro && f.perime;
+              return (
+                <WaterTile
+                  k={water?.flow ? "Débit" : "Niveau"}
+                  val={
+                    perime || !hydro
+                      ? "—"
+                      : water?.flow
+                        ? `${water.flow.value.toFixed(1)}`
+                        : `${water!.level!.value.toFixed(2)}`
+                  }
+                  unit={perime || !hydro ? "" : water?.flow ? "m³/s" : "m"}
+                  trend={perime ? undefined : water?.flow?.trend || water?.level?.trend}
+                  when={perime ? undefined : hydro?.date}
+                  sub={perime ? f.texte : undefined}
+                  tip="Débit (m³/s) ou hauteur d'eau à l'échelle (m) du cours d'eau, avec la tendance. Une crue trouble l'eau et disperse le poisson ; un étiage le concentre. Au-delà de 6 h sans relevé, la valeur n'est plus présentée comme actuelle. Source : Hub'Eau / OFB (station hydrométrique la plus proche)."
+                />
+              );
+            })()}
             {(() => {
               // French river thermometry is sparse/campaign-based: the freshest
               // real reading can be months old. Beyond ~30 days it is not a
               // "current condition" — show "pas de relevé récent" instead of a
               // stale number (the old value stays in the water briefing on tap).
               const t = water?.temp;
-              const tooOld = isStale(t?.date, now, 30 * 86400000);
+              const f = fraicheur(t?.date, "temperature", now);
+              const tooOld = !!t && f.perime;
               return (
                 <WaterTile
                   k="Temp. eau"
@@ -367,15 +381,7 @@ export function Accueil() {
                   tip="Température de l'eau. Elle règle l'activité des poissons. Source : Hub'Eau (réseau thermie + physico-chimie). La mesure est rare et par campagnes en France : souvent pas de relevé récent — on n'affiche jamais une valeur estimée."
                   when={t && !tooOld ? t.date : undefined}
                   stale={t && !tooOld ? isStaleWaterTemp(t.date) : false}
-                  sub={
-                    !water
-                      ? undefined
-                      : !t
-                        ? "pas de mesure"
-                        : tooOld
-                          ? `dernier relevé ${ago(t.date)}`
-                          : undefined
-                  }
+                  sub={!water ? undefined : !t ? "pas de mesure" : tooOld ? f.texte : undefined}
                 />
               );
             })()}
@@ -386,7 +392,7 @@ export function Accueil() {
                 distance and the age: without the distance, a brook 13 km away
                 reads as the river underfoot. Beyond ONDE_MAX_DIST_KM the app
                 abstains, same rule as the physico-chemical stations. */}
-            {onde && !ondeTropLoin(onde.dist) && (
+            {onde && !ondeTropLoin(onde.dist) && !fraicheur(onde.date, "onde", now).perime && (
               <WaterTile
                 k="Petits cours d'eau"
                 val={ondeEtat(onde.code, onde.label).court}
