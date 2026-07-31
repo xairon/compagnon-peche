@@ -31,6 +31,9 @@ import { sunTimes, moonIllumination, moonTimes, moonPhaseName, solunar } from ".
 import { fetchObstacles, obstacleInfo, passeTexte } from "../lib/sandre";
 import { fetchAccess, nearestByKind, accessIcon, accessLabel, SourceOccupee } from "../lib/overpass";
 import { boxAroundKm, distKm, hhmm, ago } from "../lib/geo";
+import { coursSousLePoint } from "../lib/troncon-hydro";
+import type { CoursDuPoint } from "../lib/cours-du-point";
+import { DIST_MAX } from "../lib/station";
 
 // The radius the briefing searches for nearby features — and the one it names
 // when it finds none. Both used to be written separately, in degrees on one
@@ -100,6 +103,33 @@ function useFetch<T>(key: string, fn: (s: AbortSignal) => Promise<T>, deps: unkn
   };
 }
 
+/**
+ * Le cours d'eau du point, demandé UNE fois et partagé.
+ *
+ * Trois consommateurs en ont besoin — la température, la qualité, et l'affichage
+ * — et il serait absurde de payer trois requêtes Sandre pour la même question.
+ * La promesse est mise en cache par point, pas son résultat : les trois
+ * s'accrochent à la même.
+ *
+ * Pas de signal d'annulation, délibérément : la promesse est partagée, et
+ * l'abandon d'un consommateur casserait les deux autres. La requête pèse ~5 ko
+ * et coursSousLePoint a son propre délai (8 s) ; un briefing refermé aussitôt
+ * laisse donc au pire cette requête-là finir dans le vide.
+ *
+ * C'est le briefing, et lui seul, qui la paie : il répond à un point que
+ * l'utilisateur a désigné. L'Accueil, qui s'ouvre à chaque session, ne demande
+ * rien de tout ça.
+ */
+const COURS = new Map<string, Promise<CoursDuPoint | null>>();
+function coursDuPointPartage(key: string, lat: number, lon: number) {
+  let p = COURS.get(key);
+  if (!p) {
+    p = coursSousLePoint(lat, lon);
+    COURS.set(key, p);
+  }
+  return p;
+}
+
 /** The fallback when a fetch failed and nothing named the cause. It used to say
  *  "connexion requise" unconditionally, which is a claim about the user's
  *  network — often wrong, and it sent them to check their signal while the
@@ -151,9 +181,28 @@ export function Briefing({
     },
     [key],
   );
-  const temp = useFetch<TempReading | null>(`temp:${key}`, (s) => nearestTemp(lat, lon, s), [key]);
+  // ---- Sur quel cours d'eau se tient ce point (lib/troncon-hydro.ts) ----
+  // Il est demandé AVANT la température et la qualité parce que c'est lui qui
+  // leur dit où chercher : sans lui, une mesure prise sur la bonne rivière un
+  // peu plus loin est écartée au profit d'une mesure prise sur le ruisseau d'à
+  // côté. Mesuré depuis Blois : la Loire à Chaumont (15,7 km) contre les Mées
+  // (3,4 km, un ruisseau).
+  const cours = useFetch<CoursDuPoint | null>(
+    `cours:${key}`,
+    () => coursDuPointPartage(key, lat, lon),
+    [key],
+  );
+  const temp = useFetch<TempReading | null>(
+    `temp:${key}`,
+    async (s) => nearestTemp(lat, lon, s, (await coursDuPointPartage(key, lat, lon))?.code),
+    [key],
+  );
   const onde = useFetch(`onde:${key}`, (s) => nearestOnde(lat, lon, s), [key]);
-  const quality = useFetch(`quality:${key}`, (s) => nearestQuality(lat, lon, s), [key]);
+  const quality = useFetch(
+    `quality:${key}`,
+    async (s) => nearestQuality(lat, lon, s, (await coursDuPointPartage(key, lat, lon))?.code),
+    [key],
+  );
 
   // ---- Flood-rise heuristic (see lib/crue.ts) — derived from the SAME hydro
   // readings above, recomputed whenever they're refreshed. No banner at all
@@ -167,18 +216,50 @@ export function Briefing({
     [water.data, now],
   );
 
+  /** Cette station est-elle sur le cours d'eau du point ? Trois états : oui,
+   *  non, et « on ne sait pas » — l'absence de code ne répond pas « non ». */
+  const memeCours = (code?: string) => !!code && !!cours.data?.code && code === cours.data.code;
+
+  /**
+   * Le nom du cours d'eau du point.
+   *
+   * La couche des tronçons ne publie AUCUN libellé (voir troncon-hydro.ts) :
+   * elle donne un code, pas un nom. Le nom vient donc des stations Hub'Eau, qui
+   * le publient — mais seulement de celles qui portent le MÊME code, sans quoi
+   * on collerait au point le nom de la rivière d'à côté. Vide quand personne ne
+   * le dit : mieux vaut ne pas nommer que mal nommer.
+   */
+  const nomCours =
+    cours.data?.nom ||
+    (memeCours(temp.data?.coursCode) ? temp.data?.cours : "") ||
+    (memeCours(quality.data?.coursCode) ? quality.data?.cours : "") ||
+    "";
+
+  /**
+   * Trop loin pour représenter cet endroit — sauf sur le même cours d'eau.
+   *
+   * L'eau circule le long d'un cours, elle ne traverse pas un bassin : une
+   * analyse prise 20 km en amont sur la Loire dit quelque chose de la Loire ici,
+   * là où une analyse prise à 4 km sur le Cher n'en dit rien. Sans cette
+   * exception, l'app aurait écrit « trop loin » d'une station qu'elle venait de
+   * choisir précisément parce qu'elle est représentative. La portée élargie est
+   * bornée en amont par nearestQuality (DIST_MAX_MEME_COURS).
+   */
+  const qTropLoin =
+    !!quality.data && isTooFar(quality.data.dist) && !memeCours(quality.data.coursCode);
+
   // ---- Water quality verdict (see lib/qualiteEau.ts) — worst-of the three
   // classified parameters, SEQ-Eau grid. Abstains beyond MAX_DIST_KM (see
   // the Section below) rather than showing a number that isn't representative.
   const qGlobal = useMemo(() => {
-    if (!quality.data || isTooFar(quality.data.dist)) return null;
+    if (!quality.data || qTropLoin) return null;
     const { o2, sat, ph } = quality.data;
     return classeGlobale([
       o2 != null ? classeO2(o2) : undefined,
       sat != null ? classeSaturationO2(sat) : undefined,
       ph != null ? classePh(ph) : undefined,
     ]);
-  }, [quality.data]);
+  }, [quality.data, qTropLoin]);
 
   // ---- Weather ----
   const meteo = useFetch<Meteo>(`meteo:${key}`, (s) => fetchMeteo(lat, lon, s), [key]);
@@ -307,6 +388,16 @@ export function Briefing({
                     <b style={{ color: "#b06e14" }}> — température ancienne, à titre indicatif</b>
                   )}
                 </div>
+                {/* Dire pourquoi la mesure vient de plus loin que d'habitude.
+                    Sans cette phrase, « 17,2 km » à côté d'un seuil de 15 km
+                    ressemble à une erreur. */}
+                {temp.data && memeCours(temp.data.coursCode) && temp.data.dist > DIST_MAX.temperature && (
+                  <div className="brief-note">
+                    Ce capteur est plus loin que les {DIST_MAX.temperature} km habituels, mais il est
+                    sur {nomCours ? `${nomCours}, ` : ""}le même cours d'eau que ce point. Une mesure
+                    prise sur la même rivière en dit plus qu'une mesure prise tout près sur une autre.
+                  </div>
+                )}
               </>
             ) : (
               <div className="brief-empty">
@@ -350,7 +441,7 @@ export function Briefing({
             (lib/qualiteEau.ts), never as a health/consumption verdict. */}
         <Section title="🧪 Qualité de l'eau" state={quality}>
           {quality.data &&
-            (isTooFar(quality.data.dist) ? (
+            (qTropLoin ? (
               <div className="brief-empty">
                 Station physico-chimique la plus proche : {quality.data.station} · {km(quality.data.dist)} — trop
                 loin (plus de {MAX_DIST_KM} km) pour représenter cet endroit, non affichée.
@@ -396,12 +487,22 @@ export function Briefing({
                   )}
                 </div>
                 <div className="brief-note">
-                  {quality.data.station} · {km(quality.data.dist)} · analyse ponctuelle (labo) du{" "}
-                  {frShort(quality.data.date)}
+                  {descriptionMesure({
+                    station: quality.data.station,
+                    cours: quality.data.cours,
+                    dist: quality.data.dist,
+                  })}{" "}
+                  · analyse ponctuelle (labo) du {frShort(quality.data.date)}
                   {isStaleQuality(quality.data.date) && (
                     <b style={{ color: "#b06e14" }}> — donnée ancienne, à titre indicatif</b>
                   )}
                 </div>
+                {isTooFar(quality.data.dist) && memeCours(quality.data.coursCode) && (
+                  <div className="brief-note">
+                    Plus loin que les {MAX_DIST_KM} km habituels, mais sur{" "}
+                    {nomCours ? `${nomCours}, ` : ""}le même cours d'eau que ce point.
+                  </div>
+                )}
                 <div className="brief-note" style={{ fontSize: 11, opacity: 0.75 }}>
                   Classement selon la grille SEQ-Eau (oxygène, acidification — MEDD &amp; agences de l'eau, 2003), un
                   seul prélèvement, pas une synthèse DCE annuelle. Ce n'est pas un avis sanitaire : voir la fiche

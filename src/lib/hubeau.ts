@@ -7,7 +7,7 @@
 
 import { distKm, boxAroundKm } from "./geo";
 import { fetchT } from "./net";
-import { choisirStation, cleCours, DIST_MAX } from "./station";
+import { choisirStation, cleCours, DIST_MAX, DIST_MAX_MEME_COURS } from "./station";
 import { parseAnalysePc } from "./analyse-pc";
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
@@ -217,42 +217,67 @@ export function isStaleWaterTemp(iso: string): boolean {
   return Date.now() - t > 14 * 86400000;
 }
 
-/** Nearest recent water-temperature reading, or null if none within DIST_MAX.temperature. */
+/**
+ * Portée à accorder pour une grandeur, selon qu'on sait ou non sur quel cours
+ * d'eau se tient le pêcheur. C'est elle qui dimensionne la BOÎTE demandée à
+ * l'API : sans ça, une station de la bonne rivière à 17 km serait acceptée par
+ * choisirStation… mais jamais téléchargée.
+ */
+function porteePour(grandeur: keyof typeof DIST_MAX, coursRef?: string): number {
+  return coursRef ? DIST_MAX_MEME_COURS[grandeur] : DIST_MAX[grandeur];
+}
+
+/**
+ * Nearest recent water-temperature reading, or null if none in range.
+ *
+ * `coursRef` : clé de cours d'eau du point (voir station.cleCours et
+ * lib/cours-du-point.ts). Quand elle est fournie, une station de LA MÊME
+ * rivière est acceptée jusqu'à DIST_MAX_MEME_COURS.
+ *
+ * La distance est désormais bornée. Elle ne l'était pas du tout : la fonction
+ * prenait la plus proche de la boîte, et la boîte déborde en diagonale — depuis
+ * Blois, elle rendait LOIRE à MUIDES-SUR-LOIRE à 17,2 km alors que
+ * DIST_MAX.temperature en accorde 15, sans jamais le dire.
+ */
 export async function nearestTemp(
   lat: number,
   lon: number,
   signal?: AbortSignal,
+  coursRef?: string,
 ): Promise<TempReading | null> {
-  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
+  const { w, s, e, n } = boxAroundKm(lat, lon, porteePour("temperature", coursRef));
   const sUrl =
     `${TEMP}/station?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=100&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,libelle_cours_eau,uri_cours_eau`;
   const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
-  let near: {
+  const cands: {
     code: string;
     nom: string;
     dist: number;
     cours: string;
     coursCode?: string;
-  } | null = null;
+  }[] = [];
   for (const d of sj.data || []) {
     const la = Number(d.latitude);
     const lo = Number(d.longitude);
     if (!Number.isFinite(la) || !Number.isFinite(lo)) continue;
-    const dist = distKm(lat, lon, la, lo);
-    if (!near || dist < near.dist)
-      near = {
-        code: String(d.code_station),
-        nom: String(d.libelle_station || ""),
-        dist,
-        // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
-        // ici est précisément ce qui empêchait le troisième critère d'exister.
-        cours: String(d.libelle_cours_eau || ""),
-        coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
-      };
+    cands.push({
+      code: String(d.code_station),
+      nom: String(d.libelle_station || ""),
+      dist: distKm(lat, lon, la, lo),
+      // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
+      // ici est précisément ce qui empêchait le troisième critère d'exister.
+      cours: String(d.libelle_cours_eau || ""),
+      coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
+    });
   }
+  // Sans date à ce stade — la chronique coûte une requête par station, et on
+  // n'en veut qu'une. choisirStation applique donc ici la seule règle qu'il
+  // peut : la bonne rivière d'abord, la plus proche ensuite. La fraîcheur, elle,
+  // est jugée en aval sur la mesure rendue (fraicheur.ts / isStaleWaterTemp).
+  const near = choisirStation(cands, "temperature", Date.now(), coursRef);
   if (!near) return null;
   const cUrl =
     `${TEMP}/chronique?code_station=${encodeURIComponent(near.code)}` +
@@ -297,12 +322,85 @@ export interface WaterTemp {
 
 const Q_TEMP = "1301"; // Température de l'eau (°C) in the quality API
 
+/** Ce que station_pc sait d'un cours d'eau, et que analyse_pc ignore. */
+export interface CoursStationPc {
+  /** Clé comparable à Candidat.coursCode (voir station.cleCours). */
+  cle: string;
+  /** Libellé publié par le réseau, ou "" — voir plus bas. */
+  nom: string;
+}
+
+/**
+ * Le cours d'eau des stations physico-chimiques d'une boîte, INDEXÉ PAR LIBELLÉ.
+ *
+ * `qualite_rivieres/analyse_pc` ne publie aucun rattachement : ses 67 champs ont
+ * été listés le 31/07/2026, il n'y a ni code ni libellé de cours d'eau (voir
+ * contrats-api.test.ts). `qualite_rivieres/station_pc`, lui, publie
+ * `code_cours_eau`, `nom_cours_eau` et `uri_cours_eau` — vérifié le même jour
+ * sur la boîte de Blois : 04051850 LOIRE à MUIDES-SUR-LOIRE porte "----0000",
+ * uri `…/CoursEau_Carthage2017/----0000`. C'est cette requête-là qui donne un
+ * cours d'eau aux analyses.
+ *
+ * POURQUOI PAR LIBELLÉ, alors que le dépôt répète qu'on ne rapproche pas deux
+ * sources par leurs libellés. Parce qu'ici ce n'est pas deux sources : c'est la
+ * même API, le même référentiel de stations, et les libellés sont les mêmes
+ * chaînes — vérifié sur les 14 stations de la boîte de Blois, aucun écart. Et
+ * parce que c'est la seule clé disponible en aval : `AnalysePc` ne transporte
+ * que le libellé de sa station.
+ *
+ * L'ambiguïté existe et elle est traitée : trois stations distinctes s'appellent
+ * « LA CISSE A AVERDON » (04448024, 04448026, 04448031). Elle ne gêne pas, tant
+ * qu'elles sont sur la même rivière — la question posée est la rivière, pas la
+ * station. Dès que deux stations homonymes divergent, ou que l'une publie un
+ * rattachement et l'autre non, le libellé est ABANDONNÉ : ne rien dire vaut
+ * mieux qu'un rattachement tiré au sort, et une analyse sans rattachement reste
+ * dans le lot ordinaire (absent ≠ autre rivière).
+ */
+export async function coursDesStationsPc(
+  w: number,
+  s: number,
+  e: number,
+  n: number,
+  signal?: AbortSignal,
+): Promise<Map<string, CoursStationPc>> {
+  const url =
+    `${QUALITE}/station_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
+    `&size=200&fields=code_station,libelle_station,code_cours_eau,nom_cours_eau,uri_cours_eau`;
+  const r = await fetchT(url, { signal, source: "hubeau" });
+  if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
+  const j = await r.json();
+  // undefined en valeur = libellé abandonné pour cause de désaccord.
+  const par = new Map<string, CoursStationPc | undefined>();
+  for (const d of j.data || []) {
+    const lib = String(d.libelle_station || "");
+    if (!lib) continue;
+    const cle = cleCours(d.code_cours_eau, d.uri_cours_eau);
+    if (!par.has(lib)) {
+      par.set(lib, cle ? { cle, nom: String(d.nom_cours_eau || "") } : undefined);
+      continue;
+    }
+    const vu = par.get(lib);
+    if (vu?.cle !== cle) par.set(lib, undefined);
+  }
+  const out = new Map<string, CoursStationPc>();
+  for (const [lib, v] of par) if (v) out.set(lib, v);
+  return out;
+}
+
+/**
+ * @param coursRef Clé du cours d'eau du point (voir lib/cours-du-point.ts).
+ *   Absente, rien ne change et rien de plus n'est demandé — c'est le cas de
+ *   l'Accueil, qui s'ouvre à chaque session. Présente, la boîte s'élargit à
+ *   DIST_MAX_MEME_COURS et une requête `station_pc` de plus donne un cours
+ *   d'eau aux analyses.
+ */
 export async function waterTemp(
   lat: number,
   lon: number,
   signal?: AbortSignal,
+  coursRef?: string,
 ): Promise<WaterTemp | null> {
-  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
+  const { w, s, e, n } = boxAroundKm(lat, lon, porteePour("temperature", coursRef));
   // A) Physico-chimie, paramètre 1301. On demande PLUSIEURS analyses, pas une.
   //    Avec `size=1`, l'API choisissait la station à la place de l'app : mesuré
   //    autour de Blois le 31/07/2026, elle rendait LA CISSE A AVERDON à 8,9 km
@@ -319,8 +417,14 @@ export async function waterTemp(
     if (!r.ok && r.status !== 206) return [];
     return parseAnalysePc(await r.json(), lat, lon);
   })().catch(() => []);
+  // A bis) Le rattachement des analyses, qui ne le portent pas. Une requête de
+  //   plus, demandée UNIQUEMENT quand on sait sur quelle rivière on se tient :
+  //   sans référence, la jointure ne servirait à rien.
+  const coursP: Promise<Map<string, CoursStationPc> | null> = coursRef
+    ? coursDesStationsPc(w, s, e, n, signal).catch(() => null)
+    : Promise.resolve(null);
   // B) Dedicated thermie network (nearest station's latest reading).
-  const thermieP: Promise<WaterTemp | null> = nearestTemp(lat, lon, signal)
+  const thermieP: Promise<WaterTemp | null> = nearestTemp(lat, lon, signal, coursRef)
     .then((t) =>
       t
         ? {
@@ -336,7 +440,15 @@ export async function waterTemp(
     )
     .catch(() => null);
 
-  const [physico, thermie] = await Promise.all([physicoP, thermieP]);
+  const [physico, thermie, cours] = await Promise.all([physicoP, thermieP, coursP]);
+  if (cours) {
+    for (const p of physico) {
+      const c = cours.get(p.station);
+      if (!c) continue; // station inconnue du référentiel, ou libellé abandonné
+      p.coursCode = c.cle;
+      if (!p.cours) p.cours = c.nom;
+    }
+  }
   const cands: WaterTemp[] = thermie ? [...physico, thermie] : physico;
   if (!cands.length) return null;
   // Proximity decides, freshness filters — NOT the other way round. Sorting by
@@ -344,7 +456,7 @@ export async function waterTemp(
   // Blois, CHER à SAINT-AIGNAN (35,2 km, another river) beat MEES à
   // CHAUSSEE-SAINT-VICTOR (3,4 km) because it was eight days newer. Water
   // temperature does not carry across catchments.
-  return choisirStation(cands, "temperature");
+  return choisirStation(cands, "temperature", Date.now(), coursRef);
 }
 
 // ---------------------------------------------------------------------------
@@ -423,44 +535,59 @@ export interface QualityReading {
   o2?: number; // mg/L
   sat?: number; // %
   ph?: number;
+  /** Cours d'eau publié par station_pc, ou "" quand elle n'en publie pas. */
+  cours?: string;
+  /** Clé de cours d'eau comparable (voir station.cleCours), ou undefined. */
+  coursCode?: string;
 }
 
-/** Nearest quality station's latest O2 / saturation / pH, or null. */
+/**
+ * Nearest quality station's latest O2 / saturation / pH, or null.
+ *
+ * `coursRef` : voir waterTemp. Deux corrections au passage, mesurées le
+ * 31/07/2026 : le code lisait `d.libelle_cours_eau` et `d.code_cours_eau` sans
+ * les avoir demandés dans `fields` — et station_pc nomme le libellé
+ * `nom_cours_eau`, pas `libelle_cours_eau`. Les deux erreurs se compensaient en
+ * un silence : le rattachement était toujours undefined, sans que rien ne le
+ * signale.
+ */
 export async function nearestQuality(
   lat: number,
   lon: number,
   signal?: AbortSignal,
+  coursRef?: string,
 ): Promise<QualityReading | null> {
-  const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.qualite);
+  const { w, s, e, n } = boxAroundKm(lat, lon, porteePour("qualite", coursRef));
   const sUrl =
     `${QUALITE}/station_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
-    `&size=150&fields=code_station,libelle_station,latitude,longitude`;
+    `&size=150&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,nom_cours_eau,uri_cours_eau`;
   const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
-  let near: {
+  const cands: {
     code: string;
     nom: string;
     dist: number;
     cours: string;
     coursCode?: string;
-  } | null = null;
+  }[] = [];
   for (const d of sj.data || []) {
     const la = Number(d.latitude);
     const lo = Number(d.longitude);
     if (!Number.isFinite(la) || !Number.isFinite(lo)) continue;
-    const dist = distKm(lat, lon, la, lo);
-    if (!near || dist < near.dist)
-      near = {
-        code: String(d.code_station),
-        nom: String(d.libelle_station || ""),
-        dist,
-        // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
-        // ici est précisément ce qui empêchait le troisième critère d'exister.
-        cours: String(d.libelle_cours_eau || ""),
-        coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
-      };
+    cands.push({
+      code: String(d.code_station),
+      nom: String(d.libelle_station || ""),
+      dist: distKm(lat, lon, la, lo),
+      // Le réseau publie le rattachement au cours d'eau ; le laisser tomber
+      // ici est précisément ce qui empêchait le troisième critère d'exister.
+      cours: String(d.nom_cours_eau || ""),
+      coursCode: cleCours(d.code_cours_eau, d.uri_cours_eau),
+    });
   }
+  // Le référentiel ne date pas ses stations : la fraîcheur se juge sur
+  // l'analyse rendue (isStaleQuality), pas ici.
+  const near = choisirStation(cands, "qualite", Date.now(), coursRef);
   if (!near) return null;
   // One request; pick the latest non-null result per parameter of interest.
   const aUrl =
@@ -471,7 +598,13 @@ export async function nearestQuality(
   if (!ar.ok && ar.status !== 206) throw new Error("Hub'Eau " + ar.status);
   const aj = await ar.json();
   const rows: { code_parametre: string; resultat: number | null; date_prelevement: string }[] = aj.data || [];
-  const out: QualityReading = { station: near.nom, dist: near.dist, date: "" };
+  const out: QualityReading = {
+    station: near.nom,
+    dist: near.dist,
+    date: "",
+    cours: near.cours,
+    coursCode: near.coursCode,
+  };
   const seen = new Set<string>();
   for (const r of rows) {
     if (r.resultat == null) continue;
