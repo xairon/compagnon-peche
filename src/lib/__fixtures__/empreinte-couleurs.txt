@@ -19,7 +19,7 @@
 .ac-metric .s|color|#6b675c
 .ac-metric .v.ondev|color|#1d6e42
 .ac-metric|background|#fbfaf7
-.ac-metric|border|1px solid #f0ede3
+.ac-metric|border|1px solid #efece2
 .ac-prise .chev|color|#6d8577
 .ac-prise .disc|background|#1d6e42
 .ac-prise .s|color|#9db4a6
@@ -86,7 +86,7 @@
 .brief-day|background|#fbfaf7
 .brief-day|border|1px solid #ece8dd
 .brief-empty|color|#6b675c
-.brief-line|border-top|1px solid #f0ece2
+.brief-line|border-top|1px solid #efece2
 .brief-load|color|#6b675c
 .brief-metric|background|#fbfaf7
 .brief-metric|border|1px solid #ece8dd
@@ -176,7 +176,7 @@
 .ce-kept button|background|#ffffff
 .ce-kept button|border|1.5px solid #e6e2d8
 .ce-kept button|color|#3a3e36
-.ce-photo-add|background|#faf9f5
+.ce-photo-add|background|#fbfaf7
 .ce-photo-add|border|1.5px dashed #cfc9ba
 .ce-photo-add|color|#6b675c
 .ce-photo-x|background|rgba(20, 30, 25, 0.72)
@@ -216,7 +216,7 @@
 .cook-x|color|#fbfaf7
 .cook|background|#16281e
 .cook|color|#fbfaf7
-.cp-danger|background|#fbe9e6
+.cp-danger|background|#fbeae7
 .cp-danger|color|#7d2118
 .cp-fin, .cp-recip|color|#6b675c
 .cp-nudge|color|#6b675c
@@ -339,7 +339,7 @@
 .ecr-id-l|color|#6b675c
 .ecr-id-ph|background|#e7ece6
 .ecr-id-pr|color|#6b675c
-.ecr-id-st.ferme|color|#8c2f24
+.ecr-id-st.ferme|color|#8a3125
 .ecr-id-st|color|#3a3e36
 .ecr-id.protegee|background|#fdf3f1
 .ecr-id.protegee|border-color|#b33a2e
@@ -383,7 +383,7 @@
 .ecr-sp-tx .l|color|#6b675c
 .ecr-sp-tx .n|color|#1a201c
 .ecr-sp-tx .w|color|#3a3e36
-.ecr-sp.protegee .w|color|#8c2f24
+.ecr-sp.protegee .w|color|#8a3125
 .ecr-sp.protegee|background|#fdf3f1
 .ecr-sp.protegee|border-color|#b33a2e
 .ecr-sp|background|#ffffff
@@ -397,7 +397,7 @@
 .ecr-total|color|#16281e
 .ecr-tri-t|color|#16281e
 .ecr-tri-x|color|#3a3e36
-.ecr-tri|background|#eef4f0
+.ecr-tri|background|#eef2ef
 .ecr-tri|border|1.5px solid #16281e
 .ecr-undo-toast button|background|#0f1f16
 .ecr-undo-toast button|color|#fbfaf7
@@ -408,14 +408,14 @@
 .ecr-wake|color|#3a3e36
 .ecr-warn|background|#f7f1e2
 .ecr-warn|color|#6d4d0d
-.edible-anses|background|#f6efe0
+.edible-anses|background|#f6f1e4
 .edible-anses|border|1px solid #e7d8b6
 .edible-anses|color|#6a531a
 .edible-status.non|background|#f7ecea
 .edible-status.non|color|#8a3125
 .edible-status.oui|background|#e9f2ec
 .edible-status.oui|color|#1d6e42
-.edible-status.réglementé|background|#f6efe0
+.edible-status.réglementé|background|#f6f1e4
 .edible-status.réglementé|color|#87681d
 .empty-note|color|#6b675c
 .explain-t|color|#5a5e52
@@ -540,8 +540,8 @@
     135deg,
     #e6e3d7,
     #e6e3d7 10px,
-    #e1ddd0 10px,
-    #e1ddd0 20px
+    #e3e0d3 10px,
+    #e3e0d3 20px
   )
 .img-slot|color|#5c635b
 .info|background|#f4f1e8
@@ -627,7 +627,7 @@
 .mr-del-confirm|background|#b33a2e
 .mr-del-confirm|color|#ffffff
 .mr-del|background|#ffffff
-.mr-del|border|1px solid #e2c9c4
+.mr-del|border|1px solid #e3c9c5
 .mr-del|color|#b33a2e
 .mr-guide-thumb|background|#f6f1e4
 .mr-hero-ph|background|linear-gradient(135deg, #16281e, #0f1f16)
@@ -691,11 +691,11 @@
 .onb2|background|#e7e4d9
 .onde-state.bad|background|#f7e9e6
 .onde-state.bad|color|#b33a2e
-.onde-state.good|background|#e6f0e9
+.onde-state.good|background|#e9f2ec
 .onde-state.good|color|#1d6e42
 .onde-state.warn|background|#f7f1e2
 .onde-state.warn|color|#7a5a12
-.onde-state|background|#eef1ee
+.onde-state|background|#eef2ef
 .onde-state|color|#3a3e36
 .ot-count-lbl|color|#7b6c45
 .ot-count-time|color|#16281e
@@ -746,7 +746,7 @@
 .persist-warn|background|#b33a2e
 .persist-warn|box-shadow|0 6px 20px rgba(20, 30, 25, 0.35)
 .persist-warn|color|#ffffff
-.pf-quick button|background|#f3f1ea
+.pf-quick button|background|#f4f1e8
 .pf-quick button|border|1px solid #ece8dd
 .pf-quick button|color|#3a3e36
 .pf-seg button.on|background|#ffffff
@@ -821,7 +821,7 @@
 .reg-block|border|1px solid #e6e2d8
 .reg-block|color|#3a3e36
 .reg-note|color|#726e62
-.reg-row|border-bottom|1px solid #f0ede3
+.reg-row|border-bottom|1px solid #efece2
 .reg-table|background|#ffffff
 .reg-table|border|1px solid #e6e2d8
 .regle-wrap|background|#fbfaf7
@@ -996,7 +996,7 @@
 .verdict .cell-i|color|#7b6c45
 .verdict .cell.cell-active|background|#f4f1e8
 .verdict .cell|background|#ffffff
-.verdict .cell|border-right|1px solid #eee7da
+.verdict .cell|border-right|1px solid #eceadf
 .verdict .k|color|#6b675c
 .verdict .sub|color|#726e62
 .verdict-banner.bad|background|#fbeae7

@@ -409,8 +409,8 @@ a:hover {
     135deg,
     #e6e3d7,
     #e6e3d7 10px,
-    #e1ddd0 10px,
-    #e1ddd0 20px
+    #e3e0d3 10px,
+    #e3e0d3 20px
   );
 }
 .img-slot.dark {
@@ -617,7 +617,7 @@ a:hover {
   padding: 13px 6px;
   text-align: center;
   border: none;
-  border-right: 1px solid #eee7da;
+  border-right: 1px solid #eceadf;
   background: #fff;
   font: inherit;
   cursor: pointer;
@@ -1339,7 +1339,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   padding: 11px 15px;
-  border-bottom: 1px solid #f0ede3;
+  border-bottom: 1px solid #efece2;
   font-size: 14px;
 }
 .reg-note {
@@ -2243,11 +2243,11 @@ a:hover {
   font-weight: 700;
   padding: 9px 12px;
   border-radius: 10px;
-  background: #eef1ee;
+  background: #eef2ef;
   color: var(--body);
 }
 .onde-state.good {
-  background: #e6f0e9;
+  background: #e9f2ec;
   color: var(--green);
 }
 .onde-state.warn {
@@ -2269,7 +2269,7 @@ a:hover {
 }
 .brief-line {
   padding: 8px 2px;
-  border-top: 1px solid #f0ece2;
+  border-top: 1px solid #efece2;
 }
 .brief-line:first-of-type {
   border-top: none;
@@ -2321,7 +2321,7 @@ a:hover {
   color: var(--green);
 }
 .edible-status.réglementé {
-  background: #f6efe0;
+  background: #f6f1e4;
   /* 4,41:1, il manquait un cheveu ; −0,6 % de luminosité HSL suffit (4,55:1). */
   color: #87681d;
 }
@@ -2330,7 +2330,7 @@ a:hover {
   color: #8a3125;
 }
 .edible-anses {
-  background: #f6efe0;
+  background: #f6f1e4;
   border: 1px solid #e7d8b6;
   color: #6a531a;
   border-radius: 10px;
@@ -2539,7 +2539,7 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  background: #f3f1ea;
+  background: #f4f1e8;
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 11px 4px;
@@ -2622,7 +2622,7 @@ a:hover {
   height: 120px;
   border: 1.5px dashed #cfc9ba;
   border-radius: 14px;
-  background: #faf9f5;
+  background: #fbfaf7;
   color: var(--muted);
   font-size: 14px;
   font-weight: 600;
@@ -3643,7 +3643,7 @@ a:hover {
 .ac-metric {
   flex: 1;
   background: var(--paper);
-  border: 1px solid #f0ede3;
+  border: 1px solid #efece2;
   border-radius: 12px;
   padding: 10px 11px;
 }
@@ -4719,7 +4719,7 @@ button.card-row {
 .mr-view-actions .btn-light { flex: 1; }
 .mr-del {
   flex: 1;
-  border: 1px solid #e2c9c4;
+  border: 1px solid #e3c9c5;
   background: #fff;
   color: var(--red);
   border-radius: 12px;
@@ -5667,7 +5667,7 @@ button.card-row {
   margin-top: 5px;
 }
 .ecr-sp.protegee .w {
-  color: #8c2f24;
+  color: #8a3125;
   font-weight: 600;
 }
 .ecr-step {
@@ -6015,7 +6015,7 @@ button.card-row {
 }
 .ecr-tri {
   border: 1.5px solid var(--green-dark);
-  background: #eef4f0;
+  background: #eef2ef;
   border-radius: 16px;
   padding: 13px 14px;
   margin-bottom: 16px;
@@ -6067,7 +6067,7 @@ button.card-row {
   color: var(--body);
 }
 .ecr-id-st.ferme {
-  color: #8c2f24;
+  color: #8a3125;
   font-weight: 600;
 }
 .ecr-id-pr {
@@ -6386,7 +6386,7 @@ button.card-row {
   color: #6d4d0d;
 }
 .cp-danger {
-  background: #fbe9e6;
+  background: #fbeae7;
   color: #7d2118;
 }
 .cp-nudge {
