@@ -17,5 +17,51 @@ export default defineConfig({
     // regressions but were pure contention.
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     exclude: ["**/node_modules/**", "**/dist/**", ".claude/**", "coverage/**"],
+    coverage: {
+      // Sans `include`, v8 n'instrumente QUE les fichiers qu'un test a déjà
+      // importés. Le chiffre affiché répondait donc à « les fichiers testés
+      // sont-ils bien testés ? » — jamais à « quelle part de l'app est
+      // testée ? ». Mesuré le 31/07/2026 : 82,04 % annoncés sur 74 fichiers
+      // instrumentés, alors que src/ en compte 165 (hors tests). Les 91 autres,
+      // jamais importés, ne pesaient rien dans la moyenne — dont dix-huit écrans
+      // entiers (Materiel, Stockage, Statistiques, Reglement…) à 0 %.
+      // Une fois `include` posé, le même dépôt mesure 47,12 %.
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.{test,spec}.{ts,tsx}",
+        // Décors de test : des réponses d'API figées, pas du code de l'app.
+        "src/lib/__fixtures__/**",
+        // Point d'entrée : `createRoot(...).render(...)` au chargement du
+        // module. L'importer pour le mesurer monterait l'app entière.
+        "src/main.tsx",
+        "src/test-setup.ts",
+        "src/vite-env.d.ts",
+        // Déclarations de types : effacées à la compilation, rien à exécuter.
+        "src/types.ts",
+        "src/store-context.ts",
+      ],
+      // Seuils posés sous le MESURÉ du jour, pas sur un idéal. Un seuil qu'on
+      // désactive le lendemain ne protège rien : celui-ci doit tenir tant que
+      // personne ne retire de test, et céder dès que quelqu'un en retire un.
+      //
+      // Mesuré le 31/07/2026, après ce lot :
+      //   instructions 49,72 %  ·  branches 41,48 %
+      //   fonctions    39,77 %  ·  lignes   49,73 %
+      //
+      // Posés ~1,5 point en dessous. La marge absorbe ce qu'un remaniement
+      // honnête déplace (un fichier scindé, une branche morte retirée) sans
+      // absorber une perte réelle : le plus petit des fichiers de test ajoutés
+      // ici pèse à lui seul plus que cette marge.
+      //
+      // Ils ne sont PAS un objectif. 49 % veut dire que la moitié de l'app
+      // n'est toujours pas exercée — dix-huit écrans à 0 % en tête. Monter les
+      // seuils sans écrire les tests d'abord ne ferait que casser le build.
+      thresholds: {
+        statements: 48,
+        branches: 40,
+        functions: 38,
+        lines: 48,
+      },
+    },
   },
 });
