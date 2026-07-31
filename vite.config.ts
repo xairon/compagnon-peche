@@ -23,7 +23,7 @@ import { GLOB_IGNORES_PRECACHE, MOTIF_RESERVE, CACHE_RESERVE } from "./src/lib/p
 // confronter chaque icône et chaque capture déclarées au contenu réel de
 // public/, et vérifier que les balises og: d'index.html pointent vers la même
 // app. Un chemin mort dans le manifeste ne se voit qu'à l'installation.
-import { MANIFEST } from "./src/lib/manifest";
+import { manifestPublie } from "./src/lib/manifest";
 
 const CSP = cspHeader();
 
@@ -242,7 +242,7 @@ export default defineConfig({
           },
         ],
       },
-      manifest: MANIFEST,
+      manifest: manifestPublie(),
     }),
   ],
 });

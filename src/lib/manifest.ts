@@ -25,6 +25,22 @@ export interface CaptureManifest {
   label?: string;
 }
 
+/**
+ * Un raccourci du menu contextuel de l'icône installée (appui long).
+ *
+ * `ecran` n'est PAS une clé du manifeste web : c'est ce dont `url` est dérivée,
+ * gardé pour qu'un renommage de route fasse tomber un test au lieu de produire
+ * un raccourci mort. Il est retiré avant d'écrire le manifeste.
+ */
+export interface RaccourciManifest {
+  ecran: string;
+  name: string;
+  short_name: string;
+  description?: string;
+  url: string;
+  icons?: IconeManifest[];
+}
+
 export interface Manifest {
   id: string;
   name: string;
@@ -39,6 +55,7 @@ export interface Manifest {
   scope: string;
   icons: IconeManifest[];
   screenshots?: CaptureManifest[];
+  shortcuts?: RaccourciManifest[];
 }
 
 export const MANIFEST: Manifest = {
@@ -75,3 +92,68 @@ export const MANIFEST: Manifest = {
   // png/svg/webp, et des captures jamais affichées dans l'app n'ont rien à
   // faire dans les 7,6 Mo du premier install.
 };
+
+/**
+ * Raccourcis de l'icône installée (appui long sur Android).
+ *
+ * Absents jusqu'ici, et pour une bonne raison : ils exigent des liens profonds,
+ * et `grep pushState|popstate` rendait 0. Quatre entrées de menu qui auraient
+ * toutes atterri sur l'Accueil auraient été un mensonge d'interface. Le lot
+ * navigation a livré les liens profonds des 27 écrans ; ils deviennent donc
+ * possibles ET honnêtes, ce qui n'est pas la même chose.
+ *
+ * Les URL sont DÉRIVÉES de la table de routes (`versUrl`), jamais recopiées :
+ * un renommage de route ferait sinon un raccourci mort, sans rien casser
+ * ailleurs. Elles restent relatives (`./#/…`) parce que `base: "./"` — l'app
+ * n'est pas servie à la racine sur GitHub Pages.
+ *
+ * Aucune icône propre : comme pour les captures d'écran, une icône annoncée et
+ * absente dégrade le menu au lieu de l'enrichir. Le navigateur retombe sur
+ * l'icône de l'app, ce qui est le comportement voulu.
+ */
+export const RACCOURCIS: RaccourciManifest[] = [
+  {
+    ecran: "prise",
+    name: "Noter une prise",
+    short_name: "Prise",
+    description: "Le geste central : espèce, taille, verdict maille et quota.",
+    url: "./#/prise",
+  },
+  {
+    ecran: "carte",
+    name: "Ouvrir la carte",
+    short_name: "Carte",
+    description: "Cours d'eau, stations, parcours et réserves autour de vous.",
+    url: "./#/carte",
+  },
+  {
+    ecran: "carnet",
+    name: "Mon carnet",
+    short_name: "Carnet",
+    description: "Prises enregistrées, spots et statistiques.",
+    url: "./#/carnet",
+  },
+  {
+    ecran: "reglement",
+    name: "Réglementation",
+    short_name: "Règles",
+    description: "Tailles, quotas et périodes du département actif.",
+    url: "./#/reglementation",
+  },
+];
+
+MANIFEST.shortcuts = RACCOURCIS;
+
+/**
+ * Le manifeste tel qu'il doit être ÉCRIT dans le fichier livré.
+ *
+ * `ecran` sert à dériver et à vérifier l'URL d'un raccourci (voir
+ * manifest-raccourcis.test.ts) ; ce n'est pas une clé du standard Web App
+ * Manifest. Elle est donc retirée ici, au seul endroit qui produit le fichier.
+ */
+export function manifestPublie(): Manifest {
+  return {
+    ...MANIFEST,
+    shortcuts: MANIFEST.shortcuts?.map(({ ecran: _ecran, ...reste }) => reste as RaccourciManifest),
+  };
+}
