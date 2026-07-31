@@ -94,14 +94,9 @@ export function App() {
     requestPersist();
   }, []);
 
-  // Persist the gloves / big-UI preference across sessions.
-  useEffect(() => {
-    try {
-      localStorage.setItem("bigUI", state.bigUI ? "1" : "0");
-    } catch {
-      /* ignore */
-    }
-  }, [state.bigUI]);
+  // The gloves preference is persisted by the store, alongside the department
+  // (lib/prefs.ts). It used to be written here too, from a second copy of the
+  // key — one owner is enough.
 
   const finishOnboarding = () => {
     try {

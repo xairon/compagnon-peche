@@ -21,6 +21,7 @@ import { recipesForSpecies } from "../lib/recipes";
 import { SPECIES_ENRICHMENT } from "../data/species-enrichment";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { CURATED_IDS } from "../data/species";
+import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 const DIFF_LABEL = ["", "Facile", "Moyen", "Difficile"];
 
@@ -697,6 +698,10 @@ export function Fiche() {
             elle disparaissait sur toute fiche qui n'en a pas. Cette app source ce
             qu'elle affirme — une fiche rédigée à la main ne fait pas exception. */}
         {sp.ficheSrc && <div className="fiche-src">Source du contenu : {sp.ficheSrc}</div>}
+
+        {/* Sits next to the existing disclaimer, which says the arrêté prevails:
+            this one says WHICH season's arrêté the figures above come from. */}
+        <RegPerimeeWarning dept={state.dept} style={{ margin: "12px 0" }} />
 
         <div className="disclaimer">
           Outil d'aide — la réglementation applicable est celle de l'arrêté préfectoral en vigueur.

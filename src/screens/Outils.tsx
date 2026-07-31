@@ -1,8 +1,10 @@
+import { REG_YEAR } from "../data/version";
 import type { Screen } from "../store";
 import { useStore } from "../store-hooks";
 import { DEPARTEMENTS } from "../data/regulation";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
+import { lienSignalement } from "../lib/diagnostic";
 
 export function Outils() {
   const { state, nav } = useStore();
@@ -31,6 +33,15 @@ export function Outils() {
       title: "Parcours & réglementation locale",
       sub: "GEOPECHE — carte des fédérations (dont Centre-Val de Loire) : lots, réserves, no-kill",
       href: "https://www.geopeche.com/",
+    },
+    // The correction channel. The app's argument is that nothing in it is
+    // invented; without a way to be told otherwise, that argument has no
+    // mechanism behind it — regulation.ts:127 already records a doubt only an
+    // angler standing in front of the arrêté can settle.
+    {
+      title: "Signaler une erreur ou un manque",
+      sub: "Une maille fausse, une date qui ne colle pas, un écran qui plante — dites-le",
+      href: lienSignalement({ ecran: "outils", dept: state.dept }),
     },
   ];
 
@@ -75,7 +86,7 @@ export function Outils() {
 
         <div className="info" style={{ marginTop: 20 }}>
           Hors-ligne — toutes les fiches restent disponibles. Les données réglementaires embarquées
-          datent des arrêtés 2026 ; revérifiez chaque année.
+          datent des arrêtés {REG_YEAR} ; revérifiez chaque année.
         </div>
       </div>
     </div>

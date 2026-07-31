@@ -19,7 +19,11 @@ import type { DeptId } from "../data/regulation";
 function AtMailleStep({ spId, dept }: { spId: string; dept: DeptId }) {
   const { set } = useStore();
   useEffect(() => {
-    set({ dept, prise: { sp: spId, step: "maille" } });
+    // `deptChosen` mirrors what setting a department means in real use: the
+    // angler picked it. Without it the screen also shows DeptDefautWarning,
+    // which names the same department and would make the assertions below
+    // ambiguous — the warning has its own test.
+    set({ dept, deptChosen: true, prise: { sp: spId, step: "maille" } });
   }, [set, spId, dept]);
   return <Prise />;
 }

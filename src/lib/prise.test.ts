@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { priseView } from "./prise";
 import type { Species } from "../types";
 import type { SeasonRule } from "../types";
+import { SPECIES } from "../data/species";
 
 // Minimal species factory — only the fields priseView reads for the "statut" step.
 function sp(over: Partial<Species> & { season: SeasonRule }): Species {
@@ -83,6 +84,61 @@ describe("priseView — maille (arrêté départemental)", () => {
   it("une espèce à maille nationale seule reste inchangée", () => {
     const v = priseView(sp({ id: "ombre", name: "Ombre", season: "cat1", maille: "30 cm" }), "maille", Q, "41");
     expect(v?.title).toContain("30 cm");
+  });
+});
+
+// effectiveMaille keeps a non-numeric wording ("Interdit", "spéciale") in
+// `label` precisely so a rule that has no number is not flattened into "no
+// size limit" — see the comment on EffectiveMaille.label. Every other surface
+// renders it (Especes, Accueil, Fiche); the decision card, the one place where
+// the angler acts on it, read only `cm` and lost it.
+describe("priseView — maille non chiffrée (moratoire, réglementation spéciale)", () => {
+  const SPECIALE = { id: "saumon-atlantique", name: "Saumon atlantique", season: "toujours" as const };
+
+  it("annonce la mention au lieu de « pas de taille légale »", () => {
+    const v = priseView(sp({ ...SPECIALE, maille: "spéciale" }), "maille", Q, "41");
+
+    expect(v?.title).toMatch(/spéciale/i);
+    expect(v?.title).not.toMatch(/pas de taille légale/i);
+  });
+
+  it("ne dit jamais « à vous de décider » quand une règle existe", () => {
+    const v = priseView(sp({ ...SPECIALE, maille: "spéciale" }), "maille", Q, "41");
+
+    // The sentence that turns an unnumbered rule into the angler's discretion.
+    expect(v?.paras.join(" ")).not.toMatch(/à vous de décider/i);
+  });
+
+  it("envoie vérifier l'arrêté plutôt que de laisser continuer sans réserve", () => {
+    const v = priseView(sp({ ...SPECIALE, maille: "spéciale" }), "maille", Q, "41");
+
+    expect(v?.banner).toMatch(/arrêté/i);
+  });
+
+  it("aucune espèce du référentiel à règle non chiffrée ne tombe sur « à vous de décider »", () => {
+    // The guard that outlives this fix: it fails the day a species is added
+    // with a worded maille, whatever the wording turns out to be.
+    const worded = SPECIES.filter((s) => {
+      const t = (s.maille || "").trim();
+      return t !== "" && t !== "—" && !/\d\s*cm/.test(t);
+    });
+    expect(worded.length).toBeGreaterThan(0); // the corpus really does contain some
+
+    for (const s of worded) {
+      const v = priseView(s, "maille", Q, "41");
+      const texte = `${v?.title ?? ""} ${v?.paras.join(" ") ?? ""}`;
+      expect(texte, `${s.id} (maille « ${s.maille} »)`).not.toMatch(/pas de taille légale/i);
+      expect(texte, `${s.id} (maille « ${s.maille} »)`).not.toMatch(/à vous de décider/i);
+    }
+  });
+
+  it("garde « à vous de décider » quand il n'y a réellement aucune règle", () => {
+    // Carp, roach, catfish: no national size, no wording. The sentence is
+    // correct there and must not be collateral damage.
+    const v = priseView(sp({ id: "carpe-commune", name: "Carpe", season: "toujours", maille: "—" }), "maille", Q, "41");
+
+    expect(v?.paras.join(" ")).toMatch(/à vous de décider/i);
+    expect(v?.banner).toBeUndefined();
   });
 });
 

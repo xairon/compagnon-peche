@@ -30,6 +30,11 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # The gate. `npm run build` already runs `tsc -b`, so type errors block a
+      # deploy on their own — what used to ship unchecked were the *logic*
+      # regressions: maille, quota, garder/relâcher. Those are what the suite covers.
+      - run: npm run lint
+      - run: npm test
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

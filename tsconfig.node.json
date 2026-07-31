@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "composite": true,
+    // composite projects must emit. Send the output to a scratch dir instead of
+    // letting .js/.d.ts land next to the sources — src/ holds source only.
+    "outDir": "./node_modules/.tmp/tsconfig-node",
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true
   },
-  "include": ["vite.config.ts"]
+  // csp.ts is shared: vite.config injects it at build time, and src/lib/csp.test.ts
+  // checks it against the map's own host lists. It has to be visible to both projects.
+  "include": ["vite.config.ts", "src/lib/csp.ts"]
 }

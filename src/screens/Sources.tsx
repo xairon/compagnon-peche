@@ -1,5 +1,8 @@
 import { useStore } from "../store-hooks";
 import { SOURCES } from "../data/regulation";
+import { buildLabel } from "../lib/build";
+import { lienSignalement } from "../lib/diagnostic";
+import { REG_YEAR, VERIFIE_LE } from "../data/version";
 
 export function Sources() {
   const { back } = useStore();
@@ -28,6 +31,24 @@ export function Sources() {
           Open-Meteo, OpenStreetMap/Overpass, GBIF et Sandre (Eaufrance). Si vous ouvrez la carte
           « Officielle », celle-ci est fournie par Géopêche (FNPF) et reçoit alors votre adresse IP et
           la zone consultée.
+        </div>
+
+        {/* The build identity, so a report can be attached to a version. An
+            install that keeps dismissing the update prompt can sit on an old
+            build for weeks, and nothing else on screen says which. */}
+        <div
+          style={{
+            marginTop: 18,
+            fontSize: 12,
+            color: "var(--muted)",
+            lineHeight: 1.6,
+          }}
+        >
+          Application {buildLabel()} · réglementation saison {REG_YEAR}, vérifiée le {VERIFIE_LE}.
+          <br />
+          <a href={lienSignalement({ ecran: "sources" })} target="_blank" rel="noreferrer">
+            Signaler une erreur ou un manque ↗
+          </a>
         </div>
       </div>
     </div>

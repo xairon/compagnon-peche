@@ -7,6 +7,8 @@ import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
+import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 import { usePhotoUrl } from "../lib/photos";
 import { fetchMeteo, weatherLabel, type Meteo, type MeteoHour } from "../lib/meteo";
 import {
@@ -204,9 +206,19 @@ export function Accueil() {
           </button>
         </div>
 
-        {state.outOfZoneDept && (
+        <RegPerimeeWarning dept={state.dept} style={{ marginTop: 10 }} />
+        {state.outOfZoneDept ? (
           <OutOfZoneWarning
             outOfZoneDept={state.outOfZoneDept}
+            activeDept={state.dept}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          // Mutually exclusive on purpose: being outside the covered zone is
+          // the more specific problem, and stacking two banners about the same
+          // thing reads as noise.
+          <DeptDefautWarning
+            deptChosen={state.deptChosen}
             activeDept={state.dept}
             style={{ marginTop: 10 }}
           />
@@ -219,7 +231,16 @@ export function Accueil() {
             <div className="loc">
               <span className="ping" />
               <div style={{ minWidth: 0 }}>
-                <div className="place">{located ? "Ma position" : `${deptName} · défaut`}</div>
+                {/* "défaut" means the app picked the department itself. Once
+                    the angler has chosen one, saying "défaut" contradicts them
+                    — it's the chef-lieu of THEIR department being shown. */}
+                <div className="place">
+                  {located
+                    ? "Ma position"
+                    : state.deptChosen
+                      ? `${deptName} · chef-lieu`
+                      : `${deptName} · défaut`}
+                </div>
                 <div className="coord">
                   {pt.lat.toFixed(3)}, {pt.lon.toFixed(3)}
                 </div>

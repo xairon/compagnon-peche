@@ -4,6 +4,7 @@
 import { get, set, keys, clear } from "idb-keyval";
 import type { Profile } from "../types";
 import { isQuotaNearlyFull } from "./backup-reminder";
+import { STORES, type StoreName } from "./stores";
 
 // ── Persistence-failure notifier ───────────────────────────────────────────
 // Writes to IndexedDB can fail silently (quota exceeded, private mode, storage
@@ -37,6 +38,16 @@ export function reportPersistError(e: unknown): void {
 export function reportReadError(): void {
   const msg =
     "Impossible de lire vos données enregistrées. Par sécurité, l'enregistrement est suspendu (pour ne pas écraser des données existantes) — rechargez l'application ; si le souci persiste, exportez une sauvegarde.";
+  if (msg === persistError) return;
+  persistError = msg;
+  persistListeners.forEach((l) => l(msg));
+}
+
+/** Something threw outside any try/catch or ErrorBoundary. Shares the banner
+ *  because the user's question is the same either way — "did that work?" — but
+ *  keeps its own wording: this is not a storage problem. */
+export function reportRuntimeError(detail: string): void {
+  const msg = `Un problème est survenu dans l'application : ${detail}. Si l'écran ne répond plus, rechargez — vos données restent sur l'appareil.`;
   if (msg === persistError) return;
   persistError = msg;
   persistListeners.forEach((l) => l(msg));
@@ -201,20 +212,25 @@ async function photoKeys(): Promise<string[]> {
   );
 }
 
-/** Current schema version of the export bundle. Bump when the shape changes. */
-export const EXPORT_SCHEMA = 2;
+/** Current schema version of the export bundle. Bump when the shape changes.
+ *  3 = crayfish sessions added to the bundle. */
+export const EXPORT_SCHEMA = 3;
 
 /** Download a full JSON backup — structured data AND photos (base64), so it can
  *  actually restore everything on a new device (see importData). */
 export async function exportData(): Promise<void> {
-  const [catches, spots, gear, bundles, profile, recipes] = await Promise.all([
-    get("carnet:catches"),
-    get("carnet:spots"),
-    get("fish-gear"),
-    get("fish-bundles"),
-    get("carnet:profile"),
-    get("carnet:recipes"),
-  ]);
+  // Derived from STORES rather than listed by hand: adding a store to the
+  // registry puts it in the backup automatically, and no future store can be
+  // forgotten here the way `carnet:crayfish` was.
+  const names = Object.keys(STORES) as StoreName[];
+  const values = await Promise.all(names.map((n) => get(STORES[n])));
+  const stored = Object.fromEntries(
+    names.map((n, i) => [
+      n,
+      // The profile is a single object; every other store is a list.
+      n === "profile" ? (values[i] ?? null) : (values[i] ?? []),
+    ]),
+  );
   // Photos as data URLs so the backup is self-contained and restorable.
   const photos: Record<string, string> = {};
   for (const k of await photoKeys()) {
@@ -231,20 +247,37 @@ export async function exportData(): Promise<void> {
     app: "compagnon-peche",
     schema: EXPORT_SCHEMA,
     exportedAtIso: new Date().toISOString(),
-    note: "Sauvegarde locale complète (carnet, spots, matériel, profil, recettes ET photos). Restaurable via « Importer une sauvegarde ».",
-    catches: catches ?? [],
-    spots: spots ?? [],
-    gear: gear ?? [],
-    bundles: bundles ?? [],
-    profile: profile ?? null,
-    recipes: recipes ?? [],
+    note: "Sauvegarde locale complète (carnet, spots, matériel, ensembles, profil, recettes, séances écrevisses ET photos). Restaurable via « Importer une sauvegarde ».",
+    ...stored,
     photos,
   };
   const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+  const filename = `carnet-peche-${new Date().toISOString().slice(0, 10)}.json`;
+
+  // Share sheet first, when the platform has one. This is not a nicety: in an
+  // installed iOS PWA the anchor+blob download below is dropped silently — no
+  // error, no file — and the app would then arm the "you have a backup"
+  // reminder for 14 days on nothing. navigator.share resolves on success and
+  // rejects on cancel, which is the only honest signal available.
+  const file = new File([blob], filename, { type: "application/json" });
+  const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+  if (typeof nav.share === "function" && nav.canShare?.({ files: [file] })) {
+    try {
+      await nav.share({ files: [file], title: "Sauvegarde du carnet de pêche" });
+    } catch (e) {
+      // The user dismissed the sheet: no backup was made, so leave the
+      // reminder armed. Any other error is a real failure — surface it.
+      if (e instanceof Error && e.name === "AbortError") return;
+      throw e;
+    }
+    setLastExportAt(Date.now());
+    return;
+  }
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `carnet-peche-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = filename;
   document.body.appendChild(a); // some WebViews require the anchor in the DOM
   a.click();
   a.remove();
@@ -260,7 +293,9 @@ export interface ImportResult {
   catches: number;
   spots: number;
   gear: number;
+  bundles: number;
   recipes: number;
+  crayfish: number;
   photos: number;
 }
 
@@ -278,6 +313,16 @@ export async function importData(file: File): Promise<ImportResult> {
   if (!data || data.app !== "compagnon-peche") {
     throw new Error("Ce fichier n'est pas une sauvegarde Compagnon de pêche.");
   }
+  // Backups already on users' phones predate the field, so a missing `schema`
+  // means 1 — never reject it. Only refuse a bundle from a FUTURE version,
+  // whose shape this build cannot know: importing it half-way would be worse
+  // than refusing. Compare with `>`, never `!==`.
+  const schema = typeof data.schema === "number" ? data.schema : 1;
+  if (schema > EXPORT_SCHEMA) {
+    throw new Error(
+      "Cette sauvegarde vient d'une version plus récente de l'app. Mettez l'app à jour, puis réessayez.",
+    );
+  }
 
   const mergeById = async (key: string, idField: string, incoming: unknown): Promise<number> => {
     if (!Array.isArray(incoming) || incoming.length === 0) return 0;
@@ -290,16 +335,17 @@ export async function importData(file: File): Promise<ImportResult> {
     return added.length;
   };
 
-  const catches = await mergeById("carnet:catches", "slot", data.catches);
-  const spots = await mergeById("carnet:spots", "id", data.spots);
-  const gear = await mergeById("fish-gear", "id", data.gear);
-  const recipes = await mergeById("carnet:recipes", "id", data.recipes);
-  await mergeById("fish-bundles", "id", data.bundles);
+  const catches = await mergeById(STORES.catches, "slot", data.catches);
+  const spots = await mergeById(STORES.spots, "id", data.spots);
+  const gear = await mergeById(STORES.gear, "id", data.gear);
+  const recipes = await mergeById(STORES.recipes, "id", data.recipes);
+  const bundles = await mergeById(STORES.bundles, "id", data.bundles);
+  const crayfish = await mergeById(STORES.crayfish, "id", data.crayfish);
 
   // Profile: fill only if the current identity is empty (don't clobber).
-  const curProfile = (await get("carnet:profile")) as Profile | undefined;
+  const curProfile = (await get(STORES.profile)) as Profile | undefined;
   const emptyProfile = isProfileEmpty(curProfile);
-  if (data.profile && emptyProfile) await set("carnet:profile", data.profile);
+  if (data.profile && emptyProfile) await set(STORES.profile, data.profile);
 
   // Photos: restore any blob not already present.
   let photos = 0;
@@ -315,7 +361,7 @@ export async function importData(file: File): Promise<ImportResult> {
       }
     }
   }
-  return { catches, spots, gear, recipes, photos };
+  return { catches, spots, gear, bundles, recipes, crayfish, photos };
 }
 
 /** Wipe ALL local data (catches, spots, gear, profile, photos). Irreversible.

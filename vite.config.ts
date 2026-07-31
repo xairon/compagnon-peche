@@ -1,25 +1,17 @@
+import { execFileSync } from "node:child_process";
+import { createRequire } from "node:module";
 import { defineConfig, type Plugin } from "vite";
+
+const pkg = createRequire(import.meta.url)("./package.json") as { version: string };
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Content-Security-Policy (defense-in-depth). Injected only in the built HTML —
-// NOT in dev, where Vite's HMR needs inline/eval and a ws: connection. Scripts are
-// restricted to 'self' (no inline script ships in prod); connect/img/frame are
-// whitelisted to the exact third parties the app talks to. `data:`/`blob:` are
-// needed for photo blobs and the backup import (fetch on a data: URL).
-const CSP = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
-  "font-src 'self'",
-  "img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com https://data.geopf.fr",
-  "worker-src 'self' blob:",
-  "connect-src 'self' data: blob: https://hubeau.eaufrance.fr https://services.sandre.eaufrance.fr https://data.geopf.fr https://api.open-meteo.com https://api.gbif.org https://overpass-api.de https://*.basemaps.cartocdn.com https://basemaps.cartocdn.com",
-  "frame-src https://map.geopeche.com",
-  "manifest-src 'self'",
-].join("; ");
+// The policy itself lives in src/lib/csp.ts so csp.test.ts can check it against
+// the map's own source lists — a host missing here is invisible in dev (the
+// policy is build-only) and blanks a layer for every user in production.
+import { cspHeader } from "./src/lib/csp";
+
+const CSP = cspHeader();
 
 const cspPlugin: Plugin = {
   name: "inject-csp",
@@ -37,8 +29,29 @@ const cspPlugin: Plugin = {
 
 // Offline-first PWA. Everything the app needs is precached so it runs with
 // zero network once installed — the core requirement for use at the water's edge.
+// Build identity, substituted into src/lib/build.ts. The commit is read from
+// git rather than stored, so it cannot drift; a missing git (tarball build)
+// degrades to "inconnu" instead of failing the build.
+function commitCourt(): string {
+  try {
+    // execFileSync, not execSync: no shell, nothing to interpolate into.
+    return execFileSync("git", ["rev-parse", "--short", "HEAD"], {
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "inconnu";
+  }
+}
+
 export default defineConfig({
   base: "./",
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+    __COMMIT__: JSON.stringify(commitCourt()),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   build: {
     // Isolate MapLibre in its own chunk so it loads only with the Carte screen.
     rollupOptions: { output: { manualChunks: { maplibre: ["maplibre-gl"] } } },
@@ -88,6 +101,20 @@ export default defineConfig({
             options: {
               cacheName: "carto-basemap",
               expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // DDT MapServer overlays (réserves de pêche, catégorie piscicole) —
+            // see lib/parcours.ts. Cache-first like the other raster layers:
+            // these are regulatory boundaries, they change once a year at most,
+            // and a blank layer reads as "no reserve here" rather than as a
+            // missing tile. Modest quota — the layers are off by default.
+            urlPattern: /^https:\/\/ogc\.geo-ide\.developpement-durable\.gouv\.fr\/.*/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "wms-parcours",
+              expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
