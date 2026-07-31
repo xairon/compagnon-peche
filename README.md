@@ -68,10 +68,10 @@ référence (types d'appâts, tailles d'hameçons, familles de leurres, fils). S
   données + images → fonctionne sans réseau une fois installée).
 - **Carnet** : `idb-keyval` (IndexedDB). 100 % local, rien n'est transmis.
 
-### Couverture des espèces — profondeur graduée (83 espèces)
+### Couverture des espèces — profondeur graduée (129 espèces)
 
 Le référentiel combine deux niveaux, fusionnés dans `src/data/species.ts` :
-- **Fiches curées** (~25) : identification, confusions, technique, recettes, santé — écrites et
+- **Fiches curées** (25) : identification, confusions, technique, recettes, santé — écrites et
   sourcées à la main.
 - **Fiches « base »** (`src/data/species-base.ts`, **générées**) : taxonomie (TAXREF `cd_nom`),
   réglementation par règles (maille R436-18, statut protégé/invasive) et bio, pour couvrir **toutes**
@@ -101,7 +101,7 @@ scripts/       fetch-images.mjs · build-base-species.mjs · species-list/*.json
 Réglementation et santé sont sourcées et vérifiables ; toute valeur non vérifiée est marquée « à
 vérifier ». Sources : **Legifrance** (R436-18 tailles, R436-21 quota, R432-5 invasives),
 **service-public F2117** (périodes), **ANSES** (bioaccumulateurs : 2×/mois, publics sensibles
-1×/2 mois), arrêtés préfectoraux 36 & 41. Taxonomie/biologie : TAXREF/GBIF/FishBase.
+1×/2 mois), arrêtés préfectoraux 23, 36 & 41. Taxonomie/biologie : TAXREF/GBIF/FishBase.
 Détail dans l'écran **Sources** et la section 12 du cahier des charges.
 
 ## Assets (images)
@@ -110,9 +110,12 @@ Toutes les images sont **libres, vérifiées et embarquées** (`public/assets`, 
 l'offline). Sources et licences dans l'écran **Crédits photos**, `src/data/media.ts` et
 `src/data/knot-diagrams.ts`.
 
-- **25 photos de poissons** (Wikimedia Commons, domaine public / CC BY / CC BY-SA).
-- **7 schémas de montage** : clinch, palomar, boucle chirurgien, texan (Commons) + drop shot,
-  pater-noster, raccord (schémas SVG originaux, `public/assets/knots/*.svg`).
+- **154 photos de poissons** (Wikimedia Commons, domaine public / CC BY / CC BY-SA), en pleine
+  taille sous `public/assets/species` et en vignettes 400 px sous `public/assets/species-sm` — ce
+  sont les vignettes, et elles seules, qui sont précachées pour l'offline.
+- **15 nœuds et montages** : clinch, palomar, boucle chirurgien, texan (photos Commons) + drop shot,
+  pater-noster, raccord, anglaise, carolina, cheveu, feeder, wacky (schémas SVG originaux, pas à pas,
+  `public/assets/knots/*.svg` et `public/assets/knots-steps/`).
 
 Ré-exécuter le sourcing (idempotent) : éditer `scripts/images.manifest.json` puis
 `node scripts/fetch-images.mjs` (télécharge depuis le CDN Wikimedia, redimensionne en WebP, régénère
@@ -120,12 +123,16 @@ Ré-exécuter le sourcing (idempotent) : éditer `scripts/images.manifest.json` 
 
 ## À compléter
 
-- **Recettes** : 17 recettes sourcées (Gallica/BnF + chefs cités) couvrant les principales espèces
-  (brochet, sandre, perche, carpe, tanche, anguille, alose, silure, truites/omble, petits blancs en
-  friture). Reste à étendre aux espèces plus rares.
-- **Espèces** : **83 fiches** (25 curées + 58 base générées) couvrant l'essentiel de l'inventaire d'eau douce métropolitain ; reste à enrichir les fiches base → curées (identification, technique, recettes).
-- **Photos** : galerie multi-photos par espèce (adulte + juvénile) — 78/83 espèces ont ≥ 1 photo,
-  24 en ont plusieurs, 11 avec juvénile. Restent quelques espèces rares/cryptiques sans photo libre.
+- **Recettes** : **22 recettes sourcées** (Gallica/BnF + chefs cités) couvrant les principales
+  espèces (brochet, sandre, perche, carpe, tanche, anguille, alose, silure, truites/omble, petits
+  blancs en friture) et les deux invasives qu'on ne peut pas remettre vivantes à l'eau
+  (perche-soleil, poisson-chat). Reste à étendre aux espèces plus rares.
+- **Espèces** : **129 fiches** (25 curées + 104 base enrichies) couvrant l'essentiel de l'inventaire
+  d'eau douce métropolitain ; reste à enrichir les fiches base → curées (identification, technique,
+  recettes).
+- **Photos** : galerie multi-photos par espèce (adulte + juvénile).
+  120/129 espèces ont ≥ 1 photo, 24 en ont plusieurs, 12 avec juvénile.
+  Restent quelques espèces rares/cryptiques sans photo libre.
 - **Données réelles Hubeau / TAXREF / FishBase** : voir la stratégie dans le backlog.
 - **Icônes PWA** : PNG 192/512 maskables pour un rendu store (optionnel).
 
