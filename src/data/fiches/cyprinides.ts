@@ -13,6 +13,10 @@ import type { Fiche } from "./index";
 // techniques. Une espèce dont un trait n'est pas établi n'a pas ce trait.
 
 const SRC = "INPN (MNHN) · FishBase — biologie et répartition ; techniques : fédérations de pêche";
+// Fiches dont le critère d'identification vient nommément de DORIS/FFESSM : la
+// source doit le dire, sans quoi le lecteur ne peut pas vérifier le critère qui
+// sépare deux espèces qui se ressemblent.
+const SRC_DORIS = SRC + " ; critères d'identification : DORIS (FFESSM)";
 
 // Les trois goujons régionaux sont des lignées séparées du goujon commun par la
 // génétique, pas par un usage différent : dans la poêle c'est la même friture.
@@ -506,21 +510,26 @@ export const CYPRINIDES: Record<string, Fiche> = {
     },
   },
 
+  // Le critère de bouche était celui du HOTU (« fente transversale »), sur la
+  // fiche même qui sert à séparer les deux espèces. DORIS/FFESSM tranche :
+  // toxostome « la bouche infère est en fente arquée », hotu bouche transversale
+  // à lèvre inférieure épaisse et cornée. Voir la garde de fiches.test.ts.
   toxostome: {
-    ficheSrc: SRC,
+    ficheSrc: SRC_DORIS,
     ident: {
       summary:
-        "Cyprinidé svelte à bouche infère cartilagineuse, en fente transversale, adaptée au broutage des algues sur les pierres — comme le hotu, mais en plus petit et plus fin. Flancs argentés, tache sombre discrète à la base de la caudale.",
+        "Cyprinidé svelte (20–30 cm) évoquant un petit hotu : bouche infère en fente arquée, en fer à cheval, à lèvres dures et tranchantes, adaptée au broutage des algues sur les pierres. Museau court, flancs argentés, tache sombre discrète à la base de la caudale.",
       traits: [
-        "Bouche infère, cartilagineuse, en fente transversale",
-        "Corps svelte, museau plus effilé que celui du hotu",
+        "Bouche infère en fente arquée (en fer à cheval), lèvres dures et tranchantes",
+        "Museau court, moins proéminent que celui du hotu",
+        "Nageoires claires à jaunâtres, jamais rouge-orangé",
         "Tache sombre discrète à la base de la nageoire caudale",
         "Jusqu'à 30 cm, bien moins massif que le hotu adulte",
       ],
       conf: [
         {
           n: "Hotu",
-          how: "Le hotu est nettement plus massif et trapu à taille égale, avec une lèvre inférieure cartilagineuse plus large et rectiligne ; le toxostome garde un corps svelte et un museau plus pointu.",
+          how: "Le hotu porte une bouche infère en fente droite et transversale, à lèvre inférieure épaisse et cornée, un museau nettement proéminent et des nageoires rouge-orangé ; le toxostome garde une bouche arquée en fer à cheval, un museau court et des nageoires claires. Séparation difficile sur les juvéniles et là où les deux s'hybrident.",
         },
       ],
     },

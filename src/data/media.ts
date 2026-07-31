@@ -551,14 +551,6 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hucho_hucho.jpg"
     }
   ],
-  "truite-de-mer": [
-    {
-      "file": "assets/species/truite-de-mer.webp",
-      "author": "Anne Blindheim / Lars Olaf Simonsen",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Salmo_trutta_trutta_retouched.jpg"
-    }
-  ],
   "brochet-aquitain": [
     {
       "file": "assets/species/brochet-aquitain.webp",

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { FICHES, withFiche } from "./fiches";
 import { BASE_SPECIES } from "./species-base";
 import { SPECIES } from "./species";
+import { IDENT } from "./identification";
 import type { Species } from "../types";
 
 /**
@@ -112,6 +113,78 @@ describe("fiches — overlay descriptif", () => {
       }
     }
     expect(inconnues).toEqual([]);
+  });
+});
+
+/**
+ * `Fiche.tsx` lit `sp.ident || IDENT[sp.id]` : IDENT est une réserve, destinée
+ * aux espèces « base » qui n'auraient pas d'identification propre. Depuis que
+ * les 104 fiches base couvrent tout le catalogue, cette réserve n'est plus une
+ * réserve — c'est un SECOND corpus d'identification pour des espèces qui en ont
+ * déjà un, invisible et jamais confronté au premier. C'est là que s'était logée
+ * l'inversion toxostome/hotu : les deux corpus se contredisaient et rien ne le
+ * signalait.
+ *
+ * Deux gardes, dans cet ordre :
+ *  1. aucune espèce ne dépend de la réserve (c'est elle qui autorise à la vider,
+ *     et qui échouera si une régénération de species-base.ts réintroduit une
+ *     espèce sans fiche) ;
+ *  2. aucune espèce n'a deux corpus concurrents.
+ */
+describe("un seul corpus d'identification par espèce", () => {
+  it("aucune espèce ne dépend de la réserve d'identification", () => {
+    expect(SPECIES.filter((s) => !s.ident).map((s) => s.id)).toEqual([]);
+  });
+
+  it("aucune espèce n'a deux corpus d'identification concurrents", () => {
+    const doubles = Object.keys(IDENT).filter(
+      (id) => SPECIES.find((s) => s.id === id)?.ident,
+    );
+    expect(doubles).toEqual([]);
+  });
+});
+
+/**
+ * Toxostome (Parachondrostoma toxostoma) et hotu (Chondrostoma nasus) se
+ * ressemblent, s'hybrident, et l'app les met explicitement face à face. Le seul
+ * critère qui les sépare en main est la FORME de la bouche infère :
+ *
+ *  - hotu     : fente TRANSVERSALE (droite), lèvre inférieure épaisse et cornée,
+ *               museau proéminent, nageoires rouge-orangé
+ *               → DORIS/FFESSM, fiche Chondrostoma nasus
+ *  - toxostome: fente ARQUÉE (en fer à cheval), lèvres dures et tranchantes mais
+ *               non épaissies, museau court, nageoires claires
+ *               → DORIS/FFESSM, fiche Chondrostoma toxostoma : « La bouche
+ *                 infère (= en position inférieure) est en fente arquée »
+ *
+ * La fiche du toxostome portait « en fente transversale », c'est-à-dire le
+ * caractère du hotu, sur l'écran même censé séparer les deux. Ce test fige les
+ * deux moitiés du critère et, surtout, interdit à chacune des deux fiches de
+ * porter le caractère de l'autre — c'est l'erreur réellement commise.
+ */
+describe("toxostome ≠ hotu — le critère de bouche n'est pas inversé", () => {
+  const texte = (id: string) => {
+    const sp = SPECIES.find((s) => s.id === id)!;
+    expect(sp, `${id} doit exister`).toBeDefined();
+    return [sp.ident?.summary ?? "", ...(sp.ident?.traits ?? [])].join(" ");
+  };
+
+  it("le toxostome a une bouche arquée, et ne porte pas « transversale »", () => {
+    const t = texte("toxostome");
+    expect(t).toMatch(/arquée|fer à cheval/i);
+    expect(t).not.toMatch(/transversale/i);
+  });
+
+  it("le hotu garde sa lèvre cornée", () => {
+    expect(texte("hotu")).toMatch(/cornée/i);
+  });
+
+  it("la confusion citée par le toxostome décrit bien la bouche du hotu", () => {
+    const sp = SPECIES.find((s) => s.id === "toxostome")!;
+    const versHotu = (sp.ident?.conf ?? []).find((c) => /hotu/i.test(c.n));
+    expect(versHotu, "le toxostome doit citer le hotu en confusion").toBeDefined();
+    expect(versHotu!.how).toMatch(/transversale|droite/i);
+    expect(versHotu!.how).toMatch(/cornée/i);
   });
 });
 
