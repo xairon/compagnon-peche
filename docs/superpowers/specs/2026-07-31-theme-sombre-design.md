@@ -69,9 +69,15 @@ des voiles blancs en sombre, ce qu'aucun remplacement de valeur ne devine.
 ### Les inline styles TSX suivent le même traitement
 
 154 sites, 44 valeurs distinctes, répartis dans une vingtaine de composants et d'écrans :
-`style={{ color: "#6b675c" }}` devient `style={{ color: "var(--muted)" }}`. Le garde-fou
-`src/lib/contraste-inline.test.ts` couvre déjà ces sites et continue de les voir, puisqu'il
-résout les `var()`.
+`style={{ color: "#6b675c" }}` devient `style={{ color: "var(--muted)" }}`.
+
+Attention à ce que devient le garde-fou : `src/lib/contraste-inline.test.ts` ne résout **pas**
+les `var()`. C'est une **liste noire** de trois valeurs hexadécimales mesurées trop faibles, qui
+interdit leur réapparition. Une fois un site tokenisé, ce test ne le voit donc plus du tout —
+la couverture se déplace vers la table de paires, qui mesure les jetons. C'est un gain net
+(un jeton est mesuré partout où il sert, une liste noire ne voit que ce qu'on y a écrit), mais
+il faut que le déplacement soit délibéré : le test mute d'une liste noire de trois valeurs vers
+l'interdiction de **tout** littéral de couleur en style inline. Plus strict, et plus simple.
 
 ### Le thème se choisit : système par défaut, bascule manuelle possible
 
@@ -80,8 +86,14 @@ Trois états — **Auto**, **Clair**, **Sombre** — dans un contrôle segmenté
 destinations, or un thème est un réglage, pas une destination. Le contrôle vit donc en tête
 d'écran, au-dessus des tuiles.
 
-La préférence est persistée en `localStorage` sous la clé `theme` (`"auto" | "light" | "dark"`).
-Elle n'est pas lue par la feuille de style : **`prefers-color-scheme` n'apparaît nulle part dans
+La préférence rejoint `src/lib/prefs.ts`, qui existe précisément pour « les préférences qui
+doivent être connues **avant le premier paint** » (c'est écrit en tête du fichier) et qui porte
+déjà `dept` et `bigUI` sous la clé `carnet:prefs`. Le thème y ajoute un champ
+`theme: "auto" | "light" | "dark"`. Pas de clé `localStorage` séparée : une seconde clé
+obligerait le script anti-flash à connaître deux emplacements, et ferait diverger deux
+mécanismes de persistance pour la même catégorie de réglage.
+
+Cette préférence n'est pas lue par la feuille de style : **`prefers-color-scheme` n'apparaît nulle part dans
 le CSS**. Une seule chose pilote l'apparence, l'attribut `data-theme` sur `<html>`, qui vaut
 toujours `"light"` ou `"dark"` — jamais `"auto"`. La feuille n'a donc qu'un bloc sombre :
 
