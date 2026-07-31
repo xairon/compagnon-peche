@@ -19,6 +19,7 @@ import { Noeuds, KnotDetail } from "./screens/Noeuds";
 import { Recette } from "./screens/Recette";
 import { Reglement } from "./screens/Reglement";
 import { Sources } from "./screens/Sources";
+import { Mentions } from "./screens/Mentions";
 import { Credits } from "./screens/Credits";
 import { Cuisine } from "./screens/Cuisine";
 import { Stockage } from "./screens/Stockage";
@@ -146,6 +147,7 @@ export function App() {
         {s === "recette" && <Recette />}
         {s === "reglement" && <Reglement />}
         {s === "sources" && <Sources />}
+        {s === "mentions-legales" && <Mentions />}
         {s === "credits" && <Credits />}
         {s === "guides" && <Guides />}
         {s === "cuisine" && <Cuisine />}

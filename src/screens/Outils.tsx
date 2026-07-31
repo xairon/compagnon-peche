@@ -22,6 +22,7 @@ export function Outils() {
     { title: "Guides", sub: "Coin de Pêche — techniques, espèces, départements (en ligne)", icon: ICONS.book, to: "guides" },
     { title: "Sources & mentions", sub: "Legifrance, ANSES, fédérations…", icon: ICONS.book, to: "sources" },
     { title: "Crédits photos", sub: "Auteurs & licences des images", icon: ICONS.book, to: "credits" },
+    { title: "Mentions légales", sub: "Éditeur, hébergeur, vos données, portée des conseils", icon: ICONS.book, to: "mentions-legales" },
     { title: "Stockage & données", sub: "Espace, sauvegarde, tout effacer", icon: ICONS.pin, to: "stockage" },
   ];
 
