@@ -43,6 +43,16 @@ export function reportReadError(): void {
   persistListeners.forEach((l) => l(msg));
 }
 
+/** Something threw outside any try/catch or ErrorBoundary. Shares the banner
+ *  because the user's question is the same either way — "did that work?" — but
+ *  keeps its own wording: this is not a storage problem. */
+export function reportRuntimeError(detail: string): void {
+  const msg = `Un problème est survenu dans l'application : ${detail}. Si l'écran ne répond plus, rechargez — vos données restent sur l'appareil.`;
+  if (msg === persistError) return;
+  persistError = msg;
+  persistListeners.forEach((l) => l(msg));
+}
+
 /** A save succeeded — clear any standing error (the problem may be transient). */
 export function clearPersistError(): void {
   if (persistError === null) return;

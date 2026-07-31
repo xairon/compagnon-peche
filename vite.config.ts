@@ -1,4 +1,8 @@
+import { execFileSync } from "node:child_process";
+import { createRequire } from "node:module";
 import { defineConfig, type Plugin } from "vite";
+
+const pkg = createRequire(import.meta.url)("./package.json") as { version: string };
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -25,8 +29,29 @@ const cspPlugin: Plugin = {
 
 // Offline-first PWA. Everything the app needs is precached so it runs with
 // zero network once installed — the core requirement for use at the water's edge.
+// Build identity, substituted into src/lib/build.ts. The commit is read from
+// git rather than stored, so it cannot drift; a missing git (tarball build)
+// degrades to "inconnu" instead of failing the build.
+function commitCourt(): string {
+  try {
+    // execFileSync, not execSync: no shell, nothing to interpolate into.
+    return execFileSync("git", ["rev-parse", "--short", "HEAD"], {
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "inconnu";
+  }
+}
+
 export default defineConfig({
   base: "./",
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+    __COMMIT__: JSON.stringify(commitCourt()),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   build: {
     // Isolate MapLibre in its own chunk so it loads only with the Carte screen.
     rollupOptions: { output: { manualChunks: { maplibre: ["maplibre-gl"] } } },

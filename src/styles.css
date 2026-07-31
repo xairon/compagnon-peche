@@ -2993,6 +2993,16 @@ a:hover {
   font-size: 15px;
   font-weight: 600;
 }
+/* The way out of a crash: somewhere to send it. Sits above the technical
+   details, which most people will never open. */
+.eb-report {
+  margin: 14px 0 0;
+  font-size: 14px;
+}
+.eb-report a {
+  color: var(--green-dark);
+  font-weight: 600;
+}
 .eb-details {
   margin-top: 16px;
   text-align: left;
