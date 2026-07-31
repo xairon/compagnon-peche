@@ -201,7 +201,6 @@ export function Materiel() {
               className="add-row"
               onClick={() => setBForm({ name: "", target: "", itemIds: [] })}
               disabled={gear.length === 0}
-              style={{ opacity: gear.length === 0 ? 0.5 : 1 }}
             >
               + Créer un ensemble
             </button>
