@@ -12,6 +12,7 @@ import {
   type Trend,
 } from "../lib/hubeau";
 import { assessCrue, crueLabel } from "../lib/crue";
+import { ondeEtat } from "../lib/onde";
 import { useNow } from "../lib/now";
 import {
   classeO2,
@@ -277,20 +278,28 @@ export function Briefing({
             ))}
         </Section>
 
-        {/* FLOW (ONDE) */}
-        <Section title="🌊 Écoulement" state={onde}>
+        {/* FLOW (ONDE) — titled by what the network actually observes. ONDE
+            watches small watercourses prone to drying; large rivers have no
+            station, so this never describes the water the angler is standing
+            in. Saying "Écoulement" made an assec on a brook 13 km away read as
+            a verdict on the Loire. */}
+        <Section title="🌊 Petits cours d'eau du secteur" state={onde}>
           {onde.data &&
             (() => {
-              const info = ondeInfo(onde.data.code);
-              // Prefer the authoritative label returned by Hub'Eau (libelle_ecoulement);
-              // fall back to our code map only if the API didn't provide one.
+              const etat = ondeEtat(onde.data.code, onde.data.label);
               return (
                 <>
-                  <div className={"onde-state " + info.tone}>{onde.data.label || info.word}</div>
+                  <div className={"onde-state " + (etat.tone === "inconnu" ? "" : etat.tone)}>
+                    {etat.mot}
+                  </div>
                   <div className="brief-note">
                     {onde.data.station}
                     {onde.data.dist != null && ` · ${km(onde.data.dist)}`} · relevé ONDE du{" "}
                     {frShort(onde.data.date)} (suivi par campagnes, pas temps réel)
+                  </div>
+                  <div className="brief-note">
+                    Le réseau ONDE suit les ruisseaux et têtes de bassin sujets à l'assèchement — pas
+                    les grandes rivières. Un assec ici ne dit rien du cours d'eau où vous pêchez.
                   </div>
                 </>
               );
@@ -484,11 +493,3 @@ function frShort(ymd: string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 }
 
-// ONDE code → human state + tone. Only 1/1a/2/3/4 exist in the data.
-function ondeInfo(code: string): { word: string; tone: string } {
-  if (code === "3") return { word: "À SEC (assec)", tone: "bad" };
-  if (code === "1" || code === "1a") return { word: "En eau — écoulement visible", tone: "good" };
-  if (code === "1b") return { word: "En eau — écoulement faible", tone: "warn" };
-  if (code === "2") return { word: "Écoulement non visible", tone: "warn" };
-  return { word: "Observation impossible", tone: "" };
-}

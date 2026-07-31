@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES, CURATED_IDS } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
+import { ondeEtat, ondeTropLoin } from "../lib/onde";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
@@ -365,16 +366,22 @@ export function Accueil() {
                 />
               );
             })()}
-            <WaterTile
-              k="Écoulement"
-              val={onde ? ondeShort(onde.code) : "—"}
-              unit=""
-              tip="État d'écoulement du cours d'eau : en eau, écoulement faible, ou à sec (assec). Observations ONDE de l'OFB, relevées par campagnes (≈ mensuelles l'été, dormantes l'hiver) — ce n'est pas du temps réel. Source : Hub'Eau / ONDE."
-              // ONDE is campaign-based (roughly monthly in summer, dormant in
-              // winter): surface the reading's age so a months-old state isn't
-              // read as current. Age first so it's never ellipsed away.
-              sub={onde ? `${ago(onde.date)} · ${onde.cours || onde.station}` : "ONDE"}
-            />
+            {/* NOT "Écoulement" — that read as the state of the water in front
+                of the angler, and ONDE never says that. The network watches
+                small watercourses prone to drying (the Loire has no station at
+                all), so the tile names its subject. Sub carries the stream, the
+                distance and the age: without the distance, a brook 13 km away
+                reads as the river underfoot. Beyond ONDE_MAX_DIST_KM the app
+                abstains, same rule as the physico-chemical stations. */}
+            {onde && !ondeTropLoin(onde.dist) && (
+              <WaterTile
+                k="Petits cours d'eau"
+                val={ondeEtat(onde.code, onde.label).court}
+                unit=""
+                tip="État d'écoulement des PETITS cours d'eau du secteur — pas celui de la rivière où vous pêchez. Le réseau ONDE (OFB) suit volontairement les ruisseaux et têtes de bassin sujets à l'assèchement ; les grands cours d'eau n'y figurent pas. Relevés par campagnes (≈ mensuelles l'été, dormantes l'hiver) : ce n'est pas du temps réel. Source : Hub'Eau / ONDE."
+                sub={`${onde.cours || onde.station} · ${onde.dist.toFixed(0)} km · ${ago(onde.date)}`}
+              />
+            )}
           </div>
           {!water && !onde && (
             <div className="dash-water-empty">Recherche des stations Hub'Eau proches…</div>
@@ -636,9 +643,3 @@ function SunArc({ sun }: { sun: SunTimes }) {
   );
 }
 
-function ondeShort(code: string): string {
-  if (code === "3") return "Assec";
-  if (code === "1" || code === "1a" || code === "1b") return "Visible";
-  if (code === "2") return "Non visible";
-  return "—";
-}
