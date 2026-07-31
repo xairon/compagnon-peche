@@ -1,0 +1,23 @@
+{
+ "count": 122774,
+ "data": [
+  {
+   "geometry": null,
+   "date_mesure_temp": "2024-08-17",
+   "heure_mesure_temp": "09:00:00",
+   "resultat": 22.6089992523193
+  },
+  {
+   "geometry": null,
+   "date_mesure_temp": "2024-08-17",
+   "heure_mesure_temp": "08:00:00",
+   "resultat": 22.632999420166
+  },
+  {
+   "geometry": null,
+   "date_mesure_temp": "2024-08-17",
+   "heure_mesure_temp": "07:00:00",
+   "resultat": 22.6809997558594
+  }
+ ]
+}

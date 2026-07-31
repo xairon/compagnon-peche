@@ -1,0 +1,25 @@
+{
+ "count": 1011,
+ "data": [
+  {
+   "date_obs": "2026-07-23T10:00:00Z",
+   "resultat_obs": -1232
+  },
+  {
+   "date_obs": "2026-07-23T09:55:00Z",
+   "resultat_obs": -1232
+  },
+  {
+   "date_obs": "2026-07-23T09:50:00Z",
+   "resultat_obs": -1231
+  },
+  {
+   "date_obs": "2026-07-23T09:45:00Z",
+   "resultat_obs": -1232
+  },
+  {
+   "date_obs": "2026-07-23T09:40:00Z",
+   "resultat_obs": -1232
+  }
+ ]
+}

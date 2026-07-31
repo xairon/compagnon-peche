@@ -1,0 +1,30 @@
+{
+ "count": 3718,
+ "data": [
+  {
+   "effectif_lot": 1,
+   "nom_commun_taxon": "Goujon indéterminé (Gobio)",
+   "nom_latin_taxon": "Gobio sp."
+  },
+  {
+   "effectif_lot": 1,
+   "nom_commun_taxon": "Chevaine",
+   "nom_latin_taxon": "Leuciscus cephalus"
+  },
+  {
+   "effectif_lot": 1,
+   "nom_commun_taxon": "Chevaine",
+   "nom_latin_taxon": "Leuciscus cephalus"
+  },
+  {
+   "effectif_lot": 1,
+   "nom_commun_taxon": "Chevaine",
+   "nom_latin_taxon": "Leuciscus cephalus"
+  },
+  {
+   "effectif_lot": 1,
+   "nom_commun_taxon": "Chevaine",
+   "nom_latin_taxon": "Leuciscus cephalus"
+  }
+ ]
+}

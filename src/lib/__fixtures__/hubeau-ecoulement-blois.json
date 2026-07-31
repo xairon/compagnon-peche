@@ -1,0 +1,173 @@
+{
+ "count": 190,
+ "data": [
+  {
+   "code_station": "K4830001",
+   "libelle_station": "LA CISSE A AVERDON",
+   "uri_station": "http://id.eaufrance.fr/SiteHydro/K4830001",
+   "code_departement": "41",
+   "libelle_departement": "Loir-et-Cher",
+   "code_commune": "41035",
+   "libelle_commune": "CHAMPIGNY-EN-BEAUCE",
+   "code_region": "24",
+   "libelle_region": "Centre-Val de Loire",
+   "code_bassin": "04",
+   "libelle_bassin": "Loire-Bretagne",
+   "coordonnee_x_station": 571612.4672094202,
+   "coordonnee_y_station": 6734695.673755708,
+   "code_projection_station": "26",
+   "libelle_projection_station": "RGF93 / Lambert 93",
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150",
+   "code_campagne": "108768",
+   "code_reseau": "0000000134",
+   "libelle_reseau": "Onde OFB",
+   "uri_reseau": "http://id.eaufrance.fr/dc/0000000134",
+   "date_observation": "2026-07-24",
+   "code_ecoulement": "3",
+   "libelle_ecoulement": "Assec",
+   "latitude": 47.700124463,
+   "longitude": 1.288067707,
+   "geometry": {
+    "type": "Point",
+    "crs": {
+     "type": "name",
+     "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+     }
+    },
+    "coordinates": [
+     1.288067707144342,
+     47.700124462664775
+    ]
+   }
+  },
+  {
+   "code_station": "K4680001",
+   "libelle_station": "LE CONON A CHEVERNY",
+   "uri_station": "http://id.eaufrance.fr/SiteHydro/K4680001",
+   "code_departement": "41",
+   "libelle_departement": "Loir-et-Cher",
+   "code_commune": "41067",
+   "libelle_commune": "COUR-CHEVERNY",
+   "code_region": "24",
+   "libelle_region": "Centre-Val de Loire",
+   "code_bassin": "04",
+   "libelle_bassin": "Loire-Bretagne",
+   "coordonnee_x_station": 588499.9451412648,
+   "coordonnee_y_station": 6711228.311627533,
+   "code_projection_station": "26",
+   "libelle_projection_station": "RGF93 / Lambert 93",
+   "code_cours_eau": "K4684000",
+   "libelle_cours_eau": "le Conon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CoursEau_Carthage2017/K4684000",
+   "code_campagne": "107808",
+   "code_reseau": "0000000134",
+   "libelle_reseau": "Onde OFB",
+   "uri_reseau": "http://id.eaufrance.fr/dc/0000000134",
+   "date_observation": "2026-06-26",
+   "code_ecoulement": "2",
+   "libelle_ecoulement": "Ecoulement non visible",
+   "latitude": 47.492006766,
+   "longitude": 1.519058071,
+   "geometry": {
+    "type": "Point",
+    "crs": {
+     "type": "name",
+     "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+     }
+    },
+    "coordinates": [
+     1.5190580713411077,
+     47.49200676618441
+    ]
+   }
+  },
+  {
+   "code_station": "K4830001",
+   "libelle_station": "LA CISSE A AVERDON",
+   "uri_station": "http://id.eaufrance.fr/SiteHydro/K4830001",
+   "code_departement": "41",
+   "libelle_departement": "Loir-et-Cher",
+   "code_commune": "41035",
+   "libelle_commune": "CHAMPIGNY-EN-BEAUCE",
+   "code_region": "24",
+   "libelle_region": "Centre-Val de Loire",
+   "code_bassin": "04",
+   "libelle_bassin": "Loire-Bretagne",
+   "coordonnee_x_station": 571612.4672094202,
+   "coordonnee_y_station": 6734695.673755708,
+   "code_projection_station": "26",
+   "libelle_projection_station": "RGF93 / Lambert 93",
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150",
+   "code_campagne": "107808",
+   "code_reseau": "0000000134",
+   "libelle_reseau": "Onde OFB",
+   "uri_reseau": "http://id.eaufrance.fr/dc/0000000134",
+   "date_observation": "2026-06-26",
+   "code_ecoulement": "1a",
+   "libelle_ecoulement": "Ecoulement visible acceptable",
+   "latitude": 47.700124463,
+   "longitude": 1.288067707,
+   "geometry": {
+    "type": "Point",
+    "crs": {
+     "type": "name",
+     "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+     }
+    },
+    "coordinates": [
+     1.288067707144342,
+     47.700124462664775
+    ]
+   }
+  },
+  {
+   "code_station": "K4680001",
+   "libelle_station": "LE CONON A CHEVERNY",
+   "uri_station": "http://id.eaufrance.fr/SiteHydro/K4680001",
+   "code_departement": "41",
+   "libelle_departement": "Loir-et-Cher",
+   "code_commune": "41067",
+   "libelle_commune": "COUR-CHEVERNY",
+   "code_region": "24",
+   "libelle_region": "Centre-Val de Loire",
+   "code_bassin": "04",
+   "libelle_bassin": "Loire-Bretagne",
+   "coordonnee_x_station": 588499.9451412648,
+   "coordonnee_y_station": 6711228.311627533,
+   "code_projection_station": "26",
+   "libelle_projection_station": "RGF93 / Lambert 93",
+   "code_cours_eau": "K4684000",
+   "libelle_cours_eau": "le Conon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CoursEau_Carthage2017/K4684000",
+   "code_campagne": "100813",
+   "code_reseau": "0000000134",
+   "libelle_reseau": "Onde OFB",
+   "uri_reseau": "http://id.eaufrance.fr/dc/0000000134",
+   "date_observation": "2025-06-26",
+   "code_ecoulement": "1f",
+   "libelle_ecoulement": "Ecoulement visible faible",
+   "latitude": 47.492006766,
+   "longitude": 1.519058071,
+   "geometry": {
+    "type": "Point",
+    "crs": {
+     "type": "name",
+     "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+     }
+    },
+    "coordinates": [
+     1.5190580713411077,
+     47.49200676618441
+    ]
+   }
+  }
+ ]
+}

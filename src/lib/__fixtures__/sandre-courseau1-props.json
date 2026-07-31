@@ -1,0 +1,33 @@
+{
+ "type": "FeatureCollection",
+ "numberMatched": 10,
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "CdEntiteHydrographique": "----0001",
+    "NomEntiteHydrographique": "fleuve la loire",
+    "Candidat": "",
+    "Classe": "1"
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "CdEntiteHydrographique": "----0000",
+    "NomEntiteHydrographique": "la Loire",
+    "Candidat": "",
+    "Classe": "1"
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "CdEntiteHydrographique": "M1--0160",
+    "NomEntiteHydrographique": "le Loir",
+    "Candidat": "",
+    "Classe": "1"
+   }
+  }
+ ]
+}
