@@ -3201,6 +3201,56 @@ a:hover {
   text-align: center;
   margin: 0 0 18px;
 }
+
+/* Department picker on the frontispiece. Every verdict the app gives quotes one
+   département's arrêté, so this is a real control, not decoration — hence full
+   44px targets (WCAG 2.5.5) on the first screen a wet-handed user ever taps. */
+.onb2-dept {
+  margin: 0 0 18px;
+}
+.onb2-dept-h {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: center;
+  margin: 0 0 10px;
+}
+.onb2-dept-row {
+  display: flex;
+  gap: 8px;
+}
+.onb2-dept-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 6px 4px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.15;
+  cursor: pointer;
+}
+.onb2-dept-btn[aria-pressed="true"] {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: var(--paper);
+}
+.onb2-dept-btn:active {
+  transform: scale(0.985);
+  filter: brightness(0.96);
+}
+.onb2-dept-hint {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+  margin: 9px 0 0;
+}
 .onb2-hint {
   font-size: 13px;
   line-height: 1.5;

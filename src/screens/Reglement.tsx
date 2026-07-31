@@ -2,6 +2,7 @@ import { useStore } from "../store-hooks";
 import { NATIONAL_SIZES, DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { MAILLE_NOTE } from "../data/ecrevisses";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
+import { DeptDefautWarning } from "../components/DeptDefautWarning";
 
 export function Reglement() {
   const { state, set, back } = useStore();
@@ -16,9 +17,15 @@ export function Reglement() {
         <div className="topbar-title">Réglementation</div>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
-        {state.outOfZoneDept && (
+        {state.outOfZoneDept ? (
           <OutOfZoneWarning
             outOfZoneDept={state.outOfZoneDept}
+            activeDept={state.dept}
+            style={{ marginTop: 0, marginBottom: 12 }}
+          />
+        ) : (
+          <DeptDefautWarning
+            deptChosen={state.deptChosen}
             activeDept={state.dept}
             style={{ marginTop: 0, marginBottom: 12 }}
           />
@@ -66,28 +73,20 @@ export function Reglement() {
           </div>
         </div>
 
+        {/* The picker sits BEFORE the block it governs: it used to be an
+            unlabelled row of buttons below everything, which read as decoration
+            rather than as the control deciding which arrêté is quoted. */}
         <div className="label" style={{ margin: "18px 0 8px" }}>
-          Mon département — {dept.name}
+          Mon département {state.deptChosen ? `— ${dept.name}` : "— non confirmé"}
         </div>
-        <div className="reg-block">
-          {dept.regText}
-          <div className="note" style={{ marginTop: 10 }}>
-            Arrêté préfectoral annuel — valable pour 2026. À revérifier chaque début d'année.
-          </div>
-          <div style={{ marginTop: 10, fontSize: 13.5 }}>
-            <a href={dept.url} target="_blank" rel="noreferrer">
-              Réglementation complète — {dept.fede} ↗
-            </a>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
           {(Object.keys(DEPARTEMENTS) as DeptId[]).map((id) => {
-            const active = state.dept === id;
+            const active = state.deptChosen && state.dept === id;
             return (
               <button
                 key={id}
-                onClick={() => set({ dept: id })}
+                aria-pressed={active}
+                onClick={() => set({ dept: id, deptChosen: true })}
                 style={{
                   flex: 1,
                   minHeight: 44,
@@ -106,6 +105,18 @@ export function Reglement() {
             );
           })}
         </div>
+        <div className="reg-block">
+          {dept.regText}
+          <div className="note" style={{ marginTop: 10 }}>
+            Arrêté préfectoral annuel — valable pour 2026. À revérifier chaque début d'année.
+          </div>
+          <div style={{ marginTop: 10, fontSize: 13.5 }}>
+            <a href={dept.url} target="_blank" rel="noreferrer">
+              Réglementation complète — {dept.fede} ↗
+            </a>
+          </div>
+        </div>
+
 
         <div className="disclaimer">
           Cette app est un outil d'aide. La réglementation applicable est celle de l'arrêté

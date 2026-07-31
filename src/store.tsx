@@ -19,6 +19,7 @@ import {
 } from "./lib/db";
 import { deletePhoto } from "./lib/photos";
 import { reportReadError } from "./lib/storage";
+import { readPrefs, writePrefs } from "./lib/prefs";
 import { frDate, isoDay, uid } from "./lib/helpers";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
 
@@ -101,6 +102,10 @@ export interface AppState {
   formOpen: boolean;
   f: CatchForm;
   dept: DeptId;
+  // Whether `dept` is the user's own answer or just the default. The app quotes
+  // one département's arrêté on every verdict, so "we never asked" and "they
+  // told us 41" must not look the same — the former warrants a warning.
+  deptChosen: boolean;
   recipeId: string | null;
   knotId: string | null;
   techId: string | null;
@@ -119,41 +124,50 @@ export interface AppState {
 
 const TABS: Tab[] = ["accueil", "especes", "carte", "carnet"];
 
-const initialState: AppState = {
-  screen: "accueil",
-  tab: "accueil",
-  carnetSeg: "prises",
-  stack: [],
-  q: "",
-  filter: "tous",
-  spId: null,
-  open: { regle: true },
-  recent: [],
-  bigUI: typeof localStorage !== "undefined" && localStorage.getItem("bigUI") === "1",
-  cookStep: 0,
-  listening: false,
-  ans: {},
-  prise: { sp: null, step: null },
-  catches: [],
-  spots: [],
-  gear: [],
-  profile: { name: "", bio: "", region: "" },
-  recipes: [],
-  crayfish: [],
-  formOpen: false,
-  f: { sp: "sandre", taille: "", lieu: "", garde: false },
-  dept: "41",
-  recipeId: null,
-  knotId: null,
-  techId: null,
-  justAdded: null,
-  focusSpot: null,
-  gearFocusId: null,
-  catchSlot: null,
-  bilanSession: null,
-  outOfZoneDept: null,
-  hydrated: false,
-  loadOk: true,
+// Built at provider mount, not at module load: preferences are read
+// synchronously (see lib/prefs.ts) so the very first paint already quotes the
+// right arrêté and draws controls at the right size. Doing it at module scope
+// would freeze the values for the lifetime of the module — surviving a page
+// load, but not a provider remount, and untestable.
+const makeInitialState = (): AppState => {
+  const prefs = readPrefs();
+  return {
+    screen: "accueil",
+    tab: "accueil",
+    carnetSeg: "prises",
+    stack: [],
+    q: "",
+    filter: "tous",
+    spId: null,
+    open: { regle: true },
+    recent: [],
+    bigUI: prefs.bigUI,
+    cookStep: 0,
+    listening: false,
+    ans: {},
+    prise: { sp: null, step: null },
+    catches: [],
+    spots: [],
+    gear: [],
+    profile: { name: "", bio: "", region: "" },
+    recipes: [],
+    crayfish: [],
+    formOpen: false,
+    f: { sp: "sandre", taille: "", lieu: "", garde: false },
+    dept: prefs.dept,
+    deptChosen: prefs.deptChosen,
+    recipeId: null,
+    knotId: null,
+    techId: null,
+    justAdded: null,
+    focusSpot: null,
+    gearFocusId: null,
+    catchSlot: null,
+    bilanSession: null,
+    outOfZoneDept: null,
+    hydrated: false,
+    loadOk: true,
+  };
 };
 
 type Patch = Partial<AppState> | ((s: AppState) => Partial<AppState>);
@@ -193,7 +207,7 @@ export interface Store {
 export type Actions = Omit<Store, "state">;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, undefined, makeInitialState);
   // Latest state for actions that need to read it (removeCatch/removeRecipe),
   // without making the action object depend on state (keeps it stable).
   const stateRef = useRef(state);
@@ -285,6 +299,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!state.hydrated || !state.loadOk) return;
     saveCrayfish(state.crayfish);
   }, [state.crayfish, state.hydrated, state.loadOk]);
+
+  // Preferences do NOT wait on hydration. The six effects above guard on
+  // `loadOk` because they could otherwise overwrite a still-present notebook
+  // with an empty array; prefs come from localStorage, which is read
+  // synchronously before the first render, so there is nothing to clobber.
+  useEffect(() => {
+    writePrefs({ dept: state.dept, deptChosen: state.deptChosen, bigUI: state.bigUI });
+  }, [state.dept, state.deptChosen, state.bigUI]);
 
   const actions = useMemo<Actions>(() => {
     const set = (patch: Patch) => dispatch(patch);

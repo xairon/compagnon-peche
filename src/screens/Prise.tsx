@@ -10,6 +10,7 @@ import { season } from "../lib/season";
 import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
+import { DeptDefautWarning } from "../components/DeptDefautWarning";
 
 function actStyle(kind: ActKind) {
   if (kind === "primary") return { bd: "#16281E", bg: "#16281E", fg: "#FBFAF7" };
@@ -74,9 +75,13 @@ export function Prise() {
         <div className="h-sub">Garder ou relâcher — le bon geste, tout de suite</div>
       </div>
 
-      {state.outOfZoneDept && (
+      {(state.outOfZoneDept || !state.deptChosen) && (
         <div style={{ margin: "0 18px 10px" }}>
-          <OutOfZoneWarning outOfZoneDept={state.outOfZoneDept} activeDept={state.dept} />
+          {state.outOfZoneDept ? (
+            <OutOfZoneWarning outOfZoneDept={state.outOfZoneDept} activeDept={state.dept} />
+          ) : (
+            <DeptDefautWarning deptChosen={state.deptChosen} activeDept={state.dept} />
+          )}
         </div>
       )}
 
