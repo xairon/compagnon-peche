@@ -37,6 +37,7 @@ export type Screen =
   | "reglement"
   | "sources"
   | "credits"
+  | "guides"
   | "regle"
   | "cuisine"
   | "carte"

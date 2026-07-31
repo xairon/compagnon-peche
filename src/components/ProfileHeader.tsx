@@ -2,9 +2,33 @@ import { useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
 import { isQuotaError } from "../lib/storage";
-import { fishingCardStatus, daysUntilCardExpiry } from "../lib/carte-peche";
+import {
+  TYPES_ANNUELS,
+  RECIPROCITES,
+  type CarteDePeche,
+  type TypeCarte,
+  type Reciprocite,
+} from "../lib/carte-peche";
+import { carteDuProfil } from "../lib/carte-profil";
+import { CartePeche } from "./CartePeche";
 
-const CARTE_PECHE_URL = "https://www.cartedepeche.fr/";
+const TYPES: { v: TypeCarte; l: string }[] = [
+  { v: "annuelle", l: "Annuelle (personne majeure)" },
+  { v: "interfederale", l: "Interfédérale (EHGO + CHI + URNE)" },
+  { v: "mineure", l: "Mineure (12-18 ans)" },
+  { v: "decouverte", l: "Découverte" },
+  { v: "hebdomadaire", l: "Hebdomadaire (7 jours)" },
+  { v: "journaliere", l: "Journalière (1 jour)" },
+];
+
+const RECIP_LABEL: Record<Reciprocite, string> = {
+  EHGO: "EHGO",
+  CHI: "CHI",
+  URNE: "URNE",
+  interfederale: "Les trois (interfédérale)",
+  aucune: "Aucune",
+  inconnue: "Je ne sais pas",
+};
 
 export function ProfileHeader() {
   const { state, setProfile } = useStore();
@@ -18,8 +42,18 @@ export function ProfileHeader() {
   const now = new Date();
   const currentYear = now.getFullYear();
   const cardYears = [currentYear - 1, currentYear, currentYear + 1];
-  const cardStatus = fishingCardStatus(p.carteAnnee, now);
-  const cardDaysLeft = p.carteAnnee ? daysUntilCardExpiry(p.carteAnnee, now) : null;
+  // Lit aussi les anciens profils, qui ne portent qu'une année nue.
+  const carte = carteDuProfil(p);
+  const carteDraft = carteDuProfil(draft);
+  const majCarte = (patch: Partial<CarteDePeche>) =>
+    setDraft({
+      ...draft,
+      carte: { type: "annuelle", ...carteDraft, ...patch },
+      // L'ancien champ cesse d'être la vérité dès qu'une carte détaillée
+      // existe ; le laisser derrière ferait diverger deux sources.
+      carteAnnee: undefined,
+    });
+  const typeDraft = carteDraft?.type ?? "annuelle";
 
   const openEdit = () => {
     setDraft(state.profile);
@@ -32,6 +66,7 @@ export function ProfileHeader() {
       region: draft.region.trim(),
       aappma: draft.aappma?.trim() || undefined,
       carteAnnee: draft.carteAnnee,
+      carte: draft.carte,
     });
     setEditing(false);
   };
@@ -82,22 +117,77 @@ export function ProfileHeader() {
             placeholder="AAPPMA de…"
           />
         </div>
+        {/* Le type décide de la durée réelle : une journalière ne vaut pas
+            jusqu'au 31 décembre. C'est la première question, pas la dernière. */}
         <div className="field">
-          <label>Carte de pêche — année de validité</label>
+          <label>Carte de pêche — type</label>
           <select
-            value={draft.carteAnnee ?? ""}
-            onChange={(e) =>
-              setDraft({ ...draft, carteAnnee: e.target.value ? Number(e.target.value) : undefined })
-            }
+            value={draft.carte || draft.carteAnnee ? typeDraft : ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (!v) {
+                setDraft({ ...draft, carte: undefined, carteAnnee: undefined });
+                return;
+              }
+              majCarte({ type: v as TypeCarte });
+            }}
           >
             <option value="">Non renseignée</option>
-            {cardYears.map((y) => (
-              <option key={y} value={y}>
-                {y}
+            {TYPES.map((t) => (
+              <option key={t.v} value={t.v}>
+                {t.l}
               </option>
             ))}
           </select>
         </div>
+
+        {(draft.carte || draft.carteAnnee) &&
+          (TYPES_ANNUELS.includes(typeDraft) ? (
+            <div className="field">
+              <label>Année de validité</label>
+              <select
+                value={carteDraft?.annee ?? ""}
+                onChange={(e) =>
+                  majCarte({ annee: e.target.value ? Number(e.target.value) : undefined })
+                }
+              >
+                <option value="">Non renseignée</option>
+                {cardYears.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className="field">
+              <label>Premier jour de validité</label>
+              <input
+                type="date"
+                value={carteDraft?.debut ?? ""}
+                onChange={(e) => majCarte({ debut: e.target.value || undefined })}
+              />
+            </div>
+          ))}
+
+        {(draft.carte || draft.carteAnnee) && (
+          <div className="field">
+            <label>Réciprocité (sur votre carte)</label>
+            <select
+              value={carteDraft?.reciprocite ?? ""}
+              onChange={(e) =>
+                majCarte({ reciprocite: (e.target.value || undefined) as Reciprocite | undefined })
+              }
+            >
+              <option value="">Non renseignée</option>
+              {RECIPROCITES.map((r) => (
+                <option key={r} value={r}>
+                  {RECIP_LABEL[r]}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className="ce-actions">
           <button className="btn-light" onClick={() => setEditing(false)}>
             Annuler
@@ -138,34 +228,10 @@ export function ProfileHeader() {
         </button>
       </div>
 
-      {/* Carte de pêche : discret quand tout va bien, net quand elle expire ou est périmée. */}
-      {cardStatus === "perimee" && (
-        <div className="ph-card-alert ph-card-danger" role="alert">
-          <b>Carte de pêche {p.carteAnnee} périmée</b> depuis le 1ᵉʳ janvier — pêcher sans carte valide
-          expose à une amende pouvant aller jusqu'à 450 € (contravention de 4ᵉ classe, art. L436-16 du code de
-          l'environnement).{" "}
-          <a href={CARTE_PECHE_URL} target="_blank" rel="noopener noreferrer">
-            Renouveler sur cartedepeche.fr ↗
-          </a>
-        </div>
-      )}
-      {cardStatus === "expire-bientot" && (
-        <div className="ph-card-alert ph-card-warn">
-          Carte de pêche {p.carteAnnee} : expire {cardDaysLeft === 0 ? "aujourd'hui" : `dans ${cardDaysLeft} j`}{" "}
-          (31 décembre) —{" "}
-          <a href={CARTE_PECHE_URL} target="_blank" rel="noopener noreferrer">
-            la renouveler sur cartedepeche.fr ↗
-          </a>
-        </div>
-      )}
-      {cardStatus === "absente" && (
-        <div className="ph-card-nudge">
-          Carte de pêche obligatoire dès 12 ans.{" "}
-          <a href={CARTE_PECHE_URL} target="_blank" rel="noopener noreferrer">
-            L'acheter ou la renouveler sur cartedepeche.fr ↗
-          </a>
-        </div>
-      )}
+      {/* Carte de pêche : discret quand tout va bien, net quand elle expire ou
+          est périmée. La durée dépend du type — c'est CartePeche qui la calcule,
+          et qui sait qu'une journalière ne court pas jusqu'au 31 décembre. */}
+      <CartePeche carte={carte} now={now} />
     </div>
   );
 }

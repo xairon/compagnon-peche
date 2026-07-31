@@ -104,7 +104,7 @@ export function onQuotaWarning(l: QuotaListener): () => void {
  *  piece of data. */
 export function isProfileEmpty(p: Partial<Profile> | undefined | null): boolean {
   if (!p) return true;
-  return !p.name && !p.bio && !p.region && !p.aappma && !p.carteAnnee;
+  return !p.name && !p.bio && !p.region && !p.aappma && !p.carteAnnee && !p.carte;
 }
 
 /** Ask the browser to make storage persistent (won't be auto-evicted under pressure). */

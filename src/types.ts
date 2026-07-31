@@ -2,6 +2,8 @@
 // Regulatory and health data is sourced (Legifrance, ANSES, R432-5), never invented;
 // any value not verified is left null or flagged so the UI says "à vérifier".
 
+import type { CarteDePeche } from "./lib/carte-peche";
+
 export type SpeciesGroup =
   | "carnassiers"
   | "cyprinides"
@@ -204,6 +206,12 @@ export interface Profile {
    *  sensitive identifier kept for no functional benefit. */
   aappma?: string;
   carteAnnee?: number;
+  /** Carte détaillée : type (annuelle, hebdo, journalière…), date de prise
+   *  d'effet pour les cartes courtes, réseau de réciprocité déclaré. Ajoutée
+   *  après `carteAnnee`, qui reste lu pour les profils existants — voir
+   *  lib/carte-profil.ts. Toujours pas de numéro de carte, pour la même raison
+   *  qu'au-dessus. */
+  carte?: CarteDePeche;
 }
 
 /** A personal fishing spot the user declares on the map, persisted in IndexedDB. */

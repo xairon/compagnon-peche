@@ -39,8 +39,13 @@ describe("fishingCardStatus", () => {
     expect(fishingCardStatus(2026, edge)).toBe("valide");
   });
 
-  it("a card bought early for next year, well ahead of its own expiry → valide", () => {
-    expect(fishingCardStatus(2027, new Date(2026, 11, 1))).toBe("valide");
+  it("a card bought early for next year is not yet valid", () => {
+    // Correction d'une attente fausse : ce test exigeait « valide ». Les cartes
+    // N+1 sont en vente dès novembre, mais une carte 2027 ne prend effet que le
+    // 1ᵉʳ janvier 2027. Répondre « valide » le 1ᵉʳ décembre 2026 disait au
+    // pêcheur qu'il était en règle alors qu'il ne l'était pas — exactement le
+    // genre de fausse assurance que le reste de l'audit traque.
+    expect(fishingCardStatus(2027, new Date(2026, 11, 1))).toBe("pas-encore-valide");
   });
 });
 

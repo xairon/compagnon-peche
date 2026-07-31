@@ -6271,3 +6271,146 @@ button.card-row {
   line-height: 1.55;
   color: var(--muted);
 }
+
+/* ── Carte de pêche ──────────────────────────────────────────────────────────
+   Reprend les tons des anciens blocs ph-card-*, désormais rendus par
+   components/CartePeche.tsx, qui calcule la durée réelle selon le type. */
+.cp {
+  margin-top: 10px;
+}
+.cp-tete {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.cp-type {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.cp-etat {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 650;
+}
+.cp-ok {
+  color: var(--green);
+}
+.cp-fin,
+.cp-recip {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.cp-recip {
+  margin-top: 7px;
+}
+.cp-alerte {
+  margin-top: 7px;
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.cp-warn {
+  background: var(--amber-bg);
+  color: #6d4d0d;
+}
+.cp-danger {
+  background: #fbe9e6;
+  color: #7d2118;
+}
+.cp-nudge {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Index des guides (coindepeche.fr) ───────────────────────────────────────
+   Des liens sortants, pas du contenu embarqué : le texte des articles reste
+   chez son éditeur, l'app n'en publie que le titre et le résumé du site. */
+.gds-intro {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.gds-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+.gds-cat {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--body);
+}
+.gds-cat[aria-pressed="true"] {
+  border-color: var(--green-dark);
+  background: var(--green-dark);
+  color: var(--paper);
+}
+.gds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gds-item {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+}
+.gds-tete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.gds-badge {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--brass-ink);
+}
+.gds-date {
+  font-size: 11px;
+  color: var(--muted);
+}
+.gds-titre {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.gds-desc {
+  margin-top: 5px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--body);
+}
+.gds-src {
+  margin-top: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.gds-pied {
+  margin-top: 14px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}

@@ -17,6 +17,9 @@ export function Outils() {
     { title: "Nœuds & montages", sub: "Guides pas-à-pas, hors-ligne", icon: ICONS.knot, to: "noeuds" },
     { title: "Réglementation générale", sub: "Socle national + " + deptName, icon: ICONS.regle, to: "reglement" },
     { title: "Département actif", sub: deptName + " — modifiable dans Réglementation", icon: ICONS.pin, to: "reglement" },
+    // Pas de compte dans le libellé : il vivrait ici et divergerait du fichier
+    // généré à la première collecte. L'écran Guides, lui, sait ce qu'il a.
+    { title: "Guides", sub: "Coin de Pêche — techniques, espèces, départements (en ligne)", icon: ICONS.book, to: "guides" },
     { title: "Sources & mentions", sub: "Legifrance, ANSES, fédérations…", icon: ICONS.book, to: "sources" },
     { title: "Crédits photos", sub: "Auteurs & licences des images", icon: ICONS.book, to: "credits" },
     { title: "Stockage & données", sub: "Espace, sauvegarde, tout effacer", icon: ICONS.pin, to: "stockage" },

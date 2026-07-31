@@ -23,6 +23,12 @@ describe("isProfileEmpty", () => {
     expect(isProfileEmpty({ carteAnnee: 2026 })).toBe(false);
   });
 
+  it("une carte détaillée compte autant que l'ancienne année nue", () => {
+    // Même piège, nouveau champ : un profil ne portant qu'une journalière
+    // passerait pour vide et serait écrasé à la première restauration.
+    expect(isProfileEmpty({ carte: { type: "journaliere", debut: "2026-07-31" } })).toBe(false);
+  });
+
   it("des champs vides restent vides", () => {
     expect(isProfileEmpty({ name: "", bio: "", region: "" })).toBe(true);
   });

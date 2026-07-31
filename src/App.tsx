@@ -41,6 +41,9 @@ const TechniqueDetail = lazy(() =>
 const EcrevissesIdent = lazy(() =>
   import("./screens/EcrevissesIdent").then((m) => ({ default: m.EcrevissesIdent })),
 );
+// Index des guides coindepeche.fr : rien de tout ça ne sert hors ligne, et
+// personne n'y va au démarrage.
+const Guides = lazy(() => import("./screens/Guides").then((m) => ({ default: m.Guides })));
 
 export function App() {
   const { state, set } = useStore();
@@ -144,6 +147,7 @@ export function App() {
         {s === "reglement" && <Reglement />}
         {s === "sources" && <Sources />}
         {s === "credits" && <Credits />}
+        {s === "guides" && <Guides />}
         {s === "cuisine" && <Cuisine />}
         {s === "carte" && <Carte />}
         {s === "materiel" && <Materiel />}
