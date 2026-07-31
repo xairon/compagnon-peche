@@ -10,7 +10,10 @@
     "allowSyntheticDefaultImports": true,
     "strict": true
   },
-  // csp.ts is shared: vite.config injects it at build time, and src/lib/csp.test.ts
-  // checks it against the map's own host lists. It has to be visible to both projects.
-  "include": ["vite.config.ts", "src/lib/csp.ts"]
+  // Fichiers partagés : vite.config les consomme au build, et leurs tests les
+  // vérifient côté app. Ils doivent être visibles des deux projets.
+  //  · csp.ts        — la CSP, comparée aux listes d'hôtes de la carte
+  //  · sw-delais.ts  — les délais du service worker, comparés à ceux de fetchT
+  //  · net-bornes.ts — dont sw-delais dérive
+  "include": ["vite.config.ts", "src/lib/csp.ts", "src/lib/sw-delais.ts", "src/lib/net-bornes.ts"]
 }

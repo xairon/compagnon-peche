@@ -74,7 +74,9 @@ const REQUETES: { kind: AccessKind; set: string; filtre: string }[] = [
 // It used to: the query announced `timeout:20` while fetchT aborted at 12, so
 // any query the server took longer than 12 s on was time spent for nothing.
 const SERVEUR_S = 25;
-const CLIENT_MS = (SERVEUR_S + 5) * 1000;
+/** Exporté pour que net-bornes.ts ne puisse pas décrire un autre budget pour
+ *  la même source : un test compare les deux. */
+export const CLIENT_MS = (SERVEUR_S + 5) * 1000;
 
 /** Access POIs within a lon/lat bbox. Order: sud,ouest,nord,est for Overpass. */
 export async function fetchAccess(

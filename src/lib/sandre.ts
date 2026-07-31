@@ -3,6 +3,7 @@
 // Rivers = CoursEau1 (named watercourses), water bodies = PlanEau (lakes/ponds).
 
 import { fetchT } from "./net";
+import { lireJsonBorne, octetsMaxPour } from "./net-bornes";
 
 const WFS = "https://services.sandre.eaufrance.fr/geo/zonage";
 const OBS = "https://services.sandre.eaufrance.fr/geo/obs";
@@ -47,9 +48,13 @@ async function wfs(
     `${base}?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature` +
     `&OUTPUTFORMAT=${encodeURIComponent(OUTPUT)}&TYPENAMES=${typename}` +
     `&BBOX=${bbox(w, s, e, n)}&COUNT=${count}`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "sandre" });
   if (!r.ok) throw new Error("Sandre " + r.status);
-  return r.json();
+  // Lecture bornée : une classe de CoursEau pèse déjà 973 ko (mesuré le
+  // 31/07/2026), et rien n'empêchait de charger entièrement en mémoire une
+  // réponse anormale sur un téléphone. CorpsTropGrand est distinct d'une
+  // absence de données : la source a répondu.
+  return (await lireJsonBorne(r, octetsMaxPour("sandre"))) as FeatureCollection;
 }
 
 /**
@@ -199,7 +204,7 @@ export interface Place {
 export async function geocode(q: string, signal?: AbortSignal): Promise<Place[]> {
   const r = await fetchT(
     `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&limit=6`,
-    { signal },
+    { signal, source: "ign" },
   );
   if (!r.ok) throw new Error("geocode " + r.status);
   const j = await r.json();
@@ -227,7 +232,7 @@ export async function deptFromCoords(
     // user's precise position to the IGN geocoder (privacy — see Sources screen).
     const r = await fetchT(
       `https://data.geopf.fr/geocodage/reverse?lon=${lon.toFixed(3)}&lat=${lat.toFixed(3)}&index=address&limit=1`,
-      { signal },
+      { signal, source: "ign" },
     );
     if (!r.ok) return null;
     const j = await r.json();

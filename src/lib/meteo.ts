@@ -81,7 +81,7 @@ export async function fetchMeteo(lat: number, lon: number, signal?: AbortSignal)
     `&hourly=temperature_2m,precipitation_probability,pressure_msl&past_days=1` + // past_days so the 3h trend works before 03:00 local
     `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
     `&forecast_days=7&timezone=auto`;
-  const r = await fetchT(`${BASE}?${params}`, { signal });
+  const r = await fetchT(`${BASE}?${params}`, { signal, source: "meteo" });
   if (!r.ok) throw new Error("Open-Meteo " + r.status);
   return parseMeteo(await r.json());
 }

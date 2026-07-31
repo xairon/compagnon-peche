@@ -46,7 +46,7 @@ export async function stationsInBbox(
   const url =
     `${BASE}/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=300&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
   return (j.data || [])
@@ -71,7 +71,7 @@ export async function speciesAtStation(
   const url =
     `${BASE}/observations?code_station=${encodeURIComponent(code)}` +
     `&size=20000&sort=desc&fields=nom_commun_taxon,nom_latin_taxon,effectif_lot`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
   const map = new Map<string, StationSpecies>();
@@ -117,7 +117,7 @@ export async function nearestHydroStation(
   const url =
     `${HYDRO}/referentiel/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&en_service=true&size=200&format=json`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
   const cands: HydroStation[] = [];
@@ -161,7 +161,7 @@ export async function latestHydro(
   const url =
     `${HYDRO}/observations_tr?code_entite=${encodeURIComponent(code)}` +
     `&grandeur_hydro=${grandeur}&size=40&sort=desc&fields=date_obs,resultat_obs`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
   const obs: { date_obs: string; resultat_obs: number }[] = j.data || [];
@@ -227,7 +227,7 @@ export async function nearestTemp(
   const sUrl =
     `${TEMP}/station?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=100&fields=code_station,libelle_station,latitude,longitude,code_cours_eau,libelle_cours_eau,uri_cours_eau`;
-  const sr = await fetchT(sUrl, { signal });
+  const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
   let near: {
@@ -257,7 +257,7 @@ export async function nearestTemp(
   const cUrl =
     `${TEMP}/chronique?code_station=${encodeURIComponent(near.code)}` +
     `&sort=desc&size=1&fields=date_mesure_temp,heure_mesure_temp,resultat`;
-  const cr = await fetchT(cUrl, { signal });
+  const cr = await fetchT(cUrl, { signal, source: "hubeau" });
   if (!cr.ok && cr.status !== 206) throw new Error("Hub'Eau " + cr.status);
   const cj = await cr.json();
   const rec = (cj.data || [])[0];
@@ -315,7 +315,7 @@ export async function waterTemp(
       `${QUALITE}/analyse_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
       `&code_parametre=${Q_TEMP}&sort=desc&size=${TAILLE_PC}` +
       `&fields=date_prelevement,resultat,libelle_station,latitude,longitude`;
-    const r = await fetchT(url, { signal });
+    const r = await fetchT(url, { signal, source: "hubeau" });
     if (!r.ok && r.status !== 206) return [];
     return parseAnalysePc(await r.json(), lat, lon);
   })().catch(() => []);
@@ -371,7 +371,7 @@ export async function nearestOnde(
   const sUrl =
     `${ONDE}/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=150&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
-  const sr = await fetchT(sUrl, { signal });
+  const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
   let near: { code: string; nom: string; cours: string; dist: number } | null = null;
@@ -392,7 +392,7 @@ export async function nearestOnde(
   const oUrl =
     `${ONDE}/observations?code_station=${encodeURIComponent(near.code)}` +
     `&sort=desc&size=1&fields=date_observation,code_ecoulement,libelle_ecoulement`;
-  const or = await fetchT(oUrl, { signal });
+  const or = await fetchT(oUrl, { signal, source: "hubeau" });
   if (!or.ok && or.status !== 206) throw new Error("Hub'Eau " + or.status);
   const oj = await or.json();
   const rec = (oj.data || [])[0];
@@ -435,7 +435,7 @@ export async function nearestQuality(
   const sUrl =
     `${QUALITE}/station_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
     `&size=150&fields=code_station,libelle_station,latitude,longitude`;
-  const sr = await fetchT(sUrl, { signal });
+  const sr = await fetchT(sUrl, { signal, source: "hubeau" });
   if (!sr.ok && sr.status !== 206) throw new Error("Hub'Eau " + sr.status);
   const sj = await sr.json();
   let near: {
@@ -467,7 +467,7 @@ export async function nearestQuality(
     `${QUALITE}/analyse_pc?code_station=${encodeURIComponent(near.code)}` +
     `&code_parametre=${Q_O2},${Q_SAT},${Q_PH}&sort=desc&size=80` +
     `&fields=code_parametre,resultat,date_prelevement`;
-  const ar = await fetchT(aUrl, { signal });
+  const ar = await fetchT(aUrl, { signal, source: "hubeau" });
   if (!ar.ok && ar.status !== 206) throw new Error("Hub'Eau " + ar.status);
   const aj = await ar.json();
   const rows: { code_parametre: string; resultat: number | null; date_prelevement: string }[] = aj.data || [];

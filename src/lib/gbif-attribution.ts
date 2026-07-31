@@ -42,7 +42,11 @@ interface EnveloppeGbif {
   endOfRecords?: boolean;
 }
 
-export function parseOccurrences(brut: EnveloppeGbif): ResultatGbif {
+/** Accepte `unknown` : la lecture bornée (net-bornes) rend du JSON non typé,
+ *  et c'est ici qu'on décide ce qu'on en croit — un champ manquant devient
+ *  null ou undefined, jamais une valeur inventée. */
+export function parseOccurrences(source: unknown): ResultatGbif {
+  const brut = (source ?? {}) as EnveloppeGbif;
   const occurrences: OccurrenceAttribuee[] = [];
   for (const o of brut.results ?? []) {
     const la = o.decimalLatitude;

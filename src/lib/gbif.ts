@@ -12,6 +12,7 @@
 // taxonKeys resolved once via /species/match and baked here (no runtime lookups).
 
 import { fetchT } from "./net";
+import { lireJsonBorne, octetsMaxPour } from "./net-bornes";
 import { parseOccurrences } from "./gbif-attribution";
 
 const API = "https://api.gbif.org/v1";
@@ -92,9 +93,10 @@ export async function occurrencesInBbox(
     `&decimalLongitude=${w.toFixed(4)},${e.toFixed(4)}` +
     tk +
     `&limit=300`;
-  const r = await fetchT(url, { signal });
+  const r = await fetchT(url, { signal, source: "gbif" });
   if (!r.ok) throw new Error("GBIF " + r.status);
-  const { occurrences } = parseOccurrences(await r.json());
+  // 537 ko mesurés pour 300 occurrences : borné, comme le Sandre.
+  const { occurrences } = parseOccurrences(await lireJsonBorne(r, octetsMaxPour("gbif")));
   return occurrences.map((o) => ({
     key: o.key,
     sci: o.sci,

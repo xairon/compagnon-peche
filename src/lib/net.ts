@@ -5,6 +5,12 @@
 // stale cache / error path. One retry smooths over transient 5xx/network blips
 // (Overpass, Sandre WFS and friends 502 fairly often).
 
+import { delaiPour, type SourceReseau } from "./net-bornes";
+
+// Repli quand l'appelant ne nomme pas sa source. C'était la valeur unique pour
+// tout le monde : 12 s pour 2 ko de météo comme pour 973 ko de couche
+// hydrographique. Voir net-bornes.ts pour les budgets par source et leur
+// justification.
 const DEFAULT_TIMEOUT = 12000; // ms
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -35,9 +41,23 @@ async function once(
 
 export async function fetchT(
   input: RequestInfo | URL,
-  opts: { signal?: AbortSignal; timeout?: number; retries?: number; retryDelay?: number } = {},
+  opts: {
+    signal?: AbortSignal;
+    /** Délai explicite, en ms. L'emporte sur celui de `source`. */
+    timeout?: number;
+    /** Source interrogée : décide du délai à défaut de `timeout`. */
+    source?: SourceReseau;
+    retries?: number;
+    retryDelay?: number;
+  } = {},
 ): Promise<Response> {
-  const { signal, timeout = DEFAULT_TIMEOUT, retries = 1, retryDelay = 400 } = opts;
+  const {
+    signal,
+    source,
+    timeout = source ? delaiPour(source) : DEFAULT_TIMEOUT,
+    retries = 1,
+    retryDelay = 400,
+  } = opts;
   let lastErr: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
     if (signal?.aborted) throw new DOMException("Aborted", "AbortError");

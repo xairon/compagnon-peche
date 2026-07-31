@@ -10,6 +10,10 @@ import { VitePWA } from "vite-plugin-pwa";
 // the map's own source lists — a host missing here is invisible in dev (the
 // policy is build-only) and blanks a layer for every user in production.
 import { cspHeader } from "./src/lib/csp";
+// Idem : les délais réseau du service worker vivent dans src/lib/sw-delais.ts,
+// dérivés de ceux de fetchT, pour que les deux ne puissent pas se contredire.
+// Un service worker qui coupe avant l'app sert un cache vide à la 1re visite.
+import { SW_DELAIS_S } from "./src/lib/sw-delais";
 
 const CSP = cspHeader();
 
@@ -120,11 +124,18 @@ export default defineConfig({
           },
           {
             // Sandre hydrography (rivers, water bodies) — fresh online, cached fallback.
+            //
+            // 25 s, et non 6. Une classe de CoursEau pèse 973 ko (mesuré le
+            // 31/07/2026) : à 6 s, le service worker abandonnait le réseau et
+            // servait le cache — vide à la première visite. La couche
+            // hydrographie n'apparaissait donc jamais au premier lancement.
+            // Aligné sur DELAIS_MS.sandre de src/lib/net-bornes.ts, où le
+            // calcul est expliqué.
             urlPattern: /^https:\/\/services\.sandre\.eaufrance\.fr\/.*/,
             handler: "NetworkFirst",
             options: {
               cacheName: "sandre-hydro",
-              networkTimeoutSeconds: 6,
+              networkTimeoutSeconds: SW_DELAIS_S.sandre,
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -146,7 +157,7 @@ export default defineConfig({
             handler: "NetworkFirst",
             options: {
               cacheName: "ign-geocode",
-              networkTimeoutSeconds: 5,
+              networkTimeoutSeconds: SW_DELAIS_S.ign,
               expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 7 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -157,7 +168,7 @@ export default defineConfig({
             handler: "NetworkFirst",
             options: {
               cacheName: "hubeau-api",
-              networkTimeoutSeconds: 5,
+              networkTimeoutSeconds: SW_DELAIS_S.hubeau,
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -168,7 +179,7 @@ export default defineConfig({
             handler: "NetworkFirst",
             options: {
               cacheName: "open-meteo",
-              networkTimeoutSeconds: 5,
+              networkTimeoutSeconds: SW_DELAIS_S.meteo,
               expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 12 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -179,7 +190,7 @@ export default defineConfig({
             handler: "NetworkFirst",
             options: {
               cacheName: "gbif-api",
-              networkTimeoutSeconds: 6,
+              networkTimeoutSeconds: SW_DELAIS_S.gbif,
               expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 14 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -190,7 +201,7 @@ export default defineConfig({
             handler: "NetworkFirst",
             options: {
               cacheName: "overpass-osm",
-              networkTimeoutSeconds: 8,
+              networkTimeoutSeconds: SW_DELAIS_S.overpass,
               expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 14 },
               cacheableResponse: { statuses: [0, 200] },
             },
