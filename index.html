@@ -14,6 +14,57 @@
       content="Compagnon de pêche eau douce — fiches espèces, réglementation, cuisine et gestes, hors-ligne."
     />
     <title>Compagnon de pêche</title>
+
+    <!--
+      Aperçu de lien. Sans ces balises, l'app partagée par WhatsApp entre
+      pêcheurs s'affichait comme une URL nue — or ce partage est son seul canal
+      de diffusion, faute d'être dans un store.
+
+      Les URL sont ABSOLUES : aucune des messageries qui comptent ici ne résout
+      un `og:image` relatif, et une vignette non résolue ne s'affiche pas du
+      tout. L'adresse est celle du service, vérifiée le 31/07/2026 ; elle est
+      dupliquée depuis src/data/mentions-legales.ts, et src/lib/manifest.test.ts
+      fait échouer la suite si les deux divergent — le HTML statique ne peut pas
+      importer la constante.
+
+      La vignette est l'icône 512 px : c'est la seule image de l'app qui la
+      représente, faute de capture d'écran produite (voir src/lib/manifest.ts).
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Compagnon de pêche" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://xairon.github.io/compagnon-peche/" />
+    <meta property="og:title" content="Compagnon de pêche — eau douce, hors-ligne" />
+    <meta
+      property="og:description"
+      content="Fiches espèces, réglementation, cuisine et gestes de pêche en eau douce — hors-ligne."
+    />
+    <meta
+      property="og:image"
+      content="https://xairon.github.io/compagnon-peche/icon-512.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta
+      property="og:image:alt"
+      content="Icône du Compagnon de pêche"
+    />
+
+    <!-- `summary` et non `summary_large_image` : la vignette est une icône
+         carrée de 512 px, pas une bannière. Annoncer une grande image pour
+         servir un carré la fait recadrer ou rejeter. -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Compagnon de pêche — eau douce, hors-ligne" />
+    <meta
+      name="twitter:description"
+      content="Fiches espèces, réglementation, cuisine et gestes de pêche en eau douce — hors-ligne."
+    />
+    <meta
+      name="twitter:image"
+      content="https://xairon.github.io/compagnon-peche/icon-512.png"
+    />
+    <meta name="twitter:image:alt" content="Icône du Compagnon de pêche" />
   </head>
   <body>
     <div id="root"></div>

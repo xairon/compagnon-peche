@@ -5,6 +5,7 @@ import { DEPARTEMENTS } from "../data/regulation";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { lienSignalement } from "../lib/diagnostic";
+import { AideInstallIOS } from "../components/InstallIOS";
 
 export function Outils() {
   const { state, nav } = useStore();
@@ -22,6 +23,7 @@ export function Outils() {
     { title: "Guides", sub: "Coin de Pêche — techniques, espèces, départements (en ligne)", icon: ICONS.book, to: "guides" },
     { title: "Sources & mentions", sub: "Legifrance, ANSES, fédérations…", icon: ICONS.book, to: "sources" },
     { title: "Crédits photos", sub: "Auteurs & licences des images", icon: ICONS.book, to: "credits" },
+    { title: "Mentions légales", sub: "Éditeur, hébergeur, vos données, portée des conseils", icon: ICONS.book, to: "mentions-legales" },
     { title: "Stockage & données", sub: "Espace, sauvegarde, tout effacer", icon: ICONS.pin, to: "stockage" },
   ];
 
@@ -52,6 +54,10 @@ export function Outils() {
     <div className="screen">
       <div className="pad">
         <div className="h1">Outils</div>
+        {/* Ne s'affiche que sur iOS hors mode installé : Safari n'émet pas
+            `beforeinstallprompt`, donc le bouton d'installation que lib/pwa.ts
+            propose sur Android n'y apparaît jamais. */}
+        <AideInstallIOS />
         <div className="section-list" style={{ marginTop: 16 }}>
           {rows.map((r) => (
             <button key={r.title} type="button" className="card-row" onClick={() => nav(r.to)}>

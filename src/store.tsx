@@ -36,6 +36,7 @@ export type Screen =
   | "recette"
   | "reglement"
   | "sources"
+  | "mentions-legales"
   | "credits"
   | "guides"
   | "regle"

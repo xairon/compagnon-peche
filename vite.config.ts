@@ -14,6 +14,11 @@ import { cspHeader } from "./src/lib/csp";
 // dérivés de ceux de fetchT, pour que les deux ne puissent pas se contredire.
 // Un service worker qui coupe avant l'app sert un cache vide à la 1re visite.
 import { SW_DELAIS_S } from "./src/lib/sw-delais";
+// Idem pour le manifeste : sorti d'ici pour que manifest.test.ts puisse
+// confronter chaque icône et chaque capture déclarées au contenu réel de
+// public/, et vérifier que les balises og: d'index.html pointent vers la même
+// app. Un chemin mort dans le manifeste ne se voit qu'à l'installation.
+import { MANIFEST } from "./src/lib/manifest";
 
 const CSP = cspHeader();
 
@@ -208,25 +213,7 @@ export default defineConfig({
           },
         ],
       },
-      manifest: {
-        name: "Compagnon de pêche",
-        short_name: "Pêche",
-        description:
-          "Fiches espèces, réglementation, cuisine et gestes de pêche en eau douce — hors-ligne.",
-        lang: "fr",
-        theme_color: "#16281E",
-        background_color: "#FBFAF7",
-        display: "standalone",
-        orientation: "portrait",
-        start_url: "./",
-        scope: "./",
-        icons: [
-          { src: "favicon.svg", sizes: "any", type: "image/svg+xml" },
-          { src: "icon-192.png", sizes: "192x192", type: "image/png" },
-          { src: "icon-512.png", sizes: "512x512", type: "image/png" },
-          { src: "icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
-        ],
-      },
+      manifest: MANIFEST,
     }),
   ],
 });

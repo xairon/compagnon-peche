@@ -97,12 +97,46 @@ describe("phraseReciprocite", () => {
     expect(RECIPROCITES).toEqual(["EHGO", "CHI", "URNE", "interfederale", "aucune", "inconnue"]);
   });
 
-  it("n'annonce aucun nombre de départements — la source se contredit sur ce point", () => {
-    // coindepeche.fr donne EHGO 37 / CHI 39 / URNE 14 sur sa page tarifs, et
-    // EHGO 35 / CHI 32 / URNE 24 dans son guide. Deux comptes différents pour
-    // les trois réseaux : l'app n'en reprend aucun.
+  it("n'annonce toujours aucun nombre pour le CHI, l'URNE et l'interfédérale", () => {
+    // coindepeche.fr donnait CHI 39 / URNE 14 sur sa page tarifs et CHI 32 /
+    // URNE 24 dans son guide. Aucun des deux réseaux ne publie son propre
+    // décompte : au 31/07/2026 le site du CHI répond 500 sur ses pages de
+    // présentation et de réciprocité, et le domaine de l'URNE n'existe plus
+    // (redirection « domaine inconnu » de WordPress.com). Le seul chiffre
+    // officiel — CHI 36 / URNE 17, page réciprocité de la FNPF — ne porte
+    // aucun millésime. Un chiffre sans date n'est pas un chiffre de la saison.
+    for (const r of RECIPROCITES.filter((x) => x !== "EHGO")) {
+      expect(phraseReciprocite(r), r).not.toMatch(/\d/);
+    }
+  });
+
+  it("donne la composition de l'EHGO, la seule que la source publie datée", () => {
+    // ehgo.fr écrit « 34 fédérations pour 37 départements (4 en région
+    // parisienne) », sur un site qui se date lui-même de 2026 (« L'EHGO
+    // 2026 : 34 fédérations », actualités de juillet 2026). Les deux chiffres
+    // se recoupent : l'entrée « Île-de-France » est une fédération pour
+    // quatre départements. La valeur 35 des sources secondaires est infirmée.
+    const p = phraseReciprocite("EHGO");
+
+    expect(p).toMatch(/34/);
+    expect(p).toMatch(/37/);
+  });
+
+  it("cite la source du seul chiffre qu'elle avance", () => {
+    // Un chiffre sans source dans cette app est un chiffre inventé. La règle
+    // est la même que pour la réglementation : on dit d'où ça vient.
+    expect(phraseReciprocite("EHGO")).toMatch(/ehgo\.fr/i);
+  });
+
+  it("n'avance aucun montant, faute de tarif national à la source", () => {
+    // Recherché au canal officiel le 31/07/2026 : cartedepeche.fr ne publie
+    // aucun tarif millésimé, seulement des moyennes qu'il qualifie lui-même
+    // d'indicatives et qui varient selon la saisie (100 € ou 114 € pour la même
+    // carte). La FNPF annonce 112 € pour l'interfédérale là où l'EHGO annonce
+    // 114 €, et aucune des deux pages n'est datée 2026. Le prix payé dépend de
+    // l'AAPPMA : il n'existe pas de tarif national à embarquer.
     for (const r of RECIPROCITES) {
-      expect(phraseReciprocite(r)).not.toMatch(/\d/);
+      expect(phraseReciprocite(r), r).not.toMatch(/€|euro/i);
     }
   });
 
