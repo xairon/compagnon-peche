@@ -10,6 +10,7 @@ import {
   binomial,
   type StationSpecies,
 } from "../lib/hubeau";
+import { troncature, texteTroncature, compteurWfs } from "../lib/troncature";
 import {
   fetchRivers,
   fetchWaterBodies,
@@ -18,6 +19,9 @@ import {
   passeTexte,
   geocode,
   riverName,
+  COUNT_RIVIERES,
+  COUNT_PLANS_EAU,
+  COUNT_OBSTACLES,
   type Place,
 } from "../lib/sandre";
 import { fetchAccess, accessIcon, accessLabel } from "../lib/overpass";
@@ -97,6 +101,8 @@ export function Carte() {
   });
 
   const [status, setStatus] = useState("Chargement de la carte…");
+  // Ce que les couches WFS n'ont pas pu montrer. Vide = rien à avouer.
+  const [troncatures, setTroncatures] = useState<string[]>([]);
   const [sheet, setSheet] = useState<Sheet>(null);
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Place[]>([]);
@@ -320,6 +326,7 @@ export function Carte() {
       dataRef.current = { ...dataRef.current, rivers: empty(), bodies: empty(), stations: empty(), obstacles: empty(), access: empty(), gbif: empty(), parcours41: empty() };
       applyData(m);
       setStatus("Zoomez pour afficher le réseau hydrographique.");
+      setTroncatures([]);
       return;
     }
     const b = m.getBounds();
@@ -328,6 +335,7 @@ export function Carte() {
     const signal = dataAbort.current.signal;
     const L = layersRef.current;
     setStatus("Chargement des données…");
+    setTroncatures([]);
     try {
       const [rivers, bodies, stations, obstacles, access, gbif] = await Promise.all([
         fetchRivers(w, s, e, n, signal).catch(() => empty()),
@@ -372,6 +380,40 @@ export function Carte() {
         })),
       };
       applyData(m);
+      // Ce que la carte montre n'est pas forcément ce qu'il y a. Les couches WFS
+      // sont plafonnées, et deux d'entre elles publient leur total — la
+      // troisième (obstacles) non, d'où l'état « saturé » distinct de
+      // « tronqué » dans lib/troncature.ts. Sans ça, une carte amputée se lit
+      // comme une carte complète.
+      const coupes = [
+        texteTroncature(
+          troncature({
+            numberMatched: compteurWfs(rivers),
+            rendus: rivers.features.length,
+            plafond: COUNT_RIVIERES,
+          }),
+          "cours d'eau",
+        ),
+        texteTroncature(
+          troncature({
+            numberMatched: compteurWfs(bodies),
+            rendus: bodies.features.length,
+            plafond: COUNT_PLANS_EAU,
+          }),
+          "plans d'eau",
+        ),
+        L.obstacles
+          ? texteTroncature(
+              troncature({
+                numberMatched: compteurWfs(obstacles),
+                rendus: obstacles.features.length,
+                plafond: COUNT_OBSTACLES,
+              }),
+              "ouvrages",
+            )
+          : null,
+      ].filter(Boolean) as string[];
+      setTroncatures(coupes);
       const bits = [
         `${rivers.features.length} cours d'eau`,
         `${bodies.features.length} plan(s) d'eau`,
@@ -907,6 +949,11 @@ export function Carte() {
       <div className="carte-legend" aria-live="polite">
         {status}
         {spots.length > 0 && <span className="legend-spots"> · {spots.length} spot(s) perso</span>}
+        {troncatures.map((t) => (
+          <div key={t} className="carte-troncature">
+            {t}
+          </div>
+        ))}
       </div>
 
       {/* Conditions briefing */}

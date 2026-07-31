@@ -20,7 +20,18 @@ export interface FeatureCollection {
     geometry: unknown;
     properties: Record<string, unknown>;
   }[];
+  /** Total annoncé par le WFS. ABSENT sur certaines couches — mesuré le
+   *  31/07/2026 : CoursEau1 et PlanEau_FXX le publient, ObstEcoul non. Son
+   *  absence n'est donc pas « réponse complète », voir lib/troncature.ts. */
+  numberMatched?: number;
 }
+
+/** Plafonds `COUNT` demandés à chaque couche. Exportés parce qu'une réponse
+ *  qui atteint exactement son plafond est le seul indice de saturation dont on
+ *  dispose sur les couches sans compteur. */
+export const COUNT_RIVIERES = 500;
+export const COUNT_PLANS_EAU = 400;
+export const COUNT_OBSTACLES = 200;
 
 async function wfs(
   base: string,
@@ -47,7 +58,7 @@ export const fetchRivers = (
   e: number,
   n: number,
   signal?: AbortSignal,
-) => wfs(WFS, "CoursEau1", w, s, e, n, 500, signal);
+) => wfs(WFS, "CoursEau1", w, s, e, n, COUNT_RIVIERES, signal);
 
 export const fetchWaterBodies = (
   w: number,
@@ -55,7 +66,7 @@ export const fetchWaterBodies = (
   e: number,
   n: number,
   signal?: AbortSignal,
-) => wfs(WFS, "PlanEau_FXX", w, s, e, n, 400, signal);
+) => wfs(WFS, "PlanEau_FXX", w, s, e, n, COUNT_PLANS_EAU, signal);
 
 /** Obstacles to flow (ROE): dams, weirs, locks — with fish-pass info. */
 export const fetchObstacles = (
@@ -64,7 +75,7 @@ export const fetchObstacles = (
   e: number,
   n: number,
   signal?: AbortSignal,
-) => wfs(OBS, "sa:ObstEcoul", w, s, e, n, 200, signal);
+) => wfs(OBS, "sa:ObstEcoul", w, s, e, n, COUNT_OBSTACLES, signal);
 
 /**
  * What the ROE says about fish passage at an obstacle.

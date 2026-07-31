@@ -1678,9 +1678,17 @@ a:hover {
   padding: 8px 16px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 7px;
   background: var(--paper);
   border-top: 1px solid var(--line);
+}
+/* Aveu de troncature : une ligne à part, sous le décompte, en ambre.
+   Une carte amputée se lisait jusqu'ici comme une carte complète. */
+.carte-troncature {
+  flex: 1 0 100%;
+  color: #6d4d0d;
+  line-height: 1.45;
 }
 .carte-legend .dot {
   width: 10px;

@@ -8,12 +8,18 @@
 import { distKm, boxAroundKm } from "./geo";
 import { fetchT } from "./net";
 import { choisirStation, cleCours, DIST_MAX } from "./station";
+import { parseAnalysePc } from "./analyse-pc";
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
 const HYDRO = "https://hubeau.eaufrance.fr/api/v2/hydrometrie";
 const TEMP = "https://hubeau.eaufrance.fr/api/v1/temperature";
 const ONDE = "https://hubeau.eaufrance.fr/api/v1/ecoulement";
 const QUALITE = "https://hubeau.eaufrance.fr/api/v2/qualite_rivieres";
+// Assez d'analyses pour que la distance ait un mot à dire, pas assez pour
+// peser : 50 enregistrements filtrés par `fields` font ~9 ko. Triées par date
+// décroissante, ce sont les 50 plus récentes de la boîte — exactement la
+// tranche qui intéresse un état courant.
+const TAILLE_PC = 50;
 
 export interface Station {
   code: string;
@@ -297,32 +303,22 @@ export async function waterTemp(
   signal?: AbortSignal,
 ): Promise<WaterTemp | null> {
   const { w, s, e, n } = boxAroundKm(lat, lon, DIST_MAX.temperature);
-  // A) Physico-chemical param 1301 — the most recent sample the API returns in the
-  //    box (its `sort=desc` is not guaranteed by date, so we always show the date).
-  const physicoP: Promise<WaterTemp | null> = (async () => {
+  // A) Physico-chimie, paramètre 1301. On demande PLUSIEURS analyses, pas une.
+  //    Avec `size=1`, l'API choisissait la station à la place de l'app : mesuré
+  //    autour de Blois le 31/07/2026, elle rendait LA CISSE A AVERDON à 8,9 km
+  //    alors que MEES à CHAUSSEE-SAINT-VICTOR est à 3,4 km. La distance ne
+  //    pouvait pas peser puisqu'il n'y avait qu'un candidat.
+  //    (Le `sort=desc` est bien décroissant par date_prelevement — vérifié sur
+  //    50 enregistrements ; l'ancien commentaire disait le contraire.)
+  const physicoP: Promise<WaterTemp[]> = (async () => {
     const url =
       `${QUALITE}/analyse_pc?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
-      `&code_parametre=${Q_TEMP}&sort=desc&size=1` +
+      `&code_parametre=${Q_TEMP}&sort=desc&size=${TAILLE_PC}` +
       `&fields=date_prelevement,resultat,libelle_station,latitude,longitude`;
     const r = await fetchT(url, { signal });
-    if (!r.ok && r.status !== 206) return null;
-    const j = await r.json();
-    const a = (j.data || [])[0];
-    if (!a || a.resultat == null) return null;
-    const la = Number(a.latitude);
-    const lo = Number(a.longitude);
-    return {
-      value: Number(a.resultat),
-      date: String(a.date_prelevement),
-      station: String(a.libelle_station || ""),
-      dist: Number.isFinite(la) && Number.isFinite(lo) ? distKm(lat, lon, la, lo) : 0,
-      source: "physico" as const,
-      // analyse_pc ne publie pas le cours d'eau : ni libellé, ni code. Le nom
-      // de station l'embarque parfois en texte libre ("LA CISSE A AVERDON"),
-      // mais l'extraire serait deviner.
-      cours: "",
-    };
-  })().catch(() => null);
+    if (!r.ok && r.status !== 206) return [];
+    return parseAnalysePc(await r.json(), lat, lon);
+  })().catch(() => []);
   // B) Dedicated thermie network (nearest station's latest reading).
   const thermieP: Promise<WaterTemp | null> = nearestTemp(lat, lon, signal)
     .then((t) =>
@@ -340,7 +336,8 @@ export async function waterTemp(
     )
     .catch(() => null);
 
-  const cands = (await Promise.all([physicoP, thermieP])).filter(Boolean) as WaterTemp[];
+  const [physico, thermie] = await Promise.all([physicoP, thermieP]);
+  const cands: WaterTemp[] = thermie ? [...physico, thermie] : physico;
   if (!cands.length) return null;
   // Proximity decides, freshness filters — NOT the other way round. Sorting by
   // date first made the app cross a basin to gain a few days: measured at
