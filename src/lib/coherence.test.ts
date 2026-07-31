@@ -7,6 +7,12 @@ import { effectiveMaille } from "./maille";
 import { season } from "./season";
 import { join } from "node:path";
 
+// `priseView` reçoit désormais son horloge (voir ./prise.ts). Cette garde
+// compare deux surfaces entre elles, pas des dates : on fige un jour où la
+// 1ʳᵉ catégorie et le brochet sont ouverts, sinon la comparaison « vert dans la
+// grille / vert dans le parcours » devient un test de calendrier déguisé.
+const NOW = new Date(2026, 5, 15, 10, 0, 0);
+
 /**
  * Garde-fou de cohérence réglementaire.
  *
@@ -67,7 +73,7 @@ describe("cohérence des verdicts entre écrans", () => {
   it("aucune espèce n'est verte dans la grille et « à vérifier » dans le parcours", () => {
     const desaccords = SPECIES.filter((sp) => {
       const vert = speciesStatus(sp).cls === "good";
-      const v = priseView(sp, "statut", { c: 0, b: 0 }, "41");
+      const v = priseView(sp, "statut", { c: 0, b: 0 }, "41", NOW);
       return vert && v?.tone !== "good";
     }).map((sp) => sp.id);
     expect(desaccords).toEqual([]);

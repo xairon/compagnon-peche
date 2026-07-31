@@ -14,6 +14,7 @@ import { effectiveMaille } from "../lib/maille";
 import { speciesAliasLabels } from "../lib/recherche";
 import { speciesStatus } from "../lib/statut";
 import { effectiveQuota } from "../lib/quota";
+import { deptNotes } from "../lib/notes-dept";
 import { ratingFg, repere } from "../lib/helpers";
 import { EDIBILITY } from "../data/edibility";
 import { IDENT } from "../data/identification";
@@ -163,13 +164,23 @@ export function Fiche() {
   if (sp.reg) {
     const localRows = localRegRows(state.dept, sp.id);
     const dr = DEPT_REG[state.dept];
+    // Les notes de l'arrêté étaient tronquées aux deux premières :
+    // 7 des 13 notes des trois départements n'atteignaient jamais l'écran, dont
+    // celle du black-bass de l'Indre — indice 2, « dans le doute, relâchez ».
+    // On trie au lieu de couper : ce qui nomme l'espèce remonte, le reste suit.
+    const notes = deptNotes(dr.notes, sp);
+    // Une note qui nomme l'espèce EST une spécificité départementale, même
+    // quand aucune ligne maille/quota ne l'est : le Loir-et-Cher n'a pas de
+    // ligne « carpe » mais deux notes carpe, et la fiche affichait pourtant
+    // « pas de spécificité départementale connue ».
+    const aDuLocal = localRows.length > 0 || notes.espece.length > 0;
     sections.push({
       id: "regle",
       title: "Réglementation locale",
       sub: deptName,
       render: () => (
         <>
-          {localRows.length > 0 ? (
+          {aDuLocal ? (
             <>
               <div className="dept-badge">Spécificités {deptName}</div>
               {localRows.map(([k, v], i) => (
@@ -178,12 +189,11 @@ export function Fiche() {
                   <span className="v">{v}</span>
                 </div>
               ))}
-              {dr.notes.slice(0, 2).map((n, i) => (
-                <div key={i} className="note">
+              {notes.espece.map((n, i) => (
+                <div key={"e" + i} className="note">
                   {n}
                 </div>
               ))}
-              <div className="source">Source : {dr.source}</div>
             </>
           ) : (
             <div className="note">
@@ -191,6 +201,17 @@ export function Fiche() {
               national ci-dessous s'applique. Vérifiez l'arrêté préfectoral en vigueur.
             </div>
           )}
+          {notes.autres.length > 0 && (
+            <>
+              <div className="dept-sub">Autres points de l'arrêté — {deptName}</div>
+              {notes.autres.map((n, i) => (
+                <div key={"a" + i} className="note">
+                  {n}
+                </div>
+              ))}
+            </>
+          )}
+          <div className="source">Source : {dr.source}</div>
           <div className="dept-sub">Socle national</div>
           {sp.reg!.rows.map(([k, v], i) => (
             <div key={i} className="kv">
