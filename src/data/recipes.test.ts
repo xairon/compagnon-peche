@@ -6,6 +6,7 @@ import { TECHNIQUES } from "./techniques";
 import { SPECIES } from "./species";
 import { EDIBILITY } from "./edibility";
 import { RECIPE_MEDIA, TECHNIQUE_MEDIA } from "./media";
+import { recipesForSpecies } from "../lib/recipes";
 
 describe("liens recettes ↔ espèces ↔ techniques", () => {
   it("chaque Recipe.species[] id résout dans SPECIES", () => {
@@ -71,6 +72,31 @@ describe("comestibilité des espèces visées par les recettes", () => {
   });
 });
 
+/**
+ * L'app dit à son utilisateur qu'il DOIT tuer certaines prises : les espèces
+ * `invasive` dont la base légale est R432-5 ne peuvent pas être remises vivantes
+ * à l'eau (cf. src/lib/statut.ts, libellé « Ne pas relâcher »). Lui imposer la
+ * mise à mort sans lui dire quoi en faire est le trou que ce test ferme.
+ *
+ * Le filtre est volontairement étroit : une espèce ne doit une recette que si
+ * l'app la déclare comestible (EDIBILITY « oui ») ET qu'elle porte déjà des
+ * conseils de cuisine (`cook`) — c'est-à-dire que l'éditorial a déjà jugé
+ * qu'elle valait la casserole. Les gobies ponto-caspiens, la gambusie, le
+ * pseudorasbora et la tête-de-boule n'ont pas de `cook` (poissons de 5 à 10 cm
+ * sans intérêt culinaire) : ils sortent d'eux-mêmes, sans liste d'exemptions
+ * à maintenir à la main.
+ */
+describe("les invasives qu'on doit tuer ont une recette", () => {
+  it("toute espèce invasive comestible et pourvue de conseils de cuisine a au moins une recette", () => {
+    const sans = SPECIES.filter(
+      (s) => s.invasive && s.cook && EDIBILITY[s.id]?.status === "oui",
+    )
+      .filter((s) => recipesForSpecies(s.id).length === 0)
+      .map((s) => s.id);
+    expect(sans).toEqual([]);
+  });
+});
+
 describe("médias recettes/techniques — fichiers réellement présents", () => {
   it("chaque fichier de RECIPE_MEDIA existe sous public/", () => {
     const manquants = Object.entries(RECIPE_MEDIA)
@@ -100,7 +126,12 @@ describe("médias recettes/techniques — fichiers réellement présents", () =>
 });
 
 describe("couverture du corpus", () => {
-  it("compte actuellement 20 recettes", () => {
-    expect(RECIPES.length).toBe(20);
+  it("compte actuellement 22 recettes", () => {
+    expect(RECIPES.length).toBe(22);
+  });
+
+  it("aucun id de recette en double", () => {
+    const ids = RECIPES.map((r) => r.id);
+    expect(ids.length).toBe(new Set(ids).size);
   });
 });

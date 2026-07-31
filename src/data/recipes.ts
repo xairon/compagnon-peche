@@ -606,6 +606,85 @@ export const RECIPES: Recipe[] = [
       "Salez à la sortie, servez très chaud avec du citron.",
     ],
   },
+  // La perche-soleil et le poisson-chat sont les deux espèces que l'app
+  // interdit de remettre vivantes à l'eau (voir leur fiche : la conduite à tenir
+  // n'est écrite qu'à cet endroit, et ces recettes ne la répètent pas). Elles
+  // n'avaient pourtant aucune recette : l'app imposait la mise à mort sans dire
+  // quoi en faire. Elles ne peuvent pas rejoindre `friture-poissons-blancs`
+  // telle quelle — la perche-soleil doit être étêtée (tête énorme pour un
+  // poisson de 12 cm, rendement dérisoire sinon) et le poisson-chat doit être
+  // dépouillé, jamais écaillé. D'où deux recettes distinctes.
+  //
+  // Aucune des deux n'a d'auteur ni de source historique : ce sont des espèces
+  // nord-américaines introduites au XIXᵉ siècle, absentes de la littérature
+  // culinaire française classique (La Varenne → Ali-Bab) d'où viennent les
+  // autres recettes de ce fichier. Les champs `author` et `year` sont donc
+  // laissés absents plutôt que remplis d'une attribution inventée.
+  {
+    id: "friture-perche-soleil",
+    species: ["perche-soleil"],
+    title: "Friture de perches-soleil",
+    origin: "Étangs et bordures (tradition)",
+    source:
+      "Préparation traditionnelle de friture de petits poissons ; aucune recette historique propre à l'espèce",
+    difficulty: 1,
+    prep: 25,
+    cook: 8,
+    bivouac: true,
+    tools: ["Bassine à friture", "Écumoire", "Écailleur"],
+    intro:
+      "La perche-soleil dépasse rarement 15 cm et sa tête occupe une bonne part du poisson : le rendement est faible et c'est pourquoi elle est presque toujours écartée de la casserole. La chair, elle, est fine et blanche. Écaillée, vidée et étêtée, elle se traite exactement comme l'éperlan — friture courte et très chaude, mangée avec les doigts. Comptez une quinzaine de poissons pour deux personnes.",
+    ing: [
+      "15 à 20 perches-soleil (soit ≈ 700 g bruts pour 2 personnes)",
+      "Lait, farine (ou moitié farine, moitié semoule fine)",
+      "Huile de friture neutre (1,5 à 2 L)",
+      "1 citron, sel, poivre",
+      "Persil frit (facultatif)",
+    ],
+    steps: [
+      "Écaillez à contre-sens : les écailles sont petites et bien accrochées, c'est le geste le plus long de la recette.",
+      "Videz, étêtez et coupez les nageoires dorsales, épineuses et piquantes.",
+      "Rincez, épongez soigneusement : un poisson humide fait retomber la température du bain et se détrempe.",
+      "Trempez dans le lait puis roulez dans la farine ; secouez l'excédent.",
+      "Chauffez l'huile à 180 °C et plongez les poissons par petites poignées pour ne pas faire chuter le bain.",
+      "Cuisez 2 à 3 min jusqu'au doré croustillant, égouttez sur papier absorbant.",
+      "Salez à la sortie du bain et servez très chaud avec du citron.",
+    ],
+  },
+  {
+    id: "poisson-chat-frit-depouille",
+    species: ["poisson-chat"],
+    title: "Poisson-chat frit (dépouillé)",
+    origin: "Étangs et canaux (tradition)",
+    source:
+      "Préparation traditionnelle des poissons à peau nue (dépouillage) ; aucune recette historique propre à l'espèce",
+    difficulty: 2,
+    prep: 30,
+    cook: 10,
+    bivouac: true,
+    tools: ["Pince à dépouiller (ou pince multiprise)", "Couteau à filet", "Poêle ou bassine à friture"],
+    safety:
+      "⚠️ MANIPULATION : les rayons antérieurs des pectorales et de la dorsale sont des épines dures et acérées qui traversent la peau — saisissez le poisson par le dessus, main derrière la tête, ou avec un chiffon épais. La piqûre est douloureuse et s'infecte facilement : désinfectez-la. Coupez ces trois épines à la pince avant de dépouiller. Le poisson-chat n'est pas bioaccumulateur, mais il vit dans les eaux stagnantes et vaseuses : indépendamment de l'espèce, certains plans d'eau sont sous arrêté préfectoral d'interdiction de consommation (PCB) — vérifiez localement. Cuisson à cœur, pas de préparation crue.",
+    intro:
+      "Le poisson-chat n'a pas d'écailles mais une peau nue, épaisse et coriace, au goût de vase : on ne l'écaille pas, on le dépouille — la peau se retire d'un bloc à la pince, comme un gant. Une fois nue, la chair est blanche, ferme et sans arêtes intramusculaires, ce qui en fait un des rares poissons de cette taille qu'un enfant peut manger sans surveillance. C'est le seul point positif d'une espèce dont la fiche donne la conduite à tenir après capture.",
+    ing: [
+      "6 à 8 poissons-chats de 20 à 30 cm",
+      "Farine, ou moitié farine moitié semoule de maïs fine",
+      "1 œuf battu (facultatif, pour une croûte plus épaisse)",
+      "Huile de friture neutre, ou beurre clarifié pour la poêle",
+      "1 citron, sel, poivre",
+    ],
+    steps: [
+      "Coupez à la pince les trois épines (les deux pectorales et la dorsale) avant toute autre manipulation.",
+      "Entaillez la peau tout autour, juste derrière la tête, sans entamer la chair.",
+      "Saisissez le lambeau de peau à la pince et tirez vers la queue : elle vient d'un seul tenant. Maintenez fermement la tête de l'autre main.",
+      "Étêtez et videz ; rincez la cavité, retirez la fine membrane noire qui la tapisse — c'est elle qui donne l'amertume.",
+      "Laissez les petits sujets entiers ; levez les filets sur les poissons de plus de 25 cm.",
+      "Épongez, farinez (ou passez à l'œuf puis à la farine) et secouez l'excédent.",
+      "Cuisez à 180 °C en bain, 4 à 5 min, ou à la poêle au beurre clarifié 4 min par face jusqu'à chair opaque et nacrée à cœur.",
+      "Égouttez, salez à la sortie, servez avec du citron.",
+    ],
+  },
   // Les gros cyprinidés (brème, chevesne, hotu, barbeau) n'avaient aucune
   // recette. La friture ne leur convient pas — c'est une préparation de PETITS
   // poissons, et ceux-ci dépassent souvent 50 cm. La terrine est la réponse
