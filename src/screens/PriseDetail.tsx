@@ -5,6 +5,7 @@ import { CAT_LABEL } from "../data/gear";
 import { usePhotoUrl } from "../lib/photos";
 import { dayPart } from "../lib/helpers";
 import { CatchEditor } from "../components/CatchEditor";
+import { DetailIntrouvable } from "../components/DetailIntrouvable";
 
 export function PriseDetail() {
   const { state, back, goTab, openSp, updateCatch, removeCatch } = useStore();
@@ -13,20 +14,9 @@ export function PriseDetail() {
   const [arm, setArm] = useState(false);
   const photo = usePhotoUrl(c?.photo);
 
-  if (!c) {
-    return (
-      <div className="screen">
-        <div className="topbar">
-          <button className="back" onClick={back} aria-label="Retour">
-            ‹
-          </button>
-        </div>
-        <div className="pad">
-          <div className="empty-note">Cette prise n'existe plus.</div>
-        </div>
-      </div>
-    );
-  }
+  // Une prise est LOCALE : un identifiant inconnu veut dire supprimée ici, pas
+  // « absente de cette version » — d'où une phrase à elle.
+  if (!c) return <DetailIntrouvable message="Cette prise n'existe plus." />;
 
   const spExists = SPECIES.some((s) => s.id === c.spid);
   const gearItems = (c.gearIds || []).map((id) => state.gear.find((g) => g.id === id)).filter(Boolean);

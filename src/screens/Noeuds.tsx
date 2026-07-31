@@ -5,6 +5,7 @@ import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
 import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 
 export function Noeuds() {
   const { nav, back } = useStore();
@@ -52,7 +53,7 @@ export function Noeuds() {
 export function KnotDetail() {
   const { state, back } = useStore();
   const knot = KNOTS.find((k) => k.id === state.knotId);
-  if (!knot) return null;
+  if (!knot) return <DetailIntrouvable message={"Ce nœud est introuvable." + LIEN_AUTRE_VERSION} />;
   const stepMedia = ALL_KNOT_STEP_MEDIA[knot.id];
   // Repli : une fiche sans séquence par étape garde son ancien schéma unique,
   // s'il existe (les 7 fiches d'origine avant upgrade).
