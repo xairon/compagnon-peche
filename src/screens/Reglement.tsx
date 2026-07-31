@@ -1,8 +1,10 @@
+import { REG_YEAR } from "../data/version";
 import { useStore } from "../store-hooks";
 import { NATIONAL_SIZES, DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { MAILLE_NOTE } from "../data/ecrevisses";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 export function Reglement() {
   const { state, set, back } = useStore();
@@ -17,6 +19,9 @@ export function Reglement() {
         <div className="topbar-title">Réglementation</div>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
+        {/* Stale data outranks the department question: applying the right
+            département's figures from the wrong season is still wrong. */}
+        <RegPerimeeWarning dept={state.dept} style={{ marginTop: 0, marginBottom: 12 }} />
         {state.outOfZoneDept ? (
           <OutOfZoneWarning
             outOfZoneDept={state.outOfZoneDept}
@@ -108,7 +113,7 @@ export function Reglement() {
         <div className="reg-block">
           {dept.regText}
           <div className="note" style={{ marginTop: 10 }}>
-            Arrêté préfectoral annuel — valable pour 2026. À revérifier chaque début d'année.
+            Arrêté préfectoral annuel — valable pour {REG_YEAR}. À revérifier chaque début d'année.
           </div>
           <div style={{ marginTop: 10, fontSize: 13.5 }}>
             <a href={dept.url} target="_blank" rel="noreferrer">

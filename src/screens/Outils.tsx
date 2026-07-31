@@ -1,3 +1,4 @@
+import { REG_YEAR } from "../data/version";
 import type { Screen } from "../store";
 import { useStore } from "../store-hooks";
 import { DEPARTEMENTS } from "../data/regulation";
@@ -75,7 +76,7 @@ export function Outils() {
 
         <div className="info" style={{ marginTop: 20 }}>
           Hors-ligne — toutes les fiches restent disponibles. Les données réglementaires embarquées
-          datent des arrêtés 2026 ; revérifiez chaque année.
+          datent des arrêtés {REG_YEAR} ; revérifiez chaque année.
         </div>
       </div>
     </div>

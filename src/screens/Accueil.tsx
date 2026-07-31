@@ -8,6 +8,7 @@ import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 import { usePhotoUrl } from "../lib/photos";
 import { fetchMeteo, weatherLabel, type Meteo, type MeteoHour } from "../lib/meteo";
 import {
@@ -205,6 +206,7 @@ export function Accueil() {
           </button>
         </div>
 
+        <RegPerimeeWarning dept={state.dept} style={{ marginTop: 10 }} />
         {state.outOfZoneDept ? (
           <OutOfZoneWarning
             outOfZoneDept={state.outOfZoneDept}

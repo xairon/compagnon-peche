@@ -11,6 +11,7 @@ import { priseView, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 function actStyle(kind: ActKind) {
   if (kind === "primary") return { bd: "#16281E", bg: "#16281E", fg: "#FBFAF7" };
@@ -74,6 +75,8 @@ export function Prise() {
         <div className="h1">Ma prise</div>
         <div className="h-sub">Garder ou relâcher — le bon geste, tout de suite</div>
       </div>
+
+      <RegPerimeeWarning dept={state.dept} style={{ margin: "0 18px 10px" }} />
 
       {(state.outOfZoneDept || !state.deptChosen) && (
         <div style={{ margin: "0 18px 10px" }}>
