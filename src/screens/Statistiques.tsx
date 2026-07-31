@@ -53,15 +53,15 @@ export function Statistiques() {
   const plural = (n: number) => (n > 1 ? "s" : "");
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back back-round" onClick={back} aria-label="Retour">
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title serif" style={{ fontSize: 20 }}>
+          <h1 className="topbar-title serif" style={{ fontSize: 20 }}>
             Statistiques
-          </div>
+          </h1>
           {total > 0 && (
             <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
               Depuis vos {total} prise{total > 1 ? "s" : ""}
@@ -204,6 +204,6 @@ export function Statistiques() {
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 }

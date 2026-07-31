@@ -8,12 +8,12 @@ import { REG_YEAR, VERIFIE_LE } from "../data/version";
 export function Sources() {
   const { back } = useStore();
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Sources &amp; mentions</div>
+        <h1 className="topbar-title">Sources &amp; mentions</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         {SOURCES.map((s) => (
@@ -80,6 +80,6 @@ export function Sources() {
           </a>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

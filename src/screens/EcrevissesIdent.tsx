@@ -6,12 +6,12 @@ export function EcrevissesIdent() {
   const { back } = useStore();
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Reconnaître les écrevisses</div>
+        <h1 className="topbar-title">Reconnaître les écrevisses</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         <div className="ecr-tri">
@@ -59,6 +59,6 @@ export function EcrevissesIdent() {
           et en Haute-Savoie, pas ici. Elle n'a donc pas de fiche d'identification dans cette app.
         </div>
       </div>
-    </div>
+    </main>
   );
 }

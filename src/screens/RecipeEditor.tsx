@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { Icon } from "../components/Icon";
@@ -20,6 +20,8 @@ export function RecipeEditor({
 }) {
   const { addRecipe, updateRecipe } = useStore();
   const fileRef = useRef<HTMLInputElement>(null);
+  // Préfixe d'identifiants pour lier chaque <label> à son champ.
+  const fid = useId();
 
   const [title, setTitle] = useState(initial?.title ?? "");
   const [species, setSpecies] = useState<string[]>(initial?.species ?? []);
@@ -136,7 +138,9 @@ export function RecipeEditor({
         <button className="back" onClick={onCancel} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">{initial ? "Modifier la recette" : "Nouvelle recette"}</div>
+        {/* h2 et non h1 : l'éditeur s'ouvre DANS le carnet (Carnet ›
+            CarnetRecettes), qui porte déjà le titre de l'écran. */}
+        <h2 className="topbar-title">{initial ? "Modifier la recette" : "Nouvelle recette"}</h2>
       </div>
 
       <div className="pad">
@@ -164,8 +168,9 @@ export function RecipeEditor({
         </div>
 
         <div className="field">
-          <label>Titre</label>
+          <label htmlFor={`${fid}-titre`}>Titre</label>
           <input
+            id={`${fid}-titre`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Sandre au beurre blanc"
@@ -189,6 +194,7 @@ export function RecipeEditor({
             <button
               key={s.id}
               className={"chip chip-sm" + (species.includes(s.id) ? " chip-on" : "")}
+              aria-pressed={species.includes(s.id)}
               onClick={() => toggleSp(s.id)}
             >
               {s.name}
@@ -197,8 +203,9 @@ export function RecipeEditor({
         </div>
 
         <div className="field" style={{ marginTop: 14 }}>
-          <label>Ingrédients — un par ligne</label>
+          <label htmlFor={`${fid}-ing`}>Ingrédients — un par ligne</label>
           <textarea
+            id={`${fid}-ing`}
             value={ing}
             onChange={(e) => setIng(e.target.value)}
             rows={5}
@@ -207,8 +214,9 @@ export function RecipeEditor({
         </div>
 
         <div className="field" style={{ marginTop: 12 }}>
-          <label>Préparation — une étape par ligne</label>
+          <label htmlFor={`${fid}-steps`}>Préparation — une étape par ligne</label>
           <textarea
+            id={`${fid}-steps`}
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
             rows={6}
@@ -217,8 +225,9 @@ export function RecipeEditor({
         </div>
 
         <div className="field" style={{ marginTop: 12 }}>
-          <label>Note (facultatif)</label>
+          <label htmlFor={`${fid}-note`}>Note (facultatif)</label>
           <textarea
+            id={`${fid}-note`}
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}

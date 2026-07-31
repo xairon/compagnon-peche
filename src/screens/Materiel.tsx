@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { get, set as idbSet } from "idb-keyval";
 import { useStore } from "../store-hooks";
 import { uid } from "../lib/helpers";
@@ -24,6 +24,8 @@ export function Materiel() {
   const [tab, setTab] = useState<"gear" | "bundles">("gear");
   const [bundles, setBundles] = useState<Bundle[]>([]);
   const [ready, setReady] = useState(false);
+  // Préfixe d'identifiants pour lier chaque <label> à son champ.
+  const fid = useId();
 
   const [gForm, setGForm] = useState<{ cat: GearCategory; name: string; detail: string } | null>(
     null,
@@ -62,7 +64,7 @@ export function Materiel() {
   };
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="pad" style={{ paddingBottom: 10 }}>
         <button
           className="back"
@@ -74,7 +76,7 @@ export function Materiel() {
         </button>
         <div style={{ display: "flex", alignItems: "flex-start" }}>
           <div style={{ flex: 1 }}>
-            <div className="h1">Matériel</div>
+            <h1 className="h1">Matériel</h1>
             <div className="h-sub">Votre équipement et vos ensembles montés</div>
           </div>
           <button className="pill-btn" onClick={() => nav("guide-materiel")}>
@@ -87,6 +89,7 @@ export function Materiel() {
             <button
               key={t}
               onClick={() => setTab(t)}
+              aria-pressed={tab === t}
               style={{
                 flex: 1,
                 height: 40,
@@ -122,6 +125,7 @@ export function Materiel() {
                     <button
                       key={c.id}
                       className="chip chip-sm"
+                      aria-pressed={on}
                       style={{
                         border: `1px solid ${on ? "#1D6E42" : "#E6E2D8"}`,
                         background: on ? "#E9F2EC" : "#fff",
@@ -135,8 +139,9 @@ export function Materiel() {
                 })}
               </div>
               <div className="field" style={{ marginTop: 12 }}>
-                <label>Nom</label>
+                <label htmlFor={`${fid}-g-nom`}>Nom</label>
                 <input
+                  id={`${fid}-g-nom`}
                   autoFocus
                   value={gForm.name}
                   onChange={(e) => setGForm({ ...gForm, name: e.target.value })}
@@ -144,8 +149,9 @@ export function Materiel() {
                 />
               </div>
               <div className="field" style={{ marginTop: 10 }}>
-                <label>Détail (optionnel)</label>
+                <label htmlFor={`${fid}-g-detail`}>Détail (optionnel)</label>
                 <input
+                  id={`${fid}-g-detail`}
                   value={gForm.detail}
                   onChange={(e) => setGForm({ ...gForm, detail: e.target.value })}
                   placeholder="Longueur, marque, taille…"
@@ -207,8 +213,9 @@ export function Materiel() {
           ) : (
             <div className="form-card">
               <div className="field">
-                <label>Nom de l'ensemble</label>
+                <label htmlFor={`${fid}-b-nom`}>Nom de l'ensemble</label>
                 <input
+                  id={`${fid}-b-nom`}
                   autoFocus
                   value={bForm.name}
                   onChange={(e) => setBForm({ ...bForm, name: e.target.value })}
@@ -216,8 +223,9 @@ export function Materiel() {
                 />
               </div>
               <div className="field" style={{ marginTop: 10 }}>
-                <label>Pour quelle pêche (optionnel)</label>
+                <label htmlFor={`${fid}-b-cible`}>Pour quelle pêche (optionnel)</label>
                 <input
+                  id={`${fid}-b-cible`}
                   value={bForm.target}
                   onChange={(e) => setBForm({ ...bForm, target: e.target.value })}
                   placeholder="Espèce, technique, spot…"
@@ -233,6 +241,8 @@ export function Materiel() {
                     <button
                       key={g.id}
                       className="pick-row"
+                      role="checkbox"
+                      aria-checked={on}
                       onClick={() =>
                         setBForm({
                           ...bForm,
@@ -300,7 +310,7 @@ export function Materiel() {
           )}
         </div>
       )}
-    </div>
+    </main>
   );
 }
 
@@ -340,12 +350,12 @@ export function GuideMateriel() {
   }, []);
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Guide — appâts, hameçons & leurres</div>
+        <h1 className="topbar-title">Guide — appâts, hameçons & leurres</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         {sections.map(({ key, title }) => (
@@ -498,6 +508,6 @@ export function GuideMateriel() {
           locale (certains appâts ou le vif peuvent être restreints).
         </div>
       </div>
-    </div>
+    </main>
   );
 }

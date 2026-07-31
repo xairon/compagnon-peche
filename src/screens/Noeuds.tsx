@@ -14,12 +14,12 @@ export function Noeuds() {
   ];
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Nœuds &amp; montages</div>
+        <h1 className="topbar-title">Nœuds &amp; montages</h1>
       </div>
       <div style={{ padding: "6px 18px 24px" }}>
         {groups.map((g) => (
@@ -45,7 +45,7 @@ export function Noeuds() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -59,13 +59,13 @@ export function KnotDetail() {
   const hasLegacyDiagram = !stepMedia && !!ALL_KNOT_MEDIA[knot.id];
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
         <div>
-          <div className="topbar-title">{knot.name}</div>
+          <h1 className="topbar-title">{knot.name}</h1>
           <div className="h-sub">{knot.use}</div>
         </div>
       </div>
@@ -98,6 +98,6 @@ export function KnotDetail() {
           <b>Quand l'utiliser :</b> {knot.when}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

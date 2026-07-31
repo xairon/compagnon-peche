@@ -15,16 +15,17 @@ export function PriseDetail() {
 
   if (!c) {
     return (
-      <div className="screen">
+      <main className="screen">
         <div className="topbar">
           <button className="back" onClick={back} aria-label="Retour">
             ‹
           </button>
+          <h1 className="topbar-title">Prise introuvable</h1>
         </div>
         <div className="pad">
           <div className="empty-note">Cette prise n'existe plus.</div>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -34,12 +35,12 @@ export function PriseDetail() {
 
   if (editing) {
     return (
-      <div className="screen">
+      <main className="screen">
         <div className="topbar">
           <button className="back" onClick={() => setEditing(false)} aria-label="Retour">
             ‹
           </button>
-          <div className="topbar-title">Modifier la prise</div>
+          <h1 className="topbar-title">Modifier la prise</h1>
         </div>
         <div className="pad">
           <CatchEditor
@@ -51,7 +52,7 @@ export function PriseDetail() {
             onCancel={() => setEditing(false)}
           />
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -63,7 +64,7 @@ export function PriseDetail() {
   if (c.technique) rows.push(["Technique", c.technique]);
 
   return (
-    <div className="screen" style={{ display: "block" }}>
+    <main className="screen" style={{ display: "block" }}>
       <div className="pd-photo">
         {photo ? <img src={photo} alt={c.sp} /> : <div className="pd-noimg">Pas de photo</div>}
         <button className="pd-back" onClick={back} aria-label="Retour">
@@ -73,9 +74,9 @@ export function PriseDetail() {
       </div>
 
       <div className="pad">
-        <div className="pd-title">
+        <h1 className="pd-title">
           {c.sp} · <b>{c.size}</b>
-        </div>
+        </h1>
         {spExists && (
           <button className="pd-fiche" onClick={() => openSp(c.spid)}>
             Voir la fiche de l'espèce ›
@@ -143,6 +144,6 @@ export function PriseDetail() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

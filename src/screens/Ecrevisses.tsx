@@ -6,6 +6,7 @@ import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";
 import { CRAYFISH_RECIPES } from "../data/ecrevisses-recipes";
 import { wakeSupported } from "../lib/wakelock";
 import { askNotifyPermission, notifyPermission } from "../lib/notify";
+import { useFermetureEchap } from "../lib/echap";
 import {
   DEFAULT_INTERVAL_MIN,
   MAX_BALANCES,
@@ -146,13 +147,13 @@ function Preparation({
   };
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={onBack} aria-label="Retour">
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">Écrevisses</div>
+          <h1 className="topbar-title">Écrevisses</h1>
           <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
             Séance de balances chronométrées
           </div>
@@ -165,7 +166,12 @@ function Preparation({
         </div>
         <div className="ecr-chips">
           {INTERVALS.map((m) => (
-            <button key={m} className={trempe === m ? "on" : ""} onClick={() => setTrempe(m)}>
+            <button
+              key={m}
+              className={trempe === m ? "on" : ""}
+              aria-pressed={trempe === m}
+              onClick={() => setTrempe(m)}
+            >
               {m} min
             </button>
           ))}
@@ -205,6 +211,7 @@ function Preparation({
           value={lieu}
           onChange={(e) => setLieu(e.target.value)}
           placeholder="Étang, bras mort, nom du coin…"
+          aria-label="Lieu de la séance"
         />
 
         <button className="ecr-start" onClick={start}>
@@ -250,7 +257,7 @@ function Preparation({
           <div className="ecr-reg-src">{REG_SOURCE}</div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -271,6 +278,11 @@ function SessionEnCours({
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [options, setOptions] = useState<string | null>(null);
+
+  // La feuille d'options d'une balance se ferme à Échap. Elle recouvre l'écran
+  // sans piéger le focus : au clavier, la seule sortie était de retrouver le
+  // bouton « Fermer ».
+  useFermetureEchap(options !== null, () => setOptions(null));
 
   // Removing a balance is undoable rather than armed-then-confirmed: it's an
   // action taken several times a session (an empty or overdue net dropped by
@@ -332,13 +344,13 @@ function SessionEnCours({
         : "Aucune balance en trempe";
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={onBack} aria-label="Retour">
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">Séance en cours</div>
+          <h1 className="topbar-title">Séance en cours</h1>
           <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
             {session.lieu} · {elapsed}
           </div>
@@ -484,6 +496,6 @@ function SessionEnCours({
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

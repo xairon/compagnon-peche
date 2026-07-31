@@ -87,9 +87,9 @@ export function Especes() {
     .filter(Boolean) as Species[];
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div style={{ padding: "22px 18px 0" }}>
-        <div className="h1">Espèces</div>
+        <h1 className="h1">Espèces</h1>
         <div className="h-sub">Eau douce · France — dépt. actif : {deptName}</div>
 
         <div className="search">
@@ -98,6 +98,7 @@ export function Especes() {
             value={state.q}
             onChange={(e) => set({ q: e.target.value })}
             placeholder="Rechercher (sandre, brochet…)"
+            aria-label="Rechercher une espèce"
           />
           {state.q.length > 0 && (
             <button className="clear" onClick={() => set({ q: "" })} aria-label="Effacer la recherche">
@@ -147,6 +148,7 @@ export function Especes() {
               <button
                 key={id}
                 className="chip"
+                aria-pressed={active}
                 style={{
                   border: `1px solid ${active ? "#16281E" : "#E6E2D8"}`,
                   background: active ? "#16281E" : "#FFFFFF",
@@ -223,6 +225,6 @@ export function Especes() {
           .
         </div>
       )}
-    </div>
+    </main>
   );
 }

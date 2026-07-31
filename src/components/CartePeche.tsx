@@ -39,7 +39,7 @@ function dateFr(d: Date): string {
 
 function LienFnpf({ children }: { children: string }) {
   return (
-    <a href={URL_FNPF} target="_blank" rel="noopener noreferrer">
+    <a className="cp-lien-fnpf" href={URL_FNPF} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );

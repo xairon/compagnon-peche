@@ -17,12 +17,12 @@ export function TechniqueDetail() {
   const usedByRecipes = RECIPES.filter((r) => r.techniques?.includes(t.id));
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">{t.name}</div>
+        <h1 className="topbar-title">{t.name}</h1>
       </div>
       {hasMedia("technique", t.id) && (
         <div className="tech-photo">
@@ -118,6 +118,6 @@ export function TechniqueDetail() {
 
         {t.source && <div className="source" style={{ marginTop: 14 }}>Source : {t.source}</div>}
       </div>
-    </div>
+    </main>
   );
 }

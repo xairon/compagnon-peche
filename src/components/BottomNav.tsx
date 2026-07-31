@@ -30,7 +30,7 @@ export function BottomNav() {
   const { state, startPrise } = useStore();
   const priseActive = state.screen === "prise";
   return (
-    <div className="bottom-nav">
+    <nav className="bottom-nav" aria-label="Navigation principale">
       {LEFT.map(([id, label]) => (
         <NavBtn key={id} id={id} label={label} />
       ))}
@@ -50,6 +50,6 @@ export function BottomNav() {
       {RIGHT.map(([id, label]) => (
         <NavBtn key={id} id={id} label={label} />
       ))}
-    </div>
+    </nav>
   );
 }

@@ -554,7 +554,7 @@ export function Fiche() {
   ];
 
   return (
-    <div className="screen" ref={scrollRef} style={{ display: "block" }}>
+    <main className="screen" ref={scrollRef} style={{ display: "block" }}>
       <div className="hero">
         <Gallery id={sp.id} placeholder={`Photo réelle plein cadre — ${sp.name}`} dark />
         <button className="back" onClick={back} aria-label="Retour">
@@ -573,7 +573,7 @@ export function Fiche() {
         <div className="fade" />
         <div className="name">
           <div className="hero-kicker">{GROUP_LABEL[sp.group] || "Espèce"}</div>
-          <div className="t">{sp.name}</div>
+          <h1 className="t">{sp.name}</h1>
           <div className="latin">{sp.latin}</div>
           {/* Les variétés sont des formes d'une MÊME espèce (écailles, robe) :
               on les nomme pour que le pêcheur qui les cherche se reconnaisse,
@@ -596,6 +596,7 @@ export function Fiche() {
             <button
               key={sec.id}
               className="sm-chip"
+              aria-pressed={open}
               style={{
                 border: `1px solid ${open ? "#16281E" : "#E6E2D8"}`,
                 background: open ? "#16281E" : "#fff",
@@ -740,6 +741,6 @@ export function Fiche() {
           Que faire de ma prise ?
         </button>
       </div>
-    </div>
+    </main>
   );
 }

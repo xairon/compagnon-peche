@@ -104,12 +104,12 @@ export function Credits() {
   );
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Crédits photos</div>
+        <h1 className="topbar-title">Crédits photos</h1>
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         <div className="info" style={{ marginBottom: 16 }}>
@@ -192,6 +192,6 @@ export function Credits() {
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }

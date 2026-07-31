@@ -59,13 +59,13 @@ export function BilanEcrevisses({
   };
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={onClose} aria-label={closed ? "Retour au carnet" : "Retour à la séance"}>
           ‹
         </button>
         <div style={{ flex: 1 }}>
-          <div className="topbar-title">{closed ? "Corriger le bilan" : "Bilan de séance"}</div>
+          <h1 className="topbar-title">{closed ? "Corriger le bilan" : "Bilan de séance"}</h1>
           <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>
             {session.lieu} · {closed ? session.date : null}
             {closed ? " · " : null}
@@ -124,6 +124,6 @@ export function BilanEcrevisses({
           {closed ? "Enregistrer la correction" : "Enregistrer et clôturer"}
         </button>
       </div>
-    </div>
+    </main>
   );
 }

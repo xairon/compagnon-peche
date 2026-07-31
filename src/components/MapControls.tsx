@@ -69,6 +69,7 @@ export function MapControls({
               <button
                 key={id}
                 className={"mc-base" + (basemap === id ? " on" : "")}
+                aria-pressed={basemap === id}
                 onClick={() => onBasemap(id)}
               >
                 {BASEMAPS[id].label}
