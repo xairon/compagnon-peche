@@ -14,6 +14,11 @@ import { cspHeader } from "./src/lib/csp";
 // dérivés de ceux de fetchT, pour que les deux ne puissent pas se contredire.
 // Un service worker qui coupe avant l'app sert un cache vide à la 1re visite.
 import { SW_DELAIS_S } from "./src/lib/sw-delais";
+// Idem pour la découpe du précache : quels dossiers restent dans l'install
+// bloquant et lesquels passent en réserve. La liste est partagée avec
+// src/lib/reserve-hors-ligne.ts, qui remplit le cache que la route lit — deux
+// listes séparées finiraient par décrire deux découpes différentes.
+import { GLOB_IGNORES_PRECACHE, MOTIF_RESERVE, CACHE_RESERVE } from "./src/lib/precache-decoupe";
 // Idem pour le manifeste : sorti d'ici pour que manifest.test.ts puisse
 // confronter chaque icône et chaque capture déclarées au contenu réel de
 // public/, et vérifier que les balises og: d'index.html pointent vers la même
@@ -76,13 +81,20 @@ export default defineConfig({
       includeAssets: ["favicon.svg", "icon-192.png", "icon-512.png", "icon-maskable-512.png"],
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,webp,woff2}"],
-        // Full-size species photos (~11 MB) are NOT precached: they made a first
-        // install 13.7 MB, which is a lot to ask over 4G at the water's edge. The
-        // 400 px thumbnails under /assets/species-sm ARE precached (~1.9 MB), so
-        // every list, grid and confusion tile works offline out of the box; the
-        // full photo is cached the first time a fiche is opened, and the gallery
-        // falls back to the thumbnail until then. Regenerate with `npm run thumbs`.
-        globIgnores: ["**/assets/species/**"],
+        // Ce qui reste ici est le NOYAU : code, styles, polices, icônes,
+        // manifeste — 25 entrées, 2 728 Kio mesurés le 31/07/2026. C'est tout
+        // ce qu'il faut pour démarrer et rendre un verdict, et c'est la seule
+        // chose dont l'activation du service worker dépend désormais.
+        //
+        // Sortent d'ici (voir src/lib/precache-decoupe.ts pour les chiffres) :
+        //  · assets/species/ — les 14,5 Mio de photos pleine taille, déjà
+        //    exclues avant cette découpe, servies par leur route CacheFirst à
+        //    l'ouverture d'une fiche ;
+        //  · les 221 illustrations de la RÉSERVE — 5 132 Kio, 90 % des entrées
+        //    du précache. Elles restent disponibles hors ligne : l'app les
+        //    télécharge derrière l'activation (src/lib/reserve-hors-ligne.ts)
+        //    dans le cache que la route ci-dessous interroge.
+        globIgnores: [...GLOB_IGNORES_PRECACHE],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         // Once the user accepts the update, the freshly-activated worker must take
         // control of the OPEN page so `controllerchange` fires and the plugin reloads
@@ -91,6 +103,23 @@ export default defineConfig({
         clientsClaim: true,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
+          {
+            // La réserve hors-ligne : les 221 illustrations sorties du précache
+            // bloquant. C'est l'app qui remplit ce cache, après l'activation et
+            // en parallèle (src/lib/reserve-hors-ligne.ts) ; le service worker
+            // n'a qu'à le lire. Pas d'`expiration` : la réserve est bornée par
+            // sa propre liste (5 132 Kio), et c'est `preparerReserve()` qui en
+            // fait le ménage — un `maxEntries` ici purgerait des fichiers que
+            // l'app croit présents, donc promettrait un hors-ligne faux.
+            urlPattern: MOTIF_RESERVE,
+            handler: "CacheFirst",
+            options: {
+              cacheName: CACHE_RESERVE,
+              // 200 seulement : une réponse opaque ou un 404 mis en cache
+              // serait resservi hors ligne à la place de l'image, sans recours.
+              cacheableResponse: { statuses: [200] },
+            },
+          },
           {
             // Full-size species photos, kept out of the precache (see globIgnores):
             // cached the first time a fiche is opened, then available offline for good.

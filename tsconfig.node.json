@@ -16,11 +16,14 @@
   //  · sw-delais.ts  — les délais du service worker, comparés à ceux de fetchT
   //  · net-bornes.ts — dont sw-delais dérive
   //  · manifest.ts   — le manifeste PWA, confronté au contenu réel de public/
+  //  · precache-decoupe.ts — la coupure noyau / réserve, partagée avec
+  //    reserve-hors-ligne.ts qui remplit le cache que la route du SW interroge
   "include": [
     "vite.config.ts",
     "src/lib/csp.ts",
     "src/lib/sw-delais.ts",
     "src/lib/net-bornes.ts",
-    "src/lib/manifest.ts"
+    "src/lib/manifest.ts",
+    "src/lib/precache-decoupe.ts"
   ]
 }
