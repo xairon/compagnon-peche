@@ -1,0 +1,28 @@
+{
+ "count": 1,
+ "api_version": "1.0.1",
+ "data": [
+  {
+   "geometry": {
+    "type": "Point",
+    "crs": {
+     "type": "name",
+     "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+     }
+    },
+    "coordinates": [
+     1.5255734605666336,
+     47.67397912736804
+    ]
+   },
+   "code_station": "04051850",
+   "libelle_station": "LOIRE à MUIDES-SUR-LOIRE",
+   "longitude": 1.525573461,
+   "latitude": 47.673979127,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  }
+ ]
+}
