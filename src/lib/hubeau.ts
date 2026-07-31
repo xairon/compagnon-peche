@@ -7,6 +7,7 @@
 
 import { distKm, boxAround } from "./geo";
 import { fetchT } from "./net";
+import { choisirStation } from "./station";
 
 const BASE = "https://hubeau.eaufrance.fr/api/v1/etat_piscicole";
 const HYDRO = "https://hubeau.eaufrance.fr/api/v2/hydrometrie";
@@ -113,24 +114,26 @@ export async function nearestHydroStation(
   const r = await fetchT(url, { signal });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = await r.json();
-  let best: HydroStation | null = null;
+  const cands: HydroStation[] = [];
   for (const d of j.data || []) {
     const la = Number(d.latitude_station ?? d.latitude);
     const lo = Number(d.longitude_station ?? d.longitude);
     if (!Number.isFinite(la) || !Number.isFinite(lo)) continue;
-    const dist = distKm(lat, lon, la, lo);
-    if (!best || dist < best.dist) {
-      best = {
-        code: String(d.code_station),
-        nom: String(d.libelle_station || d.libelle_cours_eau || "Station"),
-        cours: String(d.libelle_cours_eau || ""),
-        lat: la,
-        lon: lo,
-        dist,
-      };
-    }
+    cands.push({
+      code: String(d.code_station),
+      nom: String(d.libelle_station || d.libelle_cours_eau || "Station"),
+      cours: String(d.libelle_cours_eau || ""),
+      lat: la,
+      lon: lo,
+      dist: distKm(lat, lon, la, lo),
+    });
   }
-  return best;
+  // Bounded by DIST_MAX.hydro. `en_service=true` is not a promise of output —
+  // 42 of the Indre's 66 in-service stations publish no discharge at all — but
+  // the referential doesn't say which, and asking every candidate would cost a
+  // round-trip each. Distance bounding at least stops the answer coming from
+  // 60 km away, and the freshness guard downstream dates whatever comes back.
+  return choisirStation(cands, "hydro");
 }
 
 export type Trend = "rising" | "falling" | "stable";
@@ -293,12 +296,12 @@ export async function waterTemp(
 
   const cands = (await Promise.all([physicoP, thermieP])).filter(Boolean) as WaterTemp[];
   if (!cands.length) return null;
-  // Most recent wins; tie-break on proximity.
-  cands.sort((a, b) => {
-    const dt = new Date(b.date).getTime() - new Date(a.date).getTime();
-    return dt !== 0 ? dt : a.dist - b.dist;
-  });
-  return cands[0];
+  // Proximity decides, freshness filters — NOT the other way round. Sorting by
+  // date first made the app cross a basin to gain a few days: measured at
+  // Blois, CHER à SAINT-AIGNAN (35,2 km, another river) beat MEES à
+  // CHAUSSEE-SAINT-VICTOR (3,4 km) because it was eight days newer. Water
+  // temperature does not carry across catchments.
+  return choisirStation(cands, "temperature");
 }
 
 // ---------------------------------------------------------------------------
