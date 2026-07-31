@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
-import { SPECIES } from "../data/species";
+import { SPECIES, chargerFiches } from "../data/species";
 import { DEPARTEMENTS, DEPT_REG, localRegRows } from "../data/regulation";
 import { Icon } from "../components/Icon";
 import { ICONS, SEC_ICONS } from "../components/icons-data";
@@ -94,7 +94,32 @@ const EXPLAIN: Record<string, { title: string; text: string }> = {
 
 export function Fiche() {
   const { state, set, nav, back } = useStore();
-  const sp = SPECIES.find((s) => s.id === state.spId) || SPECIES[0];
+  // Le catalogue LÉGER d'abord, l'enrichi dès qu'il arrive. Les 182 ko de
+  // sections descriptives ne sont plus dans le premier chargement de tout le
+  // monde, mais cet écran est le seul qui les lit — il les demande donc, et
+  // rend d'abord la version sans elles.
+  //
+  // `cat` n'est PAS un état d'attente : l'en-tête, la maille, le quota, la
+  // saison et la bannière « espèce protégée » viennent du catalogue léger et
+  // sont exacts dès le premier rendu. Ce qui se complète ensuite, ce sont les
+  // sections descriptives — jamais un verdict. Le chunk étant précaché, le
+  // décalage est imperceptible hors ligne comme en ligne.
+  const [cat, setCat] = useState(SPECIES);
+  const [fichesKo, setFichesKo] = useState(false);
+  useEffect(() => {
+    let vivant = true;
+    chargerFiches().then(
+      (c) => vivant && setCat(c),
+      // Un module qui ne se charge pas n'est pas « cette espèce n'a pas de
+      // fiche » : le dire, plutôt que d'afficher un vide qui se lirait comme
+      // une absence de contenu.
+      () => vivant && setFichesKo(true),
+    );
+    return () => {
+      vivant = false;
+    };
+  }, []);
+  const sp = cat.find((s) => s.id === state.spId) || cat[0];
   const seas = season(sp);
   const deptName = DEPARTEMENTS[state.dept].name;
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -588,6 +613,16 @@ export function Fiche() {
           )}
         </div>
       </div>
+
+      {/* Un chargement raté n'est pas « cette espèce n'a pas de fiche ». Sans
+          ce mot, les sections descriptives manqueraient en silence et se
+          liraient comme une absence de contenu. */}
+      {fichesKo && (
+        <div className="ecr-warn" style={{ margin: "10px 18px 0" }}>
+          Les sections détaillées (identification, pêche, cuisine) n'ont pas pu être chargées.
+          Réglementation, maille et quota ci-dessus restent exacts. Réessayez une fois en ligne.
+        </div>
+      )}
 
       <div className="sommaire">
         {sections.map((sec) => {

@@ -1,7 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { FICHES, withFiche } from "./fiches";
 import { BASE_SPECIES } from "./species-base";
-import { SPECIES } from "./species";
+// Importe SPECIES_FICHES et non SPECIES : depuis que les 182 ko de sections
+// descriptives sont chargés à la demande, `SPECIES` est le catalogue LÉGER.
+// Ces garde-fous portent sur le contenu des fiches — les faire lire le
+// catalogue léger les rendrait aveugles sans rien casser, ce qui est la pire
+// des dérives. Aucune assertion n'est modifiée, seule la source l'est.
+import { SPECIES_FICHES as SPECIES } from "./species-fiches";
 import { IDENT } from "./identification";
 import type { Species } from "../types";
 

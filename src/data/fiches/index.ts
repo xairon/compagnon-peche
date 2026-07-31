@@ -3,6 +3,7 @@ import { CYPRINIDES } from "./cyprinides";
 import { MIGRATEURS } from "./migrateurs";
 import { AUTRES } from "./autres";
 import { CARNASSIERS_SALMONIDES } from "./carnassiers-salmonides";
+import { nePasPecher } from "../peche-interdite";
 
 /**
  * Enrichment overlays for the auto-generated "base" species.
@@ -39,12 +40,6 @@ export const FICHES: Record<string, Fiche> = {
   ...AUTRES,
   ...CARNASSIERS_SALMONIDES,
 };
-
-/** A species nobody may simply catch and keep: telling them how to fish it, or
- *  how to cook it, is a contradiction whatever the rest of the fiche says. */
-function nePasPecher(sp: Species): boolean {
-  return !!sp.protected || sp.season === "special";
-}
 
 /**
  * Apply the overlay for a species — descriptive sections only.

@@ -1,6 +1,6 @@
 import type { Species } from "../types";
 import { BASE_SPECIES } from "./species-base";
-import { withFiche } from "./fiches";
+import { sansPecheInterdite } from "./peche-interdite";
 import { ANSES_GEN, ANSES_SENS } from "./edibility";
 
 // Shared health messages. Wording is taken from the ANSES fact sheet
@@ -1547,7 +1547,23 @@ const CURATED: Species[] = [
 // withFiche s'applique AUSSI aux fiches rédigées à la main : la règle « pas de
 // technique de pêche sur une espèce protégée » ne souffre pas d'exception selon
 // l'origine de la fiche — la vandoise et l'anguille en portaient une.
-export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES].map(withFiche);
+export const SPECIES: Species[] = [...CURATED, ...BASE_SPECIES].map(sansPecheInterdite);
+
+/**
+ * Le même catalogue, AVEC les sections descriptives.
+ *
+ * 182 ko de fiches (identification, pêche, cuisine, biologie) que tout écran
+ * important SPECIES tirait jusqu'ici, alors qu'un seul les lit : l'écran Fiche.
+ * Elles partent donc dans leur propre module, chargé à la demande — et
+ * précaché, donc disponible hors ligne comme le reste.
+ *
+ * La garde réglementaire, elle, ne part PAS : `sansPecheInterdite` s'applique
+ * au catalogue de base ci-dessus. Une règle qui décide de ce que l'app a le
+ * droit d'afficher ne se charge pas en différé.
+ */
+export function chargerFiches(): Promise<Species[]> {
+  return import("./species-fiches").then((m) => m.SPECIES_FICHES);
+}
 
 /** Ids of the hand-curated species — the ones the app treats as its headline
  *  catalogue. Screens used to infer this from `depth !== "base"`, which stopped

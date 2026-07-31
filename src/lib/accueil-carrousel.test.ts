@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { SPECIES, CURATED_IDS } from "../data/species";
+// Importe SPECIES_FICHES et non SPECIES : depuis que les 182 ko de sections
+// descriptives sont chargés à la demande, `SPECIES` est le catalogue LÉGER.
+// Ces garde-fous portent sur le contenu des fiches — les faire lire le
+// catalogue léger les rendrait aveugles sans rien casser, ce qui est la pire
+// des dérives. Aucune assertion n'est modifiée, seule la source l'est.
+import { CURATED_IDS } from "../data/species";
+import { SPECIES_FICHES as SPECIES } from "../data/species-fiches";
 import { isPlainlyOpen } from "./statut";
 
 /**
