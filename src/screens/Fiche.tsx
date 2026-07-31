@@ -371,7 +371,7 @@ export function Fiche() {
                   {r.year ? ` · ${r.year}` : ""}
                 </div>
               </div>
-              <span style={{ color: "#C9C3B4" }}>›</span>
+              <span style={{ color: "#95907f" }}>›</span>
             </button>
           ))}
         </>

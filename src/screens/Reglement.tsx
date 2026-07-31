@@ -82,7 +82,7 @@ export function Reglement() {
         <div className="reg-block">
           <b>3 carnassiers / jour</b> (sandre + brochet + black-bass), <b>dont 2 brochets maximum</b>.
           Le préfet peut durcir, jamais assouplir.
-          <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 8 }}>Art. R436-21.</div>
+          <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 8 }}>Art. R436-21.</div>
         </div>
 
         <div className="label" style={{ margin: "18px 0 8px" }}>
@@ -95,7 +95,7 @@ export function Reglement() {
           dimanche de janvier, puis du dernier samedi d'avril au 31 décembre.
           <br />
           <b>Horaires</b> : de ½ h avant le lever à ½ h après le coucher du soleil.
-          <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 8 }}>
+          <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 8 }}>
             Fiche F2117, service-public.gouv.fr.
           </div>
         </div>

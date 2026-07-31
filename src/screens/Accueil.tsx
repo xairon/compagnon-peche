@@ -490,7 +490,7 @@ export function Accueil() {
           ))}
         </div>
 
-        <div style={{ fontSize: 11.5, color: "#a8a495", margin: "16px 0 4px", lineHeight: 1.5 }}>
+        <div style={{ fontSize: 11.5, color: "var(--muted)", margin: "16px 0 4px", lineHeight: 1.5 }}>
           Météo & conditions : requêtes aux API publiques Open-Meteo et Hub'Eau avec vos coordonnées
           (éphéméride calculée localement). Votre carnet, vos photos et votre profil, eux, restent
           100 % sur votre appareil — jamais transmis.

@@ -185,7 +185,7 @@ export function OutilsTerrain() {
           ))}
         </div>
 
-        <div style={{ fontSize: 11.5, color: "#a8a495", marginTop: 16, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 16, lineHeight: 1.5 }}>
           Chronos locaux à titre d'aide. Les horaires sont calculés depuis l'éphéméride — la
           réglementation applicable reste celle de l'arrêté préfectoral.
         </div>

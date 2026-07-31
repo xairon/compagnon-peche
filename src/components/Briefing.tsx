@@ -385,7 +385,7 @@ export function Briefing({
                     ? ` · eau : ${descriptionMesure({ station: temp.data.station, cours: temp.data.cours, dist: temp.data.dist })} · relevé ${ago(temp.data.date)}`
                     : !temp.loading && " · pas de capteur température à proximité"}
                   {temp.data && isStaleWaterTemp(temp.data.date) && (
-                    <b style={{ color: "#b06e14" }}> — température ancienne, à titre indicatif</b>
+                    <b style={{ color: "var(--amber)" }}> — température ancienne, à titre indicatif</b>
                   )}
                 </div>
                 {/* Dire pourquoi la mesure vient de plus loin que d'habitude.
@@ -494,7 +494,7 @@ export function Briefing({
                   })}{" "}
                   · analyse ponctuelle (labo) du {frShort(quality.data.date)}
                   {isStaleQuality(quality.data.date) && (
-                    <b style={{ color: "#b06e14" }}> — donnée ancienne, à titre indicatif</b>
+                    <b style={{ color: "var(--amber)" }}> — donnée ancienne, à titre indicatif</b>
                   )}
                 </div>
                 {isTooFar(quality.data.dist) && memeCours(quality.data.coursCode) && (

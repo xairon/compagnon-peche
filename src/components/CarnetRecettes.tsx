@@ -196,7 +196,7 @@ export function CarnetRecettes() {
               <div style={{ fontSize: 14.5, fontWeight: 600 }}>{t.name}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{t.steps.length} étape(s)</div>
             </div>
-            <span style={{ color: "#C9C3B4" }}>›</span>
+            <span style={{ color: "#95907f" }}>›</span>
           </button>
         ))}
       </div>

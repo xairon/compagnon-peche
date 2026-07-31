@@ -46,7 +46,7 @@ export function Regle() {
       </div>
 
       <div className="regle-area" ref={areaRef}>
-        <div style={{ position: "absolute", top: 6, left: 56, right: 16, fontSize: 11, color: "#A8A495", lineHeight: 1.4 }}>
+        <div style={{ position: "absolute", top: 6, left: 56, right: 16, fontSize: 11, color: "var(--muted)", lineHeight: 1.4 }}>
           Vérifiez l'échelle : une carte bancaire doit mesurer 8,6 cm sur cette règle.
         </div>
 

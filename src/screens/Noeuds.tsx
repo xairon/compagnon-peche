@@ -39,7 +39,7 @@ export function Noeuds() {
                   <div style={{ fontSize: 14.5, fontWeight: 600 }}>{k.name}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{k.use}</div>
                 </div>
-                <span style={{ color: "#C9C3B4" }}>›</span>
+                <span style={{ color: "#95907f" }}>›</span>
               </button>
             ))}
           </div>
