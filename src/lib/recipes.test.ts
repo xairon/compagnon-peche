@@ -3,12 +3,16 @@ import {
   searchRecipes,
   searchTechniques,
   searchableSpecies,
+  searchableTechniques,
   recentCatchRecipes,
+  especesSousRegime,
+  especesANePasRelacher,
+  recettesPresentables,
 } from "./recipes";
 import { RECIPES } from "../data/recipes";
 import { CRAYFISH_RECIPES } from "../data/ecrevisses-recipes";
 import { TECHNIQUES } from "../data/techniques";
-import type { PersonalRecipe, Catch, CrayfishSession } from "../types";
+import type { PersonalRecipe, Catch, CrayfishSession, Recipe } from "../types";
 
 const GUIDE = [...RECIPES, ...CRAYFISH_RECIPES];
 
@@ -108,6 +112,183 @@ describe("searchRecipes — filtre difficulté/temps et bivouac", () => {
       expect(h.recipe.cook).toBeGreaterThan(0); // exclut cook:0 par construction ci-dessus
       expect(h.recipe.prep + h.recipe.cook).toBeLessThanOrEqual(45);
     }
+  });
+});
+
+describe("searchRecipes — noms vernaculaires (lib/recherche.ts)", () => {
+  // Le module cuisine se cherche avec les mots du bord de l'eau, pas ceux du
+  // TAXREF. « barbotte » et « miroir » n'apparaissent NULLE PART dans le texte
+  // des recettes concernées (vérifié) : seul l'alias d'espèce peut les relier.
+  it("« barbotte » trouve la friture de poisson-chat", () => {
+    const ids = searchRecipes("barbotte", {}, GUIDE, []).map((h) => h.recipe.id);
+    expect(ids).toContain("poisson-chat-frit-depouille");
+  });
+
+  it("« miroir » trouve les recettes de carpe commune (variété d'écailles, pas une espèce)", () => {
+    const ids = searchRecipes("miroir", {}, GUIDE, []).map((h) => h.recipe.id);
+    expect(ids).toContain("carpe-a-la-chambord");
+  });
+
+  it("« calicoba » trouve la friture de perche-soleil — l'invasive qu'on doit tuer", () => {
+    const ids = searchRecipes("calicoba", {}, GUIDE, []).map((h) => h.recipe.id);
+    expect(ids).toContain("friture-perche-soleil");
+  });
+});
+
+describe("searchRecipes — pertinence", () => {
+  it("un titre qui porte le mot passe devant une recette qui ne l'a qu'en ingrédient", () => {
+    // « beurre » est dans le TITRE de « Sandre & brochet au beurre blanc » (13ᵉ du
+    // corpus) et dans les INGRÉDIENTS de recettes qui la précèdent dans le
+    // fichier. Sans classement, l'ordre du fichier gagne et la recette qui parle
+    // vraiment de beurre blanc arrive après celles qui en mettent une noisette.
+    const hits = searchRecipes("beurre", {}, GUIDE, []);
+    const ids = hits.map((h) => h.recipe.id);
+    expect(ids.length).toBeGreaterThan(1);
+    expect(ids[0]).toBe("sandre-brochet-au-beurre-blanc");
+  });
+
+  it("le classement ne perd aucun résultat", () => {
+    const avant = searchRecipes("truite", {}, GUIDE, []).map((h) => h.recipe.id).sort();
+    expect(avant.length).toBeGreaterThan(0);
+    expect(new Set(avant).size).toBe(avant.length);
+  });
+});
+
+describe("searchRecipes — filtre difficulté", () => {
+  it("ne garde que les recettes du niveau demandé", () => {
+    const hits = searchRecipes("", { difficulty: 1 }, GUIDE, []);
+    expect(hits.length).toBeGreaterThan(0);
+    for (const h of hits) {
+      expect(h.kind).toBe("guide");
+      if (h.kind !== "guide") continue;
+      expect(h.recipe.difficulty).toBe(1);
+    }
+  });
+
+  it("exclut les recettes personnelles — elles ne portent aucune difficulté", () => {
+    const hits = searchRecipes("", { difficulty: 1 }, GUIDE, [perso()]);
+    expect(hits.every((h) => h.kind === "guide")).toBe(true);
+  });
+});
+
+describe("searchRecipes — filtre technique", () => {
+  it("ne garde que les recettes qui déclarent la technique", () => {
+    const hits = searchRecipes("", { techniqueId: "degorgeage" }, GUIDE, []);
+    expect(hits.length).toBeGreaterThan(0);
+    for (const h of hits) {
+      expect(h.kind).toBe("guide");
+      if (h.kind !== "guide") continue;
+      expect(h.recipe.techniques ?? []).toContain("degorgeage");
+    }
+  });
+
+  it("exclut les recettes personnelles — elles ne déclarent aucune technique", () => {
+    const hits = searchRecipes("", { techniqueId: "degorgeage" }, GUIDE, [perso()]);
+    expect(hits.every((h) => h.kind === "guide")).toBe(true);
+  });
+});
+
+describe("searchRecipes — filtre « à ne pas relâcher »", () => {
+  it("ne garde que les recettes d'espèces dont la remise à l'eau vivante est interdite", () => {
+    const hits = searchRecipes("", { nePasRelacherOnly: true }, GUIDE, []);
+    const ids = hits.map((h) => h.recipe.id);
+    // Le cas d'usage qui a motivé l'ajout de ces recettes : l'app INTERDIT de
+    // remettre ces poissons vivants à l'eau, elle doit dire quoi en faire.
+    expect(ids).toContain("friture-perche-soleil");
+    expect(ids).toContain("poisson-chat-frit-depouille");
+    // Les écrevisses pêchables sont dans le même régime (R432-5).
+    expect(ids).toContain("ecrevisses-a-la-nage");
+    // La truite fario n'est pas invasive : elle ne doit pas passer.
+    expect(ids).not.toContain("truite-meuniere");
+  });
+});
+
+describe("especesANePasRelacher", () => {
+  it("liste les espèces invasives qui ont réellement une recette, avec leur nom affichable", () => {
+    const out = especesANePasRelacher(GUIDE);
+    const ids = out.map((e) => e.id);
+    expect(ids).toContain("perche-soleil");
+    expect(ids).toContain("poisson-chat");
+    expect(ids).toContain("silure");
+    expect(ids).toContain("louisiane");
+    expect(out.find((e) => e.id === "perche-soleil")?.name).toBe("Perche soleil");
+    expect(out.every((e) => e.count > 0)).toBe(true);
+  });
+
+  it("ne liste aucune espèce dépourvue de recette", () => {
+    const out = especesANePasRelacher([]);
+    expect(out).toEqual([]);
+  });
+});
+
+describe("garde des espèces interdites — la règle de peche-interdite.ts", () => {
+  const esturgeon: Recipe = {
+    id: "recette-interdite-de-test",
+    species: ["esturgeon-europeen"], // protected: true dans species-base.ts
+    title: "Esturgeon au court-bouillon",
+    origin: "Test",
+    difficulty: 1,
+    prep: 10,
+    cook: 10,
+    ing: ["esturgeon"],
+    steps: ["ne jamais faire ça"],
+  };
+
+  it("une recette visant une espèce protégée ne sort JAMAIS de la recherche", () => {
+    const hits = searchRecipes("esturgeon", {}, [...GUIDE, esturgeon], []);
+    expect(hits.map((h) => h.recipe.id)).not.toContain("recette-interdite-de-test");
+  });
+
+  it("recettesPresentables retire la recette d'une espèce protégée", () => {
+    expect(recettesPresentables([esturgeon])).toEqual([]);
+  });
+
+  it("une espèce protégée n'est jamais proposée comme entrée de recherche", () => {
+    expect(searchableSpecies([...GUIDE, esturgeon])).not.toContain("esturgeon-europeen");
+  });
+
+  // Le régime spécial n'est PAS la protection : aloses, anguille et lamproies
+  // restent légalement pêchables selon le bassin, et la fiche espèce montre déjà
+  // leurs recettes — avec un avertissement. Les cacher ici fabriquerait une
+  // seconde vérité ; les montrer sans l'avertissement serait le contournement.
+  it("une recette d'espèce sous régime spécial reste trouvable", () => {
+    const ids = searchRecipes("matelote", {}, GUIDE, []).map((h) => h.recipe.id);
+    expect(ids).toContain("matelote-d-anguille-au-vin-rouge");
+  });
+
+  it("la suggestion « d'après vos prises » ne peut pas proposer une espèce protégée", () => {
+    const catches: Catch[] = [
+      {
+        slot: "c1",
+        sp: "Esturgeon",
+        spid: "esturgeon-europeen",
+        iso: "2026-07-20",
+        size: "80 cm",
+        n: 80,
+        date: "2026-07-20",
+        place: "Test",
+        kept: false,
+      },
+    ];
+    expect(recentCatchRecipes(catches, [], [...GUIDE, esturgeon])).toEqual([]);
+  });
+
+  it("especesSousRegime nomme les espèces de la recette qui sont sous régime spécial", () => {
+    const matelote = GUIDE.find((r) => r.id === "matelote-d-anguille-au-vin-rouge")!;
+    expect(especesSousRegime(matelote)).toContain("Anguille européenne");
+    const truite = GUIDE.find((r) => r.id === "truite-meuniere")!;
+    expect(especesSousRegime(truite)).toEqual([]);
+  });
+});
+
+describe("searchableTechniques", () => {
+  it("ne liste que les techniques réellement utilisées par au moins une recette", () => {
+    const utilisees = searchableTechniques(GUIDE).map((t) => t.id);
+    expect(utilisees).toContain("degorgeage");
+    // Une technique du catalogue qu'aucune recette ne déclare n'a pas à figurer
+    // dans un filtre qui mènerait à zéro résultat.
+    const declarees = new Set(GUIDE.flatMap((r) => r.techniques ?? []));
+    expect(utilisees.every((id) => declarees.has(id))).toBe(true);
   });
 });
 
