@@ -33,6 +33,7 @@ import {
 import { fetchAccess, accessIcon, accessLabel } from "../lib/overpass";
 import { Icon } from "../components/Icon";
 import { occurrencesInBbox } from "../lib/gbif";
+import { nomLicenceCC } from "../lib/gbif-attribution";
 import { locate, locateMessage } from "../lib/locate";
 import { BASEMAPS, rasterStyle, type BasemapId } from "../lib/basemaps";
 import { PARCOURS_WMS, CATEGORIE_WMS, wmsTileUrl, geopecheUrlAt } from "../lib/parcours";
@@ -415,7 +416,7 @@ export function Carte() {
         features: (gbif as Awaited<ReturnType<typeof occurrencesInBbox>>).map((o) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [o.lon, o.lat] },
-          properties: { sci: o.sci, crayfish: o.crayfish, date: o.date },
+          properties: { sci: o.sci, crayfish: o.crayfish, date: o.date, licence: o.licence },
         })),
       };
       applyData(m);
@@ -635,12 +636,25 @@ export function Carte() {
 
     m.on("click", "gbif-circle", (ev) => {
       if (placingRef.current) return;
-      const p = ev.features?.[0]?.properties as { sci: string; crayfish: boolean; date: string };
+      const p = ev.features?.[0]?.properties as {
+        sci: string;
+        crayfish: boolean;
+        date: string;
+        licence: string;
+      };
       if (!p) return;
       const d = p.date ? String(p.date).slice(0, 10) : "date inconnue";
       popup.current
         ?.setLngLat(ev.lngLat)
-        .setHTML(`<b>${p.crayfish ? "🦞 " : "🐟 "}${esc(p.sci)}</b><br>Observé le ${esc(d)}<br><span style="color:var(--muted)">Source : GBIF.org</span>`)
+        // La licence est celle de CETTE observation, pas celle de GBIF : les
+        // jeux de données ne sont pas sous la même. Non nommée quand l'URL
+        // n'est pas reconnue — mieux vaut se taire que la nommer de travers.
+        .setHTML(
+          `<b>${p.crayfish ? "🦞 " : "🐟 "}${esc(p.sci)}</b><br>Observé le ${esc(d)}<br>` +
+            `<span style="color:var(--muted)">Source : GBIF.org${
+              nomLicenceCC(p.licence ?? "") ? ` · ${esc(nomLicenceCC(p.licence)!)}` : ""
+            }</span>`,
+        )
         .addTo(m);
     });
 

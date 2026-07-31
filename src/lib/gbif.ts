@@ -1,11 +1,18 @@
 // GBIF occurrences (api.gbif.org) — free, no key, CORS `*`. Complements Hub'Eau
 // Poisson with citizen/other records and, above all, CRAYFISH/crustaceans which
-// the electrofishing dataset doesn't cover. Occurrences carry per-record licenses
-// (CC-BY / CC0) — attribution shown on the map.
+// the electrofishing dataset doesn't cover.
+//
+// L'attribution GBIF se fait PAR ENREGISTREMENT : chaque occurrence porte la
+// licence de son jeu de données. Le commentaire d'origine affirmait ici même
+// « attribution shown on the map » et prétendait que ces licences étaient
+// « CC-BY / CC0 » — le champ `license` n'était pas lu, et la mesure du
+// 31/07/2026 autour de Blois montre aussi du CC BY-NC 4.0, qui n'autorise pas
+// les mêmes usages. Voir lib/gbif-attribution.ts.
 //
 // taxonKeys resolved once via /species/match and baked here (no runtime lookups).
 
 import { fetchT } from "./net";
+import { parseOccurrences } from "./gbif-attribution";
 
 const API = "https://api.gbif.org/v1";
 
@@ -59,6 +66,10 @@ export interface Occurrence {
   lat: number;
   lon: number;
   date: string; // eventDate (ISO or partial), may be empty
+  /** URL de licence de l'enregistrement, telle que GBIF la sert. */
+  licence: string;
+  /** Clé du jeu de données — sans elle l'attribution ne désigne personne. */
+  dataset: string;
 }
 
 /**
@@ -83,18 +94,15 @@ export async function occurrencesInBbox(
     `&limit=300`;
   const r = await fetchT(url, { signal });
   if (!r.ok) throw new Error("GBIF " + r.status);
-  const j = await r.json();
-  const out: Occurrence[] = [];
-  for (const o of j.results || []) {
-    if (o.decimalLatitude == null || o.decimalLongitude == null) continue;
-    out.push({
-      key: o.key,
-      sci: o.species || o.scientificName || "",
-      crayfish: CRAYFISH_KEYS.has(o.taxonKey) || CRAYFISH_KEYS.has(o.speciesKey),
-      lat: o.decimalLatitude,
-      lon: o.decimalLongitude,
-      date: o.eventDate || "",
-    });
-  }
-  return out;
+  const { occurrences } = parseOccurrences(await r.json());
+  return occurrences.map((o) => ({
+    key: o.key,
+    sci: o.sci,
+    crayfish: CRAYFISH_KEYS.has(o.taxonKey ?? -1) || CRAYFISH_KEYS.has(o.speciesKey ?? -1),
+    lat: o.lat,
+    lon: o.lon,
+    date: o.date,
+    licence: o.licence,
+    dataset: o.dataset,
+  }));
 }

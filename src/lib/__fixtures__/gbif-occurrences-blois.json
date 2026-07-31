@@ -1,0 +1,106 @@
+{
+ "offset": 0,
+ "limit": 300,
+ "endOfRecords": false,
+ "count": 6042,
+ "results": [
+  {
+   "key": 4149651147,
+   "species": "Esox lucius",
+   "scientificName": "Esox lucius Linnaeus, 1758",
+   "taxonKey": 2346633,
+   "speciesKey": 2346633,
+   "decimalLatitude": 47.68563,
+   "decimalLongitude": 1.30099,
+   "eventDate": "2021-03-29",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "4df2a841-e752-4b90-99c6-91c42d9fc70c"
+  },
+  {
+   "key": 3928389002,
+   "species": "Rutilus rutilus",
+   "scientificName": "Rutilus rutilus (Linnaeus, 1758)",
+   "taxonKey": 2359706,
+   "speciesKey": 2359706,
+   "decimalLatitude": 47.52645,
+   "decimalLongitude": 1.3864,
+   "eventDate": "2021-06-16",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "0b5f972e-0f84-4d07-9b84-96c09e2925da"
+  },
+  {
+   "key": 3928397671,
+   "species": "Lepomis gibbosus",
+   "scientificName": "Lepomis gibbosus (Linnaeus, 1758)",
+   "taxonKey": 2394486,
+   "speciesKey": 2394486,
+   "decimalLatitude": 47.52645,
+   "decimalLongitude": 1.3864,
+   "eventDate": "2021-06-16",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "0b5f972e-0f84-4d07-9b84-96c09e2925da"
+  },
+  {
+   "key": 3928401290,
+   "species": "Rutilus rutilus",
+   "scientificName": "Rutilus rutilus (Linnaeus, 1758)",
+   "taxonKey": 2359706,
+   "speciesKey": 2359706,
+   "decimalLatitude": 47.52645,
+   "decimalLongitude": 1.3864,
+   "eventDate": "2021-06-16",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "0b5f972e-0f84-4d07-9b84-96c09e2925da"
+  },
+  {
+   "key": 3928408946,
+   "species": "Rutilus rutilus",
+   "scientificName": "Rutilus rutilus (Linnaeus, 1758)",
+   "taxonKey": 2359706,
+   "speciesKey": 2359706,
+   "decimalLatitude": 47.52645,
+   "decimalLongitude": 1.3864,
+   "eventDate": "2021-06-16",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "0b5f972e-0f84-4d07-9b84-96c09e2925da"
+  },
+  {
+   "key": 3928409956,
+   "species": "Perca fluviatilis",
+   "scientificName": "Perca fluviatilis Linnaeus, 1758",
+   "taxonKey": 8140485,
+   "speciesKey": 8140485,
+   "decimalLatitude": 47.52645,
+   "decimalLongitude": 1.3864,
+   "eventDate": "2021-06-16",
+   "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+   "datasetKey": "0b5f972e-0f84-4d07-9b84-96c09e2925da"
+  },
+  {
+   "key": 6129818135,
+   "species": "Juniperus communis",
+   "scientificName": "Juniperus communis L.",
+   "taxonKey": 2684709,
+   "speciesKey": 2684709,
+   "decimalLatitude": 47.655499,
+   "decimalLongitude": 1.272107,
+   "eventDate": "2026-01-13T10:16:35",
+   "license": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+   "datasetKey": "50c9509d-22c7-4a22-a47d-8c48425ef4a7",
+   "rightsHolder": "Robin"
+  },
+  {
+   "key": 6129948468,
+   "species": "Himantoglossum hircinum",
+   "scientificName": "Himantoglossum hircinum (L.) Spreng.",
+   "taxonKey": 5324951,
+   "speciesKey": 5324951,
+   "decimalLatitude": 47.586188,
+   "decimalLongitude": 1.304958,
+   "eventDate": "2026-01-21T10:55:58",
+   "license": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+   "datasetKey": "50c9509d-22c7-4a22-a47d-8c48425ef4a7",
+   "rightsHolder": "floflo46"
+  }
+ ]
+}

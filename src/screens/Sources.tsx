@@ -1,5 +1,6 @@
 import { useStore } from "../store-hooks";
 import { SOURCES } from "../data/regulation";
+import { LICENCES_DONNEES } from "../data/licences-donnees";
 import { buildLabel } from "../lib/build";
 import { lienSignalement } from "../lib/diagnostic";
 import { REG_YEAR, VERIFIE_LE } from "../data/version";
@@ -23,6 +24,34 @@ export function Sources() {
             </div>
           </div>
         ))}
+        {/* Attribution des données. Ce n'est pas une politesse : ODbL et CC BY
+            font de l'attribution une CONDITION de la redistribution. L'app
+            affichait des données OpenStreetMap, Open-Meteo et Eaufrance sans
+            créditer personne. Les licences non établies sont dites comme
+            telles plutôt que devinées. */}
+        <div className="label" style={{ margin: "22px 0 8px" }}>
+          Licences des données
+        </div>
+        <div className="lic-list">
+          {LICENCES_DONNEES.map((l) => (
+            <div key={l.source} className="lic">
+              <div className="lic-tete">
+                <span className="lic-src">{l.source}</span>
+                {l.etat === "non-verifiee" ? (
+                  <span className="lic-nv">licence non établie</span>
+                ) : (
+                  <a href={l.url} target="_blank" rel="noreferrer">
+                    {l.licence} ↗
+                  </a>
+                )}
+              </div>
+              <div className="lic-mention">{l.mention}</div>
+              {l.reserve && <div className="lic-reserve">{l.reserve}</div>}
+              {l.verifieLe && <div className="lic-date">Vérifié le {l.verifieLe}.</div>}
+            </div>
+          ))}
+        </div>
+
         <div className="info" style={{ marginTop: 18 }}>
           Aucune donnée réglementaire ou sanitaire n'est inventée : tout est sourcé ou marqué « à
           vérifier ». Votre carnet, vos photos et votre profil restent 100 % sur votre appareil —

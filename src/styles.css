@@ -6422,3 +6422,46 @@ button.card-row {
   line-height: 1.5;
   color: var(--muted);
 }
+
+/* ── Licences des données (écran Sources) ────────────────────────────────────
+   ODbL et CC BY font de l'attribution une condition de la redistribution ; ces
+   lignes sont une obligation, pas une note de bas de page. */
+.lic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.lic {
+  border-left: 2px solid var(--line-strong);
+  padding-left: 11px;
+}
+.lic-tete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+}
+.lic-src {
+  font-weight: 700;
+  color: var(--ink);
+}
+.lic-nv {
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #6d4d0d;
+}
+.lic-mention,
+.lic-reserve,
+.lic-date {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.lic-reserve {
+  color: #6d4d0d;
+}
+.lic-date {
+  font-size: 11px;
+}
