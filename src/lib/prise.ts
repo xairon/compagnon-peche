@@ -281,7 +281,7 @@ export function priseView(
         kicker: m.aboveNational ? "Maille — arrêté départemental" : "Maille — taille légale minimale",
         title: `${mesure} : la maille de ${size} est atteinte`,
         paras: [
-          `Mesure prise du bout du museau à l'extrémité de la queue ? ${mesure} atteint la maille de ${size}. La maille n'est pas le seul filtre : le quota du jour vient ensuite.`,
+          `${mesure} atteint la maille de ${size} — à condition que la mesure aille bien du bout du museau à l'extrémité de la queue. La maille n'est pas le seul filtre : le quota du jour vient ensuite.`,
           ...deptLine,
         ],
         note: sp.reg && sp.reg.note ? sp.reg.note : null,
