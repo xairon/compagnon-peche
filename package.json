@@ -1,7 +1,7 @@
 {
   "name": "compagnon-peche",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.10.0",
   "type": "module",
   "description": "Compagnon de pêche eau douce — PWA offline-first (France, Centre-Val de Loire)",
   "scripts": {
