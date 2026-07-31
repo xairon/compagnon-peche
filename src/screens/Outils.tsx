@@ -20,7 +20,10 @@ export function Outils() {
     { title: "Écrevisses", sub: "Séance de balances : chronos individuels, alertes, bilan", icon: ICONS.regle, to: "ecrevisses" },
     { title: "Nœuds & montages", sub: "Guides pas-à-pas, hors-ligne", icon: ICONS.knot, to: "noeuds" },
     { title: "Réglementation générale", sub: "Socle national + " + deptName, icon: ICONS.regle, to: "reglement" },
-    { title: "Département actif", sub: deptName + " — modifiable dans Réglementation", icon: ICONS.pin, to: "reglement" },
+    // Envoyait « modifiable dans Réglementation » alors que le contrôle vit sur
+    // l'Accueil depuis qu'il y a un bouton. Une consigne périmée se lit comme
+    // un défaut de mise à jour — c'est ce qui a été signalé à l'usage.
+    { title: "Département actif", sub: deptName + " — se change sur l'Accueil", icon: ICONS.pin, to: "accueil" },
     // Pas de compte dans le libellé : il vivrait ici et divergerait du fichier
     // généré à la première collecte. L'écran Guides, lui, sait ce qu'il a.
     { title: "Guides", sub: "Coin de Pêche — techniques, espèces, départements (en ligne)", icon: ICONS.book, to: "guides" },
