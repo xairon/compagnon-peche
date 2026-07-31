@@ -1,22 +1,35 @@
 import { useStore } from "../store-hooks";
 import { findRecipe } from "../lib/recipes";
 import { exitCuisine } from "../lib/wakelock";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 
 export function Cuisine() {
   const { state, replace, back } = useStore();
   const found = findRecipe(state.recipeId);
   const rec = found?.recipe;
 
+  // Cet écran n'a aucun hook : sortir ici ne risque rien.
+  //
+  // Une recette inconnue ne rendait pas un blanc — elle rendait le mode cuisine
+  // À VIDE : titre absent, zéro ingrédient, zéro étape, et « Commencer › »
+  // proposé quand même. Le « ✕ » restait, donc ce n'était pas une impasse, mais
+  // rien ne disait ce qui manquait. `exitCuisine` plutôt que `back` : c'est le
+  // geste de sortie de cet écran, et il relâche le verrou d'écran — un no-op
+  // documenté si personne ne le tenait, ce qui est le cas par lien direct.
+  if (!rec)
+    return (
+      <DetailIntrouvable
+        message={"Cette recette est introuvable." + LIEN_AUTRE_VERSION}
+        onBack={() => exitCuisine(back)}
+      />
+    );
+
   // Flatten main steps + each component's steps into one guided sequence,
   // keeping a section label so complex dishes (quenelles, sauces) read clearly.
-  const flat: { section: string; text: string }[] = rec
-    ? [
-        ...rec.steps.map((t) => ({ section: "Préparation", text: t })),
-        ...(rec.components || []).flatMap((c) =>
-          c.steps.map((t) => ({ section: c.title, text: t })),
-        ),
-      ]
-    : [];
+  const flat: { section: string; text: string }[] = [
+    ...rec.steps.map((t) => ({ section: "Préparation", text: t })),
+    ...(rec.components || []).flatMap((c) => c.steps.map((t) => ({ section: c.title, text: t }))),
+  ];
   const n = flat.length;
   const step = Math.min(Math.max(state.cookStep, 0), n);
 
@@ -37,7 +50,7 @@ export function Cuisine() {
           <div className="prog">
             {step === 0 ? "Ingrédients" : `${cur?.section} · étape ${step} sur ${n}`}
           </div>
-          <div className="title">{rec?.title}</div>
+          <div className="title">{rec.title}</div>
         </div>
         <button className="cook-x" onClick={exit} aria-label="Quitter le mode cuisine">
           ✕
@@ -66,7 +79,7 @@ export function Cuisine() {
             >
               Ingrédients
             </div>
-            {rec?.ing.map((t, i) => (
+            {rec.ing.map((t, i) => (
               <div key={i} className="cook-ing">
                 {t}
               </div>

@@ -15,12 +15,20 @@ import { useStore } from "../store-hooks";
  * Le patron vient de PriseDetail, qui traitait déjà le cas correctement. Il vit
  * ici pour que les quatre écrans disent la même chose de la même façon.
  */
-export function DetailIntrouvable({ message }: { message: string }) {
+export function DetailIntrouvable({
+  message,
+  onBack,
+}: {
+  message: string;
+  /** Pour les écrans qui ont quelque chose à relâcher en partant — le mode
+   *  cuisine tient le verrou d'écran allumé. Par défaut : le retour ordinaire. */
+  onBack?: () => void;
+}) {
   const { back } = useStore();
   return (
     <div className="screen">
       <div className="topbar">
-        <button className="back" onClick={back} aria-label="Retour">
+        <button className="back" onClick={onBack ?? back} aria-label="Retour">
           ‹
         </button>
       </div>

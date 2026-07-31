@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 import { DEPARTEMENTS, DEPT_REG, localRegRows } from "../data/regulation";
 import { Icon } from "../components/Icon";
 import { ICONS, SEC_ICONS } from "../components/icons-data";
@@ -94,12 +95,23 @@ const EXPLAIN: Record<string, { title: string; text: string }> = {
 
 export function Fiche() {
   const { state, set, nav, back } = useStore();
-  const sp = SPECIES.find((s) => s.id === state.spId) || SPECIES[0];
-  const seas = season(sp);
-  const deptName = DEPARTEMENTS[state.dept].name;
+  // Les hooks d'abord : l'espèce inconnue fait sortir tôt, et React interdit
+  // qu'un rendu en déclare moins que le précédent.
   const scrollRef = useRef<HTMLDivElement>(null);
   const secRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [explain, setExplain] = useState<string | null>(null);
+
+  // Repliait sur `SPECIES[0]`. Un identifiant inconnu affichait donc la
+  // première espèce du catalogue — sa maille, son quota, sa saison — sous
+  // couvert d'être celle demandée. Un écran blanc se remarque, celui-là se
+  // croyait ; et la barre du bas est masquée ici (App.tsx), donc rien ne
+  // trahissait la substitution.
+  const sp = SPECIES.find((s) => s.id === state.spId) ?? null;
+  if (!sp)
+    return <DetailIntrouvable message={"Cette espèce est introuvable." + LIEN_AUTRE_VERSION} />;
+
+  const seas = season(sp);
+  const deptName = DEPARTEMENTS[state.dept].name;
   const toggleExplain = (k: string) => setExplain((cur) => (cur === k ? null : k));
 
   const ui = state.bigUI
@@ -674,7 +686,11 @@ export function Fiche() {
             <div className="txt">
               Maille {mailleCm} cm — repère : {repere(mailleCm)}
             </div>
-            <button className="link" onClick={() => nav("regle")}>
+            {/* L'espèce est passée EXPLICITEMENT : la table des routes ne
+                déclare aucun contexte pour `regle`, donc `nav()` efface `spId`
+                en chemin. Sans ça, ce lien — posé sous « Maille 60 cm » —
+                ouvrait une règle qui mesurait une autre espèce. */}
+            <button className="link" onClick={() => nav("regle", { spId: sp.id })}>
               Règle
             </button>
           </div>
