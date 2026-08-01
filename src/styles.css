@@ -1919,7 +1919,10 @@ a:hover {
   height: 10px;
   border-radius: 50%;
   background: var(--green);
-  border: 1.5px solid var(--green-dark);
+  /* Trait, pas une surface : --green-dark-ink. Le pourtour valait 14,83:1 sur
+     --paper en clair (un vrai anneau, pas une garniture) et tombait à 1,08:1
+     en sombre — --green-dark-ink le remet à 11,28:1. */
+  border: 1.5px solid var(--green-dark-ink);
   flex-shrink: 0;
 }
 .carte-sheet {
@@ -3427,7 +3430,9 @@ a:hover {
 .onb2-frame {
   padding: 5px;
   background: var(--card);
-  border: 1px solid var(--green-dark);
+  /* Trait, pas une surface : --green-dark-ink, sinon invisible en sombre
+     (1,16:1 sur --card). Voir le commentaire du jeton. */
+  border: 1px solid var(--green-dark-ink);
   box-shadow: 0 12px 34px -16px rgba(var(--onb-shadow-tint), 0.55);
 }
 .onb2-frame img {
@@ -4799,7 +4804,9 @@ button.card-row {
 .ot-count {
   margin-top: 14px;
   background: var(--card);
-  border: 1.5px solid var(--fir, #0f1f16);
+  /* Trait, pas une surface : --fir-ink, sinon invisible en sombre (1,16:1
+     sur --card). Le repli littéral garde la valeur claire de --fir. */
+  border: 1.5px solid var(--fir-ink, #0f1f16);
   border-radius: 16px;
   padding: 16px;
   text-align: center;
@@ -6223,7 +6230,9 @@ button.card-row {
   border-top: 1px solid var(--line-strong);
 }
 .ecr-tri {
-  border: 1.5px solid var(--green-dark);
+  /* Trait, pas une surface : --green-dark-ink, sinon invisible en sombre
+     (1,18:1 sur --sage). */
+  border: 1.5px solid var(--green-dark-ink);
   background: var(--sage);
   border-radius: 16px;
   padding: 13px 14px;
