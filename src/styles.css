@@ -37,6 +37,17 @@
   --on-accent-warm: #fbfaf7;
   /* v2 refonte accents */
   --fir: #0f1f16; /* deep fir green — dark surfaces & CTAs */
+  /* --fir et --green-dark portaient AUSSI un second rôle : encre de texte fort
+     et trait d'état sélectionné, sur 16 déclarations `color:` et 2
+     `border-color:`. C'est un rôle distinct de la surface ci-dessus — en
+     thème sombre la surface s'assombrit encore (#0a120d) alors qu'une encre
+     doit s'éclaircir, les confondre rendait ce texte illisible (~1,08:1 sur
+     --paper). Valeurs claires identiques aux jetons de surface d'origine (le
+     thème clair ne bouge pas) ; valeurs sombres dans le bloc
+     [data-theme="dark"], mesurées contre --paper/--card/--sand/--linen/
+     --green-tint. */
+  --fir-ink: #0f1f16;
+  --green-dark-ink: #16281e;
   /* Accent décoratif SEULEMENT : 3,07:1 sur --paper, ce qui suffit pour un
      filet ou une pastille (1.4.11) mais pas pour du texte. Pour un cartouche
      en capitales, prendre --brass-ink. */
@@ -176,6 +187,12 @@
   --chev-ink: #9aa38d;      /* chevrons et texte secondaire glosé */
   --icon-muted: #7f9788;    /* icônes discrètes */
   --photo-ink: #c7cec7;     /* texte/icône posé sur .photo-bg et le damier */
+  /* Encres de --fir/--green-dark (voir le commentaire du bloc clair). Même
+     valeur pour les deux : leur rôle converge en sombre (vert lisible fort),
+     seul le clair les distingue. Pire contraste mesuré, --green-tint
+     (le fond le plus sombre des cinq où elles sont posées) : 9,79:1. */
+  --fir-ink: #8fe0ab;
+  --green-dark-ink: #8fe0ab;
   --on-accent: #f2f7f3;
   --on-accent-warm: #fbfaf7;
 
@@ -2709,7 +2726,7 @@ a:hover {
 .pf-stat .n {
   font-size: 22px;
   font-weight: 700;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
 }
 .pf-stat .l {
   font-size: 11.5px;
@@ -3078,7 +3095,7 @@ a:hover {
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 26px;
   font-weight: 700;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   letter-spacing: -0.01em;
 }
 .st-card.fir .st-n {
@@ -3281,7 +3298,7 @@ a:hover {
   font-size: 14px;
 }
 .eb-report a {
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   font-weight: 600;
 }
 .eb-details {
@@ -4117,7 +4134,7 @@ a:hover {
 }
 .pf-seg button.on {
   background: var(--card);
-  color: var(--green-ink);
+  color: var(--fir-ink);
   box-shadow: 0 1px 2px rgba(var(--shadow-tint), 0.08);
 }
 
@@ -4605,7 +4622,7 @@ button.card-row {
 }
 .sheet-cat {
   font-size: 12.5px;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   background: var(--green-tint);
   border-radius: 8px;
   padding: 9px 11px;
@@ -4800,7 +4817,7 @@ button.card-row {
   font-size: 46px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   margin: 4px 0 10px;
   font-variant-numeric: tabular-nums;
 }
@@ -5034,7 +5051,7 @@ button.card-row {
   flex-shrink: 0;
   border: none;
   background: var(--paper-fade);
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   font-size: 12.5px;
   font-weight: 650;
   padding: 8px 13px;
@@ -5059,7 +5076,7 @@ button.card-row {
   font-size: 62px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
 }
 .dash-wx-temp .unit { font-size: 20px; font-weight: 600; color: var(--muted); margin-top: 6px; }
 .dash-wx-cond { flex: 1; min-width: 0; text-align: right; }
@@ -5084,7 +5101,7 @@ button.card-row {
   padding: 9px 10px;
 }
 .dash-metric .k { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
-.dash-metric .v { font-size: 19px; font-weight: 700; color: var(--green-ink); margin-top: 2px; }
+.dash-metric .v { font-size: 19px; font-weight: 700; color: var(--green-dark-ink); margin-top: 2px; }
 .dash-metric .s { font-size: 11px; color: var(--muted); }
 
 /* Card header shared */
@@ -5322,7 +5339,7 @@ button.card-row {
   text-transform: uppercase;
   color: var(--brass-ink);
 }
-.id-res-h .n { font-size: 13px; font-weight: 700; color: var(--green-ink); }
+.id-res-h .n { font-size: 13px; font-weight: 700; color: var(--green-dark-ink); }
 .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .id-grid.emphatic { grid-template-columns: 1fr 1fr; }
 .id-cand {
@@ -5454,7 +5471,9 @@ button.card-row {
   background: var(--red-tint);
 }
 .bal-card.bal-trempe {
-  border-color: var(--fir);
+  /* Trait d'état sélectionné, pas une surface : --fir-ink (voir sa
+     définition), sinon invisible en sombre (1,16:1 sur --card). */
+  border-color: var(--fir-ink);
 }
 .bal-main {
   width: 100%;
@@ -5480,7 +5499,7 @@ button.card-row {
   background: var(--sand);
   font-size: 12px;
   font-weight: 700;
-  color: var(--green-ink);
+  color: var(--fir-ink);
 }
 .bal-lbl {
   font-size: 12px;
@@ -5565,7 +5584,7 @@ button.card-row {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: var(--green-ink);
+  color: var(--fir-ink);
 }
 .bal-add-plus {
   font-size: 30px;
@@ -5815,7 +5834,7 @@ button.card-row {
   border-radius: 12px;
   padding: 13px 15px;
   font-size: 14.5px;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   margin-bottom: 14px;
 }
 .ecr-total b {
@@ -5875,7 +5894,7 @@ button.card-row {
   border: 1.5px solid var(--line-strong);
   background: var(--sand);
   font-size: 20px;
-  color: var(--green-ink);
+  color: var(--fir-ink);
 }
 .ecr-step span {
   min-width: 30px;
@@ -6213,7 +6232,7 @@ button.card-row {
 .ecr-tri-t {
   font-size: 13px;
   font-weight: 700;
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   margin-bottom: 4px;
 }
 .ecr-tri-x {
@@ -6320,7 +6339,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.01em;
   background: var(--green-tint);
-  color: var(--green-ink);
+  color: var(--green-dark-ink);
   border: 1px solid var(--line-strong);
 }
 .deptb-txt {
@@ -6417,7 +6436,9 @@ button.card-row {
   background: var(--card);
 }
 .deptb-opt[aria-selected="true"] {
-  border-color: var(--green-dark);
+  /* Trait d'état sélectionné, pas une surface : --green-dark-ink, sinon
+     invisible en sombre (1,24:1 sur --green-tint). */
+  border-color: var(--green-dark-ink);
   background: var(--green-tint);
 }
 .deptb-opt-nom {
