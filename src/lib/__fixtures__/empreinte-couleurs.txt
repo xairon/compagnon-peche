@@ -552,15 +552,9 @@
 .install-ios-titre|color|#1a201c
 .install-ios|background|#f4f1e8
 .install-ios|border-left|3px solid #1d6e42
-.knot-diagram|background|#ffffff
-.knot-diagram|border|1px solid #e6e2d8
-.knot-slot|background|#efece1
-.knot-slot|border|1px dashed #d8d3c4
 .knot-step .cap|color|#3a3e36
 .knot-step .num|background|#16281e
 .knot-step .num|color|#fbfaf7
-.knot-step-img|background|#ffffff
-.knot-step-img|border|1px solid #e6e2d8
 .kv .k|color|#6b675c
 .kv .v|color|#22271f
 .kv|border-bottom|1px dashed #ece8dd

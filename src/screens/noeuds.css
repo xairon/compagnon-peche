@@ -1,12 +1,12 @@
 /*
  * Fiche nœud : le cadre de l'illustration.
  *
- * Classe à part plutôt qu'une reprise de `.knot-diagram` de `styles.css` :
- * l'écran est chargé en morceau différé, l'ordre d'arrivée des deux feuilles
- * n'est pas garanti, et une surcharge qui dépend de cet ordre casse un jour
- * sur deux.
+ * Classe à part plutôt qu'une reprise de l'ancienne `.knot-diagram` de
+ * `styles.css` (retirée depuis, plus personne ne la portait) : l'écran est
+ * chargé en morceau différé, l'ordre d'arrivée des deux feuilles n'est pas
+ * garanti, et une surcharge qui dépend de cet ordre casse un jour sur deux.
  *
- * Ce qui change par rapport à l'ancienne règle (`width: 100%` sec) :
+ * Ce qui change par rapport à cette ancienne règle (`width: 100%` sec) :
  *
  *  · les planches de Commons ne font pas toutes la même taille — la boucle de
  *    chirurgien fait 287 px de large, le clinch 1 000. Étirer la première à la
