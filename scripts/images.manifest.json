@@ -1154,6 +1154,36 @@
    "author": "Luis Dantas",
    "license": "CC BY-SA 3.0",
    "file_page_url": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
+  },
+  {
+   "id": "palomar",
+   "filename": "File:PalomarKnotSequence.jpg",
+   "author": "Vaughan Pratt",
+   "license": "CC BY-SA 3.0",
+   "file_page_url": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
+  },
+  {
+   "id": "dropshot",
+   "filename": "File:Das Drop-Shot-Rig.jpg",
+   "author": "Danndorfer1914 (photo recadrée)",
+   "license": "CC0",
+   "file_page_url": "https://commons.wikimedia.org/wiki/File:Das_Drop-Shot-Rig.jpg",
+   "note": "recadrée à 8/12–100/95 % puis réduite à 900 px de haut — CC0, aucune condition"
+  },
+  {
+   "id": "carolina",
+   "filename": "File:Rigs für das Finesse Angeln.jpg",
+   "author": "Danndorfer1914 (photo recadrée sur le montage carolina)",
+   "license": "CC0",
+   "file_page_url": "https://commons.wikimedia.org/wiki/File:Rigs_f%C3%BCr_das_Finesse_Angeln.jpg",
+   "note": "la photo montre trois montages (drop-shot, carolina, texan) : recadrée à 38–72 % en largeur, 13–97 % en hauteur, soit le montage carolina seul"
+  },
+  {
+   "id": "cheveu",
+   "filename": "File:Knotless knot.svg",
+   "author": "Cmglee",
+   "license": "CC BY-SA 4.0",
+   "file_page_url": "https://commons.wikimedia.org/wiki/File:Knotless_knot.svg"
   }
  ],
  "recipes": [

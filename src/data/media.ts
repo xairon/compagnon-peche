@@ -1234,6 +1234,30 @@ export const KNOT_MEDIA: Record<string, MediaEntry> = {
     "author": "Luis Dantas",
     "license": "CC BY-SA 3.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
+  },
+  "palomar": {
+    "file": "assets/knots/palomar.webp",
+    "author": "Vaughan Pratt",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:PalomarKnotSequence.jpg"
+  },
+  "dropshot": {
+    "file": "assets/knots/dropshot.webp",
+    "author": "Danndorfer1914 (photo recadrée)",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Das_Drop-Shot-Rig.jpg"
+  },
+  "carolina": {
+    "file": "assets/knots/carolina.webp",
+    "author": "Danndorfer1914 (photo recadrée sur le montage carolina)",
+    "license": "CC0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rigs_f%C3%BCr_das_Finesse_Angeln.jpg"
+  },
+  "cheveu": {
+    "file": "assets/knots/cheveu.webp",
+    "author": "Cmglee",
+    "license": "CC BY-SA 4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Knotless_knot.svg"
   }
 };
 

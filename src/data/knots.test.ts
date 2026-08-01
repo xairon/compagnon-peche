@@ -40,21 +40,24 @@ describe("nœuds & montages — cohérence des données", () => {
 const ARBITRAGE: Record<string, "commons" | "maison" | "aucune"> = {
   // Nœuds
   clinch: "commons",
-  palomar: "aucune",
+  palomar: "commons",
   raccord: "maison",
   boucle: "commons",
   sang: "commons",
   albright: "commons",
   chaise: "commons",
   // Montages
-  dropshot: "aucune",
+  dropshot: "commons",
   texan: "commons",
   paternoster: "maison",
-  carolina: "aucune",
+  carolina: "commons",
+  // Commons ne couvre ni le wacky, ni l'anglaise, ni le feeder : rien sous
+  // licence libre n'y montre ces trois montages (catégories Fishing rigs et
+  // Feeder fishing vides, recherches FR/EN/DE sans résultat utilisable).
   wacky: "aucune",
   anglaise: "aucune",
   feeder: "aucune",
-  cheveu: "aucune",
+  cheveu: "commons",
 };
 
 describe("illustrations des nœuds — une vraie, ou rien", () => {
