@@ -49,7 +49,18 @@ describe("empreinte de src/styles.css", () => {
   // Pour régénérer VOLONTAIREMENT (thème sombre ajouté, fusion assumée) :
   //   node scripts/empreinte-couleurs.mjs --ecrire
   it("est identique au fixture", () => {
-    expect(empreinte(CSS)).toBe(readFileSync(FIXTURE, "utf8"));
+    // Normalisation CRLF -> LF des deux côtés : le fixture est versionné en
+    // CRLF (voir .gitattributes) et peut être ré-extrait par git avec ces fins
+    // de ligne selon la config `core.autocrlf` du poste, alors que le script
+    // émet toujours du LF. Sans cette normalisation, le test rougit sur une
+    // simple différence de fin de ligne — aucune couleur n'a changé — ce qui
+    // transforme ce garde-fou en bruit qu'on apprend à ignorer. Une VRAIE
+    // différence de couleur reste détectée : elle change des caractères au
+    // milieu d'une ligne, pas seulement ses fins de ligne.
+    const normaliserFinsDeLigne = (texte: string) => texte.replace(/\r\n/g, "\n");
+    expect(normaliserFinsDeLigne(empreinte(CSS))).toBe(
+      normaliserFinsDeLigne(readFileSync(FIXTURE, "utf8")),
+    );
   });
 });
 

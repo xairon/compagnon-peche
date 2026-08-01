@@ -1,0 +1,8 @@
+# Fixture de l'empreinte des couleurs (src/lib/empreinte-couleurs.test.ts) :
+# fins de ligne figées en LF pour que git ne le ré-extraie pas en CRLF sur les
+# postes Windows où core.autocrlf=true. Le script scripts/empreinte-couleurs.mjs
+# émet toujours du LF ; sans cette règle, le fichier oscille de fin de ligne
+# d'un poste à l'autre au fil des checkouts, ce qui produisait de faux échecs
+# du test (voir la normalisation côté test, qui reste une protection
+# indépendante de cette règle).
+src/lib/__fixtures__/empreinte-couleurs.txt text eol=lf
