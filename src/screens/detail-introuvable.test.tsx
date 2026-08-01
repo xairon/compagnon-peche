@@ -8,7 +8,7 @@ import type { AppState } from "../store";
 import { useStore } from "../store-hooks";
 import { Recette } from "./Recette";
 import { TechniqueDetail } from "./Techniques";
-import { KnotDetail } from "./Noeuds";
+import { NoeudFiche } from "./NoeudFiche";
 import { PriseDetail } from "./PriseDetail";
 import { Fiche } from "./Fiche";
 import { Cuisine } from "./Cuisine";
@@ -49,10 +49,10 @@ const CAS: {
     quoi: /technique/i,
   },
   {
-    nom: "KnotDetail",
+    nom: "NoeudFiche",
     lien: "#/noeud/noeud-de-cravate",
     patch: { screen: "knot", knotId: "noeud-de-cravate" },
-    ecran: <KnotDetail />,
+    ecran: <NoeudFiche />,
     quoi: /nœud|noeud/i,
   },
   {

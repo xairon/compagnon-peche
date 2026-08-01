@@ -18,7 +18,8 @@ import { Guides } from "./Guides";
 import { Identify } from "./Identify";
 import { Materiel, GuideMateriel } from "./Materiel";
 import { Mentions } from "./Mentions";
-import { Noeuds, KnotDetail } from "./Noeuds";
+import { Noeuds } from "./Noeuds";
+import { NoeudFiche } from "./NoeudFiche";
 import { Outils } from "./Outils";
 import { OutilsTerrain } from "./OutilsTerrain";
 import { PriseDetail } from "./PriseDetail";
@@ -115,7 +116,7 @@ const ECRANS: [string, ReactElement, Partial<AppState>][] = [
   ["Guide matériel", <GuideMateriel />, {}],
   ["Mentions légales", <Mentions />, {}],
   ["Nœuds", <Noeuds />, {}],
-  ["Nœud (détail)", <KnotDetail />, { knotId: "palomar" }],
+  ["Nœud (détail)", <NoeudFiche />, { knotId: "palomar" }],
   ["Outils", <Outils />, {}],
   ["Outils de terrain", <OutilsTerrain />, {}],
   ["Prise (détail)", <PriseDetail />, {}],

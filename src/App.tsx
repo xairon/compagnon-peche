@@ -15,7 +15,8 @@ import { Statistiques } from "./screens/Statistiques";
 import { Outils } from "./screens/Outils";
 import { OutilsTerrain } from "./screens/OutilsTerrain";
 import { Ecrevisses } from "./screens/Ecrevisses";
-import { Noeuds, KnotDetail } from "./screens/Noeuds";
+import { Noeuds } from "./screens/Noeuds";
+import { NoeudFiche } from "./screens/NoeudFiche";
 import { Recette } from "./screens/Recette";
 // Import direct et non `lazy` : RECIPES est déjà dans le bundle principal via
 // Fiche et Carnet, un découpage ne gagnerait rien et poserait une question de
@@ -149,7 +150,7 @@ export function App() {
         {s === "ecrevisses" && <Ecrevisses />}
         {s === "ecrevisses-ident" && <EcrevissesIdent />}
         {s === "noeuds" && <Noeuds />}
-        {s === "knot" && <KnotDetail />}
+        {s === "knot" && <NoeudFiche />}
         {s === "recette" && <Recette />}
         {s === "recettes" && <Recettes />}
         {s === "reglement" && <Reglement />}
