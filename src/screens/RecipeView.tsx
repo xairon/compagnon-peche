@@ -64,7 +64,7 @@ export function RecipeView({
           )}
         </div>
 
-        <div style={{ fontSize: 11.5, color: "#A8A495", marginTop: 16, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 16, lineHeight: 1.5 }}>
           Créée le {recipe.created} · stockée sur votre appareil.
         </div>
       </div>

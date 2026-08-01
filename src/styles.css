@@ -70,6 +70,9 @@
   --oat: #f0ede4;         /* piste de barre de progression */
   --photo-dark: #43554b;  /* fond sombre des héros et vignettes sans photo */
   --photo-bg: #dfe6e2;    /* fond de carte photo/carte (gris de .img-slot) */
+  --water-tile-1: #f3f8fa;   /* dégradé de la tuile d'eau (Tâche 10), extrémité haute */
+  --water-tile-2: #eef4f6;   /* dégradé de la tuile d'eau, extrémité basse — la plus sombre */
+  --water-tile-border: #dfeaef; /* bordure de la tuile d'eau */
 
   /* Traits. --line et --line-strong existent déjà ; --line-control est le
      trait qui DÉLIMITE un contrôle (bordure de champ, de bouton fantôme).
@@ -106,6 +109,26 @@
   --red-tint: #fdf3f1;       /* fond rouge très pâle (espèces protégées, échéances) */
   --info: #2b6c8f;
   --info-ink: #5c727c;       /* texte secondaire de la tuile météo/eau (4 usages) */
+  --water-value-ink: #14303b; /* grande valeur numérique de la tuile d'eau (Tâche 10) */
+  /* Fonds des badges pleins .pd-tag (Tâche 10) : mêmes valeurs que --amber/
+     --green en clair, mais qui ne s'inversent PAS en sombre (voir le bloc
+     [data-theme="dark"]) — un badge plein reste un badge plein, avec du
+     texte blanc constant (var(--on-accent), 4,73:1 et 5,76:1). */
+  --pd-tag-kept-bg: #926511;
+  --pd-tag-rel-bg: #1d6e42;
+  --spot-btn-bg: #a76716;      /* fond du bouton « ajouter un spot » de la carte */
+  --update-btn-bg: #27864d;    /* fond du bouton du bandeau de mise à jour */
+  --reglemente-ink: #87681d;   /* texte de la pastille « réglementé » sur --cream */
+
+  /* Statuts de maille/comestibilité et chevron sur bouton sombre, posés en
+     style inline dans Fiche.tsx, Especes.tsx et Prise.tsx (Tâche 10) : trois
+     couleurs de LISIBILITÉ (texte de statut, pas de la décoration) et deux
+     pastilles décoratives, jusqu'ici en dur et donc figées en thème sombre. */
+  --warn-ink: #9a6a12;       /* maille/quota/saison en alerte (Fiche.tsx) */
+  --neutral-ink: #8a8676;    /* comestibilité sans donnée (Fiche.tsx) */
+  --chev-on-dark: #5e7a6a;   /* chevron « › » du bouton .cta-dark (Especes/Prise) */
+  --season-good-dot: #2e9e5b;  /* pastille de saison ouverte (Fiche.tsx) */
+  --season-warn-dot: #c08a2e;  /* pastille de saison en alerte (Fiche.tsx) */
 
   /* Voiles, ombres, scrim et fondus. Seul endroit de la feuille où un
      remplacement mécanique donnerait un résultat faux : une ombre noire à
@@ -173,6 +196,12 @@
   --photo-dark: #2a352d;  /* fond des héros et vignettes sans photo */
   --photo-bg: #232a26;    /* fond de carte photo/carte (.img-slot) */
   --cook-dark: #182420;   /* boutons fantômes et piste du mode cuisson */
+  /* Tuile d'eau (Tâche 10) : dégradé bleu-gris sombre au lieu du bleu pâle
+     clair. Pire contraste mesuré sur l'extrémité la plus sombre : --info-ink
+     9,83:1, --green 7,51:1, --red 7,09:1, --amber 7,67:1, valeur 13,35:1. */
+  --water-tile-1: #182228;
+  --water-tile-2: #141c21;
+  --water-tile-border: #26343b;
 
   /* Texte. --on-accent et --on-accent-warm restent clairs : voir l'en-tête. */
   --ink: #eef2ee;
@@ -227,6 +256,22 @@
   --red-tint: #271512;
   --info: #6fb6dd;
   --info-ink: #94cbe8;
+  --water-value-ink: #cfe6f2; /* grande valeur de la tuile d'eau, 13,35:1 sur --water-tile-2 */
+  /* Badges .pd-tag : --amber/--green sont maintenant clairs, le texte
+     bascule en encre sombre — 7,04:1 sur --amber, 8,27:1 sur --green. */
+  /* Volontairement IDENTIQUES au bloc clair : voir le commentaire ci-dessus. */
+  --pd-tag-kept-bg: #926511;
+  --pd-tag-rel-bg: #1d6e42;
+  --spot-btn-bg: #96590f;      /* 5,19:1 avec --on-accent sombre (#f2f7f3) */
+  --update-btn-bg: #1f7040;    /* 5,62:1 avec --on-accent sombre */
+  --reglemente-ink: #e8bd6a;   /* 8,99:1 sur --cream sombre */
+  /* Statuts de maille/comestibilité + chevron sombre (voir le bloc clair) :
+     mesurés contre --paper/--card/--sand/--green-dark, pire cas 5,05:1. */
+  --warn-ink: #e8bd6a;
+  --neutral-ink: #b3ada0;
+  --chev-on-dark: #9db4a6;
+  --season-good-dot: #4cc07d;
+  --season-warn-dot: #d9a441;
 
   /* Décor. */
   --brass: #c9a761;
@@ -922,7 +967,17 @@ a:hover {
 }
 .glossed {
   /* Ce pointillé est le seul signe qu'un terme ouvre une bulle : 2,36:1 avant,
-     3,06:1 maintenant (1.4.11). */
+     3,06:1 maintenant (1.4.11).
+     Tâche 10 — évalué et volontairement NON scindé en propriétés longues
+     (border-bottom-width/-style/-color) malgré la recommandation : le rendu
+     serait identique et border-bottom-color suivrait --chev-ink en sombre,
+     mais scinder renomme la ligne dans l'empreinte des couleurs
+     (.glossed|border-bottom|... -> .glossed|border-bottom-color|...), et
+     cette tâche n'a pas le droit de régénérer ce fixture. Le hex brut reste
+     donc ici ; resoudreCouleur() le lit déjà via son repli premiereCouleur()
+     (voir le commentaire de ce module), et il passe AA dans les deux thèmes
+     (mesuré : 8,7:1 sur --paper sombre) — ce n'est pas un bug, seulement une
+     encre qui n'accompagne pas --chev-ink quand il s'éclaircit en sombre. */
   border-bottom: 1px dotted #95907f; /* garde-fou contraste-palette.test.ts : lit le hex brut d'un raccourci border-*, pas var() */
 }
 .tip-i {
@@ -1422,7 +1477,7 @@ a:hover {
   text-align: center;
   box-shadow: 0 1px 2px var(--shadow);
 }
-.recipe-stat .k { font-size: 11px; color: var(--muted, #6b675c); }
+.recipe-stat .k { font-size: 11px; color: var(--muted); }
 .recipe-stat .v { font-size: 14px; font-weight: 700; margin-top: 2px; color: var(--ink-2); }
 .bivouac-badge {
   display: inline-block;
@@ -1724,7 +1779,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--red, #b33a2e);
+  background: var(--red);
   color: var(--on-accent);
   border-radius: 12px;
   padding: 12px 14px;
@@ -2027,8 +2082,11 @@ a:hover {
   border: none;
   /* Blanc sur #e08a1e : 2,68:1. C'est un 14 px gras, donc du texte NORMAL au
      sens de 1.4.3 (le seuil de 3:1 ne commence qu'à 18,66 px gras) — il fallait
-     4,5:1. Teinte inchangée, luminosité HSL baissée de 12,6 % : 4,57:1. */
-  background: #a76716;
+     4,5:1. Teinte inchangée, luminosité HSL baissée de 12,6 % : 4,57:1.
+     Jeton (Tâche 10) : --on-accent perd un souffle de blancheur en sombre
+     (#f2f7f3), assez pour repasser sous 4,5:1 (4,22) sur cette même teinte —
+     --spot-btn-bg s'assombrit un peu plus en sombre (5,19:1). */
+  background: var(--spot-btn-bg);
   color: var(--on-accent);
   border-radius: 100px;
   padding: 11px 18px;
@@ -2532,8 +2590,11 @@ a:hover {
 }
 .edible-status.réglementé {
   background: var(--cream);
-  /* 4,41:1, il manquait un cheveu ; −0,6 % de luminosité HSL suffit (4,55:1). */
-  color: #87681d;
+  /* 4,41:1, il manquait un cheveu ; −0,6 % de luminosité HSL suffit (4,55:1).
+     Jeton (Tâche 10) : --cream s'assombrit fortement en sombre (#1e241d), ce
+     qui fait tomber cette encre statique à 3,04:1 — --reglemente-ink la
+     remplace et s'éclaircit en sombre (8,99:1). */
+  color: var(--reglemente-ink);
 }
 .edible-status.non {
   background: var(--red-wash);
@@ -2980,11 +3041,17 @@ a:hover {
   font-weight: 650;
   color: var(--on-accent);
 }
+/* --amber et --green sont CLAIRS en sombre (l'accent devient clair sur fond
+   profond — voir le bloc sombre) : un badge plein avec du texte var(--on-accent)
+   passait de 4,55:1 à 2,07:1. --pd-tag-kept-bg/--pd-tag-rel-bg portent
+   exactement la valeur claire de --amber/--green (badge inchangé à l'œil),
+   mais restent un fond FONCÉ dans les deux thèmes au lieu de s'inverser :
+   c'est un badge plein et soutenu, pas une encre posée sur une surface. */
 .pd-tag.kept {
-  background: var(--amber);
+  background: var(--pd-tag-kept-bg);
 }
 .pd-tag.rel {
-  background: var(--green);
+  background: var(--pd-tag-rel-bg);
 }
 .pd-title {
   font-family: "Source Serif 4", Georgia, serif;
@@ -3090,8 +3157,8 @@ a:hover {
   box-shadow: 0 1px 2px var(--shadow);
 }
 .st-card.fir {
-  background: var(--fir, #0f1f16);
-  border-color: var(--fir, #0f1f16);
+  background: var(--fir);
+  border-color: var(--fir);
   box-shadow: 0 8px 20px -14px var(--veil);
 }
 .st-n {
@@ -3261,7 +3328,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--backdrop, #eceadf);
+  background: var(--backdrop);
 }
 .eb-card {
   background: var(--card);
@@ -3617,8 +3684,10 @@ a:hover {
 .update-toast button {
   border: none;
   /* Blanc sur #2e9e5b : 3,41:1 pour un 13 px gras. Teinte conservée,
-     luminosité HSL −6 % : 4,56:1. */
-  background: #27864d;
+     luminosité HSL −6 % : 4,56:1. Jeton (Tâche 10) : --on-accent perd un
+     souffle de blancheur en sombre, assez pour retomber à 4,21:1 sur cette
+     même teinte — --update-btn-bg s'assombrit un peu plus en sombre (5,62:1). */
+  background: var(--update-btn-bg);
   color: var(--on-accent);
   border-radius: 100px;
   padding: 11px 16px; /* ≥44px tap target */
@@ -4766,7 +4835,7 @@ button.card-row {
 
 /* ————— Outils de terrain (chronos & horaires légaux) ————— */
 .ot-legal {
-  background: var(--fir, #0f1f16);
+  background: var(--fir);
   color: var(--on-dark);
   border-radius: 18px;
   padding: 18px 18px 16px;
@@ -4806,12 +4875,12 @@ button.card-row {
   background: var(--card);
   /* Trait, pas une surface : --fir-ink, sinon invisible en sombre (1,16:1
      sur --card). Le repli littéral garde la valeur claire de --fir. */
-  border: 1.5px solid var(--fir-ink, #0f1f16);
+  border: 1.5px solid var(--fir-ink);
   border-radius: 16px;
   padding: 16px;
   text-align: center;
 }
-.ot-count.done { border-color: var(--green); background: var(--green-tint, #eaf4ee); }
+.ot-count.done { border-color: var(--green); background: var(--green-tint); }
 .ot-count-lbl {
   font-size: 12px;
   font-weight: 700;
@@ -4838,7 +4907,7 @@ button.card-row {
   width: 100%;
   text-align: left;
   background: var(--card);
-  border: 1px solid var(--line, #e6e2d8);
+  border: 1px solid var(--line);
   border-radius: 14px;
   padding: 13px 14px;
   box-shadow: 0 1px 2px rgba(20, 40, 30, 0.04);
@@ -4856,7 +4925,7 @@ button.card-row {
 }
 .ot-timer .tx { flex: 1; min-width: 0; }
 .ot-timer .tx .t { font-size: 15px; font-weight: 600; color: var(--ink-2); }
-.ot-timer .tx .s { font-size: 12.5px; color: var(--muted, #6b7168); margin-top: 1px; }
+.ot-timer .tx .s { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
 .ot-timer .dur {
   flex-shrink: 0;
   font-size: 12.5px;
@@ -4875,7 +4944,7 @@ button.card-row {
   gap: 9px;
   width: 100%;
   margin-top: 14px;
-  background: var(--fir, #0f1f16);
+  background: var(--fir);
   color: var(--on-accent-warm);
   border: none;
   border-radius: 14px;
@@ -4885,7 +4954,7 @@ button.card-row {
   cursor: pointer;
   box-shadow: 0 8px 20px -12px rgba(var(--veil-tint), 0.65);
 }
-.mr-note { font-size: 12.5px; color: var(--muted, #6b7168); line-height: 1.5; margin: 10px 2px 14px; }
+.mr-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 10px 2px 14px; }
 .mr-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -5146,8 +5215,8 @@ button.card-row {
 }
 .dash-water-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
 .dash-wtile {
-  background: linear-gradient(180deg, #f3f8fa, #eef4f6);
-  border: 1px solid #dfeaef;
+  background: linear-gradient(180deg, var(--water-tile-1), var(--water-tile-2));
+  border: 1px solid var(--water-tile-border);
   border-radius: 13px;
   padding: 11px;
   min-width: 0; /* let the grid cell shrink below its longest word (no overflow) */
@@ -5166,7 +5235,7 @@ button.card-row {
   /* No overflow:hidden here — these labels are short and fixed, and clipping
      would swallow the info-tooltip bubble that opens below the label (.tip). */
 }
-.dash-wtile .v { font-size: 20px; font-weight: 700; color: #14303b; margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
+.dash-wtile .v { font-size: 20px; font-weight: 700; color: var(--water-value-ink); margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
 .dash-wtile .v .u { font-size: 12px; font-weight: 600; color: var(--info-ink); }
 .dash-wtile .v .tr { font-size: 15px; margin-left: 1px; }
 .dash-wtile .v .tr.rising { color: var(--green); }
@@ -5260,7 +5329,7 @@ button.card-row {
 .id-intro {
   font-size: 13.5px;
   line-height: 1.55;
-  color: var(--muted, #6b7168);
+  color: var(--muted);
   background: var(--linen);
   border: 1px solid var(--line-cream);
   border-radius: 14px;
@@ -5272,7 +5341,7 @@ button.card-row {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: var(--fir, #0f1f16);
+  background: var(--fir);
   color: var(--on-accent-warm);
   border: none;
   border-radius: 100px;
@@ -5324,7 +5393,7 @@ button.card-row {
 }
 .id-done, .id-foot { font-size: 12px; color: var(--muted); line-height: 1.5; }
 .id-done {
-  background: var(--green-tint, #eaf4ee);
+  background: var(--green-tint);
   border: 1px solid var(--id-line);
   color: #2a6d48;
   border-radius: 12px;
@@ -5372,7 +5441,7 @@ button.card-row {
   align-items: center;
   gap: 7px;
   width: 100%;
-  background: var(--fir, #0f1f16);
+  background: var(--fir);
   color: var(--on-accent-warm);
   text-decoration: none;
   border-radius: 11px;
@@ -5398,7 +5467,7 @@ button.card-row {
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 17px;
   font-weight: 700;
-  color: var(--fir, #0f1f16);
+  color: var(--fir);
   margin: 14px 4px 4px;
 }
 .fed-dept:first-child .fed-dept-h { margin-top: 4px; }
@@ -5454,7 +5523,7 @@ button.card-row {
 }
 .mc-note {
   font-size: 11px;
-  color: var(--muted, #6b7168);
+  color: var(--muted);
   line-height: 1.45;
   margin-top: 8px;
 }

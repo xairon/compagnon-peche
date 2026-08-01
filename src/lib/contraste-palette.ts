@@ -118,8 +118,8 @@ function resoudreSource(css: string, s: Source, vars: Record<string, string>): s
 export function evaluerPaire(
   css: string,
   paire: Paire,
+  vars: Record<string, string> = variablesRacine(css),
 ): { nom: string; texte: string; fond: string; ratio: number; seuil: number } {
-  const vars = variablesRacine(css);
   const texte = resoudreSource(css, paire.texte, vars);
   const fond = resoudreSource(css, paire.fond, vars);
   return {
@@ -131,10 +131,37 @@ export function evaluerPaire(
   };
 }
 
-/** Le dégradé des tuiles d'eau : on retient l'extrémité la plus sombre. */
-const TUILE_EAU = "#eef4f6";
+/**
+ * Les jetons tels qu'ils valent DANS un thème donné.
+ *
+ * En clair, ce sont ceux de `:root`. En sombre, ceux de `:root` écrasés par
+ * ceux de `:root[data-theme="dark"]` — exactement ce que fait la cascade au
+ * navigateur. Cette fonction est ce qui permet à la table des 63 paires de
+ * n'être écrite QU'UNE FOIS : les fonds y sont exprimés en jetons, donc ils
+ * suivent le thème d'eux-mêmes.
+ */
+export function variablesTheme(
+  css: string,
+  theme: "light" | "dark",
+): Record<string, string> {
+  const base = variablesRacine(css);
+  if (theme === "light") return base;
+  const bloc = /:root\[data-theme="dark"\]\s*\{([\s\S]*?)\}/.exec(css);
+  if (!bloc) return base;
+  const corps = bloc[1].replace(/\/\*[\s\S]*?\*\//g, "");
+  const sombre = { ...base };
+  for (const decl of corps.split(";")) {
+    const m = /^\s*(--[\w-]+)\s*:\s*([\s\S]+)$/.exec(decl);
+    if (m) sombre[m[1]] = m[2].trim();
+  }
+  return sombre;
+}
+
+/** Le dégradé des tuiles d'eau : on retient l'extrémité la plus sombre, en
+ *  jeton (Tâche 10) pour que la mesure suive le thème comme le reste. */
+const TUILE_EAU = "var(--water-tile-2)";
 /** Fond des placards « toujours utile » (chronos, identification). */
-const CREME = "#f6f1e4";
+const CREME = "var(--cream)";
 
 export const PAIRES: Paire[] = [
   // ————— Texte courant sur le papier —————
@@ -142,13 +169,13 @@ export const PAIRES: Paire[] = [
   { nom: "--ink sur --paper", texte: "var(--ink)", fond: "var(--paper)", taillePx: 16, ou: ".search input, .h2, .tick-label" },
   { nom: "--ink-2 sur --paper", texte: "var(--ink-2)", fond: "var(--paper)", taillePx: 15, ou: ".sec-title, .card-row .t" },
   { nom: "--muted sur --paper", texte: "var(--muted)", fond: "var(--paper)", taillePx: 12, ou: ".h-sub, .muted, .sp-latin — 106 règles" },
-  { nom: "--muted sur #fff", texte: "var(--muted)", fond: "#fff", taillePx: 12, ou: "cartes blanches (.dash-water, .verdict)" },
+  { nom: "--muted sur --card", texte: "var(--muted)", fond: "var(--card)", taillePx: 12, ou: "cartes blanches (.dash-water, .verdict)" },
   { nom: "--muted sur --sand", texte: "var(--muted)", fond: "var(--sand)", taillePx: 10, ou: ".explain, cellule verdict active" },
   { nom: "--faint sur --paper", texte: "var(--faint)", fond: "var(--paper)", taillePx: 11, ou: ".source, .disclaimer, .field label" },
-  { nom: "--faint sur #fff", texte: "var(--faint)", fond: "#fff", taillePx: 10, ou: ".verdict .sub" },
+  { nom: "--faint sur --card", texte: "var(--faint)", fond: "var(--card)", taillePx: 10, ou: ".verdict .sub" },
   { nom: "--faint sur --sand", texte: "var(--faint)", fond: "var(--sand)", taillePx: 10, ou: ".verdict .cell-active .sub" },
   { nom: "--green sur --paper", texte: "var(--green)", fond: "var(--paper)", taillePx: 13, ou: "tous les liens" },
-  { nom: "--green sur #fff", texte: "var(--green)", fond: "#fff", taillePx: 13, ou: "liens dans les cartes blanches" },
+  { nom: "--green sur --card", texte: "var(--green)", fond: "var(--card)", taillePx: 13, ou: "liens dans les cartes blanches" },
   { nom: "--red sur --paper", texte: "var(--red)", fond: "var(--paper)", taillePx: 13, ou: ".persist-warn button, .bal-echue" },
 
   // ————— Ambre : c'est la couleur des avertissements —————
@@ -164,10 +191,10 @@ export const PAIRES: Paire[] = [
   { nom: "--brass sur --paper (accent non textuel)", texte: "var(--brass)", fond: "var(--paper)", taillePx: 11, nonTexte: true, ou: "accent décoratif — ne pas employer pour du texte" },
 
   // ————— Le ⓘ : seul indice visuel qu'une cellule verdict est un bouton —————
-  { nom: "ⓘ des cellules verdict sur #fff", texte: { regle: ".verdict .cell-i", propriete: "color" }, fond: "#fff", taillePx: 9, ou: "Fiche → barre de verdict" },
+  { nom: "ⓘ des cellules verdict sur --card", texte: { regle: ".verdict .cell-i", propriete: "color" }, fond: "var(--card)", taillePx: 9, ou: "Fiche → barre de verdict" },
   { nom: "ⓘ des cellules verdict sur la cellule ouverte", texte: { regle: ".verdict .cell-i", propriete: "color" }, fond: "var(--sand)", taillePx: 9, ou: "Fiche → cellule verdict active" },
   { nom: "ⓘ de la pastille saison", texte: { regle: ".hero .season .season-i", propriete: "color" }, fond: "var(--paper)", taillePx: 11, ou: "Fiche → pastille saison (fond papier à 92 % sur la photo)" },
-  { nom: "libellé des cellules verdict sur #fff", texte: { regle: ".verdict .k", propriete: "color" }, fond: "#fff", taillePx: 10, ou: "Fiche → barre de verdict" },
+  { nom: "libellé des cellules verdict sur --card", texte: { regle: ".verdict .k", propriete: "color" }, fond: "var(--card)", taillePx: 10, ou: "Fiche → barre de verdict" },
   { nom: "libellé des cellules verdict sur la cellule ouverte", texte: { regle: ".verdict .k", propriete: "color" }, fond: "var(--sand)", taillePx: 10, ou: "Fiche → cellule verdict active" },
   { nom: "fermeture de l'encart d'explication", texte: { regle: ".explain-x", propriete: "color" }, fond: "var(--sand)", taillePx: 13, ou: "Fiche → encart ⓘ, bouton ✕" },
   { nom: "texte de l'encart d'explication", texte: { regle: ".explain-t", propriete: "color" }, fond: "var(--sand)", taillePx: 13, ou: "Fiche → encart ⓘ" },
@@ -191,9 +218,9 @@ export const PAIRES: Paire[] = [
   { nom: "pastille « non »", texte: { regle: ".edible-status.non", propriete: "color" }, fond: { regle: ".edible-status.non", propriete: "background" }, taillePx: 13, gras: true, ou: "Fiche → consommation" },
 
   // ————— Emplacements photo (les seuls textes sur fond gris) —————
-  { nom: "légende d'emplacement photo clair", texte: { regle: ".img-slot", propriete: "color" }, fond: "#e1ddd0", taillePx: 11, ou: "vignettes sans photo (bande la plus sombre du damier)" },
+  { nom: "légende d'emplacement photo clair", texte: { regle: ".img-slot", propriete: "color" }, fond: "var(--sand-2)", taillePx: 11, ou: "vignettes sans photo (bande la plus sombre du damier)" },
   { nom: "légende d'emplacement photo sombre", texte: { regle: ".img-slot.dark", propriete: "color" }, fond: { regle: ".img-slot.dark", propriete: "background" }, taillePx: 11, ou: "héros sans photo" },
-  { nom: "prise sans photo", texte: { regle: ".pd-noimg", propriete: "color" }, fond: "#dfe6e2", taillePx: 14, ou: "Carnet → détail d'une prise" },
+  { nom: "prise sans photo", texte: { regle: ".pd-noimg", propriete: "color" }, fond: "var(--photo-bg)", taillePx: 14, ou: "Carnet → détail d'une prise" },
 
   // ————— Gris de service —————
   { nom: "source de la réglementation écrevisses", texte: { regle: ".ecr-reg-src", propriete: "color" }, fond: "var(--paper)", taillePx: 11, ou: "Écrevisses → mention de source" },
@@ -207,8 +234,15 @@ export const PAIRES: Paire[] = [
   { nom: "note réglementaire écrevisses", texte: { regle: ".ecr-reg-note", propriete: "color" }, fond: { regle: ".ecr-reg-note", propriete: "background" }, taillePx: 12, ou: "Écrevisses → encart ambre" },
 
   // ————— Surfaces sombres (elles passent déjà : la paire les y garde) —————
-  { nom: "--paper sur --fir", texte: "var(--paper)", fond: "var(--fir)", taillePx: 15.5, gras: true, ou: ".ac-prise, .ot-legal" },
-  { nom: "--paper sur --green-dark", texte: "var(--paper)", fond: "var(--green-dark)", taillePx: 14, ou: ".cta-dark, .cook, .update-toast" },
+  // NB : --on-accent-warm remplace --paper ici (Tâche 10). Les deux valaient
+  // exactement #fbfaf7 en clair — --paper servait de proxy — mais --paper
+  // s'assombrit en sombre (c'est une SURFACE) alors que le texte réel de
+  // .ac-prise est bien var(--on-accent-warm), qui reste clair dans les deux
+  // thèmes. Le proxy donnait donc 1,08:1 en sombre pour une chose qui ne se
+  // produit jamais à l'écran.
+  { nom: "--on-accent-warm sur --fir", texte: "var(--on-accent-warm)", fond: "var(--fir)", taillePx: 15.5, gras: true, ou: ".ac-prise, .ot-legal" },
+  // NB : même correction que ci-dessus (--paper → --on-accent-warm, Tâche 10).
+  { nom: "--on-accent-warm sur --green-dark", texte: "var(--on-accent-warm)", fond: "var(--green-dark)", taillePx: 14, ou: ".cta-dark, .cook, .update-toast" },
   { nom: "sous-titre de CTA sombre", texte: { regle: ".cta-dark .s", propriete: "color" }, fond: "var(--green-dark)", taillePx: 12, ou: "Accueil → bouton principal" },
   { nom: "sous-titre de la CTA prise", texte: { regle: ".ac-prise .s", propriete: "color" }, fond: "var(--fir)", taillePx: 12, ou: "Accueil → « noter une prise »" },
   { nom: "chevron de la CTA prise", texte: { regle: ".ac-prise .chev", propriete: "color" }, fond: "var(--fir)", taillePx: 18, nonTexte: true, ou: "Accueil → « noter une prise »" },

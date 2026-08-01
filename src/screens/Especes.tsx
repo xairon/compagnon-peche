@@ -118,7 +118,7 @@ export function Especes() {
             <span className="t">Identifier ma prise</span>
             <span className="s">Je ne connais pas l'espèce — assistant par critères</span>
           </span>
-          <span style={{ color: "#5E7A6A", fontSize: 18 }}>›</span>
+          <span style={{ color: "var(--chev-on-dark)", fontSize: 18 }}>›</span>
         </button>
 
         {recentSp.length > 0 && (

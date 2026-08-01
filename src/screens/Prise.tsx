@@ -133,7 +133,7 @@ export function Prise() {
               <span className="t">Je ne connais pas l'espèce</span>
               <span className="s">Identification guidée par critères</span>
             </span>
-            <span style={{ color: "#5E7A6A", fontSize: 18 }}>›</span>
+            <span style={{ color: "var(--chev-on-dark)", fontSize: 18 }}>›</span>
           </button>
 
           {!pq && recentSp.length > 0 && (

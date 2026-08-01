@@ -522,9 +522,9 @@ export function Fiche() {
   // au-dessus de sa photo, en se contredisant elle-même plus bas.
   const statut = speciesStatus(sp);
   const seasonFg =
-    statut.cls === "good" ? "var(--green)" : statut.cls === "warn" ? "#9A6A12" : "var(--red)";
+    statut.cls === "good" ? "var(--green)" : statut.cls === "warn" ? "var(--warn-ink)" : "var(--red)";
   const seasonDot =
-    statut.cls === "good" ? "#2E9E5B" : statut.cls === "warn" ? "#C08A2E" : "var(--red)";
+    statut.cls === "good" ? "var(--season-good-dot)" : statut.cls === "warn" ? "var(--season-warn-dot)" : "var(--red)";
 
   const toggle = (id: string) => set((s) => ({ open: { ...s.open, [id]: !s.open[id] } }));
 
@@ -554,9 +554,9 @@ export function Fiche() {
     ? ed.status === "non"
       ? "var(--red)"
       : ed.status === "réglementé"
-        ? "#9A6A12"
+        ? "var(--warn-ink)"
         : "var(--green)"
-    : "#8A8676";
+    : "var(--neutral-ink)";
   const verdict: { k: string; v: string; fg: string; sub: string | null }[] = [
     {
       k: "Comestible",
@@ -573,7 +573,7 @@ export function Fiche() {
     {
       k: "Quota",
       v: effQuota.text ?? "—",
-      fg: effQuota.text ? "#9A6A12" : "var(--ink)",
+      fg: effQuota.text ? "var(--warn-ink)" : "var(--ink)",
       sub: effQuota.local ? `arrêté ${state.dept}` : sp.quotaSub,
     },
   ];
