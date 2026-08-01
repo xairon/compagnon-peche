@@ -41,7 +41,7 @@ le publie sur Pages. Réglage unique : **Settings → Pages → Source : GitHub 
 
 ## Écrans
 
-Espèces (recherche + grille + identification guidée) · Fiche espèce (verdict + info-bulles,
+Espèces (recherche + grille + **filtre « dans mon coin »** + identification guidée) · Fiche espèce (verdict + info-bulles,
 sections dépliables, glossaire cliquable, confusions) · **Carte** (MapLibre GL + géoloc + présence
 réelle Hub'Eau) · **Ma prise** (parcours garder/relâcher, route les protégées/invasives) · Règle à
 l'écran · Carnet de captures (IndexedDB) · **Écrevisses** (séance de balances : chrono par balance,
@@ -55,6 +55,13 @@ Crédits.
 moi » (géolocalisation), et **API Poisson Hub'Eau** (OFB/ASPE) → stations de pêche scientifique de
 la zone visible ; toucher une station liste les **espèces réellement observées**, chacune reliée à
 sa fiche. Seule couche nécessitant le réseau — le reste de l'app reste 100 % hors-ligne.
+
+Le même réseau ASPE nourrit le **filtre « dans mon coin »** de l'écran Espèces
+(`src/lib/especes-du-coin.ts`) : sur appui explicite, l'app relève les espèces des trois stations
+valides les plus proches (~237 ko, une seule fois), enregistre le résultat et réduit la grille à
+ces espèces. Le relevé reste ensuite utilisable **hors-ligne**. Le filtre masque, mais il annonce
+toujours combien d'espèces il cache et se défait en un appui : l'électro-pêche capture mal les
+gros silures et les carpes de fond, et « absent des relevés » ne veut pas dire « absent de l'eau ».
 
 ### Matériel (tacklebox)
 
