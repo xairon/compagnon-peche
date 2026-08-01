@@ -501,19 +501,29 @@ Expected: de l'ordre de 95 lignes, chacune donnant une valeur et les propriété
 
 Compléter le bloc `:root`. Les jetons déjà présents ne sont pas redéclarés ; ceux ci-dessous sont ajoutés, avec pour valeur celle de la couleur qu'ils remplacent (relevée dans `/tmp/restantes.txt`) :
 
+**Les noms se déduisent de l'inventaire de l'étape 1, pas d'une table écrite d'avance.** Ce plan a été rédigé à partir d'une analyse statistique des valeurs, sans lire chaque déclaration — et les revues des tâches 3 et 4 ont déjà démenti trois de ses étiquettes de rôle. Les faits **vérifiés au grep** à ce stade :
+
+| Valeur | Rôle réel constaté | Donc |
+|---|---|---|
+| `#eceadf` | `border` (6 usages) | un jeton de **trait**, pas de surface |
+| `#efece2` | `border` / `border-top` / `border-bottom` | un jeton de **trait** |
+| `#e3e0d3` | `background` (damier + 4 vignettes) | un jeton de **surface** |
+
+Nomme d'après ce que fait la valeur dans la feuille. Un jeton mal nommé se redéfinit mal en sombre : un « fond » qui est en réalité un trait deviendra presque noir et le trait disparaîtra.
+
 ```css
   /* Surfaces, du fond de page à la carte posée dessus. */
   --surface-raised: #ffffff;  /* carte au-dessus d'une carte (modale, popover) */
-  --sand-2: #eceadf;          /* bande sable, plus soutenue que --sand */
-  --cream: #efece2;           /* fond de section crème */
-  --cream-2: #f6f1e4;         /* encadré crème */
+  --sand-2: #e3e0d3;          /* surface sable soutenue (damier, vignettes) */
+  --cream: #f6f1e4;           /* encadré crème */
 
-  /* Traits. --line et --line-strong existent ; celui-ci est le trait qui
+  /* Traits. --line et --line-strong existent ; --line-control est le trait qui
      DÉLIMITE un contrôle (bordure de champ, de bouton fantôme). WCAG 1.4.11
      lui impose 3:1, alors qu'un simple séparateur décoratif n'a pas de seuil.
      Les confondre ferait passer les champs de saisie sous le seuil en sombre. */
   --line-control: #cfc9ba;
-  --line-sand: #e3e0d3;
+  --line-warm: #eceadf;       /* trait chaud (6 usages) */
+  --line-cream: #efece2;      /* trait crème de section */
 
   /* Sémantique : chaque couleur a son fond de cartouche (-bg) et le texte
      posé dessus (-ink). --green, --amber, --red existent déjà comme accent. */
