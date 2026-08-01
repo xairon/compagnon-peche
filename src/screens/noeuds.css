@@ -114,3 +114,27 @@
 .noeud-chevron {
   color: var(--chev-ink);
 }
+
+.noeud-filtres {
+  padding: 4px 18px 2px;
+}
+
+/*
+ * `contain` et non `cover` : une vignette est un diagramme, pas une photo.
+ * Recadrer un schéma en carré coupe une légende ou un brin, ce qui en fait
+ * une image fausse plutôt qu'une image serrée.
+ */
+.noeud-vignette {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: contain;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+}
+.noeud-vignette-vide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
