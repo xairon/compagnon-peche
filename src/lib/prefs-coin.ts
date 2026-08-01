@@ -3,9 +3,11 @@ import type { CoinEspeces, StationDuCoin } from "./especes-du-coin";
 /**
  * Le relevé du coin, d'un lancement à l'autre.
  *
- * POURQUOI ON LE GARDE. Il coûte ~237 ko de réseau (voir especes-du-coin.ts).
- * Le refaire à chaque lancement rendrait le filtre inutilisable là où il sert
- * le plus — au bord de l'eau, sans réseau.
+ * POURQUOI ON LE GARDE. Il coûte ~183 ko de réseau (mesuré au `curl` sur les
+ * trois stations réellement retenues près de Blois, voir le commentaire de
+ * `STATIONS_RETENUES` dans especes-du-coin.ts). Le refaire à chaque lancement
+ * rendrait le filtre inutilisable là où il sert le plus — au bord de l'eau,
+ * sans réseau.
  *
  * POURQUOI UNE CLÉ À PART, et non un champ de plus dans `carnet:prefs` : la
  * raison est déjà écrite dans prefs-accueil.ts, et elle vaut mot pour mot ici.

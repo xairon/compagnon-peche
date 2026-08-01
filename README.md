@@ -58,7 +58,7 @@ sa fiche. Seule couche nécessitant le réseau — le reste de l'app reste 100 %
 
 Le même réseau ASPE nourrit le **filtre « dans mon coin »** de l'écran Espèces
 (`src/lib/especes-du-coin.ts`) : sur appui explicite, l'app relève les espèces des trois stations
-valides les plus proches (~237 ko, une seule fois), enregistre le résultat et réduit la grille à
+valides les plus proches (~183 ko, une seule fois), enregistre le résultat et réduit la grille à
 ces espèces. Le relevé reste ensuite utilisable **hors-ligne**. Le filtre masque, mais il annonce
 toujours combien d'espèces il cache et se défait en un appui : l'électro-pêche capture mal les
 gros silures et les carpes de fond, et « absent des relevés » ne veut pas dire « absent de l'eau ».

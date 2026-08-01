@@ -90,12 +90,29 @@ export const PORTEE_COIN_KM = 15;
 /**
  * Combien de stations nourrissent un relevé.
  *
- * C'EST LUI QUI FIXE LA FACTURE. Mesuré le 01/08/2026 : 60 à 104 ko par
- * station, pour le seul champ `nom_latin_taxon` — l'API ne sait pas rendre des
- * taxons distincts, elle rend un enregistrement par lot, et une station bien
- * suivie en compte des milliers. Trois stations ≈ 237 ko, UNE FOIS, sur appui
- * explicite. À comparer aux 973 ko d'une classe Sandre que l'app télécharge
- * déjà (voir lib/net-bornes.ts).
+ * C'EST LUI QUI FIXE LA FACTURE. `chargerEspecesDuCoin` ne demande que le
+ * champ `nom_latin_taxon` à `speciesAtStation` (voir son paramètre `champs`
+ * dans lib/hubeau.ts) — l'API ne sait pas rendre des taxons distincts, elle
+ * rend un enregistrement par lot, et une station bien suivie en compte des
+ * milliers. Mesuré au `curl` le 01/08/2026 sur les trois stations RÉELLEMENT
+ * retenues près de Blois (§2.6 de la spec, ce sont celles des tests) :
+ *
+ *   /stations?bbox=…                    2 546 o
+ *   04052025 (3,37 km, 2 taxons)           475 o
+ *   04052800 (5,06 km, 28 taxons)       59 898 o
+ *   04052600 (7,63 km, 32 taxons)      120 535 o
+ *   ──────────────────────────────────────────
+ *   TOTAL                             183 454 o  ≈ 183 ko, UNE FOIS, sur
+ *                                                  appui explicite.
+ *
+ * (La spec mesure aussi 60–104 ko par station sur trois stations prises au
+ * hasard, §2.2 — ce nombre-ci décrit le coût par station typique, pas le
+ * total d'un relevé réel ; les deux mesures coexistent dans la spec avec leur
+ * périmètre propre.) À comparer aux 973 ko d'une classe Sandre que l'app
+ * télécharge déjà (voir lib/net-bornes.ts), et à la borne `OCTETS_MAX.hubeau`
+ * de 2 000 000 o (même fichier) : le pire cas mesuré par station ci-dessus
+ * (120 535 o) en laisse plus de 16× de marge avant qu'une réponse anormale ne
+ * soit coupée.
  *
  * Pourquoi pas une seule : la station la plus proche de Blois ne rend que 2
  * taxons. Pourquoi pas dix : au-delà de trois on quitte le coin, et la facture
@@ -177,7 +194,13 @@ export async function chargerEspecesDuCoin(
   const lues: StationDuCoin[] = [];
   for (const st of retenues) {
     try {
-      const sp = await speciesAtStation(st.code, signal);
+      // Un seul champ demandé (voir STATIONS_RETENUES) : c'est tout ce que
+      // `apparier` lit. `retries: 0` — un 5xx ou 429 relancé par `fetchT`
+      // doublerait jusqu'à 4 requêtes déjà proches du seuil de débit mesuré
+      // au §2.3 de la spec (299 o de HTML au lieu du JSON, à la 9ᵉ requête
+      // rapprochée) ; une station qui échoue se retire déjà du lot sans vider
+      // le résultat, un retry n'y changerait rien d'utile.
+      const sp = await speciesAtStation(st.code, signal, { champs: "nom_latin_taxon", retries: 0 });
       // `latin` peut être vide quand la source ne publie qu'un nom commun.
       // On garde alors le nom commun : il finira en « inconnu », ce qui est
       // honnête — le jeter en silence ne l'aurait pas été.

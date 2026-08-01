@@ -4,7 +4,7 @@ import { readPrefs, writePrefs } from "./prefs";
 import { readCoin, writeCoin, CLE_COIN } from "./prefs-coin";
 import type { CoinEspeces } from "./especes-du-coin";
 
-// Le relevé du coin coûte ~237 ko de réseau. Le perdre à chaque lancement
+// Le relevé du coin coûte ~183 ko de réseau. Le perdre à chaque lancement
 // rendrait la fonctionnalité inutilisable au bord de l'eau — c'est justement
 // hors-ligne qu'elle sert. D'où une clé à part : `store.tsx` réécrit
 // `carnet:prefs` en ENTIER à chaque changement de département.

@@ -54,6 +54,32 @@ Ces trois stations ont été prises **au hasard** dans les 22 de la boîte, pour
 typique — ce ne sont pas « les trois plus proches de Blois ». C'est le coût par station qui compte
 ici (60–104 ko), pas l'identité des stations.
 
+**Correction post-revue (dernière relecture avant fusion, même jour).** Le code expédié avait
+dérivé de cette mesure : `speciesAtStation` demandait par défaut trois champs
+(`nom_commun_taxon,nom_latin_taxon,effectif_lot`), pas le seul `nom_latin_taxon` mesuré ci-dessus —
+`effectif_lot` n'est jamais lu par `apparier`. Écart mesuré au `curl` sur la station 04052800 :
+59 898 o pour `nom_latin_taxon` seul (la mesure ci-dessus, retrouvée à l'octet près) contre 138 084 o
+avec les trois champs, soit ×2,3. `speciesAtStation` reçoit désormais un paramètre `champs` optionnel
+(par défaut inchangé, pour la Carte qui affiche `effectif`) ; le chargeur du coin demande
+`nom_latin_taxon` seul, ce qui referme l'écart.
+
+Cette correction ne change pas le tableau ci-dessus (toujours vrai : coût par station, stations
+prises au hasard) mais change le total qu'un relevé réel coûte, parce que les trois stations
+RETENUES par le code près de Blois (§2.6, pas celles ci-dessus) ne sont pas celles du tableau.
+Mesuré au `curl` le 01/08/2026 sur les trois stations retenues et sur la requête de stations :
+
+```
+/stations?bbox=1.1322,47.4486,1.5398,47.7234&…       2 546 o
+04052025 (3,37 km, 2 taxons)  fields=nom_latin_taxon     475 o
+04052800 (5,06 km, 28 taxons) fields=nom_latin_taxon  59 898 o
+04052600 (7,63 km, 32 taxons) fields=nom_latin_taxon 120 535 o
+──────────────────────────────────────────────────────────────
+TOTAL                                                183 454 o  ≈ 183 ko
+```
+
+C'est ce nombre — 183 ko, pas les 237 ko du tableau ci-dessus — qui décrit ce que l'écran télécharge
+réellement à Blois, une fois, sur appui explicite.
+
 **Pourquoi 15 km.** La boîte mesurée ci-dessus fait ≈ 37 × 33 km et contient 22 stations : de quoi
 en trouver trois bien au-delà de ce qu'un pêcheur appellerait « son coin ». `PORTEE_COIN_KM = 15`
 est un plafond de crédibilité, pas un plafond de coût — le coût est fixé par

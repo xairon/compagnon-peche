@@ -78,15 +78,30 @@ export async function stationsInBbox(
 /** Species recorded at a station, aggregated across ALL surveys (most abundant
  *  first). size=20000 (the API max) so heavily-surveyed stations aren't truncated
  *  — some have thousands of lots (e.g. La Ferté-St-Cyr ≈ 2600); sort=desc keeps
- *  the most recent first as a safety if a station ever exceeds one page. */
+ *  the most recent first as a safety if a station ever exceeds one page.
+ *
+ *  `opts.champs` : les champs demandés à l'API, par défaut inchangés pour la
+ *  Carte (qui affiche et trie sur `effectif`). `lib/especes-du-coin.ts` réduit
+ *  ce champ à `nom_latin_taxon` seul, le seul qu'il lit — demander
+ *  `effectif_lot` en plus multipliait la charge par ~2,3 sur une station bien
+ *  suivie pour une valeur jamais utilisée (mesuré le 01/08/2026, voir son
+ *  commentaire sur `STATIONS_RETENUES`).
+ *  `opts.retries` : passe-plat vers `fetchT`, par défaut inchangé (1 retry sur
+ *  5xx/429). */
 export async function speciesAtStation(
   code: string,
   signal?: AbortSignal,
+  opts: { champs?: string; retries?: number } = {},
 ): Promise<StationSpecies[]> {
+  const { champs = "nom_commun_taxon,nom_latin_taxon,effectif_lot", retries } = opts;
   const url =
     `${BASE}/observations?code_station=${encodeURIComponent(code)}` +
-    `&size=20000&sort=desc&fields=nom_commun_taxon,nom_latin_taxon,effectif_lot`;
-  const r = await fetchT(url, { signal, source: "hubeau" });
+    `&size=20000&sort=desc&fields=${champs}`;
+  const r = await fetchT(url, {
+    signal,
+    source: "hubeau",
+    ...(retries !== undefined ? { retries } : {}),
+  });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   const map = new Map<string, StationSpecies>();
