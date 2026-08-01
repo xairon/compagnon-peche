@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { DEPARTEMENTS } from "../data/regulation";
@@ -8,7 +9,11 @@ import { ratingFg } from "../lib/helpers";
 import { speciesStatus } from "../lib/statut";
 import { matchSpecies } from "../lib/recherche";
 import { effectiveMaille } from "../lib/maille";
+import { chargerEspecesDuCoin, PORTEE_COIN_KM, type CoinEspeces } from "../lib/especes-du-coin";
+import { readCoin, writeCoin } from "../lib/prefs-coin";
+import { locate, locateMessage } from "../lib/locate";
 import type { Species } from "../types";
+import "./especes.css";
 
 // Web Speech API: still absent from TypeScript's DOM lib, and prefixed on WebKit.
 // Only the members the voice search actually touches are declared.
@@ -58,11 +63,27 @@ function flags(sp: Species): { label: string; amber: boolean }[] {
 export function Especes() {
   const { state, set, nav, openSp } = useStore();
   const deptName = DEPARTEMENTS[state.dept].name;
+
+  // Relu en synchrone au montage : ce relevé décide du premier rendu, et une
+  // lecture asynchrone afficherait les 129 fiches le temps d'une frame avant
+  // d'en masquer 95.
+  const [coin, setCoin] = useState<CoinEspeces | null>(() => readCoin());
+  // Trois états nommés plutôt qu'une chaîne libre : `"repos" | "charge" | string`
+  // s'effondre en `string` pour TypeScript, et le test `typeof x === "string"`
+  // serait toujours vrai. L'échec porte son message, il ne l'EST pas.
+  const [coinEtat, setCoinEtat] = useState<
+    { k: "repos" } | { k: "charge" } | { k: "err"; msg: string }
+  >({ k: "repos" });
+
   const list = SPECIES.filter(
     (sp) =>
       (state.filter === "tous" || sp.group === state.filter) &&
-      matchSpecies(sp, state.q),
+      matchSpecies(sp, state.q) &&
+      (!state.coin || !coin || coin.ids.includes(sp.id)),
   );
+  // Ce que le filtre cache, compté sur le catalogue entier et non sur la vue
+  // courante : c'est le nombre que le pêcheur doit pouvoir contredire.
+  const masquees = state.coin && coin ? SPECIES.length - coin.ids.length : 0;
 
   const micAvail = !!speechCtor();
 
@@ -85,6 +106,47 @@ export function Especes() {
   const recentSp = state.recent
     .map((id) => SPECIES.find((s) => s.id === id))
     .filter(Boolean) as Species[];
+
+  async function releverLeCoin() {
+    setCoinEtat({ k: "charge" });
+    try {
+      const { lat, lon } = await locate();
+      const c = await chargerEspecesDuCoin(lat, lon);
+      if (!c) {
+        // La source n'a pas répondu. Distinct de « il n'y a rien ici » : on ne
+        // sait pas, et l'écran n'a pas le droit de confondre les deux.
+        setCoinEtat({
+          k: "err",
+          msg: "Sans réseau, la liste des relevés ne peut pas être établie.",
+        });
+        return;
+      }
+      if (!c.stations.length) {
+        // On a demandé, et la réponse est « rien ici ». Pas de repli sur le
+        // département : aucune donnée de répartition départementale n'existe
+        // dans le dépôt, et en inventer une pour boucher ce trou irait contre
+        // la règle qui tient tout le reste.
+        setCoinEtat({
+          k: "err",
+          msg: `Aucune station de pêche scientifique à moins de ${PORTEE_COIN_KM} km d'ici.`,
+        });
+        return;
+      }
+      writeCoin(c);
+      setCoin(c);
+      setCoinEtat({ k: "repos" });
+      set({ coin: true });
+    } catch (e) {
+      // `locate()` rejette avec un code (`"denied"`…), pas une Error :
+      // locateMessage en fait la phrase, et elle est déjà juste.
+      setCoinEtat({ k: "err", msg: locateMessage(e) });
+    }
+  }
+
+  function basculerCoin() {
+    if (coin) set({ coin: !state.coin });
+    else void releverLeCoin();
+  }
 
   return (
     <main className="screen">
@@ -138,6 +200,50 @@ export function Especes() {
                 </button>
               ))}
             </div>
+          </div>
+        )}
+
+        <div className="coin-rang">
+          <button
+            type="button"
+            className={"chip" + (state.coin ? " chip-on" : "")}
+            aria-pressed={state.coin}
+            disabled={coinEtat.k === "charge"}
+            onClick={basculerCoin}
+          >
+            {coinEtat.k === "charge" ? "Relevé en cours…" : "Dans mon coin"}
+          </button>
+        </div>
+
+        {coinEtat.k === "err" && <div className="coin-src">{coinEtat.msg}</div>}
+
+        {state.coin && coin && (
+          <div className="coin-src">
+            D'après {coin.stations.length}{" "}
+            {coin.stations.length > 1 ? "stations Hub'Eau" : "station Hub'Eau"} —{" "}
+            {coin.stations
+              .map((s) => `${s.nom} (${s.dist.toFixed(1).replace(".", ",")} km)`)
+              .join(", ")}{" "}
+            · relevé le {coin.releveIso.split("-").reverse().join("/")}{" "}
+            <button type="button" className="coin-maj link-inline" onClick={releverLeCoin}>
+              actualiser
+            </button>
+            {coin.inconnus.length > 0 && (
+              <>
+                <br />
+                {coin.inconnus.length} taxon{coin.inconnus.length > 1 ? "s" : ""} relevé
+                {coin.inconnus.length > 1 ? "s" : ""} n'
+                {coin.inconnus.length > 1 ? "ont" : "a"} pas de fiche : lots identifiés au genre
+                ou à la famille, hybrides.
+              </>
+            )}
+            {coin.ecrevisses.length > 0 && (
+              <>
+                <br />
+                {coin.ecrevisses.length} écrevisse{coin.ecrevisses.length > 1 ? "s" : ""} relevée
+                {coin.ecrevisses.length > 1 ? "s" : ""} ici — voir l'écran Écrevisses.
+              </>
+            )}
           </div>
         )}
 
@@ -213,6 +319,18 @@ export function Especes() {
           );
         })}
       </div>
+
+      {masquees > 0 && (
+        <div className="coin-reste">
+          {/* Les relevés ne sont pas exhaustifs : l'électro-pêche capture mal
+              les gros silures et les carpes de fond, et une station ne couvre
+              qu'un point du cours d'eau. Le filtre masque, mais il dit combien,
+              et il se défait en un appui. */}
+          <button type="button" className="link-inline" onClick={() => set({ coin: false })}>
+            {masquees} autres espèces ne sont pas dans les relevés d'ici — les voir
+          </button>
+        </div>
+      )}
 
       {list.length === 0 && (
         <div style={{ padding: "10px 18px 30px", textAlign: "center", color: "var(--muted)", fontSize: 14 }}>

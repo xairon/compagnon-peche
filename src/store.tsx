@@ -111,6 +111,17 @@ export interface AppState {
   // consultait pas — et c'est exactement pour ça qu'il fermait l'app.
   q: string;
   filter: string;
+  /** La bascule « dans mon coin » de l'écran Espèces.
+   *
+   *  DANS LE STORE ET NON EN LOCAL : aller sur une fiche puis revenir doit
+   *  garder le filtre allumé. Le RELEVÉ, lui, n'est pas ici — il se relit de
+   *  localStorage à chaque montage (lib/prefs-coin.ts), et le dupliquer dans
+   *  l'état ferait deux vérités.
+   *
+   *  NON PERSISTÉ, délibérément : ouvrir l'app et trouver 95 espèces déjà
+   *  masquées sans l'avoir demandé serait une surprise, et le pêcheur qui
+   *  cherche une fiche vue ailleurs ne comprendrait pas sa disparition. */
+  coin: boolean;
   spId: string | null;
   open: Record<string, boolean>;
   recent: string[];
@@ -178,6 +189,7 @@ const makeInitialState = (): AppState => {
     carnetSeg: "prises",
     q: "",
     filter: "tous",
+    coin: false,
     open: { regle: true },
     recent: [],
     bigUI: prefs.bigUI,

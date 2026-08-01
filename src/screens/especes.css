@@ -1,0 +1,33 @@
+/* Espèces — le filtre « dans mon coin ».
+   Jetons uniquement : les paires --muted/--paper et --green/--paper sont déjà
+   déclarées dans PAIRES (lib/contraste-palette.ts). */
+
+.coin-rang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* La provenance n'est pas décorative : c'est elle qui permet de juger si le
+   relevé parle bien du coin où l'on pêche. */
+.coin-src {
+  margin-top: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.coin-src .coin-maj {
+  color: var(--green);
+  font-weight: 550;
+  text-decoration: underline;
+}
+
+/* L'aveu de ce que le filtre cache, en pied de grille. */
+.coin-reste {
+  padding: 2px 18px 26px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
