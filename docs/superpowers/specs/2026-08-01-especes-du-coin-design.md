@@ -314,13 +314,25 @@ une absence qu'il n'a pas constatée.
   `04052025`, `04052800`, `04052600` — les trois plus proches **valides** ;
 - une station en échec ne vide pas le résultat ; les trois en échec rendent `null` ;
 - `ids` est trié — deux appels rendent le même ordre ;
-- sur les fixtures : `ids.length === 34`, `ecrevisses.length === 2`, `inconnus.length === 3`.
+- sur les fixtures : `ids.length === 34`, `ecrevisses.length === 2`, `inconnus.length === 3` ;
+- chaque station lue ne demande que `fields=nom_latin_taxon` (ajouté en revue finale — voir la
+  correction post-revue du §2.2) ;
+- **de bout en bout, ajouté en revue finale** : un relevé produit par `chargerEspecesDuCoin` sur les
+  fixtures, `writeCoin`é puis `readCoin`é, ressort identique — `especes-du-coin.test.ts` et
+  `prefs-coin.test.ts` ne s'étaient testés jusque-là que séparément, chacun sur des objets construits
+  à la main ;
+- `coinEstLoin` (ajouté en revue finale) : faux au point du relevé et dans sa portée, vrai au-delà de
+  `PORTEE_COIN_KM`.
 
 `src/lib/prefs-coin.test.ts` : stockage absent, tronqué, JSON invalide, champs du mauvais type →
 défaut, jamais de levée. Miroir de `prefs-accueil.test.ts`.
 
 `src/screens/Especes` (test d'écran) : la bascule masque, le compteur annonce le bon nombre, un
-appui sur « les voir » restaure la grille entière, et le filtre se combine avec un groupe.
+appui sur « les voir » restaure la grille entière, et le filtre se combine avec un groupe. Ajoutés en
+revue finale : un relevé complète sous `StrictMode` sans rester bloqué sur « Relevé en cours… » ; la
+grille vide à cause du seul filtre coin dit « aucune de ces espèces », pas « aucune espèce ne
+correspond à la recherche » ; l'avertissement de distance apparaît quand la géolocalisation répond
+loin du point du relevé, et reste silencieux quand elle est refusée ou indisponible.
 
 ## 6. Hors périmètre, délibérément
 
