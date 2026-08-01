@@ -1,0 +1,275 @@
+{
+ "count": 30,
+ "data": [
+  {
+   "code_station": "K441409001",
+   "libelle_station": "La Mauve de Détourbe à Meung-sur-Loire",
+   "longitude_station": 1.69461322,
+   "latitude_station": 47.820222839,
+   "code_cours_eau": "K4414000",
+   "libelle_cours_eau": "la Mauve de la Détourbe",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4414000"
+  },
+  {
+   "code_station": "K442701001",
+   "libelle_station": "Le Lien à Tavers",
+   "longitude_station": 1.614974732,
+   "latitude_station": 47.754893277,
+   "code_cours_eau": "K4427000",
+   "libelle_cours_eau": "le Lien",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4427000"
+  },
+  {
+   "code_station": "K444301001",
+   "libelle_station": "L'Ardoux à Lailly-en-Val",
+   "longitude_station": 1.655754727,
+   "latitude_station": 47.747510065,
+   "code_cours_eau": "K44-0300",
+   "libelle_cours_eau": "l'Ardoux",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K44-0300"
+  },
+  {
+   "code_station": "K447001001",
+   "libelle_station": "La Loire à Blois",
+   "longitude_station": 1.335147948,
+   "latitude_station": 47.584957074,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "code_station": "K457221001",
+   "libelle_station": "Le Beuvron à Montrieux-en-Sologne - Bois Olympe",
+   "longitude_station": 1.70755632,
+   "latitude_station": 47.529619622,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "code_station": "K467000101",
+   "libelle_station": "Le Beuvron à Cellettes - Clénord",
+   "longitude_station": 1.420533553,
+   "latitude_station": 47.5325123,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "code_station": "K467000103",
+   "libelle_station": "Le Beuvron à Cellettes - Clénord - Station débitmétrique",
+   "longitude_station": 1.420658053,
+   "latitude_station": 47.532421511,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "code_station": "K479301001",
+   "libelle_station": "Le Cosson à Chailles",
+   "longitude_station": 1.309387152,
+   "latitude_station": 47.543684348,
+   "code_cours_eau": "K47-0300",
+   "libelle_cours_eau": "le Cosson",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K47-0300"
+  },
+  {
+   "code_station": "K480001001",
+   "libelle_station": "La Loire à Onzain - Pont de Chaumont - Aval",
+   "longitude_station": 1.188799046,
+   "latitude_station": 47.486229382,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "code_station": "K480001002",
+   "libelle_station": "La Loire à Onzain - Pont de Chaumont - Amont",
+   "longitude_station": 1.189729485,
+   "latitude_station": 47.486604008,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "code_station": "K481000201",
+   "libelle_station": "L'Amasse à Saint-Règle",
+   "longitude_station": 1.061147506,
+   "latitude_station": 47.412057249,
+   "code_cours_eau": "K4814000",
+   "libelle_cours_eau": "l'Amasse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4814000"
+  },
+  {
+   "code_station": "K484000102",
+   "libelle_station": "La Cisse à Coulanges - Moulin Jouan",
+   "longitude_station": 1.235465156,
+   "latitude_station": 47.54658671,
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0150"
+  },
+  {
+   "code_station": "K485300001",
+   "libelle_station": "La Cisse à Nazelles-Négron",
+   "longitude_station": 0.965964808,
+   "latitude_station": 47.434852534,
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0150"
+  },
+  {
+   "code_station": "K487312001",
+   "libelle_station": "La Brenne à Villedômer - Bas Villaumay",
+   "longitude_station": 0.898195076,
+   "latitude_station": 47.567900305,
+   "code_cours_eau": "K48-031A",
+   "libelle_cours_eau": null,
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K48-031A"
+  },
+  {
+   "code_station": "K488000301",
+   "libelle_station": "[La Brenne] à Vernou-sur-Brenne",
+   "longitude_station": 0.843285191,
+   "latitude_station": 47.415566255,
+   "code_cours_eau": "K48-0311",
+   "libelle_cours_eau": null,
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K48-0311"
+  },
+  {
+   "code_station": "K488000401",
+   "libelle_station": "La Quintame à Auzouer-en-Touraine",
+   "longitude_station": 0.931092649,
+   "latitude_station": 47.556200563,
+   "code_cours_eau": "K4885000",
+   "libelle_cours_eau": "la Quintame",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4885000"
+  },
+  {
+   "code_station": "K620090010",
+   "libelle_station": "Le Cher à Mennetou-sur-Cher",
+   "longitude_station": 1.870065751,
+   "latitude_station": 47.267909366,
+   "code_cours_eau": "K---0090",
+   "libelle_cours_eau": "le Cher",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K---0090"
+  },
+  {
+   "code_station": "K622091003",
+   "libelle_station": "Le Cher à Selles-sur-Cher - Pont D 956A",
+   "longitude_station": 1.557872339,
+   "latitude_station": 47.278245121,
+   "code_cours_eau": "K---0090",
+   "libelle_cours_eau": "le Cher",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K---0090"
+  },
+  {
+   "code_station": "K648251001",
+   "libelle_station": "La Sauldre à Pruniers-en-Sologne",
+   "longitude_station": 1.671547667,
+   "latitude_station": 47.320917289,
+   "code_cours_eau": "K6--0250",
+   "libelle_cours_eau": "la Sauldre",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K6--0250"
+  },
+  {
+   "code_station": "K650091001",
+   "libelle_station": "Le Cher à Châtillon-sur-Cher",
+   "longitude_station": 1.488142911,
+   "latitude_station": 47.27025012,
+   "code_cours_eau": "K---0090",
+   "libelle_cours_eau": "le Cher",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K---0090"
+  },
+  {
+   "code_station": "K654000201",
+   "libelle_station": "Le Renon à Sembleçay - [5a]",
+   "longitude_station": 1.677368677,
+   "latitude_station": 47.219652538,
+   "code_cours_eau": "K65-0310",
+   "libelle_cours_eau": "le Renon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K65-0310"
+  },
+  {
+   "code_station": "K654000301",
+   "libelle_station": "[Bras droit] à Sembleçay - Renon aval [5b]",
+   "longitude_station": 1.681812545,
+   "latitude_station": 47.219705583,
+   "code_cours_eau": "K6545002",
+   "libelle_cours_eau": null,
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K6545002"
+  },
+  {
+   "code_station": "K659302001",
+   "libelle_station": "Le Fouzon à Meusnes - Le Gué au Loup",
+   "longitude_station": 1.484626065,
+   "latitude_station": 47.26032664,
+   "code_cours_eau": "K65-0300",
+   "libelle_cours_eau": "le Fouzon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K65-0300"
+  },
+  {
+   "code_station": "K660000401",
+   "libelle_station": "Le Modon à Lye [Les Cartes]",
+   "longitude_station": 1.459164772,
+   "latitude_station": 47.239578417,
+   "code_cours_eau": "K6604000",
+   "libelle_cours_eau": "le Modon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K6604000"
+  },
+  {
+   "code_station": "K664090010",
+   "libelle_station": "Le Cher à Montrichard",
+   "longitude_station": 1.186684741,
+   "latitude_station": 47.342028215,
+   "code_cours_eau": "K---0090",
+   "libelle_cours_eau": "le Cher",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K---0090"
+  },
+  {
+   "code_station": "K750261010",
+   "libelle_station": "L'Indre à Cormery",
+   "longitude_station": 0.834674827,
+   "latitude_station": 47.269527055,
+   "code_cours_eau": "K7--0260",
+   "libelle_cours_eau": "l'Indre",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K7--0260"
+  },
+  {
+   "code_station": "K751401001",
+   "libelle_station": "L'Echandon à Saint-Branchs",
+   "longitude_station": 0.818916274,
+   "latitude_station": 47.247365239,
+   "code_cours_eau": "K7514000",
+   "libelle_cours_eau": "l'Echandon",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K7514000"
+  },
+  {
+   "code_station": "M114161010",
+   "libelle_station": "Le Loir à Vendôme",
+   "longitude_station": 1.060309124,
+   "latitude_station": 47.794067718,
+   "code_cours_eau": "M1--0161",
+   "libelle_cours_eau": null,
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/M1--0161"
+  },
+  {
+   "code_station": "M115161010",
+   "libelle_station": "Le Loir à Villavard",
+   "longitude_station": 0.890596043,
+   "latitude_station": 47.759345078,
+   "code_cours_eau": "M1--0160",
+   "libelle_cours_eau": "le Loir",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/M1--0160"
+  },
+  {
+   "code_station": "M123304010",
+   "libelle_station": "La Braye à Sargé-sur-Braye",
+   "longitude_station": 0.841455731,
+   "latitude_station": 47.911375964,
+   "code_cours_eau": "M12-0300",
+   "libelle_cours_eau": "la Braye",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/M12-0300"
+  }
+ ]
+}
