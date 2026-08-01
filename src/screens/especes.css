@@ -1,6 +1,6 @@
 /* Espèces — le filtre « dans mon coin ».
-   Jetons uniquement : les paires --muted/--paper et --green/--paper sont déjà
-   déclarées dans PAIRES (lib/contraste-palette.ts). */
+   Jetons uniquement : les paires --muted/--paper, --green/--paper et
+   --amber/--paper sont déjà déclarées dans PAIRES (lib/contraste-palette.ts). */
 
 .coin-rang {
   display: flex;
@@ -20,6 +20,13 @@
 /* Tout le reste (couleur, soulignement) vient déjà de .link-inline ; seul le
    poids diffère. */
 .coin-src .coin-maj {
+  font-weight: 550;
+}
+
+/* Le relevé s'est éloigné du pêcheur : avertit, ne bloque rien — même jeton
+   que les autres alertes non bloquantes de l'app (.ce-gps-msg, .brief-stale). */
+.coin-loin {
+  color: var(--amber);
   font-weight: 550;
 }
 

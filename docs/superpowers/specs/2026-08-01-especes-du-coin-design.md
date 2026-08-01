@@ -292,6 +292,8 @@ const list = SPECIES.filter(
 | Aucune station à portée | « Aucune station de pêche scientifique à moins de 15 km d'ici. » — pas de repli sur le département |
 | Taxons sans fiche | « 3 taxons relevés n'ont pas de fiche : lots identifiés au genre ou à la famille, hybrides. » |
 | Écrevisses relevées | « 2 écrevisses relevées ici — voir l'écran Écrevisses. » Jamais comptées comme « sans fiche » |
+| Grille vide à cause du coin (recherche/groupe sans résultat dans le relevé) | « Le relevé de ce coin ne contient aucune de ces espèces. » + « les voir quand même » — distinct du message de recherche sans résultat, qui reste affiché quand c'est la recherche, pas le coin, qui vide la grille |
+| Relevé fait loin du point actuel (ajouté en revue finale) | Avertissement à côté du bandeau de provenance : « Ce relevé a été fait à plus de 15 km d'ici. » N'apparaît que si la géolocalisation répond ; silence sinon. N'éteint ni ne vide rien — voir `coinEstLoin` |
 
 Chaque état est distinct : un écran qui confondrait « hors-ligne » et « aucune station » affirmerait
 une absence qu'il n'a pas constatée.

@@ -9,7 +9,12 @@ import { ratingFg } from "../lib/helpers";
 import { speciesStatus } from "../lib/statut";
 import { matchSpecies } from "../lib/recherche";
 import { effectiveMaille } from "../lib/maille";
-import { chargerEspecesDuCoin, PORTEE_COIN_KM, type CoinEspeces } from "../lib/especes-du-coin";
+import {
+  chargerEspecesDuCoin,
+  coinEstLoin,
+  PORTEE_COIN_KM,
+  type CoinEspeces,
+} from "../lib/especes-du-coin";
 import { readCoin, writeCoin } from "../lib/prefs-coin";
 import { locate, locateMessage } from "../lib/locate";
 import type { Species } from "../types";
@@ -74,6 +79,11 @@ export function Especes() {
   const [coinEtat, setCoinEtat] = useState<
     { k: "repos" } | { k: "charge" } | { k: "err"; msg: string }
   >({ k: "repos" });
+  // Le relevé ne meurt jamais tout seul (voir chargerEspecesDuCoin), et la
+  // bascule est un appui : sans ce drapeau, un relevé fait à Blois continuerait
+  // de s'afficher « dans mon coin » à un pêcheur maintenant à 200 km. Purement
+  // consultatif : il ne désactive rien, il ne vide rien, il avertit.
+  const [coinLoin, setCoinLoin] = useState(false);
 
   // Même garde que le GPS de l'Accueil (voir Accueil.tsx) : un relevé résolu
   // après que le pêcheur a quitté l'écran ne doit toucher ni un état local, ni
@@ -173,6 +183,8 @@ export function Especes() {
       writeCoin(c);
       setCoin(c);
       setCoinEtat({ k: "repos" });
+      // Le relevé vient d'être fait exactement ici : rien à avertir.
+      setCoinLoin(false);
       set({ coin: true });
     } catch (e) {
       if (!mounted.current) return;
@@ -184,9 +196,38 @@ export function Especes() {
     }
   }
 
+  /**
+   * Compare la position actuelle au point du relevé enregistré, pour avertir
+   * (jamais bloquer) quand il ne décrit plus le coin où l'on se trouve.
+   *
+   * GÉOLOCALISATION SEULE, JAMAIS UNE REQUÊTE HUB'EAU : vérifier la distance ne
+   * doit pas devenir un coût, sous peine de transformer une bascule qui marche
+   * hors-ligne en dépense réseau à chaque appui. Si la position est refusée ou
+   * indisponible, on ne dit RIEN : le silence est correct quand on ne sait pas
+   * — deviner serait pire, et ça casserait une bascule qui, sinon, marche.
+   */
+  async function verifierDistanceCoin(c: CoinEspeces) {
+    try {
+      const { lat, lon } = await locate();
+      if (!mounted.current) return;
+      setCoinLoin(coinEstLoin(c, lat, lon));
+    } catch {
+      /* position refusée ou indisponible : silence, voir le commentaire ci-dessus */
+    }
+  }
+
   function basculerCoin() {
-    if (coin) set({ coin: !state.coin });
-    else void releverLeCoin();
+    if (coin) {
+      const activation = !state.coin;
+      set({ coin: activation });
+      // Une « actualiser » ratée ne doit pas laisser son erreur affichée alors
+      // que le filtre s'est remis à marcher depuis le relevé déjà enregistré.
+      if (coinEtat.k === "err") setCoinEtat({ k: "repos" });
+      if (activation) void verifierDistanceCoin(coin);
+      else setCoinLoin(false);
+    } else {
+      void releverLeCoin();
+    }
   }
 
   return (
@@ -274,6 +315,14 @@ export function Especes() {
             >
               actualiser
             </button>
+            {coinLoin && (
+              <>
+                <br />
+                <span className="coin-loin">
+                  Ce relevé a été fait à plus de {PORTEE_COIN_KM} km d'ici.
+                </span>
+              </>
+            )}
             {coin.inconnus.length > 0 && (
               <>
                 <br />
