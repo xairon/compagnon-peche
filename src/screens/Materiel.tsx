@@ -98,7 +98,7 @@ export function Materiel() {
                 fontWeight: 600,
                 border: `1.5px solid ${tab === t ? "var(--green-dark)" : "var(--line-strong)"}`,
                 background: tab === t ? "var(--green-dark)" : "var(--card)",
-                color: tab === t ? "var(--paper)" : "var(--body)",
+                color: tab === t ? "var(--on-accent-warm)" : "var(--body)",
               }}
             >
               {t === "gear" ? `Mon matériel (${gear.length})` : `Mes ensembles (${bundles.length})`}

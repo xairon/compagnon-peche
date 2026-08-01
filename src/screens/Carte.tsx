@@ -932,7 +932,7 @@ export function Carte() {
           )}
         </div>
         <button className="carte-gps-btn" onClick={recenter} aria-label="Ma position">
-          <Icon d="M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z" size={20} stroke="var(--paper)" width={1.6} />
+          <Icon d="M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z" size={20} stroke="var(--on-accent-warm)" width={1.6} />
         </button>
       </div>
       )}
