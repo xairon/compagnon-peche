@@ -11,6 +11,7 @@ import {
   type StorageInfo,
 } from "../lib/storage";
 import { isQuotaNearlyFull, shouldSuggestBackup } from "../lib/backup-reminder";
+import { messageExportIncomplet } from "../lib/export-incomplet";
 
 export function Stockage() {
   const { state, back } = useStore();
@@ -18,6 +19,7 @@ export function Stockage() {
   const [busy, setBusy] = useState(false);
   const [arm, setArm] = useState(false);
   const [exported, setExported] = useState(false);
+  const [exportPartiel, setExportPartiel] = useState<string | null>(null);
   const [importMsg, setImportMsg] = useState<string | null>(null);
   const [importErr, setImportErr] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -35,9 +37,21 @@ export function Stockage() {
   };
 
   const doExport = async () => {
-    await exportData();
-    setExported(true);
-    setTimeout(() => setExported(false), 3000);
+    const r = await exportData();
+    if (r.complet) {
+      setExportPartiel(null);
+      setExported(true);
+      setTimeout(() => setExported(false), 3000);
+      return;
+    }
+    // Un magasin n'a pas pu être lu : le fichier est parti, mais amputé. Pas de
+    // « ✓ Sauvegarde téléchargée » — c'est justement la situation où l'app dit
+    // « exportez une sauvegarde », et lui répondre par un succès ordinaire
+    // laisserait l'utilisateur croire son carnet à l'abri. Et pas d'effacement
+    // au bout de trois secondes non plus : cette phrase-là doit pouvoir être
+    // relue.
+    setExported(false);
+    setExportPartiel(messageExportIncomplet(r.lecturesEchouees));
   };
 
   const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,6 +204,12 @@ export function Stockage() {
         <button className="stg-btn" onClick={doExport}>
           {exported ? "✓ Sauvegarde téléchargée" : "⤓ Exporter mes données (JSON)"}
         </button>
+        {exportPartiel && (
+          <div className="stg-card warn" role="status" style={{ marginTop: 10 }}>
+            <div className="stg-h">⚠️ Sauvegarde incomplète</div>
+            <div className="stg-p">{exportPartiel}</div>
+          </div>
+        )}
         <div className="stg-note">
           Sauvegarde locale complète : carnet, spots, matériel, profil, recettes <b>et photos</b>.
           Conservez ce fichier ailleurs (cloud, ordinateur) — c'est votre seul filet en cas de perte
