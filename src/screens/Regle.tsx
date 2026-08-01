@@ -10,7 +10,7 @@ const PX_PER_CM = 37.795;
 export function Regle() {
   const { state, back } = useStore();
   const cur = SPECIES.find((s) => s.id === state.spId) || SPECIES[0];
-  const sp = SPECIES.find((s) => s.id === state.prise.sp) || cur;
+  const sp = SPECIES.find((s) => s.id === state.priseSp) || cur;
   // Same resolution as the decision card that leads here: the ruler must never
   // measure a different maille from the one the flow just announced.
   const cm = effectiveMaille(sp, state.dept).cm;

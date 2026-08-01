@@ -23,7 +23,14 @@ import { readPrefs, writePrefs } from "./lib/prefs";
 import { appliquerTheme, resoudreTheme, REQUETE_SOMBRE, type Theme } from "./lib/theme";
 import { frDate, isoDay, uid } from "./lib/helpers";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
-import { CTX_DEFAUT, contexteNettoye, ecranParent, ongletDe, versUrl } from "./lib/nav-conventions";
+import {
+  CTX_DEFAUT,
+  contexteNettoye,
+  ecranParent,
+  ongletDe,
+  versUrl,
+  type PriseEtape,
+} from "./lib/nav-conventions";
 import {
   lirePoint,
   memeEndroit,
@@ -72,14 +79,10 @@ export type Tab = "accueil" | "especes" | "carte" | "carnet";
 // has to land on "Écrevisses", otherwise the session just closed isn't visible.
 export type CarnetSeg = "prises" | "spots" | "ecrevisses" | "recettes";
 
-export type PriseStep =
-  | "statut"
-  | "maille"
-  | "quota"
-  | "choix"
-  | "kill"
-  | "release"
-  | null;
+// La liste vit dans la table des routes : l'étape est un mot d'URL
+// (`#/prise/sandre/maille`) avant d'être un état, et c'est là qu'un lien reçu
+// est validé.
+export type PriseStep = PriseEtape | null;
 
 // Guided-identifier answers: trait key → chosen value. Absent key = unanswered.
 export type IdAnswers = Record<string, string>;
@@ -109,7 +112,13 @@ export interface AppState {
   cookStep: number;
   listening: boolean;
   ans: IdAnswers;
-  prise: { sp: string | null; step: PriseStep; place?: string | null };
+  // Le parcours « Ma prise », à plat : l'espèce et l'étape sont du contexte de
+  // navigation (une entrée d'historique par étape, voir nav-conventions.ts),
+  // `prisePlace` non — c'est le spot d'où le parcours a été lancé, il ne dit
+  // rien de l'endroit affiché et ne se remet pas à zéro en changeant d'écran.
+  priseSp: string | null;
+  priseStep: PriseStep;
+  prisePlace: string | null;
   catches: Catch[];
   spots: Spot[];
   gear: GearItem[];
@@ -163,7 +172,7 @@ const makeInitialState = (): AppState => {
     theme: prefs.theme,
     listening: false,
     ans: {},
-    prise: { sp: null, step: null },
+    prisePlace: null,
     catches: [],
     spots: [],
     gear: [],
@@ -175,7 +184,7 @@ const makeInitialState = (): AppState => {
     dept: prefs.dept,
     deptChosen: prefs.deptChosen,
     justAdded: null,
-    // Les neuf champs de contexte de navigation en un seul endroit — soit ceux
+    // Les onze champs de contexte de navigation en un seul endroit — soit ceux
     // du lien profond, soit tous à zéro. Les lister un par un ici, c'était la
     // porte ouverte à en oublier un au prochain écran ajouté.
     ...(lien?.ctx ?? CTX_DEFAUT),
@@ -361,6 +370,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const { screen: ecranCourant, tab: ongletCourant } = state;
   const { spId, recipeId, knotId, techId, catchSlot } = state;
   const { focusSpot, gearFocusId, bilanSession, cookStep } = state;
+  const { priseSp, priseStep } = state;
   const point = useMemo(
     () =>
       pointDeEtat(
@@ -376,6 +386,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           gearFocusId,
           bilanSession,
           cookStep,
+          priseSp,
+          priseStep,
         },
         0,
       ),
@@ -391,6 +403,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       gearFocusId,
       bilanSession,
       cookStep,
+      priseSp,
+      priseStep,
     ],
   );
 
@@ -495,11 +509,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dispatch({ ...contexteNettoye(t), screen: t, tab: t, ...(extra || {}) });
     // The central action: opens the full "prise" flow at its start, from anywhere.
     // An optional `place` (e.g. a spot name) pre-fills the catch location.
+    // L'espèce et l'étape sont remises à zéro À LA MAIN : l'écran `prise` les
+    // RÉCLAME, donc `contexteNettoye` les laisse passer exprès (c'est ce qui
+    // permet au retour de les restituer). Le bouton central, lui, ouvre
+    // toujours le parcours à son commencement.
     const startPrise: Store["startPrise"] = (place) =>
       dispatch({
         ...contexteNettoye("prise"),
         screen: "prise",
-        prise: { sp: null, step: null, place: place ?? null },
+        priseSp: null,
+        priseStep: null,
+        prisePlace: place ?? null,
       });
     const openSp: Store["openSp"] = (id) => {
       dispatch((s) => ({
@@ -523,7 +543,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           size: cm ? cm + " cm" : "— cm",
           n: cm || 0,
           date: frDate(),
-          place: s.prise.place || "—", // pre-filled when the flow started from a spot
+          place: s.prisePlace || "—", // pre-filled when the flow started from a spot
           kept,
           slot: uid("p"),
         };
@@ -532,7 +552,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           ...contexteNettoye("carnet"),
           screen: "carnet",
           tab: "carnet",
-          prise: { sp: null, step: null },
+          // `contexteNettoye` a déjà effacé l'espèce et l'étape ; le spot, lui,
+          // n'est pas du contexte de navigation et se range ici.
+          prisePlace: null,
           formOpen: false,
           justAdded: entry.slot,
         };

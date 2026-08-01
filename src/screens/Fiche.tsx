@@ -769,7 +769,7 @@ export function Fiche() {
       {/* v2: sticky decision CTA — enters the prise flow at the verdict step */}
       <div className="fiche-cta">
         <button
-          onClick={() => nav("prise", { prise: { sp: sp.id, step: "statut" } })}
+          onClick={() => nav("prise", { priseSp: sp.id, priseStep: "statut" })}
           style={{ fontSize: ui.fs, padding: ui.pad }}
         >
           <Icon d={ICONS.fish} size={18} stroke="#8fbfa4" width={1.7} />

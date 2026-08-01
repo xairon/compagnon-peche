@@ -7,7 +7,7 @@ import { Media } from "../components/Media";
 import { HoldButton } from "../components/HoldButton";
 import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
-import { priseView, parseTaille, STEP_ORDER, PREV_STEP, type ActKind } from "../lib/prise";
+import { priseView, parseTaille, STEP_ORDER, type ActKind } from "../lib/prise";
 import { effectiveMaille } from "../lib/maille";
 import { useNow } from "../lib/now";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
@@ -21,11 +21,11 @@ function actStyle(kind: ActKind) {
 }
 
 export function Prise() {
-  const { state, set, nav, goTab, addCatch } = useStore();
+  const { state, set, nav, back, goTab, addCatch } = useStore();
   const [pq, setPq] = useState("");
   const [size, setSize] = useState("");
   const qt = quotaToday(state.catches);
-  const sp = SPECIES.find((s) => s.id === state.prise.sp);
+  const sp = SPECIES.find((s) => s.id === state.priseSp);
   // The screen owns the clock; the engine never reads it (see lib/prise.ts).
   // useNow re-renders on its own cadence, so a phone left open on the card
   // crosses an opening or closing date instead of freezing on the verdict it
@@ -34,39 +34,34 @@ export function Prise() {
   // The size field fed the carnet and nothing else: the card could announce a
   // 60 cm maille while the angler had just typed 45 into the input right below
   // it. The engine now receives the measurement and answers with it.
-  const pv = priseView(sp, state.prise.step, qt, state.dept, now, parseTaille(size));
-  const choosing = !state.prise.step;
+  const pv = priseView(sp, state.priseStep, qt, state.dept, now, parseTaille(size));
+  // Une étape sans poisson connu n'affiche RIEN : `priseView` rend `null`, et
+  // l'écran n'aurait ni carte ni liste. Ça n'arrive que par un lien qui nomme
+  // une espèce disparue du jeu de données — on retombe sur le choix d'espèce
+  // plutôt que sur un cul-de-sac.
+  const choosing = !state.priseStep || !sp;
 
   const nq = norm(pq);
   const found = SPECIES.filter(
     (s) => !nq || norm(s.name).includes(nq) || norm(s.latin).includes(nq),
   );
   const recentSp = state.recent.map((id) => SPECIES.find((s) => s.id === id)).filter(Boolean);
-  const pick = (id: string) => set((st) => ({ prise: { ...st.prise, sp: id, step: "statut" } }));
+  const pick = (id: string) => set({ priseSp: id, priseStep: "statut" });
   const ui = state.bigUI ? { fs: "17.5px", h: 66 } : { fs: "15px", h: 54 };
 
   // Protected/invasive/out-of-season/special-regime jump straight from "statut"
-  // to kill/release, skipping choix. Back must return to "statut" then — never to
-  // "garder ou relâcher". The "special" regime was added later and forgotten
-  // here: pressing ‹ after releasing a salmon landed on "Je garde", an offer the
-  // angler never saw and that the moratorium warning had explicitly avoided.
+  // to kill/release, skipping choix — so those two steps aren't "step 5 of 5",
+  // they're the end of a two-step path and the counter would lie.
   const shortcut =
     !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp, now).open);
-  const step = state.prise.step;
+  const step = state.priseStep;
   const isShortcutStep = shortcut && (step === "kill" || step === "release");
 
-  const setPrise = (s: typeof state.prise.step) =>
-    set((st) => ({ prise: { ...st.prise, step: s } }));
-
-  const goBack = () => {
-    const prev = isShortcutStep ? "statut" : PREV_STEP[step as string];
-    if (prev) setPrise(prev);
-    else set((st) => ({ prise: { ...st.prise, sp: null, step: null } }));
-  };
+  const setPrise = (s: typeof state.priseStep) => set({ priseStep: s });
 
   const handleAct = (act: string) => {
     if (act === "cancel" || act === "done") {
-      goTab("especes", { prise: { sp: null, step: null } });
+      goTab("especes", { prisePlace: null });
     } else if (act === "ruler") {
       nav("regle");
     } else if (act === "tocarnet" && sp) {
@@ -74,7 +69,7 @@ export function Prise() {
     } else if (act === "tocarnet-rel" && sp) {
       addCatch(sp, false, size);
     } else {
-      setPrise(act as typeof state.prise.step);
+      setPrise(act as typeof state.priseStep);
     }
   };
 
@@ -104,9 +99,9 @@ export function Prise() {
         </div>
       </div>
 
-      {state.prise.place && (
+      {state.prisePlace && (
         <div className="prise-place">
-          📍 Enregistrée à&nbsp;: <b>{state.prise.place}</b>
+          📍 Enregistrée à&nbsp;: <b>{state.prisePlace}</b>
         </div>
       )}
 
@@ -173,7 +168,13 @@ export function Prise() {
       {!choosing && pv && (
         <div style={{ padding: "4px 18px 24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-            <button className="round-btn" onClick={goBack} aria-label="Étape précédente">
+            {/* Le retour est délégué à l'historique, comme partout ailleurs :
+                chaque étape y a son entrée, donc cette flèche et le geste
+                d'Android dépilent la MÊME chose. Le chemin n'est plus déduit —
+                ce qui règle d'un coup les raccourcis (protégée, invasive, hors
+                saison, régime spécial), dont la liste avait déjà été oubliée
+                une fois : le « ‹ » d'un saumon relâché proposait « Je garde ». */}
+            <button className="round-btn" onClick={back} aria-label="Étape précédente">
               ‹
             </button>
             <div style={{ fontSize: 13, color: "var(--muted)" }}>
@@ -181,7 +182,7 @@ export function Prise() {
               {!isShortcutStep && ` · étape ${STEP_ORDER[step as string] || 1} / 5`}
             </div>
             <button
-              onClick={() => set((st) => ({ prise: { ...st.prise, sp: null, step: null } }))}
+              onClick={() => set({ priseSp: null, priseStep: null })}
               style={{
                 marginLeft: "auto",
                 border: "none",
@@ -239,7 +240,7 @@ export function Prise() {
             {pv.note && <div className="note" style={{ marginTop: 14 }}>{pv.note}</div>}
           </div>
 
-          {state.prise.step === "maille" && sp && effectiveMaille(sp, state.dept).cm > 0 && (
+          {state.priseStep === "maille" && sp && effectiveMaille(sp, state.dept).cm > 0 && (
             <div className="field" style={{ marginTop: 14 }}>
               <label>Taille mesurée (cm) — facultatif, pré-remplira le carnet</label>
               <input

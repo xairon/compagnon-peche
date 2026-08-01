@@ -36,6 +36,8 @@ function Probe() {
       <span data-testid="spId">{String(s.state.spId)}</span>
       <span data-testid="recipeId">{String(s.state.recipeId)}</span>
       <span data-testid="bilan">{String(s.state.bilanSession)}</span>
+      <span data-testid="priseSp">{String(s.state.priseSp)}</span>
+      <span data-testid="priseStep">{String(s.state.priseStep)}</span>
     </>
   );
 }
@@ -301,6 +303,70 @@ describe("correction sans entrée d'historique", () => {
 
     expect(push).not.toHaveBeenCalled();
     expect(window.location.hash).toBe("#/cuisine/r1/2");
+  });
+});
+
+describe("le parcours « Ma prise »", () => {
+  const etape = () => screen.getByTestId("priseStep").textContent;
+
+  it("recule d'une étape au geste retour, au lieu de quitter tout le parcours", async () => {
+    // Le seul endroit où le geste système et le « ‹ » de l'app divergeaient
+    // encore : l'étape n'existait pas dans l'historique, donc le retour d'Android
+    // sautait par-dessus les cinq questions d'un coup — après quoi il fallait
+    // tout refaire, poisson en main.
+    mount();
+    act(() => st.startPrise());
+    act(() => st.set({ priseSp: "sandre", priseStep: "statut" }));
+    act(() => st.set({ priseStep: "maille" }));
+
+    act(() => {
+      window.history.back();
+    });
+
+    await waitFor(() => expect(etape()).toBe("statut"));
+    expect(ecran()).toBe("prise");
+    expect(screen.getByTestId("priseSp").textContent).toBe("sandre");
+  });
+
+  it("écrit l'espèce ET l'étape dans l'URL", () => {
+    // L'espèce voyage avec l'étape : une étape sans son poisson n'affiche
+    // qu'une carte vide, pour la même raison que `catchSlot` est obligatoire.
+    mount();
+    act(() => st.startPrise());
+
+    act(() => st.set({ priseSp: "sandre", priseStep: "maille" }));
+
+    expect(window.location.hash).toBe("#/prise/sandre/maille");
+  });
+
+  it("ouvre le parcours à l'étape désignée par un lien", () => {
+    window.location.hash = "#/prise/brochet/quota";
+
+    mount();
+
+    expect(ecran()).toBe("prise");
+    expect(screen.getByTestId("priseSp").textContent).toBe("brochet");
+    expect(etape()).toBe("quota");
+  });
+
+  it("retombe sur l'accueil quand l'étape de l'URL n'existe pas", () => {
+    // Une étape inventée ouvrirait un parcours sans carte à afficher : ni le
+    // choix d'espèce, ni la décision. Mieux vaut l'accueil.
+    window.location.hash = "#/prise/sandre/nawak";
+
+    mount();
+
+    expect(ecran()).toBe("accueil");
+  });
+
+  it("efface l'espèce et l'étape en quittant le parcours", () => {
+    mount();
+    act(() => st.set({ priseSp: "sandre", priseStep: "maille" }));
+
+    act(() => st.goTab("carnet"));
+
+    expect(screen.getByTestId("priseSp").textContent).toBe("null");
+    expect(etape()).toBe("null");
   });
 });
 
