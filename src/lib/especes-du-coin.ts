@@ -1,6 +1,8 @@
 import { SPECIES } from "../data/species";
 import { ECREVISSES } from "../data/ecrevisses";
-import { binomial } from "./hubeau";
+import { binomial, stationsInBbox, speciesAtStation } from "./hubeau";
+import { boxAroundKm, distKm } from "./geo";
+import { isoDay } from "./helpers";
 
 /**
  * Des taxons relevés par les pêches scientifiques aux fiches de l'app.
@@ -73,4 +75,122 @@ export function apparier(taxons: string[]): {
     ecrevisses: [...ecrevisses].sort(),
     inconnus: [...inconnus].sort(),
   };
+}
+
+/**
+ * Rayon de la boîte demandée, en kilomètres.
+ *
+ * C'est un plafond de CRÉDIBILITÉ, pas un plafond de coût — le coût est fixé
+ * par `STATIONS_RETENUES`, quelle que soit la portée. Une station à 14 km est
+ * déjà une extrapolation, que l'écran doit avouer en la nommant avec sa
+ * distance ; au-delà, elle ne parle plus du coin où l'on pêche.
+ */
+export const PORTEE_COIN_KM = 15;
+
+/**
+ * Combien de stations nourrissent un relevé.
+ *
+ * C'EST LUI QUI FIXE LA FACTURE. Mesuré le 01/08/2026 : 60 à 104 ko par
+ * station, pour le seul champ `nom_latin_taxon` — l'API ne sait pas rendre des
+ * taxons distincts, elle rend un enregistrement par lot, et une station bien
+ * suivie en compte des milliers. Trois stations ≈ 237 ko, UNE FOIS, sur appui
+ * explicite. À comparer aux 973 ko d'une classe Sandre que l'app télécharge
+ * déjà (voir lib/net-bornes.ts).
+ *
+ * Pourquoi pas une seule : la station la plus proche de Blois ne rend que 2
+ * taxons. Pourquoi pas dix : au-delà de trois on quitte le coin, et la facture
+ * suit linéairement.
+ */
+export const STATIONS_RETENUES = 3;
+
+/** Une station qui a nourri le relevé, nommée pour que l'écran puisse la citer. */
+export interface StationDuCoin {
+  code: string;
+  nom: string;
+  /** Kilomètres depuis le point demandé. */
+  dist: number;
+}
+
+/** Ce que le coin retient. Sérialisable tel quel (voir lib/prefs-coin.ts). */
+export interface CoinEspeces {
+  /** Ids de fiches SPECIES, triés. */
+  ids: string[];
+  /** Ids de fiches d'écrevisses relevées ici. Elles ne filtrent pas la grille —
+   *  SPECIES ne les contient pas — mais l'app les documente. */
+  ecrevisses: string[];
+  /** Taxons qu'aucune fiche ne reçoit : lots au genre ou à la famille, hybrides. */
+  inconnus: string[];
+  /** Les stations qui ont RÉPONDU, la plus proche d'abord. */
+  stations: StationDuCoin[];
+  lat: number;
+  lon: number;
+  /** yyyy-mm-dd du relevé. */
+  releveIso: string;
+}
+
+/**
+ * Un code de station exploitable.
+ *
+ * 6 des 22 enregistrements de la boîte de Blois n'ont ni `code_station` ni
+ * `libelle_station` — seulement des coordonnées — et `stationsInBbox` les
+ * traverse en `String(null)`, soit la CHAÎNE "null", qui est truthy. Tester la
+ * chaîne, donc, et pas seulement la valeur falsy.
+ */
+function codeExploitable(code: string): boolean {
+  return code !== "" && code !== "null" && code !== "undefined";
+}
+
+/**
+ * Les espèces relevées autour d'un point, ou null quand on ne sait rien.
+ *
+ * NE LÈVE JAMAIS, sur le modèle de `chargerRivieres` : une station muette se
+ * retire du lot, elle ne vide pas l'écran. Mais la distinction entre « la
+ * source a dit qu'il n'y a rien » (relevé vide) et « on n'a pas pu demander »
+ * (null) est tenue de bout en bout : l'écran n'a pas le droit de les confondre.
+ *
+ * EN SÉRIE, JAMAIS EN PARALLÈLE. Hub'Eau rate-limite : mesuré le 01/08/2026, la
+ * 9ᵉ requête rapprochée rend 299 o de HTML au lieu du JSON attendu.
+ */
+export async function chargerEspecesDuCoin(
+  lat: number,
+  lon: number,
+  signal?: AbortSignal,
+): Promise<CoinEspeces | null> {
+  const { w, s, e, n } = boxAroundKm(lat, lon, PORTEE_COIN_KM);
+  let brutes;
+  try {
+    brutes = await stationsInBbox(w, s, e, n, signal);
+  } catch {
+    return null;
+  }
+
+  const retenues = brutes
+    .filter((st) => codeExploitable(st.code))
+    .map((st) => ({ code: st.code, nom: st.nom, dist: distKm(lat, lon, st.lat, st.lon) }))
+    .filter((st) => st.dist <= PORTEE_COIN_KM)
+    // À égalité de distance, le code tranche : deux relevés du même point
+    // doivent citer les mêmes stations dans le même ordre.
+    .sort((a, b) => a.dist - b.dist || a.code.localeCompare(b.code))
+    .slice(0, STATIONS_RETENUES);
+
+  const taxons: string[] = [];
+  const lues: StationDuCoin[] = [];
+  for (const st of retenues) {
+    try {
+      const sp = await speciesAtStation(st.code, signal);
+      // `latin` peut être vide quand la source ne publie qu'un nom commun.
+      // On garde alors le nom commun : il finira en « inconnu », ce qui est
+      // honnête — le jeter en silence ne l'aurait pas été.
+      for (const x of sp) taxons.push(x.latin || x.fr);
+      lues.push(st);
+    } catch {
+      /* une station muette se retire ; les autres restent */
+    }
+  }
+  // Nommer des stations sans pouvoir citer une seule espèce se lirait « aucun
+  // poisson ici ». Aucune station retenue, en revanche, est une réponse : la
+  // boîte est vide, et l'écran doit pouvoir le dire.
+  if (retenues.length > 0 && lues.length === 0) return null;
+
+  return { ...apparier(taxons), stations: lues, lat, lon, releveIso: isoDay() };
 }
