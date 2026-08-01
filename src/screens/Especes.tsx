@@ -378,16 +378,30 @@ export function Especes() {
         </div>
       )}
 
-      {list.length === 0 && (
+      {list.length === 0 && sansCoin.length > 0 ? (
+        // La grille n'est vide qu'à cause du filtre coin (il y a des espèces
+        // pour la recherche/le groupe en cours, mais aucune dans le relevé) :
+        // blâmer « {state.q} » ici affirmerait une cause qui n'est pas la
+        // bonne — le relevé n'affirme que ce qu'il a constaté.
         <div style={{ padding: "10px 18px 30px", textAlign: "center", color: "var(--muted)", fontSize: 14 }}>
-          Aucune espèce ne correspond à « {state.q} ».
+          Le relevé de ce coin ne contient aucune de ces espèces.
           <br />
-          Essayez l'
-          <button className="link-inline" onClick={() => nav("identify")}>
-            identification guidée
+          <button type="button" className="link-inline" onClick={() => set({ coin: false })}>
+            Les voir quand même
           </button>
-          .
         </div>
+      ) : (
+        list.length === 0 && (
+          <div style={{ padding: "10px 18px 30px", textAlign: "center", color: "var(--muted)", fontSize: 14 }}>
+            Aucune espèce ne correspond à « {state.q} ».
+            <br />
+            Essayez l'
+            <button className="link-inline" onClick={() => nav("identify")}>
+              identification guidée
+            </button>
+            .
+          </div>
+        )
       )}
     </main>
   );
