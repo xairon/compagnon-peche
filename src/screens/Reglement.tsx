@@ -3,10 +3,11 @@ import { REG_YEAR } from "../data/version";
 import { useStore } from "../store-hooks";
 import { chargerRegTiers, type RegTiers as RegTiersData } from "../lib/reg-tiers";
 import { RegTiers } from "../components/RegTiers";
-import { NATIONAL_SIZES, DEPARTEMENTS, type DeptId } from "../data/regulation";
+import { NATIONAL_SIZES, DEPARTEMENTS } from "../data/regulation";
 import { MAILLE_NOTE } from "../data/ecrevisses";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
+import { DeptBouton } from "../components/DeptBouton";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 export function Reglement() {
@@ -100,38 +101,27 @@ export function Reglement() {
           </div>
         </div>
 
-        {/* The picker sits BEFORE the block it governs: it used to be an
-            unlabelled row of buttons below everything, which read as decoration
-            rather than as the control deciding which arrêté is quoted. */}
+        {/* Le MÊME contrôle que l'Accueil, pas un second de son cru. Cet écran
+            avait sa propre rangée de boutons : deux commandes d'apparence
+            différente pour un seul réglage, et l'utilisateur ne savait plus
+            laquelle faisait foi. Le contrôle reste ici — on veut pouvoir
+            changer de département en lisant les règles — mais il se présente
+            et se comporte exactement comme là-bas.
+
+            Il reste AVANT le bloc qu'il gouverne : placé après, il se lisait
+            comme une décoration plutôt que comme la commande qui décide de
+            l'arrêté cité. */}
         <div className="label" style={{ margin: "18px 0 8px" }}>
-          Mon département {state.deptChosen ? `— ${dept.name}` : "— non confirmé"}
+          Mon département
         </div>
-        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-          {(Object.keys(DEPARTEMENTS) as DeptId[]).map((id) => {
-            const active = state.deptChosen && state.dept === id;
-            return (
-              <button
-                key={id}
-                aria-pressed={active}
-                onClick={() => set({ dept: id, deptChosen: true })}
-                style={{
-                  flex: 1,
-                  minHeight: 44,
-                  padding: "4px 6px",
-                  borderRadius: 12,
-                  fontSize: 12.5,
-                  lineHeight: 1.15,
-                  fontWeight: 600,
-                  border: `1.5px solid ${active ? "#16281E" : "#E6E2D8"}`,
-                  background: active ? "#16281E" : "#FFFFFF",
-                  color: active ? "#FBFAF7" : "#3A3E36",
-                }}
-              >
-                {DEPARTEMENTS[id].name}
-              </button>
-            );
-          })}
-        </div>
+        <DeptBouton
+          dept={state.dept}
+          deptChosen={state.deptChosen}
+          outOfZoneDept={state.outOfZoneDept}
+          onChoose={(id) => set({ dept: id, deptChosen: true })}
+          onVoirTout={() => {}}
+        />
+
         <div className="reg-block">
           {dept.regText}
           <div className="note" style={{ marginTop: 10 }}>
