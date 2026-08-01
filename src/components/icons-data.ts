@@ -23,6 +23,10 @@ export const ICONS = {
   gloves:
     "M8 11V5.5a1.5 1.5 0 0 1 3 0V10m0-5v-1a1.5 1.5 0 0 1 3 0V10m0-4.5a1.5 1.5 0 0 1 3 0V11m0-3a1.5 1.5 0 0 1 3 0v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.8-3.1L4.5 14a1.7 1.7 0 0 1 2.9-1.8l.6.9",
   pot: "M8 3v2M12 3v2M16 3v2M5 9h14a2 2 0 0 1 2 2v1a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-1a2 2 0 0 1 2-2zM7 16v5h10v-5",
+  // Bascule d'apparence : l'icône annonce la DESTINATION, jamais l'état
+  // courant. Le soleil ramène au clair, la lune emmène au sombre.
+  sun: "M12 4V2M12 22v-2M4 12H2M22 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0",
+  moon: "M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z",
 };
 
 // Bottom-nav icons.

@@ -3914,6 +3914,25 @@ a:hover {
   letter-spacing: -0.015em;
   margin-top: 4px;
 }
+/* La bascule d'apparence, à gauche de l'avatar. Mêmes 44 px et même rondeur :
+   l'en-tête porte deux pastilles, pas une pastille et un bouton d'une autre
+   famille. Fond transparent, en revanche — l'avatar est une destination, celle-ci
+   n'est qu'un réglage, et deux ronds pleins côte à côte se disputeraient l'œil. */
+.ac-theme {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.ac-theme:active {
+  background: var(--sage);
+}
 .ac-avatar {
   width: 44px;
   height: 44px;

@@ -6,6 +6,7 @@ import { ondeEtat, ondeTropLoin } from "../lib/onde";
 import { fraicheur } from "../lib/fraicheur";
 import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
+import { ICONS } from "../components/icons-data";
 import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
 import { Repli } from "../components/Repli";
@@ -325,6 +326,24 @@ export function Accueil() {
             <div className="ac-kicker">{today}</div>
             <h1 className="ac-hello">Bonjour{p.name ? `, ${p.name}` : ""}</h1>
           </div>
+          {/* La bascule d'apparence. Le contrôle à trois états (Auto · Clair ·
+              Sombre) reste en tête d'Outils ; ici c'est le geste d'un appui,
+              là où il se voit. Un appui QUITTE « auto » — c'est le prix d'un
+              choix explicite, et il se reprend dans Outils. */}
+          <button
+            className="ac-theme"
+            onClick={() => set({ theme: state.themeEffectif === "dark" ? "light" : "dark" })}
+            aria-label={
+              state.themeEffectif === "dark" ? "Passer en thème clair" : "Passer en thème sombre"
+            }
+          >
+            <Icon
+              d={state.themeEffectif === "dark" ? ICONS.sun : ICONS.moon}
+              size={20}
+              stroke="var(--icon-muted)"
+              width={1.6}
+            />
+          </button>
           <button className="ac-avatar" onClick={() => goTab("carnet")} aria-label="Mon carnet">
             {avatar ? <img src={avatar} alt="" /> : <span>🎣</span>}
           </button>

@@ -20,7 +20,14 @@ import {
 import { deletePhoto } from "./lib/photos";
 import { reportReadError } from "./lib/storage";
 import { readPrefs, writePrefs } from "./lib/prefs";
-import { appliquerTheme, resoudreTheme, REQUETE_SOMBRE, type Theme } from "./lib/theme";
+import {
+  appliquerTheme,
+  resoudreTheme,
+  systemeSombre,
+  REQUETE_SOMBRE,
+  type Theme,
+  type ThemeEffectif,
+} from "./lib/theme";
 import { frDate, isoDay, uid } from "./lib/helpers";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
 import {
@@ -109,6 +116,11 @@ export interface AppState {
   recent: string[];
   bigUI: boolean;
   theme: Theme;
+  /** Ce que « auto » a donné. Dérivé, jamais persisté (`writePrefs` n'écrit que
+   *  `theme`) — mais dans l'état, et pas recalculé au rendu, pour que la
+   *  bascule de l'en-tête se retourne quand le TÉLÉPHONE change de réglage,
+   *  app ouverte. L'effet qui pose `data-theme` le tient à jour. */
+  themeEffectif: ThemeEffectif;
   cookStep: number;
   listening: boolean;
   ans: IdAnswers;
@@ -170,6 +182,9 @@ const makeInitialState = (): AppState => {
     recent: [],
     bigUI: prefs.bigUI,
     theme: prefs.theme,
+    // Résolu dès l'init, pas au premier effet : la bascule de l'en-tête ne doit
+    // pas annoncer une destination fausse le temps d'un rendu.
+    themeEffectif: resoudreTheme(prefs.theme, systemeSombre()),
     listening: false,
     ans: {},
     prisePlace: null,
@@ -345,8 +360,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // la préférence devient explicite : plus rien à suivre.
   useEffect(() => {
     const mq = window.matchMedia?.(REQUETE_SOMBRE);
-    const appliquer = () =>
-      appliquerTheme(resoudreTheme(state.theme, mq?.matches ?? false));
+    const appliquer = () => {
+      const effectif = resoudreTheme(state.theme, mq?.matches ?? false);
+      appliquerTheme(effectif);
+      // Même valeur pour la feuille de style et pour l'écran : la bascule de
+      // l'en-tête la lit ici plutôt que de refaire la résolution dans son coin.
+      dispatch({ themeEffectif: effectif });
+    };
     appliquer();
     if (state.theme !== "auto" || !mq) return;
     mq.addEventListener("change", appliquer);

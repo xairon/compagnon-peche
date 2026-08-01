@@ -338,3 +338,123 @@ describe("Ce que l'épuration ne doit pas casser", () => {
     expect(await screen.findByRole("button", { name: /J'ai une prise/i })).toBeInTheDocument();
   });
 });
+
+/**
+ * La bascule de thème dans l'en-tête.
+ *
+ * DEMANDE, verbatim : « pourquoi il est en darkmode par défaut ? devrait y
+ * avoir un bouton pour switch automatiquement entre les deux, c'est standard »
+ *
+ * Le défaut n'était pas le problème : `theme: "auto"` suit `prefers-color-
+ * scheme`, donc l'app était sombre parce que le téléphone l'était — c'est déjà
+ * le standard demandé. Le problème était le BOUTON. Il existait, en tête
+ * d'Outils, mais un seul chemin menait à Outils dans toute l'app : un lien
+ * « Tout › » dans un en-tête de section, en bas d'un écran de trois hauteurs
+ * d'écran. Introuvable revient au même qu'absent.
+ *
+ * Sous jsdom, `matchMedia` n'existe pas : `systemeSombre()` retombe sur `false`
+ * et « auto » résout donc en CLAIR. C'est ce qui rend ces cas déterministes.
+ */
+describe("Apparence : la bascule quitte le fond d'Outils pour l'en-tête", () => {
+  it("l'en-tête porte la bascule, et son libellé annonce où elle mène", async () => {
+    monter();
+
+    // Le libellé nomme la DESTINATION, pas l'état courant : « Passer en thème
+    // sombre » se comprend sans voir l'écran, là où « Thème clair » laisse le
+    // lecteur d'écran deviner si c'est un constat ou une action.
+    expect(await screen.findByRole("button", { name: /passer en thème sombre/i })).toBeInTheDocument();
+  });
+
+  it("un appui bascule en sombre, et la feuille de style suit", async () => {
+    const user = userEvent.setup();
+    monter();
+
+    await user.click(await screen.findByRole("button", { name: /passer en thème sombre/i }));
+
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+  });
+
+  it("le libellé se retourne : depuis le sombre, elle ramène au clair", async () => {
+    const user = userEvent.setup();
+    monter();
+
+    await user.click(await screen.findByRole("button", { name: /passer en thème sombre/i }));
+
+    const retour = await screen.findByRole("button", { name: /passer en thème clair/i });
+    await user.click(retour);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+  });
+
+  it("choisir explicitement fait sortir d'« auto » — le réglage cesse de suivre le téléphone", async () => {
+    const user = userEvent.setup();
+    monter();
+
+    await user.click(await screen.findByRole("button", { name: /passer en thème sombre/i }));
+
+    // Conséquence assumée, et réversible : « Auto » reste offert en tête
+    // d'Outils, qui garde le contrôle à trois états.
+    await waitFor(() =>
+      expect(JSON.parse(localStorage.getItem("carnet:prefs") || "{}").theme).toBe("dark"),
+    );
+  });
+});
+
+describe("Apparence : « auto » quand le téléphone, lui, est en sombre", () => {
+  /** jsdom n'implémente pas matchMedia ; on le pose pour ce cas précis. */
+  function telephoneSombre() {
+    vi.stubGlobal("matchMedia", (q: string) => ({
+      matches: q.includes("dark"),
+      media: q,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }));
+  }
+
+  it("le libellé suit le thème EFFECTIF, pas la préférence", async () => {
+    // Le piège que ce cas verrouille : lire `state.theme` donnerait « auto »,
+    // dont on ne peut déduire aucune destination. Un utilisateur en auto sur un
+    // téléphone sombre verrait « Passer en thème sombre » — proposé alors qu'il
+    // y est déjà, et menant en réalité au clair.
+    telephoneSombre();
+    monter();
+
+    expect(await screen.findByRole("button", { name: /passer en thème clair/i })).toBeInTheDocument();
+  });
+});
+
+describe("Apparence : le téléphone qui change d'avis, app ouverte", () => {
+  /**
+   * Ce cas ne se vérifie PAS au navigateur : l'émulation de
+   * `prefers-color-scheme` du pilote change `matchMedia().matches` sans
+   * dispatcher l'événement `change` — un écouteur témoin posé à la main n'en
+   * reçoit aucun. C'est donc ici que la promesse se tient, avec un matchMedia
+   * dont on garde la poignée pour déclencher le changement soi-même.
+   *
+   * Ce qu'on protège : `themeEffectif` vit dans l'état, et pas recalculé au
+   * rendu, précisément pour que ce changement-là repeigne l'en-tête.
+   */
+  it("en « auto », le libellé de la bascule se retourne sans rechargement", async () => {
+    const ecouteurs: Array<(e: { matches: boolean }) => void> = [];
+    let sombre = true;
+    vi.stubGlobal("matchMedia", (q: string) => ({
+      get matches() {
+        return q.includes("dark") && sombre;
+      },
+      media: q,
+      addEventListener: (_: string, fn: (e: { matches: boolean }) => void) => {
+        ecouteurs.push(fn);
+      },
+      removeEventListener: () => {},
+    }));
+
+    monter();
+    expect(await screen.findByRole("button", { name: /passer en thème clair/i })).toBeInTheDocument();
+
+    // Le pêcheur bascule son téléphone en clair, l'app ouverte.
+    sombre = false;
+    ecouteurs.forEach((fn) => fn({ matches: false }));
+
+    expect(await screen.findByRole("button", { name: /passer en thème sombre/i })).toBeInTheDocument();
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+  });
+});
