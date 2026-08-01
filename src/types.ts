@@ -125,13 +125,36 @@ export interface Species {
   ficheSrc?: string;
 }
 
+/** Le besoin auquel une fiche répond — l'entrée par le geste plutôt que par le nom. */
+export type BesoinId = "attacher" | "relier" | "boucle-fixe" | "au-fond" | "entre-deux-eaux";
+
 export interface Knot {
   id: string;
   cat: "noeud" | "montage";
   name: string;
   use: string;
   when: string;
+  /**
+   * 3 à 6 gestes, un par image de la séquence. L'ordre fait foi.
+   * Pour les fiches illustrées depuis Commons, c'est le nombre de cases de la
+   * planche qui fixe ce découpage — jamais l'inverse.
+   */
   steps: string[];
+  besoins: BesoinId[];
+  difficulte: "facile" | "moyen" | "difficile";
+  /** Ordre de grandeur lisible : « 30 s », « 1 min 30 ». */
+  duree: string;
+  fils: ("nylon" | "fluoro" | "tresse")[];
+  /**
+   * Part de la résistance de ligne conservée. Optionnel à dessein : les chiffres
+   * publiés varient beaucoup selon le protocole de test, donc le champ n'est
+   * rempli que là où une source sérieuse le donne — vide ailleurs, jamais meublé.
+   */
+  resistance?: string;
+  /** L'erreur concrète qui fait casser ou rate le montage. Obligatoire. */
+  erreur: string;
+  /** Ids d'autres fiches, pour les renvois cliquables. */
+  voirAussi?: string[];
 }
 
 /** A trend already computed elsewhere (lib/meteo, lib/hubeau): rising/falling/stable. */

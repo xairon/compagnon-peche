@@ -1,5 +1,13 @@
 import type { Knot } from "../types";
 
+/**
+ * Les 15 fiches. Un `step` est UN geste, parce qu'il portera UNE image : le
+ * découpage du texte et celui de la planche doivent coïncider, et c'est le test
+ * « autant d'images que d'étapes » qui les empêche de dériver l'un de l'autre.
+ *
+ * Aucun chemin de fichier ici : les images vivent dans `knot-steps.gen.ts`, qui
+ * se régénère sans jamais toucher à cette prose.
+ */
 export const KNOTS: Knot[] = [
   {
     id: "clinch",
@@ -7,10 +15,20 @@ export const KNOTS: Knot[] = [
     name: "Clinch amélioré",
     use: "Attacher un hameçon ou un leurre",
     when: "Le nœud de base pour attacher hameçons, agrafes et leurres sur nylon ou fluorocarbone jusqu'à 40/100.",
+    besoins: ["attacher"],
+    difficulte: "facile",
+    duree: "45 s",
+    fils: ["nylon", "fluoro"],
+    resistance: "80 à 90 % de la résistance de ligne",
+    erreur:
+      "Serrer à sec. Le nylon chauffe en glissant sur lui-même et casse à la moitié de sa résistance — humecte toujours avant de serrer.",
+    voirAussi: ["palomar"],
     steps: [
-      "Passer le fil dans l'œillet, faire 5 à 7 tours autour du brin principal.",
-      "Repasser le bout dans la première boucle contre l'œillet, puis dans la grande boucle formée.",
-      "Humecter, serrer progressivement en tirant le brin principal, raser l'excédent.",
+      "Passer une quinzaine de centimètres de fil dans l'œillet de l'hameçon.",
+      "Enrouler le bout 5 à 7 fois autour du brin principal, sans serrer, en gardant ouverte la première boucle contre l'œillet.",
+      "Repasser le bout dans cette première boucle, contre l'œillet.",
+      "Repasser le bout dans la grande boucle qui vient de se former.",
+      "Humecter, serrer en tirant sur le brin principal, puis raser l'excédent au ras du nœud.",
     ],
   },
   {
@@ -19,10 +37,20 @@ export const KNOTS: Knot[] = [
     name: "Palomar",
     use: "Hameçon / agrafe — très solide, tresse comprise",
     when: "Excellente résistance, idéal sur tresse (drop shot, texan). Nécessite de passer le leurre dans la boucle.",
+    besoins: ["attacher"],
+    difficulte: "facile",
+    duree: "30 s",
+    fils: ["nylon", "fluoro", "tresse"],
+    resistance: "~95 % — l'un des plus solides, tresse comprise",
+    erreur:
+      "Oublier de passer l'hameçon entier dans la boucle avant de serrer. Le nœud se ferme alors sur lui-même et tout est à recommencer.",
+    voirAussi: ["clinch", "dropshot"],
     steps: [
-      "Doubler le fil et passer la boucle dans l'œillet.",
-      "Faire un nœud simple avec la boucle, sans serrer.",
-      "Passer l'hameçon entier dans la boucle, humecter et serrer.",
+      "Doubler le fil sur une vingtaine de centimètres.",
+      "Passer la boucle ainsi formée dans l'œillet de l'hameçon.",
+      "Faire un nœud simple avec la boucle et le fil doublé, sans serrer.",
+      "Passer l'hameçon entier à travers la boucle, puis ramener la boucle au-dessus de l'œillet.",
+      "Humecter, serrer les deux brins ensemble, raser l'excédent.",
     ],
   },
   {
@@ -31,10 +59,19 @@ export const KNOTS: Knot[] = [
     name: "Raccord ligne / bas de ligne",
     use: "Relier tresse et fluorocarbone",
     when: "Pour relier le corps de ligne (tresse) au bas de ligne (fluoro) sans agrafe — passe dans les anneaux. Diamètres proches : ce raccord suffit. Diamètres très différents (tresse épaisse vers fluoro fin) : préférez l'Albright, dont les tours supplémentaires empêchent le fil fin de glisser.",
+    besoins: ["relier"],
+    difficulte: "moyen",
+    duree: "1 min",
+    fils: ["fluoro", "tresse"],
+    erreur:
+      "L'employer sur des diamètres trop différents. Une tresse épaisse sur un fluoro fin glisse et le raccord file sous la traction — c'est le domaine de l'Albright.",
+    voirAussi: ["albright", "sang"],
     steps: [
-      "Former une boucle avec le fluorocarbone.",
+      "Former une boucle avec le fluorocarbone, sur une quinzaine de centimètres.",
+      "Poser la tresse le long de la boucle, son bout dirigé vers l'ouverture.",
       "Enrouler la tresse 8 à 10 fois autour des deux brins de la boucle.",
-      "Repasser la tresse dans la boucle, humecter, serrer les deux côtés, raser.",
+      "Repasser le bout de tresse dans la boucle, du côté par lequel elle est entrée.",
+      "Humecter généreusement, serrer les deux côtés en même temps, raser les deux excédents.",
     ],
   },
   {
@@ -43,10 +80,18 @@ export const KNOTS: Knot[] = [
     name: "Boucle simple (chirurgien)",
     use: "Créer une boucle en bout de ligne",
     when: "Boucle rapide pour montages boucle-dans-boucle (pêche au coup, bas de ligne prêts).",
+    besoins: ["boucle-fixe"],
+    difficulte: "facile",
+    duree: "20 s",
+    fils: ["nylon", "fluoro"],
+    erreur:
+      "Ne faire qu'un seul passage. C'est le second passage de la boucle dans le nœud qui en fait un nœud de chirurgien ; avec un seul, c'est un nœud simple qui se déforme sous tension.",
+    voirAussi: ["paternoster", "chaise"],
+    // Trois gestes : c'est ce que montre la planche de Commons, qui fait loi.
     steps: [
-      "Doubler le fil sur 15 cm.",
-      "Faire un nœud simple avec le fil doublé, puis repasser la boucle une seconde fois dans le même nœud avant de serrer (c'est ce double passage qui fait le nœud de chirurgien).",
-      "Humecter et serrer ; la boucle doit rester bien ronde.",
+      "Doubler le fil sur une quinzaine de centimètres, de façon à former une boucle.",
+      "Faire un nœud simple avec le fil doublé, puis repasser la boucle une seconde fois dans ce même nœud, sans serrer.",
+      "Humecter et serrer en tirant sur la boucle et sur les deux brins ; la boucle doit rester bien ronde.",
     ],
   },
   {
@@ -55,10 +100,19 @@ export const KNOTS: Knot[] = [
     name: "Nœud de sang",
     use: "Relier deux fils de diamètre proche",
     when: "Le nœud de référence pour raccorder deux nylons ou deux fluorocarbones de diamètre similaire (bas de ligne, réparation de casse).",
+    besoins: ["relier"],
+    difficulte: "moyen",
+    duree: "1 min 30",
+    fils: ["nylon", "fluoro"],
+    resistance: "~85 % entre deux fils de diamètre proche",
+    erreur:
+      "Enrouler un côté plus que l'autre. Le nombre de tours doit être le même des deux côtés, sinon le nœud se referme de travers et le brin le moins enroulé lâche le premier.",
+    voirAussi: ["albright", "raccord"],
     steps: [
-      "Superposer les deux brins sur 15 cm, en sens opposés.",
-      "Enrouler chaque brin 5 à 6 fois autour de l'autre, en partant du centre vers l'extérieur.",
-      "Repasser les deux bouts au centre, en sens inverse l'un de l'autre, puis humecter et serrer progressivement les deux côtés.",
+      "Superposer les deux brins sur une quinzaine de centimètres, dirigés en sens opposés.",
+      "Enrouler le premier brin 5 à 6 fois autour de l'autre en partant du centre, puis ramener son bout dans l'ouverture laissée au milieu.",
+      "Enrouler le second brin autant de fois dans l'autre sens, et repasser son bout au centre en sens inverse du premier.",
+      "Humecter, serrer les deux côtés progressivement et en même temps, raser les deux excédents.",
     ],
   },
   {
@@ -67,10 +121,19 @@ export const KNOTS: Knot[] = [
     name: "Albright",
     use: "Relier deux fils de diamètre très différent",
     when: "Backing/tresse épaisse vers bas de ligne fin, ou corps de ligne vers un fil beaucoup plus fin — là où le nœud de sang glisse.",
+    besoins: ["relier"],
+    difficulte: "difficile",
+    duree: "2 min",
+    fils: ["nylon", "fluoro", "tresse"],
+    erreur:
+      "Trop peu de tours. Sous 10 tours, le fil fin glisse le long du fil épais et le raccord file — c'est précisément ce que l'Albright est censé empêcher.",
+    voirAussi: ["sang", "raccord"],
+    // Quatre gestes : c'est ce que montre la planche de Commons, qui fait loi.
     steps: [
-      "Former une boucle avec le fil le plus épais, la tenir entre deux doigts.",
-      "Passer le fil fin dans la boucle et l'enrouler 10 à 12 fois autour des deux brins de la boucle, en revenant vers l'ouverture.",
-      "Repasser le bout du fil fin dans la boucle par le même côté qu'à l'entrée, humecter et serrer progressivement en tenant les deux fils épais.",
+      "Former une boucle avec le fil le plus épais, la pincer entre deux doigts, et y passer le fil fin en laissant dépasser une vingtaine de centimètres.",
+      "Enrouler le fil fin 10 à 12 fois autour des deux brins de la boucle, en serrant les tours les uns contre les autres sans les laisser se chevaucher.",
+      "Repasser le bout du fil fin dans la boucle, par le côté où il est entré.",
+      "Humecter, serrer en tenant fermement les deux brins épais, puis raser les deux excédents.",
     ],
   },
   {
@@ -79,10 +142,19 @@ export const KNOTS: Knot[] = [
     name: "Nœud de chaise",
     use: "Boucle fixe et solide en bout de ligne",
     when: "Amarrer une embarcation, fixer une ligne à un point fixe (piquet, anneau) — une boucle qui ne glisse jamais et se défait pourtant facilement après tension.",
+    besoins: ["boucle-fixe"],
+    difficulte: "moyen",
+    duree: "30 s",
+    fils: ["nylon"],
+    resistance: "~60 % — c'est un nœud d'amarrage, pas un nœud de ligne",
+    erreur:
+      "L'employer en bout de ligne pour pêcher. Il perd près de la moitié de la résistance du fil : à réserver au bateau et aux points fixes.",
+    voirAussi: ["boucle"],
     steps: [
-      "Former une petite boucle sur le brin dormant, environ 30 cm avant le bout.",
+      "Former une petite boucle sur le brin dormant, à une trentaine de centimètres du bout.",
       "Faire passer le bout du fil dans cette boucle, par en dessous.",
-      "Passer le bout derrière le brin dormant puis le repasser dans la petite boucle, dans le sens inverse ; humecter et serrer en tenant le brin dormant.",
+      "Passer le bout derrière le brin dormant, puis le repasser dans la petite boucle en sens inverse.",
+      "Humecter et serrer en tenant le brin dormant ; la grande boucle ne doit plus coulisser.",
     ],
   },
   {
@@ -91,10 +163,19 @@ export const KNOTS: Knot[] = [
     name: "Drop shot",
     use: "Sandre et perche en verticale ou au posé",
     when: "Présenter un leurre souple au-dessus du fond, plomb en bas : idéal cassures et postes profonds.",
+    besoins: ["entre-deux-eaux"],
+    difficulte: "moyen",
+    duree: "2 min",
+    fils: ["fluoro", "tresse"],
+    erreur:
+      "Nouer l'hameçon sans repasser le brin dans l'œillet par le haut. Sans ça l'hameçon bascule vers le bas et le leurre nage à l'envers.",
+    voirAussi: ["palomar", "wacky"],
     steps: [
-      "Nouer l'hameçon au palomar en laissant 30–80 cm de fil sous le nœud.",
-      "Repasser le brin dans l'œillet pour que l'hameçon pointe vers le haut.",
-      "Fixer le plomb drop shot à l'extrémité ; escher le leurre par la tête.",
+      "Nouer l'hameçon au palomar, en laissant 30 à 80 cm de fil libre sous le nœud.",
+      "Repasser ce brin libre dans l'œillet, de haut en bas, pour que la hampe pointe vers le haut.",
+      "Fixer le plomb drop shot à l'extrémité du brin libre, par sa pince.",
+      "Escher le leurre souple par la tête, piqué sur un centimètre seulement.",
+      "Ajuster la longueur sous le nœud selon la hauteur à laquelle tiennent les poissons.",
     ],
   },
   {
@@ -103,10 +184,19 @@ export const KNOTS: Knot[] = [
     name: "Montage texan",
     use: "Pêcher dans les obstacles sans accrocher",
     when: "Leurre souple anti-herbe pour brochet et bass dans le bois noyé et les herbiers.",
+    besoins: ["au-fond"],
+    difficulte: "moyen",
+    duree: "1 min 30",
+    fils: ["fluoro", "tresse"],
+    erreur:
+      "Rentrer la pointe trop profondément dans le corps du leurre. Elle ne ressort plus au ferrage et le poisson se décroche.",
+    voirAussi: ["carolina", "palomar"],
+    // Quatre gestes : les quatre planches du montage texan sur Commons.
     steps: [
-      "Enfiler un plomb balle sur le fil, pointe vers la canne : la base plate vient se caler contre la tête du leurre.",
-      "Nouer un hameçon texan (clinch ou palomar).",
-      "Piquer le leurre par la tête puis rentrer la pointe dans le corps (anti-accroc).",
+      "Enfiler un plomb balle sur le fil, sa pointe dirigée vers la canne.",
+      "Nouer l'hameçon texan au clinch ou au palomar ; la base plate du plomb vient se caler contre la tête du leurre.",
+      "Piquer l'hameçon par la tête du leurre souple, le faire ressortir sous un centimètre, puis faire pivoter la hampe.",
+      "Repiquer la pointe dans le corps du leurre, juste sous la peau, pour la rendre anti-accroc.",
     ],
   },
   {
@@ -115,10 +205,18 @@ export const KNOTS: Knot[] = [
     name: "Pater-noster",
     use: "Pêche au vif ou au posé",
     when: "Montage classique pour le vif (sandre, brochet) : le plomb au fond, l'esche à distance sur une potence.",
+    besoins: ["au-fond"],
+    difficulte: "moyen",
+    duree: "3 min",
+    fils: ["nylon", "tresse"],
+    erreur:
+      "Faire la potence trop courte. Sous 20 cm, le bas de ligne s'emmêle dans le corps de ligne à chaque lancer.",
+    voirAussi: ["boucle", "feeder"],
     steps: [
-      "Former une potence (boucle) sur le corps de ligne à 40–60 cm du bas.",
-      "Fixer le plomb à l'extrémité du corps de ligne.",
-      "Monter le bas de ligne esché boucle-dans-boucle sur la potence.",
+      "Former une boucle de chirurgien sur le corps de ligne, à 40–60 cm du bas : c'est la potence.",
+      "Fixer le plomb à l'extrémité du corps de ligne, sous la potence.",
+      "Préparer un bas de ligne de 30 à 50 cm terminé par une boucle et l'hameçon.",
+      "Raccorder le bas de ligne à la potence boucle-dans-boucle, puis escher.",
     ],
   },
   {
@@ -127,10 +225,19 @@ export const KNOTS: Knot[] = [
     name: "Montage carolina",
     use: "Black-bass et perche sur le fond, prospection large",
     when: "Plomb qui reste au contact du fond pendant que le leurre, plus loin sur le bas de ligne, garde une nage libre — idéal fonds durs et pentes.",
+    besoins: ["au-fond"],
+    difficulte: "moyen",
+    duree: "3 min",
+    fils: ["fluoro", "tresse"],
+    erreur:
+      "Oublier la perle entre le plomb et l'émerillon. Le plomb frappe alors le nœud à chaque lancer et finit par le fatiguer jusqu'à la casse.",
+    voirAussi: ["texan"],
     steps: [
-      "Enfiler un plomb olive coulissant sur le corps de ligne, puis une perle anti-choc.",
-      "Nouer un émerillon en bout de ligne pour bloquer le plomb et la perle.",
-      "Ajouter 40 à 70 cm de fluorocarbone et un hameçon texan avec un leurre souple.",
+      "Enfiler un plomb olive coulissant sur le corps de ligne.",
+      "Enfiler une perle anti-choc derrière le plomb.",
+      "Nouer un émerillon en bout du corps de ligne : il bloque le plomb et la perle.",
+      "Nouer 40 à 70 cm de fluorocarbone à l'autre œillet de l'émerillon.",
+      "Terminer par un hameçon texan et monter le leurre souple en anti-accroc.",
     ],
   },
   {
@@ -139,10 +246,18 @@ export const KNOTS: Knot[] = [
     name: "Montage wacky",
     use: "Black-bass à faible profondeur, coulée lente",
     when: "Le ver souple plie en son milieu et frétille de partout à la chute — très efficace en tirs précis dans les postes, herbiers et bordures.",
+    besoins: ["entre-deux-eaux"],
+    difficulte: "facile",
+    duree: "45 s",
+    fils: ["fluoro", "tresse"],
+    erreur:
+      "Piquer le ver ailleurs qu'en son milieu exact. Décentré, il ne plie plus en deux à la descente et perd tout son frétillement.",
+    voirAussi: ["dropshot"],
     steps: [
       "Prendre un ver souple droit (stick bait), sans tête plombée.",
-      "Piquer l'hameçon (weedless ou simple) perpendiculairement, en plein milieu du ver.",
-      "Laisser les deux extrémités libres pour un frétillement maximal à la coulée.",
+      "Repérer le milieu exact du ver.",
+      "Piquer l'hameçon perpendiculairement au corps, de part en part, à cet endroit.",
+      "Laisser les deux extrémités entièrement libres et lancer sans plomb ; le ver plie et frétille à la coulée.",
     ],
   },
   {
@@ -151,10 +266,19 @@ export const KNOTS: Knot[] = [
     name: "Montage anglaise",
     use: "Pêche au coup classique, gardon, brème, tanche",
     when: "Flotteur waggler fixé par le bas seulement : lancer précis et discret, plombée dégressive pour une descente naturelle de l'esche.",
+    besoins: ["entre-deux-eaux"],
+    difficulte: "difficile",
+    duree: "5 min",
+    fils: ["nylon"],
+    erreur:
+      "Fixer le waggler par les deux bouts. Bloqué en haut aussi, il ne se met plus dans l'axe au lancer et la ligne vrille.",
+    voirAussi: ["feeder"],
     steps: [
-      "Fixer le flotteur anglaise (waggler) par le bas uniquement, sur le corps de ligne.",
-      "Répartir les plombs de plantée en dégressif vers l'hameçon, un gros plomb près du flotteur.",
-      "Terminer par un ou deux plombs fins juste au-dessus de l'hameçon, pour l'équilibrage final.",
+      "Enfiler deux stop-flotteurs sur le corps de ligne, puis l'œillet du waggler entre les deux.",
+      "Bloquer le waggler par le bas uniquement, en resserrant les stop-flotteurs contre son œillet.",
+      "Placer le gros plomb (la masselotte) juste sous le flotteur, pour l'équilibrer.",
+      "Répartir les plombs suivants en dégressif vers l'hameçon, du plus gros au plus fin.",
+      "Terminer par un ou deux plombs fins à une vingtaine de centimètres de l'hameçon.",
     ],
   },
   {
@@ -163,10 +287,19 @@ export const KNOTS: Knot[] = [
     name: "Montage feeder",
     use: "Brème, carpe, gardon en rivière ou plan d'eau",
     when: "Le panier (ou la cage) amorce en continu autour de l'hameçon posé au fond — efficace sur poste précis, surtout en eau courante.",
+    besoins: ["au-fond"],
+    difficulte: "moyen",
+    duree: "3 min",
+    fils: ["nylon", "tresse"],
+    erreur:
+      "Un bas de ligne trop long en eau courante. Au-delà de 50 cm, l'amorce est emportée bien avant que l'hameçon soit à côté.",
+    voirAussi: ["paternoster", "anglaise"],
     steps: [
-      "Fixer un panier feeder coulissant (ou une cage) en tête de ligne, avec une butée en caoutchouc.",
-      "Nouer un émerillon à agrafe pour limiter le vrillage et faciliter les changements de bas de ligne.",
-      "Monter un bas de ligne de 20 à 50 cm avec l'hameçon, amorcé dans le panier au posé.",
+      "Enfiler le panier feeder coulissant sur le corps de ligne.",
+      "Enfiler une butée en caoutchouc derrière le panier, pour amortir les chocs.",
+      "Nouer un émerillon à agrafe en bout du corps de ligne.",
+      "Monter un bas de ligne de 20 à 50 cm terminé par l'hameçon, agrafé à l'émerillon.",
+      "Garnir le panier d'amorce et poser le montage sur le poste, canne en attente.",
     ],
   },
   {
@@ -175,10 +308,19 @@ export const KNOTS: Knot[] = [
     name: "Montage cheveu",
     use: "Carpe, présentation de bouillette",
     when: "L'appât pend librement sous l'hameçon plutôt que d'être piqué dessus : la carpe l'aspire avec l'hameçon, qui se plante seul à l'éjection — la base de la pêche moderne de la carpe.",
+    besoins: ["au-fond"],
+    difficulte: "difficile",
+    duree: "4 min",
+    fils: ["tresse"],
+    erreur:
+      "Un cheveu trop long. La bouillette s'éloigne de la pointe et la carpe l'aspire sans emporter l'hameçon.",
+    voirAussi: ["paternoster"],
     steps: [
-      "Nouer l'hameçon avec un nœud sans nœud (knotless knot), en laissant un cheveu de fil libre sous la hampe.",
-      "Fixer la bouillette sur le cheveu à l'aide d'une aiguille à amorce, puis bloquer avec un stop-appât.",
-      "Ajuster la longueur du cheveu pour que la bouillette pende juste sous la pointe de l'hameçon.",
+      "Former une petite boucle à l'extrémité du bas de ligne : c'est le cheveu.",
+      "Passer le brin libre dans l'œillet de l'hameçon, du côté de la pointe.",
+      "Enrouler le brin 7 à 10 fois autour de la hampe, en descendant vers la pointe.",
+      "Repasser le brin dans l'œillet, du même côté, puis serrer : c'est le nœud sans nœud.",
+      "Enfiler la bouillette sur le cheveu à l'aiguille et la bloquer avec un stop-appât, juste sous la pointe.",
     ],
   },
 ];

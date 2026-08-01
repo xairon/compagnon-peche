@@ -2,14 +2,58 @@ import { describe, it, expect } from "vitest";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { KNOTS } from "./knots";
+import { BESOINS } from "./besoins";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
 import { LOCAL_KNOT_MEDIA } from "./knot-diagrams";
 
 const pub = (f: string) => join(process.cwd(), "public", f);
 
-describe("nœuds & montages — cohérence des données", () => {
-  it("chaque fiche a au moins 2 étapes", () => {
-    const fautes = KNOTS.filter((k) => k.steps.length < 2).map((k) => k.id);
+describe("nœuds & montages — le catalogue enrichi", () => {
+  /**
+   * La borne basse est celle de la boucle de chirurgien : sa planche de Commons
+   * ne montre que trois gestes, et lui en inventer un quatrième pour faire
+   * nombre laisserait une étape sans image.
+   */
+  it("chaque fiche compte 3 à 6 gestes", () => {
+    const fautes = KNOTS.filter((k) => k.steps.length < 3 || k.steps.length > 6).map(
+      (k) => `${k.id} — ${k.steps.length} étapes`,
+    );
+    expect(fautes).toEqual([]);
+  });
+
+  it("chaque fiche porte au moins un besoin, et tous sont connus", () => {
+    const connus = new Set(BESOINS.map((b) => b.id));
+    const fautes: string[] = [];
+    for (const k of KNOTS) {
+      if (!k.besoins.length) fautes.push(`${k.id} — aucun besoin`);
+      for (const b of k.besoins) if (!connus.has(b)) fautes.push(`${k.id} — besoin inconnu : ${b}`);
+    }
+    expect(fautes).toEqual([]);
+  });
+
+  it("chaque besoin mène à au moins une fiche", () => {
+    const orphelins = BESOINS.filter((b) => !KNOTS.some((k) => k.besoins.includes(b.id)));
+    expect(orphelins.map((b) => b.id)).toEqual([]);
+  });
+
+  it("chaque fiche dit l'erreur qui fait casser", () => {
+    const fautes = KNOTS.filter((k) => !k.erreur?.trim()).map((k) => k.id);
+    expect(fautes).toEqual([]);
+  });
+
+  it("chaque renvoi vise une fiche qui existe, et jamais elle-même", () => {
+    const ids = new Set(KNOTS.map((k) => k.id));
+    const fautes: string[] = [];
+    for (const k of KNOTS)
+      for (const v of k.voirAussi ?? []) {
+        if (!ids.has(v)) fautes.push(`${k.id} → ${v} (inconnu)`);
+        if (v === k.id) fautes.push(`${k.id} → lui-même`);
+      }
+    expect(fautes).toEqual([]);
+  });
+
+  it("chaque fiche indique au moins un fil et une durée", () => {
+    const fautes = KNOTS.filter((k) => !k.fils.length || !k.duree?.trim()).map((k) => k.id);
     expect(fautes).toEqual([]);
   });
 });
