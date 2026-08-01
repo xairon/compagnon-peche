@@ -6,6 +6,7 @@ import { StoreProvider } from "../store";
 import { useStore } from "../store-hooks";
 import { NoeudFiche } from "./NoeudFiche";
 import { KNOTS } from "../data/knots";
+import { KNOT_STEPS } from "../data/knot-steps.gen";
 
 /**
  * `StoreProvider` ne prend que `children` : il n'a pas de prop d'état initial.
@@ -75,5 +76,31 @@ describe("fiche nœud", () => {
     // Le titre ET le message parlent d'un nœud introuvable : viser le titre.
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Nœud introuvable");
     expect(screen.queryAllByTestId("etape")).toHaveLength(0);
+  });
+});
+
+describe("fiche nœud — séquence illustrée", () => {
+  it("montre une image par geste quand la séquence existe", () => {
+    monte("albright");
+    expect(screen.getAllByTestId("image-etape")).toHaveLength(KNOT_STEPS.albright.length);
+  });
+
+  it("décrit chaque image par le geste qu'elle montre", () => {
+    const albright = KNOTS.find((k) => k.id === "albright")!;
+    monte("albright");
+    const imgs = screen.getAllByTestId("image-etape");
+    expect(imgs[0]).toHaveAttribute("alt", `Albright, étape 1 : ${albright.steps[0]}`);
+  });
+
+  it("n'affiche plus l'illustration unique quand la séquence la remplace", () => {
+    monte("albright");
+    expect(screen.queryByTestId("illustration-unique")).toBeNull();
+  });
+
+  it("retombe sur l'illustration unique quand aucune séquence n'existe", () => {
+    // Le clinch attend ses photos : sa planche unique reste, faute de mieux.
+    monte("clinch");
+    expect(screen.getByTestId("illustration-unique")).toBeInTheDocument();
+    expect(screen.queryAllByTestId("image-etape")).toHaveLength(0);
   });
 });

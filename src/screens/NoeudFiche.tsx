@@ -2,6 +2,7 @@ import { useStore } from "../store-hooks";
 import { KNOTS } from "../data/knots";
 import type { Knot } from "../types";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
+import { KNOT_STEPS } from "../data/knot-steps.gen";
 import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 import "./noeuds.css";
 
@@ -32,6 +33,7 @@ export function NoeudFiche() {
   // couvre n'affiche aucun cadre : un cadre vide se lirait comme une image
   // cassée, et son texte se suffit.
   const media = ALL_KNOT_MEDIA[knot.id];
+  const sequence = KNOT_STEPS[knot.id] ?? [];
   const liees = (knot.voirAussi ?? [])
     .map((id) => KNOTS.find((k) => k.id === id))
     .filter((k): k is Knot => !!k);
@@ -62,7 +64,12 @@ export function NoeudFiche() {
           )}
         </div>
 
-        {media && (
+        {/*
+          Une séquence remplace l'illustration unique, elle ne s'y ajoute pas :
+          la planche entière et ses propres vignettes montreraient deux fois la
+          même leçon, et la planche est justement ce qu'on cherchait à quitter.
+        */}
+        {sequence.length === 0 && media && (
           <div className="knot-illus" data-testid="illustration-unique">
             <img
               src={import.meta.env.BASE_URL + media.file}
@@ -73,9 +80,21 @@ export function NoeudFiche() {
         )}
 
         {knot.steps.map((s, i) => (
-          <div key={i} className="knot-step" data-testid="etape">
-            <div className="num">{i + 1}</div>
-            <div className="cap">{s}</div>
+          <div key={i} className="knot-geste" data-testid="etape">
+            {sequence[i] && (
+              <img
+                className="knot-geste-img"
+                data-testid="image-etape"
+                src={import.meta.env.BASE_URL + sequence[i].file}
+                alt={`${knot.name}, étape ${i + 1} : ${s}`}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            )}
+            <div className="knot-step">
+              <div className="num">{i + 1}</div>
+              <div className="cap">{s}</div>
+            </div>
           </div>
         ))}
 

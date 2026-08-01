@@ -4,6 +4,7 @@ import { KNOTS } from "../data/knots";
 import { BESOINS } from "../data/besoins";
 import type { BesoinId } from "../types";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
+import { KNOT_STEPS } from "../data/knot-steps.gen";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import "./noeuds.css";
@@ -49,7 +50,11 @@ export function Noeuds() {
           <div key={g.label}>
             <div className="label noeud-label">{g.label}</div>
             {g.items.map((k) => {
-              const media = ALL_KNOT_MEDIA[k.id];
+              // La dernière image de la séquence montre le nœud fini : c'est
+              // elle qu'on reconnaît à 46 px. À défaut, la planche entière ;
+              // à défaut encore, l'icône générique.
+              const sequence = KNOT_STEPS[k.id] ?? [];
+              const media = sequence[sequence.length - 1] ?? ALL_KNOT_MEDIA[k.id];
               return (
                 <button
                   key={k.id}

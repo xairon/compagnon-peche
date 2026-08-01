@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider } from "../store";
 import { Noeuds } from "./Noeuds";
+import { KNOT_STEPS } from "../data/knot-steps.gen";
 
 // La liste ne lit aucun état du store : un montage nu suffit.
 const monte = () =>
@@ -49,6 +50,18 @@ describe("liste des nœuds & montages", () => {
     expect(bouton).toHaveAttribute("aria-pressed", "false");
     await user.click(bouton);
     expect(bouton).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("la vignette montre le nœud fini, pas la planche entière", () => {
+    monte();
+    const tuile = screen
+      .getAllByTestId("tuile-noeud")
+      .find((n) => n.textContent?.includes("Albright"))!;
+    const derniere = KNOT_STEPS.albright[KNOT_STEPS.albright.length - 1];
+    expect(tuile.querySelector("img")).toHaveAttribute(
+      "src",
+      expect.stringContaining(derniere.file),
+    );
   });
 
   it("masque un en-tête de groupe que le filtre a vidé", async () => {

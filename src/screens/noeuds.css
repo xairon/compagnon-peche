@@ -138,3 +138,23 @@
   align-items: center;
   justify-content: center;
 }
+
+/*
+ * Un geste = son image, puis son texte. L'image d'abord parce qu'on la
+ * reconnaît avant de lire, et que le doigt s'arrête dessus en défilant.
+ */
+.knot-geste {
+  margin-bottom: 20px;
+}
+.knot-geste-img {
+  display: block;
+  width: 100%;
+  /* Bornée en hauteur : une vignette verticale occuperait tout l'écran et
+     ferait croire que la fiche s'arrête là. */
+  max-height: 46vh;
+  object-fit: contain;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  margin-bottom: 8px;
+}
