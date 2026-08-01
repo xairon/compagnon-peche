@@ -32,34 +32,46 @@ Relevé fait le 1er août 2026 par l'API Commons (recherche par mot-clé, catég
 `Fishing knots`, `Knot diagrams`, `Fishing rigs`, `Animated knots`). Toutes les licences
 citées sont libres et vérifiées.
 
-| Fiche | Ressource | Forme | Découpable |
+Les six planches candidates ont été téléchargées et **regardées**, une à une : leurs
+dimensions ne disent pas combien de cases elles contiennent, et trois d'entre elles ne
+contiennent pas ce que leur nom laissait croire.
+
+| Fiche | Ressource | Ce que la planche contient vraiment | Retenu |
 |---|---|---|---|
-| Palomar | `PalomarKnotSequence.jpg` 992×421, CC BY-SA 3.0 | bande de vignettes | oui |
-| Nœud de sang | `BloodKnot HowTo.jpg` 1074×930, CC BY-SA 3.0 | grille | oui |
-| Albright | `Albright knot diagram retouched.png` 454×1024, DP | colonne de 4 | oui |
-| Nœud de chaise | `Bowline in four steps.png` 559×713, CC BY-SA 3.0 | grille de 4 | oui |
-| Boucle chirurgien | `Surgeon's Loop knot.svg` 271×612, DP | colonne | oui |
-| Montage cheveu | `Knotless knot.svg` 512×1024, CC BY-SA 4.0 | colonne | oui |
-| Montage texan | `Texas Rig Diagram 1→4.svg`, CC BY 4.0 | **déjà 4 fichiers** | rien à découper |
-| Clinch | photo d'un nœud lâche | image unique | non |
-| Raccord | `Uni knot.jpg` | image unique | non |
-| Drop shot | photo du montage fini | image unique | non |
-| Carolina, pater-noster, wacky, anglaise, feeder | — | rien | non |
+| Nœud de sang | `BloodKnot HowTo.jpg` 1074×930, CC BY-SA 3.0 | grille 2×2, 4 photos de cordelette | **découpe, 4 gestes** |
+| Nœud de chaise | `Bowline in four steps.png` 559×713, CC BY-SA 3.0 | grille 2×2 numérotée 1 à 4 | **découpe, 4 gestes** |
+| Albright | `Albright knot diagram retouched.png` 454×1024, DP | colonne de 4, **plus un bandeau de titre** | **découpe après recadrage, 4 gestes** |
+| Boucle chirurgien | `Surgeon's Loop knot.svg` 271×612, DP | colonne de **3**, plus un bandeau de titre | **découpe après recadrage, 3 gestes** |
+| Montage texan | `Texas Rig Diagram 1→4.svg`, CC BY 4.0 | 4 fichiers déjà séparés | **conversion, 4 gestes** |
+| Palomar | `PalomarKnotSequence.jpg` 992×421, CC BY-SA 3.0 | 5 cases **irrégulières** (3 en haut, 2 décalées en bas) — et un **porte-clés en paracorde**, pas une ligne et un hameçon | **écarté → photo** |
+| Montage cheveu | `Knotless knot.svg` 512×1024, CC BY-SA 4.0 | **un seul dessin** du nœud fini, pas une séquence | **écarté → schéma** |
+| Clinch | photo d'un nœud lâche | image unique | → photo |
+| Raccord | `Uni knot.jpg` | image unique | → photo |
+| Drop shot | photo du montage fini | image unique | → schéma |
+| Carolina, pater-noster, wacky, anglaise, feeder | — | rien | → schéma |
+
+Le cas du palomar mérite d'être consigné, parce qu'il s'est déjà produit : le commit
+`864cb95`, « remplacer les photos Palomar, qui montraient un porte-clés en paracorde », avait
+retiré cette illustration pour ce motif exact. Elle est revenue depuis par une autre voie.
+Un tutoriel de pêche qui montre un anneau porte-clés en paracorde pour enseigner le nœud le
+plus utilisé sur tresse ne peut pas être réintroduit une troisième fois : le palomar rejoint
+les séries photographiées.
 
 Deux pistes ont été explorées et écartées : la série numérotée `Barb.NN`, qui promettait un
 jeu photo cohérent d'un même auteur, est du macramé décoratif (nœuds japonais, vice-versa) et
 ne touche la pêche que par deux fichiers isolés ; et les animations, dont Commons ne possède
 qu'un exemplaire utile (`Anim Noeud de chaise.gif`), trop peu pour fonder une forme.
 
-**Bilan : 7 fiches sur 15.** Et la répartition est l'information importante — **5 nœuds sur 7,
-mais 2 montages sur 8**.
+**Bilan : 5 fiches découpables sur 15** — et non 7, comme le laissait croire un relevé fait
+sur les seules dimensions. La répartition, elle, ne change pas de sens : **4 nœuds sur 7,
+1 montage sur 8**.
 
 ## Décisions retenues
 
 ### Un nœud et un montage ne sont pas le même objet, et n'appellent pas la même image
 
-Ce déséquilibre 5/7 contre 2/8 n'est pas un trou de catalogue qu'une meilleure recherche
-comblerait. Il est structurel.
+Ce déséquilibre — 4 nœuds sur 7 contre 1 montage sur 8 — n'est pas un trou de catalogue
+qu'une meilleure recherche comblerait. Il est structurel.
 
 Un **nœud** est une suite de gestes exercés sur un fil : il existe un geste 1, un geste 2, un
 geste 3, et chacun se photographie. Un **montage** est un ordre d'assemblage de composants le
@@ -69,24 +81,30 @@ long de la ligne — plomb, perle, émerillon, bas de ligne, hameçon. Il n'y a 
 entier, légendé (corps de ligne, potence, plomb, surface, fond), lisible à 375 px ».
 
 Chercher indéfiniment une séquence pour le feeder, c'est chercher une chose qui n'existe pas.
-Les six montages non couverts reçoivent donc la forme qui leur convient, pas une séquence
-dégradée.
+Les sept montages non couverts reçoivent donc la forme qui leur convient, pas une séquence
+dégradée. Le montage cheveu le confirme après examen : sa planche de Commons est un dessin
+unique du nœud fini — un plan, précisément, et non une suite de gestes.
 
 ### Trois producteurs d'images, un seul rendu
 
-**a. Découpe des planches Commons — 7 fiches.** Un script `scripts/crop-knot-steps.mjs`
-adossé à `sharp` (déjà en dépendance de développement) découpe chaque planche en une image
-par geste, pilotée par un manifeste déclaratif — `{id:"chaise", grid:{cols:2,rows:2}}`,
-`{id:"palomar", grid:{cols:5,rows:1}}` — avec des boîtes de découpe manuelles pour les
-planches qui ne sont pas des grilles régulières. Le texan ne se découpe pas : ses quatre SVG
-existent déjà séparément, il suffit de les récupérer et de les convertir.
+**a. Découpe des planches Commons — 5 fiches** (sang, chaise, albright, boucle, texan). Un
+script `scripts/crop-knot-steps.mjs` adossé à `sharp` (déjà en dépendance de développement)
+découpe chaque planche en une image par geste, pilotée par un manifeste déclaratif —
+`{id:"chaise", grid:{cols:2,rows:2}}`. Deux des quatre planches à découper portent un bandeau
+de titre en pied et un cadre de couleur : le manifeste doit donc décrire un **recadrage
+préalable** avant la grille, sans quoi la dernière case emporterait le titre. Le texan ne se
+découpe pas : ses quatre SVG existent déjà séparément, il suffit de les convertir.
+
+**Le nombre de cases de la planche fait loi.** C'est lui qui fixe le nombre d'étapes écrites,
+et non l'inverse : la boucle de chirurgien tient en trois gestes parce que sa planche en
+montre trois, et y ajouter un quatrième pour faire nombre laisserait une étape sans image.
 
 **La licence, l'auteur et l'URL source de la planche mère sont recopiés sur chaque vignette.**
 L'attribution doit survivre à la découpe : c'est une obligation des licences CC BY et CC BY-SA,
 et l'écran Crédits photos en dépend.
 
-**b. Schémas d'assemblage — 6 montages** (drop shot, carolina, pater-noster, wacky, anglaise,
-feeder). Un langage visuel unique, tenu par une contrainte explicite : même format portrait,
+**b. Schémas d'assemblage — 7 montages** (drop shot, carolina, pater-noster, wacky, anglaise,
+feeder, cheveu). Un langage visuel unique, tenu par une contrainte explicite : même format portrait,
 surface en haut et fond hachuré en bas, corps de ligne épais et bas de ligne fin, une
 bibliothèque de composants constante d'un schéma à l'autre (plomb olive, plomb balle, plomb
 drop shot, perle, émerillon, agrafe, hameçon simple, hameçon texan, waggler, panier feeder,
@@ -94,10 +112,11 @@ leurre souple, bouillette), et des pastilles numérotées qui renvoient aux éta
 Les couleurs sont prises dans les jetons du thème, pour que le mode sombre suive sans
 retouche — le chantier de tokenisation du 31 juillet 2026 rend cela possible.
 
-**c. Photographies maison — 2 nœuds** (clinch, raccord), quatre clichés chacun. Ce sont des
-nœuds, pas des montages : la séquence est la bonne forme, et Commons ne l'a pas. Un protocole
-de prise de vue et un script `scripts/import-knot-photos.mjs` (recadrage, redimensionnement,
-conversion WebP, nommage) les intègrent.
+**c. Photographies maison — 3 nœuds** (clinch, raccord, palomar), cinq clichés chacun. Ce sont
+des nœuds, pas des montages : la séquence est la bonne forme, et Commons ne l'a pas — ou, pour
+le palomar, ne l'a que sur un porte-clés. Un protocole de prise de vue et un script
+`scripts/import-knot-photos.mjs` (recadrage, redimensionnement, conversion WebP, nommage) les
+intègrent.
 
 ### Le schéma d'assemblage est un fichier SVG, et voici pourquoi ce n'est pas un retour en arrière
 
@@ -126,7 +145,7 @@ franche. Si le langage ne convainc pas, un schéma est perdu, pas six.
 export interface Knot {
   id: string; cat: "noeud" | "montage";
   name: string; use: string; when: string;
-  steps: string[];              // 4 à 6 gestes, un par image
+  steps: string[];              // 3 à 6 gestes, un par image
   besoins: BesoinId[];          // filtres de la liste
   difficulte: "facile" | "moyen" | "difficile";
   duree: string;                // "30 s", "2 min"
@@ -196,7 +215,8 @@ nouvelles valeurs `commons-decoupe`, `schema-maison`, `photo-maison`.
 
 S'y ajoutent les invariants suivants, chacun protégeant une dérive précise :
 
-- chaque fiche compte 4 à 6 étapes ;
+- chaque fiche compte 3 à 6 étapes — la borne basse est celle de la boucle de chirurgien,
+  dont la planche ne montre que trois gestes ;
 - **autant d'images que d'étapes** quand la séquence existe — c'est le test qui empêche le
   texte et les images de dériver l'un par rapport à l'autre au fil des retouches ;
 - chaque fichier référencé existe sur le disque ;
@@ -206,10 +226,14 @@ S'y ajoutent les invariants suivants, chacun protégeant une dérive précise :
 
 ### Une fiche sans séquence retombe proprement sur son image actuelle
 
-Les deux séries photographiques dépendent d'une session d'atelier hors code. Le rendu traite
+Les trois séries photographiques dépendent d'une session d'atelier hors code. Le rendu traite
 donc l'absence de séquence comme un cas normal et affiche l'illustration unique existante —
 jamais un cadre vide, qui se lirait comme une image cassée. C'est déjà la règle en vigueur
-dans `KnotDetail`, et elle rend le chantier livrable en 13 fiches sur 15 sans rien casser.
+dans `KnotDetail`, et elle rend le chantier livrable en 12 fiches sur 15 sans rien casser.
+
+Le palomar est la seule fiche pour laquelle cette dégradation est insuffisante : son
+illustration actuelle est celle qu'on a décidé d'écarter. En attendant les photos, elle est
+retirée et la fiche s'affiche sans cadre, comme les fiches que rien ne couvre.
 
 ## Ce qui n'est pas fait
 
@@ -225,7 +249,7 @@ dans `KnotDetail`, et elle rend le chantier livrable en 13 fiches sur 15 sans ri
 1. Modèle de données et les 15 textes redécoupés en gestes, avec erreur, pastilles et renvois.
    Données pures : testable et vérifiable sans une seule image.
 2. Les deux écrans, qui fonctionnent d'emblée en retombant sur les illustrations actuelles.
-3. Script de découpe et les 7 fiches Commons.
+3. Script de découpe et les 5 fiches Commons.
 4. **Le pater-noster seul, soumis à validation.**
-5. Les cinq schémas d'assemblage restants.
-6. Les deux séries photographiques et leur import.
+5. Les six schémas d'assemblage restants.
+6. Les trois séries photographiques et leur import.
