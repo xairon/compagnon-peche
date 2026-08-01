@@ -111,7 +111,7 @@ describe("Especes — filtre du coin", () => {
     expect(screen.getByText(/1 écrevisse relevée/)).toBeTruthy();
   });
 
-  it("dit que la liste ne peut pas être établie hors-ligne, sans relevé", async () => {
+  it("dit que la liste n'a pas pu être établie, sans diagnostiquer une cause qu'on n'a pas constatée", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => {
       throw new Error("hors-ligne");
     }));
@@ -129,7 +129,7 @@ describe("Especes — filtre du coin", () => {
     fireEvent.click(screen.getByRole("button", { name: /dans mon coin/i }));
 
     await waitFor(() =>
-      expect(screen.getByText(/Sans réseau, la liste des relevés/)).toBeTruthy(),
+      expect(screen.getByText(/n'a pas pu être établie — réseau indisponible ou source muette/)).toBeTruthy(),
     );
     // Et surtout : la grille n'a pas été vidée.
     expect(screen.getByLabelText("Fiche Ablette")).toBeTruthy();
@@ -174,15 +174,18 @@ describe("Especes — filtre du coin", () => {
         ),
       ).toBeTruthy(),
     );
-    expect(screen.queryByText(/Sans réseau/)).toBeNull();
+    expect(screen.queryByText(/n'a pas pu être établie/)).toBeNull();
     // La grille n'a pas été vidée pour autant.
     expect(screen.getByLabelText("Fiche Ablette")).toBeTruthy();
   });
 
-  it("un relevé résolu après le démontage ne casse rien et ne bascule pas le store", async () => {
-    // Le pêcheur appuie, quitte l'écran avant la réponse, et la réponse arrive
-    // quand même. Sans garde, `set({ coin: true })` toucherait le store
-    // GLOBAL — qui, lui, survit à l'écran — pour un écran déjà quitté.
+  it("une géolocalisation résolue après le démontage s'arrête au premier garde-fou, sans toucher le store", async () => {
+    // Le pêcheur appuie, quitte l'écran avant la réponse, et LA GÉOLOCALISATION
+    // (pas le relevé entier — `resoudreGeo` ne résout que `locate()`, jamais
+    // `chargerEspecesDuCoin`) arrive quand même. Sans garde, la suite du
+    // `then` toucherait le store GLOBAL — qui, lui, survit à l'écran — pour un
+    // écran déjà quitté ; le premier `if (!mounted.current) return;` doit
+    // suffire à l'arrêter là, avant même l'appel réseau.
     let resoudreGeo!: PositionCallback;
     vi.stubGlobal("navigator", {
       geolocation: {

@@ -287,7 +287,7 @@ const list = SPECIES.filter(
 | Filtre actif, espèces masquées | Pied de grille : « 95 autres espèces ne sont pas dans les relevés d'ici — **les voir** » (un appui désactive) |
 | Premier appui, chargement | La bascule passe en attente ; la grille ne bouge pas tant que rien n'est établi |
 | Géoloc refusée / indisponible | Le message de `locateMessage()`, tel quel — il existe déjà et il est juste |
-| Hors-ligne, aucun coin enregistré | « Sans réseau, la liste des relevés ne peut pas être établie. » |
+| Hors-ligne, aucun coin enregistré | « La liste des relevés n'a pas pu être établie — réseau indisponible ou source muette. » |
 | Hors-ligne, coin enregistré | **Le filtre marche**, et la date du relevé le dit |
 | Aucune station à portée | « Aucune station de pêche scientifique à moins de 15 km d'ici. » — pas de repli sur le département |
 | Taxons sans fiche | « 3 taxons relevés n'ont pas de fiche : lots identifiés au genre ou à la famille, hybrides. » |

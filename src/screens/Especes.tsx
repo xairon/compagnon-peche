@@ -145,11 +145,17 @@ export function Especes() {
       const c = await chargerEspecesDuCoin(lat, lon, controleur.signal);
       if (!mounted.current) return;
       if (!c) {
-        // La source n'a pas répondu. Distinct de « il n'y a rien ici » : on ne
-        // sait pas, et l'écran n'a pas le droit de confondre les deux.
+        // `chargerEspecesDuCoin` rend `null` pour toute lecture à laquelle on
+        // n'a pas pu répondre — pas seulement hors-ligne : un 5xx Hub'Eau, la
+        // réponse de rate-limit mesurée (299 o de HTML au lieu du JSON), ou
+        // `CorpsTropGrand` (qui dit lui-même « la source a répondu »). Le
+        // message ne peut donc pas diagnostiquer une cause qu'on n'a pas
+        // constatée — seulement l'incapacité. Distinct de « il n'y a rien
+        // ici » : on ne sait pas, et l'écran n'a pas le droit de confondre
+        // les deux.
         setCoinEtat({
           k: "err",
-          msg: "Sans réseau, la liste des relevés ne peut pas être établie.",
+          msg: "La liste des relevés n'a pas pu être établie — réseau indisponible ou source muette.",
         });
         return;
       }
