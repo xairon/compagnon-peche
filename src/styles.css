@@ -21,6 +21,12 @@
   --sand: #f4f1e8;
   --amber-bg: #f7f1e2;
   --green-tint: #e9f2ec;
+  /* Deux rôles que #fff confondait sur 110 déclarations : la SURFACE d'une
+     carte, et le TEXTE posé sur un accent sombre (bouton vert, bandeau sapin).
+     En thème sombre le premier devient presque noir et le second reste
+     presque blanc — les garder confondus rendrait le sombre impossible. */
+  --card: #ffffff;
+  --on-accent: #ffffff;
   /* v2 refonte accents */
   --fir: #0f1f16; /* deep fir green — dark surfaces & CTAs */
   /* Accent décoratif SEULEMENT : 3,07:1 sur --paper, ce qui suffit pour un
@@ -219,7 +225,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 0 14px;
@@ -314,7 +320,7 @@ a:hover {
   font-size: 13.5px;
   font-weight: 550;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--body);
 }
 .chip-sm {
@@ -357,7 +363,7 @@ a:hover {
 }
 .thumb .flag {
   background: rgba(179, 58, 46, 0.95);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 10px;
   font-weight: 650;
   letter-spacing: 0.04em;
@@ -452,7 +458,7 @@ a:hover {
   border-radius: 50%;
   border: none;
   background: rgba(15, 31, 22, 0.42);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 22px;
   line-height: 1;
   display: flex;
@@ -484,7 +490,7 @@ a:hover {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
 }
 .gallery-dots .dot.on {
-  background: #fff;
+  background: var(--on-accent);
 }
 
 /* Fiche hero */
@@ -546,7 +552,7 @@ a:hover {
   bottom: 14px;
   left: 18px;
   right: 18px;
-  color: #fff;
+  color: var(--on-accent);
   pointer-events: none;
 }
 .hero .name .t {
@@ -583,7 +589,7 @@ a:hover {
   font-size: 12px;
   font-weight: 600;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--body);
 }
 
@@ -609,7 +615,7 @@ a:hover {
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
+  background: var(--card);
   margin-bottom: 14px;
 }
 .verdict .cell {
@@ -618,7 +624,7 @@ a:hover {
   text-align: center;
   border: none;
   border-right: 1px solid #eceadf;
-  background: #fff;
+  background: var(--card);
   font: inherit;
   cursor: pointer;
   transition: background 0.15s;
@@ -897,7 +903,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 12px;
   padding: 12px 14px;
@@ -950,7 +956,7 @@ a:hover {
   align-items: center;
   gap: 13px;
   padding: 14px 15px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
   margin-bottom: 10px;
@@ -977,7 +983,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 13px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 13px 15px;
@@ -1035,7 +1041,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 11px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 13px;
   padding: 11px 14px;
@@ -1048,7 +1054,7 @@ a:hover {
 .prise-grid-btn {
   min-height: 52px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 12px;
   font-size: 14px;
   font-weight: 550;
@@ -1057,7 +1063,7 @@ a:hover {
   text-align: left;
 }
 .prise-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 16px;
   padding: 18px 16px;
 }
@@ -1083,7 +1089,7 @@ a:hover {
   width: 40px;
   height: 40px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 50%;
   font-size: 20px;
   color: var(--ink);
@@ -1127,7 +1133,7 @@ a:hover {
   height: 52px;
   border: none;
   background: var(--green);
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 12px;
   font-size: 15px;
   font-weight: 600;
@@ -1170,7 +1176,7 @@ a:hover {
   left: 20px;
   right: 20px;
   bottom: 14px;
-  color: #fff;
+  color: var(--on-accent);
 }
 .recipe-hero-kicker {
   font-size: 10px;
@@ -1194,7 +1200,7 @@ a:hover {
 }
 .recipe-stat {
   flex: 1;
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 12px;
   padding: 9px;
@@ -1214,7 +1220,7 @@ a:hover {
   padding: 5px 12px;
 }
 .recipe-ing-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 16px;
   padding: 4px 15px;
@@ -1308,7 +1314,7 @@ a:hover {
   width: 100%;
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   margin-bottom: 18px;
 }
@@ -1324,13 +1330,13 @@ a:hover {
   max-width: 220px;
   border-radius: 10px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   margin-bottom: 8px;
 }
 
 /* Reglement */
 .reg-table {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   overflow: hidden;
@@ -1349,7 +1355,7 @@ a:hover {
   line-height: 1.5;
 }
 .reg-block {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 14px 15px;
@@ -1536,7 +1542,7 @@ a:hover {
   align-items: center;
   gap: 12px;
   background: var(--red, #b33a2e);
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 12.5px;
@@ -1661,7 +1667,7 @@ a:hover {
 }
 .official-offline button {
   border: 1.5px solid var(--green);
-  background: #fff;
+  background: var(--card);
   color: var(--green);
   border-radius: 100px;
   padding: 11px 20px;
@@ -1739,7 +1745,7 @@ a:hover {
   right: 0;
   bottom: 0;
   max-height: 62%;
-  background: #fff;
+  background: var(--card);
   border-radius: 18px 18px 0 0;
   box-shadow: 0 -10px 40px rgba(20, 30, 25, 0.25);
   z-index: 1000;
@@ -1837,7 +1843,7 @@ a:hover {
      sens de 1.4.3 (le seuil de 3:1 ne commence qu'à 18,66 px gras) — il fallait
      4,5:1. Teinte inchangée, luminosité HSL baissée de 12,6 % : 4,57:1. */
   background: #a76716;
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 100px;
   padding: 11px 18px;
   font-size: 14px;
@@ -1870,7 +1876,7 @@ a:hover {
 .carte-placing button {
   border: 1px solid #8fbfa4;
   background: var(--green);
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 100px;
   padding: 8px 12px;
   font-size: 12.5px;
@@ -1925,7 +1931,7 @@ a:hover {
   height: 46px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--ink-2);
   font-size: 14px;
   font-weight: 600;
@@ -1935,7 +1941,7 @@ a:hover {
   height: 46px;
   border-radius: 12px;
   border: 1.5px solid #e3c9c5;
-  background: #fff;
+  background: var(--card);
   color: var(--red);
   font-size: 14px;
   font-weight: 600;
@@ -1946,7 +1952,7 @@ a:hover {
   border-radius: 12px;
   border: 1.5px solid var(--red);
   background: var(--red);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 14px;
   font-weight: 600;
 }
@@ -1965,7 +1971,7 @@ a:hover {
   padding: 10px 12px;
   font: inherit;
   font-size: 14.5px;
-  background: #fff;
+  background: var(--card);
   outline: none;
   resize: vertical;
 }
@@ -2047,7 +2053,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 100px;
   padding: 8px 13px;
@@ -2057,7 +2063,7 @@ a:hover {
   box-shadow: 0 2px 8px rgba(20, 30, 25, 0.15);
 }
 .mc-panel {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 12px;
@@ -2094,7 +2100,7 @@ a:hover {
 .mc-base {
   flex: 1;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 10px;
   padding: 8px 4px;
   font-size: 12.5px;
@@ -2116,7 +2122,7 @@ a:hover {
   align-items: center;
   gap: 8px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--card);
   border-radius: 10px;
   padding: 9px 10px;
   font-size: 13px;
@@ -2137,7 +2143,7 @@ a:hover {
 .mc-layer.on .mc-dot {
   border-color: var(--green);
   background: var(--green);
-  box-shadow: inset 0 0 0 2px #fff;
+  box-shadow: inset 0 0 0 2px var(--on-accent);
 }
 
 /* ---- Briefing panel ---- */
@@ -2385,11 +2391,11 @@ a:hover {
 .catch-del.confirm {
   border: 1.5px solid var(--red);
   background: var(--red);
-  color: #fff;
+  color: var(--on-accent);
 }
 .catch-del.cancel {
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--muted);
   min-width: 40px;
   padding: 8px 10px;
@@ -2415,7 +2421,7 @@ a:hover {
   height: 44px;
   font: inherit;
   font-size: 15px;
-  background: #fff;
+  background: var(--card);
   outline: none;
 }
 .field textarea {
@@ -2484,7 +2490,7 @@ a:hover {
 }
 .ph-edit-btn {
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -2565,7 +2571,7 @@ a:hover {
   padding: 0 10px;
   font: inherit;
   font-size: 13px;
-  background: #fff;
+  background: var(--card);
 }
 
 /* Photo grid */
@@ -2598,7 +2604,7 @@ a:hover {
   left: 8px;
   top: 8px;
   background: rgba(29, 110, 66, 0.92);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 10.5px;
   font-weight: 600;
   padding: 2px 7px;
@@ -2647,7 +2653,7 @@ a:hover {
   border-radius: 50%;
   border: none;
   background: rgba(20, 30, 25, 0.72);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 14px;
 }
 .ce-chips {
@@ -2670,7 +2676,7 @@ a:hover {
   height: 44px;
   border: 1px solid var(--line-strong);
   border-radius: 12px;
-  background: #fff;
+  background: var(--card);
   font: inherit;
   font-size: 13px;
   color: #2b6c8f;
@@ -2691,7 +2697,7 @@ a:hover {
   font-size: 14px;
   font-weight: 600;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--body);
 }
 /* Recopie littérale de l'ancien ambre : elle échappait au jeton et restait à
@@ -2718,7 +2724,7 @@ a:hover {
   height: 48px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--ink-2);
   font-size: 14px;
   font-weight: 600;
@@ -2768,7 +2774,7 @@ a:hover {
   border-radius: 100px;
   font-size: 12.5px;
   font-weight: 650;
-  color: #fff;
+  color: var(--on-accent);
 }
 .pd-tag.kept {
   background: var(--amber);
@@ -2799,7 +2805,7 @@ a:hover {
 }
 .pd-rows {
   margin-top: 14px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 16px;
   padding: 4px 16px;
@@ -2857,7 +2863,7 @@ a:hover {
   height: 46px;
   border: 1.5px solid var(--line-strong);
   border-radius: 12px;
-  background: #fff;
+  background: var(--card);
   font: inherit;
   font-size: 14px;
   font-weight: 600;
@@ -2872,7 +2878,7 @@ a:hover {
   margin-bottom: 8px;
 }
 .st-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 16px;
   padding: 14px;
@@ -2915,7 +2921,7 @@ a:hover {
   width: 40px;
   height: 40px;
   border: 1px solid #dedacb;
-  background: #fff;
+  background: var(--card);
   border-radius: 50%;
   font-size: 20px;
   padding: 0 0 2px;
@@ -3054,7 +3060,7 @@ a:hover {
   background: var(--backdrop, #eceadf);
 }
 .eb-card {
-  background: #fff;
+  background: var(--card);
   border-radius: 18px;
   padding: 28px 22px;
   max-width: 420px;
@@ -3139,7 +3145,7 @@ a:hover {
   background: var(--paper);
   border: 1px solid var(--line-strong);
   border-radius: 5px;
-  box-shadow: 0 1px 0 #fff inset, 0 22px 55px -24px rgba(22, 40, 30, 0.5);
+  box-shadow: 0 1px 0 var(--card) inset, 0 22px 55px -24px rgba(22, 40, 30, 0.5);
   padding: 30px 28px 26px;
 }
 @keyframes onbUp {
@@ -3219,7 +3225,7 @@ a:hover {
 }
 .onb2-frame {
   padding: 5px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--green-dark);
   box-shadow: 0 12px 34px -16px rgba(22, 40, 30, 0.55);
 }
@@ -3407,7 +3413,7 @@ a:hover {
   /* Blanc sur #2e9e5b : 3,41:1 pour un 13 px gras. Teinte conservée,
      luminosité HSL −6 % : 4,56:1. */
   background: #27864d;
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 100px;
   padding: 11px 16px; /* ≥44px tap target */
   min-height: 44px;
@@ -3497,7 +3503,7 @@ a:hover {
   height: 48px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--ink-2);
   font-size: 14.5px;
   font-weight: 600;
@@ -3511,7 +3517,7 @@ a:hover {
 .stg-btn.danger {
   border: none;
   background: var(--red);
-  color: #fff;
+  color: var(--on-accent);
 }
 .stg-btn.danger-ghost {
   border-color: #e3c9c5;
@@ -3608,7 +3614,7 @@ a:hover {
 
 /* Conditions card */
 .ac-cond {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 16px;
@@ -3788,7 +3794,7 @@ a:hover {
 .ac-spcard {
   flex-shrink: 0;
   width: 150px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 16px;
   overflow: hidden;
@@ -3843,7 +3849,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 11px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 13px 14px;
@@ -3926,7 +3932,7 @@ a:hover {
   white-space: nowrap;
 }
 .pf-seg button.on {
-  background: #fff;
+  background: var(--card);
   color: var(--fir);
   box-shadow: 0 1px 2px rgba(20, 30, 25, 0.08);
 }
@@ -3935,7 +3941,7 @@ a:hover {
 .add-row {
   width: 100%;
   border: 1.5px dashed #cfc9ba;
-  background: #fff;
+  background: var(--card);
   border-radius: 14px;
   padding: 15px;
   font-size: 14.5px;
@@ -3944,7 +3950,7 @@ a:hover {
   margin-top: 14px;
 }
 .form-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 16px;
   padding: 16px;
@@ -3955,7 +3961,7 @@ a:hover {
   height: 46px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   font-size: 14px;
   font-weight: 600;
   color: var(--body);
@@ -4012,7 +4018,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   font-size: 13px;
-  color: #fff;
+  color: var(--on-accent);
   flex-shrink: 0;
 }
 .pick-box.on {
@@ -4028,7 +4034,7 @@ a:hover {
   padding: 0 10px;
 }
 .bundle-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 16px;
   padding: 14px 16px;
@@ -4256,7 +4262,7 @@ button.card-row {
 .tech-chip {
   height: 44px; /* min touch target (WCAG 2.5.5) — reachable with wet/gloved hands */
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 100px;
   padding: 0 13px;
   font-size: 12.5px;
@@ -4264,7 +4270,7 @@ button.card-row {
   color: var(--green);
 }
 .safety-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 14px 16px;
@@ -4344,7 +4350,7 @@ button.card-row {
   border-radius: 14px;
   padding: 0 42px 0 14px;
   font-size: 15px;
-  background: #fff;
+  background: var(--card);
   outline: none;
   box-shadow: 0 8px 24px -12px rgba(15, 31, 22, 0.35);
 }
@@ -4394,7 +4400,7 @@ button.card-row {
   left: 0;
   right: 0;
   top: 54px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(20, 30, 25, 0.16);
@@ -4408,7 +4414,7 @@ button.card-row {
   padding: 11px 14px;
   border: none;
   border-bottom: 1px solid var(--line);
-  background: #fff;
+  background: var(--card);
   font: inherit;
   font-size: 14px;
   color: var(--ink);
@@ -4580,7 +4586,7 @@ button.card-row {
 .ot-legal-time b { font-weight: 700; }
 .ot-legal-time span { color: #a9bdb0; font-weight: 400; }
 .ot-legal-sub { font-size: 13.5px; line-height: 1.5; color: #d3ddd4; margin-top: 8px; }
-.ot-legal-sub b { color: #fff; }
+.ot-legal-sub b { color: var(--on-accent); }
 .ot-legal-note {
   font-size: 11.5px;
   line-height: 1.5;
@@ -4591,7 +4597,7 @@ button.card-row {
 }
 .ot-count {
   margin-top: 14px;
-  background: #fff;
+  background: var(--card);
   border: 1.5px solid var(--fir, #0f1f16);
   border-radius: 16px;
   padding: 16px;
@@ -4623,7 +4629,7 @@ button.card-row {
   gap: 13px;
   width: 100%;
   text-align: left;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line, #e6e2d8);
   border-radius: 14px;
   padding: 13px 14px;
@@ -4686,7 +4692,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--on-accent);
   background: rgba(176, 138, 62, 0.92);
   border-radius: 999px;
   padding: 3px 8px;
@@ -4720,7 +4726,7 @@ button.card-row {
 .mr-del {
   flex: 1;
   border: 1px solid #e3c9c5;
-  background: #fff;
+  background: var(--card);
   color: var(--red);
   border-radius: 12px;
   padding: 12px;
@@ -4732,7 +4738,7 @@ button.card-row {
   flex: 1.4;
   border: none;
   background: var(--red);
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 12px;
   padding: 12px;
   font-size: 14px;
@@ -4792,7 +4798,7 @@ button.card-row {
   inset: 4px;
   border-radius: 50%;
   background: var(--green);
-  border: 2px solid #fff;
+  border: 2px solid var(--on-accent);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 .minimap-pin .pulse {
@@ -4811,7 +4817,7 @@ button.card-row {
   right: 6px;
   top: 6px;
   font-size: 9px;
-  color: #fff;
+  color: var(--on-accent);
   background: rgba(15, 31, 22, 0.5);
   padding: 2px 6px;
   border-radius: 6px;
@@ -4828,7 +4834,7 @@ button.card-row {
   padding: 12px 14px;
   pointer-events: none;
 }
-.dash-map-bar .loc { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; color: #fff; }
+.dash-map-bar .loc { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; color: var(--on-accent); }
 .dash-map-bar .ping {
   width: 9px;
   height: 9px;
@@ -4855,7 +4861,7 @@ button.card-row {
 /* Weather hero */
 .dash-wx {
   margin-top: 12px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 20px;
   padding: 16px 16px 12px;
@@ -4924,7 +4930,7 @@ button.card-row {
 /* Water card */
 .dash-water {
   margin-top: 12px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid #eceadf;
   border-radius: 20px;
   padding: 14px 16px 16px;
@@ -4975,7 +4981,7 @@ button.card-row {
 }
 .dash-sun svg { width: 100%; height: auto; display: block; }
 .dash-sun-lbl { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cdd9cf; margin-top: 2px; }
-.dash-sun-lbl b { color: #fff; font-weight: 700; }
+.dash-sun-lbl b { color: var(--on-accent); font-weight: 700; }
 .dash-sun-lbl .ic { color: #e6c169; }
 .dash-sun-lbl .mid {
   font-size: 10px;
@@ -4993,7 +4999,7 @@ button.card-row {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .dash-moon .disc { font-size: 34px; line-height: 1; }
-.dash-moon .ph { font-size: 14px; font-weight: 650; color: #fff; }
+.dash-moon .ph { font-size: 14px; font-weight: 650; color: var(--on-accent); }
 .dash-moon .il { font-size: 12px; color: #9db4a6; }
 
 /* Quota strip */
@@ -5034,7 +5040,7 @@ button.card-row {
 .id-reset {
   margin-left: auto;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--muted);
   font-size: 12.5px;
   font-weight: 600;
@@ -5084,7 +5090,7 @@ button.card-row {
   gap: 12px;
   width: 100%;
   text-align: left;
-  background: #fff;
+  background: var(--card);
   border: 1.5px solid var(--line-strong);
   border-radius: 13px;
   padding: 11px 13px;
@@ -5136,7 +5142,7 @@ button.card-row {
 .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .id-grid.emphatic { grid-template-columns: 1fr 1fr; }
 .id-cand {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   overflow: hidden;
@@ -5254,7 +5260,7 @@ button.card-row {
 }
 .bal-card {
   position: relative;
-  background: #fff;
+  background: var(--card);
   border: 1.5px solid var(--line-strong);
   border-radius: 16px;
   overflow: hidden;
@@ -5396,7 +5402,7 @@ button.card-row {
 }
 .ecr-chips button {
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   border-radius: 999px;
   padding: 9px 15px;
   font-size: 13.5px;
@@ -5415,7 +5421,7 @@ button.card-row {
   border: 1.5px solid var(--line-strong);
   border-radius: 999px;
   padding: 0 13px;
-  background: #fff;
+  background: var(--card);
   color: var(--muted);
   font-size: 13.5px;
 }
@@ -5441,7 +5447,7 @@ button.card-row {
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 15px;
-  background: #fff;
+  background: var(--card);
   color: var(--ink);
 }
 .ecr-start,
@@ -5553,7 +5559,7 @@ button.card-row {
   border-radius: 10px;
   padding: 9px 11px;
   font-size: 14.5px;
-  background: #fff;
+  background: var(--card);
   color: var(--ink);
 }
 .ecr-sheet-close {
@@ -5635,7 +5641,7 @@ button.card-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #fff;
+  background: var(--card);
   border: 1.5px solid var(--line-strong);
   border-radius: 16px;
   padding: 13px 14px;
@@ -5701,7 +5707,7 @@ button.card-row {
 
 /* ---- Écrevisses : historique dans le carnet ---- */
 .ecr-row {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   margin-top: 10px;
@@ -5754,7 +5760,7 @@ button.card-row {
   padding: 0 16px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   color: var(--ink-2);
   font-size: 13.5px;
   font-weight: 600;
@@ -5766,7 +5772,7 @@ button.card-row {
   padding: 0 16px;
   border-radius: 12px;
   border: 1.5px solid #e3c9c5;
-  background: #fff;
+  background: var(--card);
   color: var(--red);
   font-size: 13.5px;
   font-weight: 600;
@@ -5779,7 +5785,7 @@ button.card-row {
   border-radius: 12px;
   border: 1.5px solid var(--red);
   background: var(--red);
-  color: #fff;
+  color: var(--on-accent);
   font-size: 13.5px;
   font-weight: 600;
 }
@@ -5975,7 +5981,7 @@ button.card-row {
   border: 1px solid var(--line-strong);
   border-radius: 12px;
   padding: 10px;
-  background: #fff;
+  background: var(--card);
   grid-column: span 1;
 }
 .gear-card.expanded {
@@ -6034,7 +6040,7 @@ button.card-row {
 .ecr-id {
   border: 1.5px solid var(--line-strong);
   border-radius: 16px;
-  background: #fff;
+  background: var(--card);
   padding: 12px;
   margin-bottom: 14px;
 }
@@ -6113,7 +6119,7 @@ button.card-row {
   padding: 11px 14px;
   border-radius: 16px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   box-shadow: 0 6px 18px -14px rgba(20, 30, 25, 0.55);
 }
 .deptb-blason {
@@ -6192,7 +6198,7 @@ button.card-row {
 }
 .deptb--defaut .deptb-blason,
 .deptb--hors-zone .deptb-blason {
-  background: #fff;
+  background: var(--card);
   color: var(--amber);
   border-color: #e0cfa4;
 }
@@ -6224,7 +6230,7 @@ button.card-row {
   padding: 11px 13px;
   border-radius: 14px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
 }
 .deptb-opt[aria-selected="true"] {
   border-color: var(--green-dark);
@@ -6276,7 +6282,7 @@ button.card-row {
   padding: 11px 14px;
   border-radius: 12px;
   border: 1.5px dashed var(--line-strong);
-  background: #fff;
+  background: var(--card);
   font-size: 13.5px;
   font-weight: 650;
   color: var(--green);
@@ -6286,7 +6292,7 @@ button.card-row {
   padding: 10px 12px;
   border-radius: 12px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   font-size: 15px;
   color: var(--ink);
 }
@@ -6415,7 +6421,7 @@ button.card-row {
   padding: 6px 12px;
   border-radius: 999px;
   border: 1.5px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   font-size: 12.5px;
   font-weight: 600;
   color: var(--body);
@@ -6435,7 +6441,7 @@ button.card-row {
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid var(--line-strong);
-  background: #fff;
+  background: var(--card);
   text-decoration: none;
   color: inherit;
 }
