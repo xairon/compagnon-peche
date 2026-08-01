@@ -747,10 +747,13 @@ function stations(v: unknown): StationDuCoin[] {
     if (typeof s !== "object" || s === null) continue;
     const r = s as Record<string, unknown>;
     // Sans code la station ne peut pas être réinterrogée ; sans distance
-    // chiffrée l'écran ne peut pas avouer à quelle distance il extrapole.
+    // chiffrée l'écran ne peut pas avouer à quelle distance il extrapole ;
+    // sans nom elle n'a pas de provenance à citer — sa raison d'être est
+    // de dire d'où vient le relevé.
     if (typeof r.code !== "string" || !r.code) continue;
     if (typeof r.dist !== "number" || !Number.isFinite(r.dist)) continue;
-    out.push({ code: r.code, nom: typeof r.nom === "string" ? r.nom : "", dist: r.dist });
+    if (typeof r.nom !== "string" || !r.nom) continue;
+    out.push({ code: r.code, nom: r.nom, dist: r.dist });
   }
   return out;
 }

@@ -70,7 +70,7 @@ describe("readCoin", () => {
     expect(readCoin()!.ids).toEqual([]);
   });
 
-  it("écarte une station sans code ou sans distance chiffrée", () => {
+  it("écarte une station sans code, sans nom, ou sans distance chiffrée", () => {
     localStorage.setItem(
       CLE_COIN,
       JSON.stringify({
@@ -79,6 +79,8 @@ describe("readCoin", () => {
           { code: "04052800", nom: "COSSON à CHAILLES", dist: 5.06 },
           { code: "", nom: "?", dist: 1 },
           { code: "04052600", nom: "BEUVRON", dist: "loin" },
+          { code: "04052700", nom: "", dist: 2 },
+          { code: "04052900", nom: null, dist: 3 },
         ],
       }),
     );
