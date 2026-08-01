@@ -15,9 +15,9 @@ import { DeptDefautWarning } from "../components/DeptDefautWarning";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 function actStyle(kind: ActKind) {
-  if (kind === "primary") return { bd: "#16281E", bg: "#16281E", fg: "#FBFAF7" };
-  if (kind === "danger") return { bd: "#B33A2E", bg: "#B33A2E", fg: "#FBFAF7" };
-  return { bd: "#E6E2D8", bg: "#FFFFFF", fg: "#22271F" };
+  if (kind === "primary") return { bd: "var(--green-dark)", bg: "var(--green-dark)", fg: "var(--paper)" };
+  if (kind === "danger") return { bd: "var(--red)", bg: "var(--red)", fg: "var(--paper)" };
+  return { bd: "var(--line-strong)", bg: "var(--card)", fg: "var(--ink-2)" };
 }
 
 export function Prise() {
@@ -98,7 +98,7 @@ export function Prise() {
       )}
 
       <div className="quota-bar">
-        <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={18} stroke="#4A5D52" />
+        <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={18} stroke="var(--icon-muted)" />
         <div className="txt">
           <b>Quota du jour</b> (carnet) : {qt.c} / 3 carnassiers · {qt.b} / 2 brochets
         </div>
@@ -223,16 +223,16 @@ export function Prise() {
               {pv.title}
             </div>
             {pv.paras.map((t, i) => (
-              <p key={i} style={{ fontSize: 14, lineHeight: 1.55, color: "#3A3E36", margin: "10px 0 0" }}>
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.55, color: "var(--body)", margin: "10px 0 0" }}>
                 {t}
               </p>
             ))}
             {pv.list.map((li) => (
               <div
                 key={li.n}
-                style={{ display: "flex", gap: 9, fontSize: 13.5, lineHeight: 1.5, color: "#3A3E36", marginTop: 9 }}
+                style={{ display: "flex", gap: 9, fontSize: 13.5, lineHeight: 1.5, color: "var(--body)", marginTop: 9 }}
               >
-                <span style={{ color: "#1D6E42", fontWeight: 700, flexShrink: 0 }}>{li.n}</span>
+                <span style={{ color: "var(--green)", fontWeight: 700, flexShrink: 0 }}>{li.n}</span>
                 <span>{li.t}</span>
               </div>
             ))}

@@ -81,7 +81,7 @@ export function Outils() {
         <div className="section-list" style={{ marginTop: 16 }}>
           {rows.map((r) => (
             <button key={r.title} type="button" className="card-row" onClick={() => nav(r.to as Screen)}>
-              <Icon d={r.icon} size={21} stroke="#4A5D52" />
+              <Icon d={r.icon} size={21} stroke="var(--icon-muted)" />
               <div style={{ flex: 1 }}>
                 <div className="t">{r.title}</div>
                 <div className="s">{r.sub}</div>
@@ -103,7 +103,7 @@ export function Outils() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Icon d={ICONS.pin} size={21} stroke="#4A5D52" />
+              <Icon d={ICONS.pin} size={21} stroke="var(--icon-muted)" />
               <div style={{ flex: 1 }}>
                 <div className="t">{l.title}</div>
                 <div className="s">{l.sub}</div>

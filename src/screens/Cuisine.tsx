@@ -58,7 +58,7 @@ export function Cuisine() {
             <div
               style={{
                 fontSize: 13,
-                color: "#9DB4A6",
+                color: "var(--on-dark-muted)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 marginBottom: 12,

@@ -15,7 +15,7 @@ const RIGHT: [Tab, string][] = [
 function NavBtn({ id, label }: { id: Tab; label: string }) {
   const { state, goTab } = useStore();
   const active = state.tab === id && state.screen !== "prise";
-  const fg = active ? "#1D6E42" : "#6b675c";
+  const fg = active ? "var(--green)" : "var(--muted)";
   return (
     <button className="nav-btn" onClick={() => goTab(id)} aria-current={active ? "page" : undefined} aria-label={label}>
       <Icon d={NAV_ICONS[id]} size={23} stroke={fg} width={active ? 1.9 : 1.5} />
@@ -42,7 +42,7 @@ export function BottomNav() {
         aria-current={priseActive ? "page" : undefined}
       >
         <span className="disc">
-          <Icon d={ICONS.fish} size={26} stroke="#FBFAF7" width={1.7} />
+          <Icon d={ICONS.fish} size={26} stroke="var(--paper)" width={1.7} />
         </span>
         <span className="lbl">Prise</span>
       </button>

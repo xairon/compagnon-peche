@@ -62,6 +62,10 @@ export function Regle() {
 
         {cm > 0 && cm <= maxCm && (
           <>
+            {/* Couleurs volontairement laissées en dur (non tokenisées) : cette règle
+                est un instrument de mesure, son fond et ses tracés restent clairs dans
+                les deux thèmes (Tâche 12). Le contraste de la silhouette du poisson posé
+                dessus prime sur la cohérence du thème sombre. */}
             <div
               style={{
                 position: "absolute",

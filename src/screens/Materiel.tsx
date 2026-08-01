@@ -96,9 +96,9 @@ export function Materiel() {
                 borderRadius: 12,
                 fontSize: 13.5,
                 fontWeight: 600,
-                border: `1.5px solid ${tab === t ? "#16281E" : "#E6E2D8"}`,
-                background: tab === t ? "#16281E" : "#fff",
-                color: tab === t ? "#FBFAF7" : "#3A3E36",
+                border: `1.5px solid ${tab === t ? "var(--green-dark)" : "var(--line-strong)"}`,
+                background: tab === t ? "var(--green-dark)" : "var(--card)",
+                color: tab === t ? "var(--paper)" : "var(--body)",
               }}
             >
               {t === "gear" ? `Mon matériel (${gear.length})` : `Mes ensembles (${bundles.length})`}
@@ -127,9 +127,9 @@ export function Materiel() {
                       className="chip chip-sm"
                       aria-pressed={on}
                       style={{
-                        border: `1px solid ${on ? "#1D6E42" : "#E6E2D8"}`,
-                        background: on ? "#E9F2EC" : "#fff",
-                        color: on ? "#1D6E42" : "#3A3E36",
+                        border: `1px solid ${on ? "var(--green)" : "var(--line-strong)"}`,
+                        background: on ? "var(--green-tint)" : "var(--card)",
+                        color: on ? "var(--green)" : "var(--body)",
                       }}
                       onClick={() => setGForm({ ...gForm, cat: c.id })}
                     >
@@ -291,7 +291,7 @@ export function Materiel() {
                   .filter(Boolean)
                   .map((g) => (
                     <div key={g!.id} className="bundle-item">
-                      <span style={{ color: "#1D6E42" }}>—</span> {g!.name}
+                      <span style={{ color: "var(--green)" }}>—</span> {g!.name}
                       <span style={{ color: "var(--muted)", fontSize: 12 }}> · {CAT_LABEL[g!.cat]}</span>
                     </div>
                   ))}
@@ -491,7 +491,7 @@ export function GuideMateriel() {
             Hameçons — tailles
           </div>
           {GEAR_GUIDE[0].intro && (
-            <div style={{ fontSize: 13, color: "#5a5e52", margin: "4px 0 8px", lineHeight: 1.5 }}>
+            <div style={{ fontSize: 13, color: "var(--muted-2)", margin: "4px 0 8px", lineHeight: 1.5 }}>
               {GEAR_GUIDE[0].intro}
             </div>
           )}

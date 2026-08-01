@@ -201,10 +201,10 @@ export function App() {
           title="Mode une main / gants"
           aria-label="Mode une main / gants"
           aria-pressed={state.bigUI}
-          style={{ background: state.bigUI ? "#1D6E42" : "#FFFFFF" }}
+          style={{ background: state.bigUI ? "var(--green)" : "var(--card)" }}
           onClick={() => set((st) => ({ bigUI: !st.bigUI }))}
         >
-          <Icon d={ICONS.gloves} size={24} stroke={state.bigUI ? "#FBFAF7" : "#4A5D52"} width={1.6} />
+          <Icon d={ICONS.gloves} size={24} stroke={state.bigUI ? "var(--paper)" : "var(--icon-muted)"} width={1.6} />
         </button>
       )}
 

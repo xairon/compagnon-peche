@@ -69,7 +69,7 @@ export function Credits() {
   const techniqueRows = Object.entries(TECHNIQUE_MEDIA).map(([id, m]) => ({ name: nameForTechnique(id), ...m }));
 
   const Row = (r: { name: string; author: string; license: string; sourceUrl: string }) => (
-    <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid #ECE8DD" }}>
+    <div key={r.name} style={{ padding: "12px 2px", borderBottom: "1px solid var(--line)" }}>
       <div style={{ fontSize: 14, fontWeight: 600 }}>{r.name}</div>
       <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
         {r.author} —{" "}

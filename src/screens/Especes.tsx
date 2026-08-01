@@ -107,7 +107,7 @@ export function Especes() {
           )}
           {micAvail && (
             <button className="icon-btn" onClick={startVoice} aria-label="Recherche vocale">
-              <Icon d={ICONS.mic} size={20} stroke={state.listening ? "#B33A2E" : "var(--muted)"} width={1.6} />
+              <Icon d={ICONS.mic} size={20} stroke={state.listening ? "var(--red)" : "var(--muted)"} width={1.6} />
             </button>
           )}
         </div>
@@ -150,9 +150,9 @@ export function Especes() {
                 className="chip"
                 aria-pressed={active}
                 style={{
-                  border: `1px solid ${active ? "#16281E" : "#E6E2D8"}`,
-                  background: active ? "#16281E" : "#FFFFFF",
-                  color: active ? "#FBFAF7" : "#3A3E36",
+                  border: `1px solid ${active ? "var(--green-dark)" : "var(--line-strong)"}`,
+                  background: active ? "var(--green-dark)" : "var(--card)",
+                  color: active ? "var(--paper)" : "var(--body)",
                 }}
                 onClick={() => set({ filter: id })}
               >
@@ -191,7 +191,7 @@ export function Especes() {
                   className="dot"
                   style={{
                     background: sp.invasive
-                      ? "#B33A2E"
+                      ? "var(--red)"
                       : sp.ratingCls
                         ? ratingFg(sp.ratingCls)
                         : "#C2BEB2",

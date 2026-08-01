@@ -109,7 +109,7 @@ export function TechniqueDetail() {
 
         {t.safety && (
           <div className="alert" style={{ marginTop: 16 }}>
-            <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
             <div className="txt">
               <b>Sécurité</b> — {t.safety}
             </div>

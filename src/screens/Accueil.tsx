@@ -514,7 +514,7 @@ export function Accueil() {
         {/* Water card */}
         <div className="dash-water">
           <div className="dash-card-h">
-            <Icon d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" size={15} stroke="#2b6c8f" width={1.6} />
+            <Icon d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" size={15} stroke="var(--info)" width={1.6} />
             <span>Conditions de l'eau</span>
             {water?.station && !aucuneMesure && <span className="src">{water.station}</span>}
           </div>
@@ -635,7 +635,7 @@ export function Accueil() {
 
         {/* Quota + Prise CTA */}
         <div className="dash-quota">
-          <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={15} stroke="#726e62" width={1.6} />
+          <Icon d="M4 6v12M8 6v12M12 6v12M16 6v12M3 16l16-9" size={15} stroke="var(--faint)" width={1.6} />
           <span className="q">
             <Tip text="Limite légale nationale : 3 carnassiers (sandre, brochet, black-bass) par jour et par pêcheur, dont 2 brochets maximum — art. R436-21. Décompté depuis votre carnet du jour. Un arrêté préfectoral peut être plus strict.">
               Quota du jour
@@ -649,7 +649,7 @@ export function Accueil() {
 
         <button className="ac-prise" onClick={() => startPrise()}>
           <span className="disc">
-            <Icon d={FISH_ICON} size={21} stroke="#FBFAF7" width={1.7} />
+            <Icon d={FISH_ICON} size={21} stroke="var(--paper)" width={1.7} />
           </span>
           <span className="txt">
             <span className="t">J'ai une prise</span>
@@ -688,7 +688,7 @@ export function Accueil() {
         <div className="ac-tools">
           {TOOLS.map((t) => (
             <button key={t.label} className="ac-tool" onClick={() => nav(t.to)}>
-              <Icon d={t.icon} size={20} stroke="#1d6e42" width={1.6} />
+              <Icon d={t.icon} size={20} stroke="var(--green)" width={1.6} />
               <span>{t.label}</span>
             </button>
           ))}
@@ -798,23 +798,23 @@ function TempCurve({ hours, sun }: { hours: MeteoHour[]; sun: SunTimes }) {
         </linearGradient>
       </defs>
       {/* night shading */}
-      {sr != null && <rect x={padX} y={padTop} width={xOf(sr) - padX} height={base - padTop} fill="#0f1f16" opacity="0.06" />}
-      {ss != null && <rect x={xOf(ss)} y={padTop} width={W - padX - xOf(ss)} height={base - padTop} fill="#0f1f16" opacity="0.06" />}
+      {sr != null && <rect x={padX} y={padTop} width={xOf(sr) - padX} height={base - padTop} fill="var(--fir)" opacity="0.06" />}
+      {ss != null && <rect x={xOf(ss)} y={padTop} width={W - padX - xOf(ss)} height={base - padTop} fill="var(--fir)" opacity="0.06" />}
       {/* sun markers */}
       {sr != null && <line x1={xOf(sr)} y1={padTop} x2={xOf(sr)} y2={base} stroke="#c9a24a" strokeWidth="1" strokeDasharray="2 3" />}
       {ss != null && <line x1={xOf(ss)} y1={padTop} x2={xOf(ss)} y2={base} stroke="#8a6d2f" strokeWidth="1" strokeDasharray="2 3" />}
       <path d={area} fill="url(#tempg)" />
       <path d={line} fill="none" stroke="var(--brass)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
       {/* min / max labels */}
-      <circle cx={pts[iMax][0]} cy={pts[iMax][1]} r="2.6" fill="#b33a2e" />
+      <circle cx={pts[iMax][0]} cy={pts[iMax][1]} r="2.6" fill="var(--red)" />
       <text x={pts[iMax][0]} y={pts[iMax][1] - 6} className="dash-chart-t hi" textAnchor="middle">{Math.round(max)}°</text>
-      <circle cx={pts[iMin][0]} cy={pts[iMin][1]} r="2.6" fill="#2b6c8f" />
+      <circle cx={pts[iMin][0]} cy={pts[iMin][1]} r="2.6" fill="var(--info)" />
       <text x={pts[iMin][0]} y={pts[iMin][1] + 12} className="dash-chart-t lo" textAnchor="middle">{Math.round(min)}°</text>
       {/* now cursor */}
       {nowPt && (
         <>
-          <line x1={nowPt[0]} y1={padTop - 4} x2={nowPt[0]} y2={base} stroke="#16281e" strokeWidth="1.2" opacity="0.5" />
-          <circle cx={nowPt[0]} cy={nowPt[1]} r="4" fill="#16281e" stroke="#fff" strokeWidth="1.5" />
+          <line x1={nowPt[0]} y1={padTop - 4} x2={nowPt[0]} y2={base} stroke="var(--green-dark)" strokeWidth="1.2" opacity="0.5" />
+          <circle cx={nowPt[0]} cy={nowPt[1]} r="4" fill="var(--green-dark)" stroke="var(--card)" strokeWidth="1.5" />
         </>
       )}
       {/* x axis hours */}

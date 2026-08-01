@@ -249,7 +249,7 @@ export function RecipeEditor({
 
         {photoError && (
           <div className="alert" style={{ marginTop: 12 }} role="alert">
-            <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
             <div className="txt">
               {photoError}
               <div style={{ marginTop: 8 }}>

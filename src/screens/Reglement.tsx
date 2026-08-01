@@ -64,7 +64,7 @@ export function Reglement() {
         <div className="reg-table">
           {NATIONAL_SIZES.map(([k, v]) => (
             <div key={k} className="reg-row">
-              <span style={{ color: "#3A3E36" }}>{k}</span>
+              <span style={{ color: "var(--body)" }}>{k}</span>
               <span style={{ fontWeight: 650 }}>{v}</span>
             </div>
           ))}

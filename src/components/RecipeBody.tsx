@@ -19,7 +19,7 @@ export function IngredientList({
   if (items.length === 0) return null;
   const rows = items.map((t, i) => (
     <div key={i} className="ing">
-      <span style={{ color: "#1D6E42" }}>—</span>
+      <span style={{ color: "var(--green)" }}>—</span>
       <span>{t}</span>
     </div>
   ));

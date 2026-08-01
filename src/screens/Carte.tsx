@@ -533,7 +533,7 @@ export function Carte() {
       const p = ev.features?.[0]?.properties as Record<string, string> | undefined;
       if (!p) return;
       const bits = [p.type, p.categ, p.rive].filter(Boolean).map(esc).join(" · ");
-      const nuit = p.nuit === "oui" ? '<br><b style="color:#1D6E42">🌙 Pêche de nuit autorisée</b>' : "";
+      const nuit = p.nuit === "oui" ? '<br><b style="color:var(--green)">🌙 Pêche de nuit autorisée</b>' : "";
       const acces = p.acces ? `<br><span style="color:#6b7168">Accès : ${esc(p.acces)}</span>` : "";
       officialPopup(
         ev.lngLat,
@@ -547,7 +547,7 @@ export function Carte() {
       const lim = [p.amont, p.aval].filter(Boolean).map(esc).join(" → ");
       officialPopup(
         ev.lngLat,
-        `<b style="color:#B33A2E">⛔ ${esc(p.nom)}</b>${lim ? "<br>" + lim : ""}<br><span style="color:var(--muted);font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
+        `<b style="color:var(--red)">⛔ ${esc(p.nom)}</b>${lim ? "<br>" + lim : ""}<br><span style="color:var(--muted);font-size:11px">Pêche interdite · Pilote41 / Féd. 41</span>`,
       );
     });
 
@@ -575,18 +575,18 @@ export function Carte() {
         .map(esc)
         .join(" · ");
       const tech = p.techniques ? `<br>${esc(p.techniques)}` : "";
-      const note = p.note ? `<br><span style="color:#6b675c">${esc(p.note)}</span>` : "";
+      const note = p.note ? `<br><span style="color:var(--muted)">${esc(p.note)}</span>` : "";
       const approx =
         p.precision === "commune"
           ? `<br><b style="color:#b06e14">⚠️ Emplacement approximatif (commune, pas le parcours exact)</b>`
           : "";
       const src =
         typeof p.source === "string" && /^https?:\/\//.test(p.source)
-          ? `<br><a href="${esc(p.source)}" target="_blank" rel="noopener noreferrer" style="color:#1D6E42;font-size:11px">Source : fédération de pêche ↗</a>`
+          ? `<br><a href="${esc(p.source)}" target="_blank" rel="noopener noreferrer" style="color:var(--green);font-size:11px">Source : fédération de pêche ↗</a>`
           : "";
       officialPopup(
         ev.lngLat,
-        `<b>${esc(p.name)}</b> <span style="color:#6b675c;font-size:11px">${esc(kind)}</span>${bits ? "<br>" + bits : ""}${tech}${note}${approx}${src}`,
+        `<b>${esc(p.name)}</b> <span style="color:var(--muted);font-size:11px">${esc(kind)}</span>${bits ? "<br>" + bits : ""}${tech}${note}${approx}${src}`,
       );
     });
 
@@ -932,7 +932,7 @@ export function Carte() {
           )}
         </div>
         <button className="carte-gps-btn" onClick={recenter} aria-label="Ma position">
-          <Icon d="M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z" size={20} stroke="#fbfaf7" width={1.6} />
+          <Icon d="M12 2v3M12 19v3M2 12h3M19 12h3M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10z" size={20} stroke="var(--paper)" width={1.6} />
         </button>
       </div>
       )}

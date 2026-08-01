@@ -17,9 +17,9 @@ export function Sources() {
       </div>
       <div style={{ padding: "6px 18px 26px" }}>
         {SOURCES.map((s) => (
-          <div key={s.t} style={{ padding: "13px 2px", borderBottom: "1px solid #ECE8DD" }}>
+          <div key={s.t} style={{ padding: "13px 2px", borderBottom: "1px solid var(--line)" }}>
             <div style={{ fontSize: 14, fontWeight: 600 }}>{s.t}</div>
-            <div style={{ fontSize: 12.5, color: "#6b675c", marginTop: 2, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
               {s.d}
             </div>
           </div>

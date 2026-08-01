@@ -109,7 +109,7 @@ export function Recette() {
 
         {rec.safety && (
           <div className="alert" style={{ marginTop: 12 }}>
-            <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
             <div className="txt">
               <b>Sécurité</b> — {rec.safety}
             </div>
@@ -138,7 +138,7 @@ export function Recette() {
 
         <button
           className="cta-center"
-          style={{ marginTop: 16, background: "#1D6E42", padding: 15, fontSize: 15 }}
+          style={{ marginTop: 16, background: "var(--green)", padding: 15, fontSize: 15 }}
           onClick={() => enterCuisine(() => nav("cuisine", { cookStep: 0 }))}
         >
           <Icon d={ICONS.pot} size={18} stroke="currentColor" width={1.6} />

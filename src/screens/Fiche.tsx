@@ -396,7 +396,7 @@ export function Fiche() {
                   {r.year ? ` · ${r.year}` : ""}
                 </div>
               </div>
-              <span style={{ color: "#95907f" }}>›</span>
+              <span style={{ color: "var(--chev-ink)" }}>›</span>
             </button>
           ))}
         </>
@@ -522,9 +522,9 @@ export function Fiche() {
   // au-dessus de sa photo, en se contredisant elle-même plus bas.
   const statut = speciesStatus(sp);
   const seasonFg =
-    statut.cls === "good" ? "#1D6E42" : statut.cls === "warn" ? "#9A6A12" : "#B33A2E";
+    statut.cls === "good" ? "var(--green)" : statut.cls === "warn" ? "#9A6A12" : "var(--red)";
   const seasonDot =
-    statut.cls === "good" ? "#2E9E5B" : statut.cls === "warn" ? "#C08A2E" : "#B33A2E";
+    statut.cls === "good" ? "#2E9E5B" : statut.cls === "warn" ? "#C08A2E" : "var(--red)";
 
   const toggle = (id: string) => set((s) => ({ open: { ...s.open, [id]: !s.open[id] } }));
 
@@ -552,10 +552,10 @@ export function Fiche() {
     : null;
   const edFg = ed
     ? ed.status === "non"
-      ? "#B33A2E"
+      ? "var(--red)"
       : ed.status === "réglementé"
         ? "#9A6A12"
-        : "#1D6E42"
+        : "var(--green)"
     : "#8A8676";
   const verdict: { k: string; v: string; fg: string; sub: string | null }[] = [
     {
@@ -567,13 +567,13 @@ export function Fiche() {
     {
       k: "Maille",
       v: eff.label ?? "—",
-      fg: "#1A201C",
+      fg: "var(--ink)",
       sub: eff.aboveNational ? `arrêté ${state.dept} — national ${sp.maille}` : sp.mailleSub,
     },
     {
       k: "Quota",
       v: effQuota.text ?? "—",
-      fg: effQuota.text ? "#9A6A12" : "#1A201C",
+      fg: effQuota.text ? "#9A6A12" : "var(--ink)",
       sub: effQuota.local ? `arrêté ${state.dept}` : sp.quotaSub,
     },
   ];
@@ -633,9 +633,9 @@ export function Fiche() {
               className="sm-chip"
               aria-pressed={open}
               style={{
-                border: `1px solid ${open ? "#16281E" : "#E6E2D8"}`,
-                background: open ? "#16281E" : "#fff",
-                color: open ? "#FBFAF7" : "#3A3E36",
+                border: `1px solid ${open ? "var(--green-dark)" : "var(--line-strong)"}`,
+                background: open ? "var(--green-dark)" : "var(--card)",
+                color: open ? "var(--paper)" : "var(--body)",
               }}
               onClick={() => goSection(sec.id)}
             >
@@ -648,7 +648,7 @@ export function Fiche() {
       <div className="pad" style={{ paddingTop: 18, paddingBottom: 96 }}>
         {sp.protected && (
           <div className="alert">
-            <Icon d={ICONS.alert} size={19} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <Icon d={ICONS.alert} size={19} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
             <div className="txt">
               <b>Espèce protégée ou menacée</b> — à relâcher : ne la conservez pas. Selon l'espèce et
               le département, la pêche peut être restreinte ou interdite (l'esturgeon est totalement
@@ -658,7 +658,7 @@ export function Fiche() {
         )}
         {sp.alert && (
           <div className="alert">
-            <Icon d={ICONS.alert} size={19} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+            <Icon d={ICONS.alert} size={19} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
             <div className="txt">
               <b>{sp.alert.title}</b> — {sp.alert.text}
             </div>
@@ -706,7 +706,7 @@ export function Fiche() {
 
         {mailleCm > 0 && (
           <div className="repere">
-            <Icon d={ICONS.ruler} size={18} stroke="#4A5D52" />
+            <Icon d={ICONS.ruler} size={18} stroke="var(--icon-muted)" />
             <div className="txt">
               Maille {mailleCm} cm — repère : {repere(mailleCm)}
             </div>
@@ -736,7 +736,7 @@ export function Fiche() {
                   onClick={() => toggle(sec.id)}
                   aria-expanded={open}
                 >
-                  <Icon d={SEC_ICONS[sec.id] || SEC_ICONS.bio} size={20} stroke="#4A5D52" className="ic" />
+                  <Icon d={SEC_ICONS[sec.id] || SEC_ICONS.bio} size={20} stroke="var(--icon-muted)" className="ic" />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="sec-title">{sec.title}</div>
                     <div className="sec-sub">{sec.sub}</div>

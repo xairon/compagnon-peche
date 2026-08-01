@@ -264,7 +264,7 @@ export function CatchEditor({
 
       {/* Species */}
       <div className="label" style={{ marginBottom: 6 }}>
-        Espèce — <b style={{ color: "#1D6E42" }}>{SP_NAME.get(f.spid) || f.spid}</b>
+        Espèce — <b style={{ color: "var(--green)" }}>{SP_NAME.get(f.spid) || f.spid}</b>
       </div>
       <div className="field" style={{ marginBottom: 8 }}>
         <input
@@ -405,7 +405,7 @@ export function CatchEditor({
 
       {photoError && (
         <div className="alert" style={{ marginTop: 12 }} role="alert">
-          <Icon d={ICONS.alert} size={18} stroke="#B33A2E" width={1.7} style={{ marginTop: 1 }} />
+          <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
           <div className="txt">
             {photoError}
             <div style={{ marginTop: 8 }}>

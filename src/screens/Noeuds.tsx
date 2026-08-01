@@ -33,12 +33,12 @@ export function Noeuds() {
                 className="tile"
                 onClick={() => nav("knot", { knotId: k.id })}
               >
-                <Icon d={ICONS.knot} size={21} stroke="#4A5D52" />
+                <Icon d={ICONS.knot} size={21} stroke="var(--icon-muted)" />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14.5, fontWeight: 600 }}>{k.name}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{k.use}</div>
                 </div>
-                <span style={{ color: "#95907f" }}>›</span>
+                <span style={{ color: "var(--chev-ink)" }}>›</span>
               </button>
             ))}
           </div>

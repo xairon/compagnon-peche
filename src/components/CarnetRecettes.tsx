@@ -159,7 +159,7 @@ export function CarnetRecettes() {
       </div>
 
       <button className="mr-create" style={{ marginTop: 14 }} onClick={() => setEditing("new")}>
-        <Icon d="M12 5v14M5 12h14" size={20} stroke="#FBFAF7" width={1.8} />
+        <Icon d="M12 5v14M5 12h14" size={20} stroke="var(--paper)" width={1.8} />
         Créer une recette
       </button>
       <div className="mr-note">100 % local — liez-la à une espèce, avec photo, ingrédients, étapes et note.</div>
@@ -197,7 +197,7 @@ export function CarnetRecettes() {
               <div style={{ fontSize: 14.5, fontWeight: 600 }}>{t.name}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{t.steps.length} étape(s)</div>
             </div>
-            <span style={{ color: "#95907f" }}>›</span>
+            <span style={{ color: "var(--chev-ink)" }}>›</span>
           </button>
         ))}
       </div>
@@ -223,9 +223,9 @@ export function CarnetRecettes() {
 
 function chipStyle(active: boolean): React.CSSProperties {
   return {
-    border: `1px solid ${active ? "#16281E" : "#E6E2D8"}`,
-    background: active ? "#16281E" : "#FFFFFF",
-    color: active ? "#FBFAF7" : "#3A3E36",
+    border: `1px solid ${active ? "var(--green-dark)" : "var(--line-strong)"}`,
+    background: active ? "var(--green-dark)" : "var(--card)",
+    color: active ? "var(--paper)" : "var(--body)",
   };
 }
 

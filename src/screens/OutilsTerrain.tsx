@@ -112,7 +112,7 @@ export function OutilsTerrain() {
         {legal && (
           <div className="ot-legal">
             <div className="ot-legal-h">
-              <Icon d={CLOCK} size={16} stroke="#cfa85c" width={1.7} />
+              <Icon d={CLOCK} size={16} stroke="var(--gold)" width={1.7} />
               <span>Horaires légaux · aujourd'hui</span>
             </div>
             <div className="ot-legal-time">
