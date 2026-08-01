@@ -43,6 +43,7 @@ export type Screen =
   | "noeuds"
   | "knot"
   | "recette"
+  | "recettes"
   | "reglement"
   | "sources"
   | "mentions-legales"

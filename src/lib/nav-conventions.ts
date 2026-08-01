@@ -103,6 +103,9 @@ export const ROUTES: Record<Screen, Route> = {
   noeuds: { path: "noeuds", parent: "outils" },
   knot: { path: "noeud", ctx: ["knotId"], parent: "noeuds" },
   recette: { path: "recette", ctx: ["recipeId"], parent: "carnet" },
+  // Le module cuisine, atteint depuis Outils. Parent « outils » et non
+  // « carnet » : c'est de là qu'on y entre, et le « ‹ » doit y ramener.
+  recettes: { path: "recettes", parent: "outils" },
   reglement: { path: "reglementation" },
   sources: { path: "sources", parent: "outils" },
   "mentions-legales": { path: "mentions-legales", parent: "outils" },

@@ -29,12 +29,16 @@ const CTX_EXEMPLE = {
 } as const;
 
 describe("table des routes", () => {
-  it("couvre les 27 écrans du store", () => {
-    // Le compte est le point de départ du lot : si un écran est ajouté sans
+  it("couvre les 28 écrans du store", () => {
+    // Le compte est un fil-piège volontaire : si un écran est ajouté sans
     // route, il n'a ni URL ni parent, et le retour depuis un lien profond le
     // renvoie à l'accueil sans raison. `Record<Screen, Route>` l'attrape à la
     // compilation ; ce test l'attrape aussi quand on regarde le rouge.
-    expect(ECRANS).toHaveLength(27);
+    //
+    // 27 -> 28 le 31/07/2026 : ajout de l'écran « recettes », le module
+    // cuisine. Le fil a bien sonné, et sa route a été posée avec son parent
+    // (outils), pas seulement son chemin.
+    expect(ECRANS).toHaveLength(28);
   });
 
   it("ne donne jamais deux fois le même chemin", () => {

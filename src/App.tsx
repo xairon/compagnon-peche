@@ -17,6 +17,10 @@ import { OutilsTerrain } from "./screens/OutilsTerrain";
 import { Ecrevisses } from "./screens/Ecrevisses";
 import { Noeuds, KnotDetail } from "./screens/Noeuds";
 import { Recette } from "./screens/Recette";
+// Import direct et non `lazy` : RECIPES est déjà dans le bundle principal via
+// Fiche et Carnet, un découpage ne gagnerait rien et poserait une question de
+// précache pour un écran qui doit marcher hors-ligne.
+import { Recettes } from "./screens/Recettes";
 import { Reglement } from "./screens/Reglement";
 import { Sources } from "./screens/Sources";
 import { Mentions } from "./screens/Mentions";
@@ -146,6 +150,7 @@ export function App() {
         {s === "noeuds" && <Noeuds />}
         {s === "knot" && <KnotDetail />}
         {s === "recette" && <Recette />}
+        {s === "recettes" && <Recettes />}
         {s === "reglement" && <Reglement />}
         {s === "sources" && <Sources />}
         {s === "mentions-legales" && <Mentions />}
