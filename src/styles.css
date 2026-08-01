@@ -38,6 +38,55 @@
      sous AA, pour des libellés déjà petits (10,5–12 px) et très espacés.
      Après : --paper 4,94, crème 4,57, #fff 5,16, --sand 4,57, --amber-bg 4,58. */
   --brass-ink: #7b6c45;
+
+  /* Surfaces, du fond de page à la carte posée dessus. Chaque nom décrit ce
+     que la teinte évoque, pas d'où elle vient : les tons sont vérifiés au
+     grep, pas déduits d'une bande de luminosité. */
+  --sand-2: #e3e0d3;      /* surface sable soutenue (damier, vignettes) */
+  --cream: #f6f1e4;       /* encadré crème (déjà nommée en commentaire ligne 37) */
+  --mint: #f2f8f4;        /* surface verte très pâle (confirmations, calques actifs) */
+  --sage: #eef2ef;        /* surface avatar/pastille neutre */
+  --mist: #e7ece6;        /* surface des vignettes photo (fiche, matériel) */
+  --linen: #faf8f2;       /* encadré chiffre-clé (tableau de bord) */
+  --oat: #f0ede4;         /* piste de barre de progression */
+  --photo-dark: #43554b;  /* fond sombre des héros et vignettes sans photo */
+  --photo-bg: #dfe6e2;    /* fond de carte photo/carte (gris de .img-slot) */
+
+  /* Traits. --line et --line-strong existent déjà ; --line-control est le
+     trait qui DÉLIMITE un contrôle (bordure de champ, de bouton fantôme).
+     WCAG 1.4.11 lui impose 3:1, un séparateur décoratif n'a aucun seuil. */
+  --line-control: #cfc9ba;
+  --line-warm: #eceadf;      /* trait chaud (7 usages, pas un fond malgré la clarté) */
+  --line-cream: #efece2;     /* trait crème de section */
+  --green-line: #b4d6c0;     /* trait des bandeaux verts (verdict, ajout) */
+  --id-line: #cfe6d8;        /* trait des cartouches d'identification validée */
+  --amber-line: #e6dcc0;     /* trait des cartouches d'avertissement */
+  --amber-line-2: #e0cfa4;   /* trait du bandeau département hors zone */
+  --red-line: #e3c9c5;       /* trait des boutons fantômes de danger (3:1) */
+  --handle: #dedacb;         /* trait/poignée neutre (bouton retour rond, feuille) */
+  --cook-dark: #2e4234;      /* boutons fantômes et piste du mode cuisson */
+
+  /* Texte et icônes. */
+  --muted-2: #5a5e52;        /* texte secondaire, variante de --muted (15 usages) */
+  --on-dark: #eef2ec;        /* texte clair sur carte sapin/verte sombre */
+  --on-dark-muted: #9db4a6;  /* texte discret sur fond sombre ou accent */
+  --gold: #cfa85c;           /* kicker/label doré sur photo ou fond sombre */
+  --chev-ink: #95907f;       /* chevrons et texte secondaire glosé (3,06:1) */
+  --icon-muted: #4a5d52;     /* icônes discrètes (option, édition photo) */
+  --photo-ink: #5c635b;      /* texte/icône posé sur .photo-bg et le damier */
+
+  /* Sémantique : chaque couleur a son fond de cartouche et le texte posé
+     dessus. --green, --amber, --red, --info existent déjà comme accents (ou
+     sont ajoutés ici pour --info, jusqu'ici seulement en dur). */
+  --green-ink: #14532b;
+  --amber-ink: #6d4d0d;      /* teinte dominante (9 usages) */
+  --amber-ink-2: #7a5a12;    /* variante posée directement sur --amber-bg */
+  --red-bg: #fbeae7;
+  --red-ink: #8a3125;        /* teinte dominante (4 usages) */
+  --red-wash: #f7ecea;       /* fond rouge pâle secondaire (avertissements) */
+  --red-tint: #fdf3f1;       /* fond rouge très pâle (espèces protégées, échéances) */
+  --info: #2b6c8f;
+  --info-ink: #5c727c;       /* texte secondaire de la tuile météo/eau (4 usages) */
 }
 
 /* Visible keyboard focus (was absent everywhere). */
@@ -287,7 +336,7 @@ a:hover {
 .cta-dark .s {
   display: block;
   font-size: 12px;
-  color: #9db4a6;
+  color: var(--on-dark-muted);
   margin-top: 1px;
 }
 .cta-center {
@@ -344,7 +393,7 @@ a:hover {
   aspect-ratio: 4 / 3;
   border-radius: 14px;
   overflow: hidden;
-  background: #e3e0d3;
+  background: var(--sand-2);
 }
 .thumb.wide {
   aspect-ratio: 16 / 9;
@@ -410,19 +459,19 @@ a:hover {
   line-height: 1.3;
   /* 2,33:1 sur la bande la plus sombre du damier (#e1ddd0). Ce texte dit ce que
      la photo manquante aurait montré : 4,56:1 maintenant. */
-  color: #5c635b;
+  color: var(--photo-ink);
   background: repeating-linear-gradient(
     135deg,
     #e6e3d7,
     #e6e3d7 10px,
-    #e3e0d3 10px,
-    #e3e0d3 20px
+    var(--sand-2) 10px,
+    var(--sand-2) 20px
   );
 }
 .img-slot.dark {
   /* Sur fond sombre, il faut éclaircir : 3,60:1 → 4,55:1 (+9 % de luminosité). */
   color: #b7c8be;
-  background: #43554b;
+  background: var(--photo-dark);
 }
 .media-img {
   width: 100%;
@@ -497,7 +546,7 @@ a:hover {
 .hero {
   position: relative;
   height: 230px;
-  background: #43554b;
+  background: var(--photo-dark);
 }
 .hero .back {
   position: absolute;
@@ -623,7 +672,7 @@ a:hover {
   padding: 13px 6px;
   text-align: center;
   border: none;
-  border-right: 1px solid #eceadf;
+  border-right: 1px solid var(--line-warm);
   background: var(--card);
   font: inherit;
   cursor: pointer;
@@ -688,7 +737,7 @@ a:hover {
 .explain-t {
   font-size: 13px;
   line-height: 1.5;
-  color: #5a5e52;
+  color: var(--muted-2);
 }
 
 /* Glossary term + tap tooltip */
@@ -708,7 +757,7 @@ a:hover {
 .glossed {
   /* Ce pointillé est le seul signe qu'un terme ouvre une bulle : 2,36:1 avant,
      3,06:1 maintenant (1.4.11). */
-  border-bottom: 1px dotted #95907f;
+  border-bottom: 1px dotted #95907f; /* garde-fou contraste-palette.test.ts : lit le hex brut d'un raccourci border-*, pas var() */
 }
 .tip-i {
   width: 12px;
@@ -768,7 +817,7 @@ a:hover {
   flex: 1;
   font-size: 12.5px;
   line-height: 1.45;
-  color: #5a5e52;
+  color: var(--muted-2);
 }
 .repere .link {
   border: none;
@@ -813,7 +862,7 @@ a:hover {
   /* Chevron : élément non textuel porteur d'information (1.4.11, seuil 3:1).
      Il était à 1,68:1 sur --paper, soit invisible au soleil alors qu'il est le
      seul signe qu'une section se déplie. #95907f garde le gris chaud à 3,06:1. */
-  color: #95907f;
+  color: var(--chev-ink);
   font-size: 17px;
   transition: transform 0.18s;
   margin-left: auto;
@@ -882,19 +931,19 @@ a:hover {
   aspect-ratio: 16 / 10;
   border-radius: 9px;
   overflow: hidden;
-  background: #e3e0d3;
+  background: var(--sand-2);
 }
 .confusion .pair .cap {
   font-size: 11px;
   font-weight: 600;
-  color: #5a5e52;
+  color: var(--muted-2);
   text-align: center;
   margin-top: 4px;
 }
 .confusion .how {
   font-size: 13px;
   line-height: 1.5;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 8px;
 }
 
@@ -941,7 +990,7 @@ a:hover {
   padding: 14px 16px;
   font-size: 12.5px;
   line-height: 1.55;
-  color: #5a5e52;
+  color: var(--muted-2);
 }
 .disclaimer {
   font-size: 11.5px;
@@ -976,7 +1025,7 @@ a:hover {
 }
 .card-row .chev {
   /* Idem : 1,68:1 → 3,06:1 (1.4.11). */
-  color: #95907f;
+  color: var(--chev-ink);
   font-size: 17px;
 }
 .tile {
@@ -1152,7 +1201,7 @@ a:hover {
 .recipe-hero {
   position: relative;
   height: 170px;
-  background: #43554b;
+  background: var(--photo-dark);
 }
 /* v2 recipe hero — species photo full-bleed with an overlaid kicker + serif title. */
 .recipe-hero-v2 {
@@ -1183,7 +1232,7 @@ a:hover {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #cfa85c;
+  color: var(--gold);
 }
 .recipe-hero-title {
   font-family: "Source Serif 4", Georgia, serif;
@@ -1201,7 +1250,7 @@ a:hover {
 .recipe-stat {
   flex: 1;
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 12px;
   padding: 9px;
   text-align: center;
@@ -1221,7 +1270,7 @@ a:hover {
 }
 .recipe-ing-card {
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 16px;
   padding: 4px 15px;
   box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
@@ -1345,7 +1394,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   padding: 11px 15px;
-  border-bottom: 1px solid #efece2;
+  border-bottom: 1px solid var(--line-cream);
   font-size: 14px;
 }
 .reg-note {
@@ -1417,7 +1466,7 @@ a:hover {
 }
 .cook-head .prog {
   font-size: 11px;
-  color: #cfa85c;
+  color: var(--gold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -1432,7 +1481,7 @@ a:hover {
 .cook-x {
   width: 48px;
   height: 48px;
-  border: 1px solid #2e4234;
+  border: 1px solid var(--cook-dark);
   background: transparent;
   border-radius: 50%;
   color: var(--paper);
@@ -1449,7 +1498,7 @@ a:hover {
   flex: 1;
   height: 3px;
   border-radius: 2px;
-  background: #2e4234;
+  background: var(--cook-dark);
   transition: background 0.2s;
 }
 .cook-progress span.on {
@@ -1497,7 +1546,7 @@ a:hover {
   flex: 1;
   height: 88px;
   border-radius: 18px;
-  border: 1.5px solid #2e4234;
+  border: 1.5px solid var(--cook-dark);
   background: transparent;
   color: var(--paper);
   font-size: 19px;
@@ -1631,7 +1680,7 @@ a:hover {
   padding: 9px 14px;
   font-size: 12px;
   line-height: 1.35;
-  color: #5a5e52;
+  color: var(--muted-2);
   background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
@@ -1682,7 +1731,7 @@ a:hover {
   justify-content: center;
   gap: 8px;
   border: 1px solid var(--line);
-  background: #f2f8f4;
+  background: var(--mint);
   color: var(--green);
   border-radius: 12px;
   padding: 11px 12px;
@@ -1700,8 +1749,8 @@ a:hover {
   display: block;
   width: 100%;
   margin-top: 9px;
-  border: 1px solid #cfc9ba;
-  background: #f2f8f4;
+  border: 1px solid var(--line-control);
+  background: var(--mint);
   color: var(--green);
   border-radius: 8px;
   padding: 8px 10px;
@@ -1711,11 +1760,11 @@ a:hover {
 }
 .maplibregl-map {
   font: inherit;
-  background: #dfe6e2;
+  background: var(--photo-bg);
 }
 .carte-legend {
   font-size: 11.5px;
-  color: #5a5e52;
+  color: var(--muted-2);
   padding: 8px 16px;
   display: flex;
   align-items: center;
@@ -1728,7 +1777,7 @@ a:hover {
    Une carte amputée se lisait jusqu'ici comme une carte complète. */
 .carte-troncature {
   flex: 1 0 100%;
-  color: #6d4d0d;
+  color: var(--amber-ink);
   line-height: 1.45;
 }
 .carte-legend .dot {
@@ -1899,7 +1948,7 @@ a:hover {
   border: none;
   background: transparent;
   padding: 0;
-  color: #2b6c8f;
+  color: var(--info);
   text-decoration: underline;
   font: inherit;
   font-size: 12px;
@@ -1940,7 +1989,7 @@ a:hover {
   flex: 1;
   height: 46px;
   border-radius: 12px;
-  border: 1.5px solid #e3c9c5;
+  border: 1.5px solid var(--red-line);
   background: var(--card);
   color: var(--red);
   font-size: 14px;
@@ -1982,8 +2031,8 @@ a:hover {
   padding: 9px 12px;
   border-radius: 10px;
   background: var(--amber-bg);
-  border: 1px solid #e6dcc0;
-  color: #7a5a12;
+  border: 1px solid var(--amber-line);
+  color: var(--amber-ink-2);
   font-size: 13px;
 }
 
@@ -2133,12 +2182,12 @@ a:hover {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1.5px solid #cfc9ba;
+  border: 1.5px solid var(--line-control);
   flex-shrink: 0;
 }
 .mc-layer.on {
   border-color: var(--green);
-  background: #f2f8f4;
+  background: var(--mint);
 }
 .mc-layer.on .mc-dot {
   border-color: var(--green);
@@ -2249,16 +2298,16 @@ a:hover {
   font-weight: 700;
   padding: 9px 12px;
   border-radius: 10px;
-  background: #eef2ef;
+  background: var(--sage);
   color: var(--body);
 }
 .onde-state.good {
-  background: #e9f2ec;
+  background: var(--green-tint);
   color: var(--green);
 }
 .onde-state.warn {
   background: var(--amber-bg);
-  color: #7a5a12;
+  color: var(--amber-ink-2);
 }
 .onde-state.bad {
   background: #f7e9e6;
@@ -2266,7 +2315,7 @@ a:hover {
 }
 .brief-solunar {
   font-size: 12px;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 11px;
   line-height: 1.5;
   background: #f6f4ec;
@@ -2275,7 +2324,7 @@ a:hover {
 }
 .brief-line {
   padding: 8px 2px;
-  border-top: 1px solid #efece2;
+  border-top: 1px solid var(--line-cream);
 }
 .brief-line:first-of-type {
   border-top: none;
@@ -2304,9 +2353,9 @@ a:hover {
 
 /* Protected-species caveat above the cuisine section */
 .cook-warn {
-  background: #f7ecea;
-  border: 1px solid #e3c9c5;
-  color: #8a3125;
+  background: var(--red-wash);
+  border: 1px solid var(--red-line);
+  color: var(--red-ink);
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 12.5px;
@@ -2327,16 +2376,16 @@ a:hover {
   color: var(--green);
 }
 .edible-status.réglementé {
-  background: #f6f1e4;
+  background: var(--cream);
   /* 4,41:1, il manquait un cheveu ; −0,6 % de luminosité HSL suffit (4,55:1). */
   color: #87681d;
 }
 .edible-status.non {
-  background: #f7ecea;
-  color: #8a3125;
+  background: var(--red-wash);
+  color: var(--red-ink);
 }
 .edible-anses {
-  background: #f6f1e4;
+  background: var(--cream);
   border: 1px solid #e7d8b6;
   color: #6a531a;
   border-radius: 10px;
@@ -2443,7 +2492,7 @@ a:hover {
   height: 68px;
   border-radius: 50%;
   border: 2px solid var(--line-strong);
-  background: #eef2ef;
+  background: var(--sage);
   flex-shrink: 0;
   overflow: hidden;
   display: flex;
@@ -2480,7 +2529,7 @@ a:hover {
 }
 .ph-bio {
   font-size: 13px;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 2px;
 }
 .ph-region {
@@ -2495,7 +2544,7 @@ a:hover {
   width: 40px;
   height: 40px;
   font-size: 15px;
-  color: #4a5d52;
+  color: var(--icon-muted);
   flex-shrink: 0;
 }
 .ph-edit {
@@ -2545,7 +2594,7 @@ a:hover {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  background: #f4f1e8;
+  background: var(--sand);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 11px 4px;
@@ -2591,7 +2640,7 @@ a:hover {
   aspect-ratio: 1;
   border-radius: 14px;
   overflow: hidden;
-  background: #e3e0d3;
+  background: var(--sand-2);
 }
 .ct-img img,
 .ct-img .media-img {
@@ -2626,9 +2675,9 @@ a:hover {
 .ce-photo-add {
   width: 100%;
   height: 120px;
-  border: 1.5px dashed #cfc9ba;
+  border: 1.5px dashed var(--line-control);
   border-radius: 14px;
-  background: #fbfaf7;
+  background: var(--paper);
   color: var(--muted);
   font-size: 14px;
   font-weight: 600;
@@ -2679,7 +2728,7 @@ a:hover {
   background: var(--card);
   font: inherit;
   font-size: 13px;
-  color: #2b6c8f;
+  color: var(--info);
   padding: 0 10px;
   white-space: nowrap;
   overflow: hidden;
@@ -2735,7 +2784,7 @@ a:hover {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  background: #dfe6e2;
+  background: var(--photo-bg);
 }
 .pd-photo img {
   width: 100%;
@@ -2749,7 +2798,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   /* 2,10:1 sur #dfe6e2 ; même gris que .img-slot, 4,88:1. */
-  color: #5c635b;
+  color: var(--photo-ink);
   font-size: 14px;
 }
 .pd-back {
@@ -2806,7 +2855,7 @@ a:hover {
 .pd-rows {
   margin-top: 14px;
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 16px;
   padding: 4px 16px;
   box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
@@ -2867,7 +2916,7 @@ a:hover {
   font: inherit;
   font-size: 14px;
   font-weight: 600;
-  color: #2b6c8f;
+  color: var(--info);
 }
 
 /* ============ Statistiques ============ */
@@ -2879,7 +2928,7 @@ a:hover {
 }
 .st-card {
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 16px;
   padding: 14px;
   text-align: left;
@@ -2914,13 +2963,13 @@ a:hover {
   margin-top: 2px;
 }
 .st-card.fir .st-l {
-  color: #9db4a6;
+  color: var(--on-dark-muted);
 }
 /* Bordered round back chip (v2 headers). */
 .back-round {
   width: 40px;
   height: 40px;
-  border: 1px solid #dedacb;
+  border: 1px solid var(--handle);
   background: var(--card);
   border-radius: 50%;
   font-size: 20px;
@@ -2957,7 +3006,7 @@ a:hover {
   position: relative;
   flex: 1;
   height: 34px;
-  background: #f0ede4;
+  background: var(--oat);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -3033,13 +3082,13 @@ a:hover {
 .st-part-track {
   flex: 1;
   height: 18px;
-  background: #f0ede4;
+  background: var(--oat);
   border-radius: 6px;
   overflow: hidden;
 }
 .st-part-fill {
   height: 100%;
-  background: #2b6c8f;
+  background: var(--info);
   min-width: 2px;
 }
 .st-part-n {
@@ -3076,7 +3125,7 @@ a:hover {
 }
 .eb-card p {
   font-size: 14px;
-  color: #5a5e52;
+  color: var(--muted-2);
   line-height: 1.55;
 }
 .eb-btn {
@@ -3439,7 +3488,7 @@ a:hover {
 }
 .stg-card.warn {
   background: var(--amber-bg);
-  border-color: #e6dcc0;
+  border-color: var(--amber-line);
 }
 .stg-h {
   font-size: 15px;
@@ -3447,7 +3496,7 @@ a:hover {
 }
 .stg-p {
   font-size: 13px;
-  color: #5a5e52;
+  color: var(--muted-2);
   line-height: 1.5;
   margin-top: 5px;
 }
@@ -3469,7 +3518,7 @@ a:hover {
 }
 .stg-fill {
   height: 100%;
-  background: #2b6c8f;
+  background: var(--info);
   min-width: 3px;
 }
 .stg-sub {
@@ -3520,7 +3569,7 @@ a:hover {
   color: var(--on-accent);
 }
 .stg-btn.danger-ghost {
-  border-color: #e3c9c5;
+  border-color: var(--red-line);
   color: var(--red);
 }
 .stg-note {
@@ -3562,7 +3611,7 @@ a:hover {
 }
 .sp-pill.bad {
   color: var(--red);
-  background: #fbeae7;
+  background: var(--red-bg);
 }
 .sp-pill.neutral {
   color: var(--body);
@@ -3597,7 +3646,7 @@ a:hover {
   height: 44px;
   border-radius: 50%;
   border: 1.5px solid var(--line-strong);
-  background: #eef2ef;
+  background: var(--sage);
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
@@ -3649,7 +3698,7 @@ a:hover {
 .ac-metric {
   flex: 1;
   background: var(--paper);
-  border: 1px solid #efece2;
+  border: 1px solid var(--line-cream);
   border-radius: 12px;
   padding: 10px 11px;
 }
@@ -3710,7 +3759,7 @@ a:hover {
   background: var(--paper);
   font: inherit;
   font-size: 12.5px;
-  color: #2b6c8f;
+  color: var(--info);
 }
 
 /* Prise CTA */
@@ -3749,7 +3798,7 @@ a:hover {
 .ac-prise .s {
   display: block;
   font-size: 12px;
-  color: #9db4a6;
+  color: var(--on-dark-muted);
   margin-top: 1px;
 }
 .ac-prise .chev {
@@ -3805,7 +3854,7 @@ a:hover {
 .ac-spcard .img {
   height: 88px;
   position: relative;
-  background: #e3e0d3;
+  background: var(--sand-2);
 }
 .ac-spcard .img img,
 .ac-spcard .img .media-img {
@@ -3867,7 +3916,7 @@ a:hover {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #cfa85c;
+  color: var(--gold);
   margin-bottom: 3px;
 }
 .fiche-cta {
@@ -3940,7 +3989,7 @@ a:hover {
 /* ---- Matériel (tacklebox) & guide ---- */
 .add-row {
   width: 100%;
-  border: 1.5px dashed #cfc9ba;
+  border: 1.5px dashed var(--line-control);
   background: var(--card);
   border-radius: 14px;
   padding: 15px;
@@ -4013,7 +4062,7 @@ a:hover {
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  border: 1.5px solid #cfc9ba;
+  border: 1.5px solid var(--line-control);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4065,7 +4114,7 @@ a:hover {
 }
 .g-detail {
   font-size: 13px;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 2px;
   line-height: 1.45;
 }
@@ -4392,7 +4441,7 @@ button.card-row {
   width: 38px;
   height: 4px;
   border-radius: 2px;
-  background: #dedacb;
+  background: var(--handle);
   z-index: 2;
 }
 .carte-results {
@@ -4519,7 +4568,7 @@ button.card-row {
   flex: 1;
 }
 .verdict-banner.bad {
-  background: #fbeae7;
+  background: var(--red-bg);
   color: #9a2f24;
   border: 1.5px solid #e6b3ac;
 }
@@ -4530,15 +4579,15 @@ button.card-row {
 }
 .verdict-banner.good {
   background: var(--green-tint);
-  color: #14532b;
-  border: 1.5px solid #b4d6c0;
+  color: var(--green-ink);
+  border: 1.5px solid var(--green-line);
 }
 
 /* Carnet: "just added ✓" confirmation + row highlight */
 .added-banner {
   background: var(--green-tint);
-  color: #14532b;
-  border: 1px solid #b4d6c0;
+  color: var(--green-ink);
+  border: 1px solid var(--green-line);
   border-radius: 12px;
   padding: 11px 14px;
   margin-top: 14px;
@@ -4561,7 +4610,7 @@ button.card-row {
 /* ————— Outils de terrain (chronos & horaires légaux) ————— */
 .ot-legal {
   background: var(--fir, #0f1f16);
-  color: #eef2ec;
+  color: var(--on-dark);
   border-radius: 18px;
   padding: 18px 18px 16px;
   margin-top: 6px;
@@ -4575,7 +4624,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #cfa85c;
+  color: var(--gold);
 }
 .ot-legal-time {
   font-family: "Source Serif 4", Georgia, serif;
@@ -4644,7 +4693,7 @@ button.card-row {
   display: grid;
   place-items: center;
   border-radius: 11px;
-  background: #f6f1e4;
+  background: var(--cream);
 }
 .ot-timer .tx { flex: 1; min-width: 0; }
 .ot-timer .tx .t { font-size: 15px; font-weight: 600; color: var(--ink-2); }
@@ -4654,7 +4703,7 @@ button.card-row {
   font-size: 12.5px;
   font-weight: 700;
   color: var(--brass-ink);
-  background: #f6f1e4;
+  background: var(--cream);
   border-radius: 999px;
   padding: 5px 11px;
 }
@@ -4697,7 +4746,7 @@ button.card-row {
   border-radius: 999px;
   padding: 3px 8px;
 }
-.mr-noimg { display: grid; place-items: center; width: 100%; height: 100%; font-size: 30px; background: #f6f1e4; }
+.mr-noimg { display: grid; place-items: center; width: 100%; height: 100%; font-size: 30px; background: var(--cream); }
 .mr-guide { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
 .mr-guide-thumb {
   width: 52px;
@@ -4705,7 +4754,7 @@ button.card-row {
   flex-shrink: 0;
   border-radius: 11px;
   overflow: hidden;
-  background: #f6f1e4;
+  background: var(--cream);
 }
 .mr-guide-thumb img, .mr-guide-thumb > * { width: 100%; height: 100%; object-fit: cover; }
 .mr-kicker {
@@ -4725,7 +4774,7 @@ button.card-row {
 .mr-view-actions .btn-light { flex: 1; }
 .mr-del {
   flex: 1;
-  border: 1px solid #e3c9c5;
+  border: 1px solid var(--red-line);
   background: var(--card);
   color: var(--red);
   border-radius: 12px;
@@ -4765,7 +4814,7 @@ button.card-row {
   padding: 0;
   border: none;
   overflow: hidden;
-  background: #e7ece6;
+  background: var(--mist);
   cursor: pointer;
 }
 .minimap-tiles { position: absolute; inset: 0; }
@@ -4862,7 +4911,7 @@ button.card-row {
 .dash-wx {
   margin-top: 12px;
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 20px;
   padding: 16px 16px 12px;
   box-shadow: 0 1px 3px rgba(20, 30, 25, 0.05);
@@ -4885,7 +4934,7 @@ button.card-row {
 .dash-chart { width: 100%; height: auto; display: block; margin: 8px 0 2px; }
 .dash-chart-t { font-size: 9px; font-weight: 700; }
 .dash-chart-t.hi { fill: var(--red); }
-.dash-chart-t.lo { fill: #2b6c8f; }
+.dash-chart-t.lo { fill: var(--info); }
 .dash-chart-x { font-size: 8px; fill: var(--muted); }
 .dash-metrics {
   display: grid;
@@ -4894,8 +4943,8 @@ button.card-row {
   margin-top: 10px;
 }
 .dash-metric {
-  background: #faf8f2;
-  border: 1px solid #efece2;
+  background: var(--linen);
+  border: 1px solid var(--line-cream);
   border-radius: 12px;
   padding: 9px 10px;
 }
@@ -4931,7 +4980,7 @@ button.card-row {
 .dash-water {
   margin-top: 12px;
   background: var(--card);
-  border: 1px solid #eceadf;
+  border: 1px solid var(--line-warm);
   border-radius: 20px;
   padding: 14px 16px 16px;
   box-shadow: 0 1px 3px rgba(20, 30, 25, 0.05);
@@ -4952,19 +5001,19 @@ button.card-row {
      #94a29a à 2,40:1) tombaient tous sous AA sur l'extrémité sombre du dégradé
      (#eef4f6). Un seul les remplace, à 4,55:1, ce qui évite d'inventer trois
      nuances là où une suffit. */
-  color: #5c727c;
+  color: var(--info-ink);
   font-weight: 600;
   white-space: nowrap;
   /* No overflow:hidden here — these labels are short and fixed, and clipping
      would swallow the info-tooltip bubble that opens below the label (.tip). */
 }
 .dash-wtile .v { font-size: 20px; font-weight: 700; color: #14303b; margin-top: 3px; display: flex; align-items: baseline; gap: 3px; }
-.dash-wtile .v .u { font-size: 12px; font-weight: 600; color: #5c727c; }
+.dash-wtile .v .u { font-size: 12px; font-weight: 600; color: var(--info-ink); }
 .dash-wtile .v .tr { font-size: 15px; margin-left: 1px; }
 .dash-wtile .v .tr.rising { color: var(--green); }
 .dash-wtile .v .tr.falling { color: var(--red); }
-.dash-wtile .v .tr.stable { color: #5c727c; }
-.dash-wtile .s { font-size: 10.5px; color: #5c727c; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-wtile .v .tr.stable { color: var(--info-ink); }
+.dash-wtile .s { font-size: 10.5px; color: var(--info-ink); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* « périmé » est un avertissement : il prend l'ambre du reste de l'app
    (3,72:1 → 4,62:1) au lieu d'un orange isolé qui ne passait nulle part. */
 .dash-wtile .s.stale { color: var(--amber); font-weight: 600; }
@@ -4976,7 +5025,7 @@ button.card-row {
   background: linear-gradient(160deg, var(--green-dark), var(--fir));
   border-radius: 20px;
   padding: 14px 16px 12px;
-  color: #eef2ec;
+  color: var(--on-dark);
   box-shadow: 0 8px 22px -14px rgba(15, 31, 22, 0.6);
 }
 .dash-sun svg { width: 100%; height: auto; display: block; }
@@ -4987,7 +5036,7 @@ button.card-row {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cfa85c;
+  color: var(--gold);
   font-weight: 700;
 }
 .dash-moon {
@@ -5000,7 +5049,7 @@ button.card-row {
 }
 .dash-moon .disc { font-size: 34px; line-height: 1; }
 .dash-moon .ph { font-size: 14px; font-weight: 650; color: var(--on-accent); }
-.dash-moon .il { font-size: 12px; color: #9db4a6; }
+.dash-moon .il { font-size: 12px; color: var(--on-dark-muted); }
 
 /* Quota strip */
 .dash-quota {
@@ -5009,8 +5058,8 @@ button.card-row {
   gap: 8px;
   margin-top: 14px;
   padding: 11px 14px;
-  background: #faf8f2;
-  border: 1px solid #efece2;
+  background: var(--linen);
+  border: 1px solid var(--line-cream);
   border-radius: 14px;
   font-size: 12.5px;
   color: var(--body);
@@ -5032,7 +5081,7 @@ button.card-row {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: #e7ece6;
+  background: var(--mist);
 }
 .tech-photo .media-img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -5053,8 +5102,8 @@ button.card-row {
   font-size: 13.5px;
   line-height: 1.55;
   color: var(--muted, #6b7168);
-  background: #faf8f2;
-  border: 1px solid #efece2;
+  background: var(--linen);
+  border: 1px solid var(--line-cream);
   border-radius: 14px;
   padding: 13px 15px;
   margin: 6px 0 4px;
@@ -5099,7 +5148,7 @@ button.card-row {
 }
 .id-opt:active { transform: scale(0.995); }
 .id-opt:hover { border-color: #cdbf9a; }
-.id-opt .ic { width: 40px; height: 22px; flex-shrink: 0; color: #4a5d52; }
+.id-opt .ic { width: 40px; height: 22px; flex-shrink: 0; color: var(--icon-muted); }
 .id-opt .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .id-opt .tx .l { font-size: 14.5px; font-weight: 600; color: var(--ink-2); }
 .id-opt .tx .sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
@@ -5108,7 +5157,7 @@ button.card-row {
   font-size: 12px;
   font-weight: 700;
   color: var(--brass-ink);
-  background: #f6f1e4;
+  background: var(--cream);
   border-radius: 100px;
   min-width: 26px;
   text-align: center;
@@ -5117,7 +5166,7 @@ button.card-row {
 .id-done, .id-foot { font-size: 12px; color: var(--muted); line-height: 1.5; }
 .id-done {
   background: var(--green-tint, #eaf4ee);
-  border: 1px solid #cfe6d8;
+  border: 1px solid var(--id-line);
   color: #2a6d48;
   border-radius: 12px;
   padding: 11px 13px;
@@ -5151,8 +5200,8 @@ button.card-row {
   text-align: left;
   box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
 }
-.id-grid.emphatic .id-cand { border-color: #cfe6d8; box-shadow: 0 6px 16px -12px rgba(29, 110, 66, 0.5); }
-.id-cand-img { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: #e7ece6; }
+.id-grid.emphatic .id-cand { border-color: var(--id-line); box-shadow: 0 6px 16px -12px rgba(29, 110, 66, 0.5); }
+.id-cand-img { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--mist); }
 .id-cand-img .media-img, .id-cand-img > * { width: 100%; height: 100%; object-fit: cover; }
 .id-cand-cap { padding: 9px 11px 11px; }
 .id-cand-cap .n { font-size: 14px; font-weight: 650; color: var(--ink-2); }
@@ -5177,7 +5226,7 @@ button.card-row {
   width: 100%;
   margin-top: 7px;
   border: 1px solid var(--line);
-  background: #f2f8f4;
+  background: var(--mint);
   color: var(--green);
   border-radius: 11px;
   padding: 10px 13px;
@@ -5222,8 +5271,8 @@ button.card-row {
   flex-shrink: 0;
 }
 .fed-go {
-  border: 1px solid #cfc9ba;
-  background: #f2f8f4;
+  border: 1px solid var(--line-control);
+  background: var(--mint);
   color: var(--green);
   border-radius: 8px;
   padding: 6px 10px;
@@ -5267,7 +5316,7 @@ button.card-row {
 }
 .bal-card.bal-echue {
   border-color: var(--red);
-  background: #fdf3f1;
+  background: var(--red-tint);
 }
 .bal-card.bal-trempe {
   border-color: var(--fir);
@@ -5367,12 +5416,12 @@ button.card-row {
 .bal-rm:hover,
 .bal-rm:focus-visible {
   color: var(--red);
-  background: #fdf3f1;
+  background: var(--red-tint);
 }
 /* The "add a balance" tile lives in the grid, same footprint as a card, so the
    battery visibly grows one net at a time. */
 .bal-add {
-  border: 1.5px dashed #cfc9ba;
+  border: 1.5px dashed var(--line-control);
   background: transparent;
   border-radius: 16px;
   min-height: 96px;
@@ -5481,7 +5530,7 @@ button.card-row {
   padding: 11px 14px;
   font-size: 12.5px;
   line-height: 1.5;
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .ecr-wake {
   display: flex;
@@ -5506,7 +5555,7 @@ button.card-row {
 }
 .ecr-reg-note {
   margin-top: 8px;
-  color: #6d4d0d;
+  color: var(--amber-ink);
   background: var(--amber-bg);
   border-radius: 10px;
   padding: 9px 11px;
@@ -5649,7 +5698,7 @@ button.card-row {
 }
 .ecr-sp.protegee {
   border-color: var(--red);
-  background: #fdf3f1;
+  background: var(--red-tint);
 }
 .ecr-sp-tx {
   flex: 1;
@@ -5673,7 +5722,7 @@ button.card-row {
   margin-top: 5px;
 }
 .ecr-sp.protegee .w {
-  color: #8a3125;
+  color: var(--red-ink);
   font-weight: 600;
 }
 .ecr-step {
@@ -5771,7 +5820,7 @@ button.card-row {
   height: 40px;
   padding: 0 16px;
   border-radius: 12px;
-  border: 1.5px solid #e3c9c5;
+  border: 1.5px solid var(--red-line);
   background: var(--card);
   color: var(--red);
   font-size: 13.5px;
@@ -5900,7 +5949,7 @@ button.card-row {
   padding: 8px 12px;
   border-radius: 10px;
   background: var(--sand);
-  color: #5a5e52;
+  color: var(--muted-2);
 }
 .season-reminder-row.closing {
   color: var(--amber);
@@ -5952,7 +6001,7 @@ button.card-row {
   border-radius: 999px;
 }
 .id-cand-statut.bad {
-  background: #fdf3f1;
+  background: var(--red-tint);
   color: var(--red);
 }
 .id-cand-statut.warn {
@@ -5998,7 +6047,7 @@ button.card-row {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 8px;
-  background: #e7ece6;
+  background: var(--mist);
 }
 .gc-name {
   font-size: 14px;
@@ -6021,7 +6070,7 @@ button.card-row {
 }
 .ecr-tri {
   border: 1.5px solid var(--green-dark);
-  background: #eef2ef;
+  background: var(--sage);
   border-radius: 16px;
   padding: 13px 14px;
   margin-bottom: 16px;
@@ -6046,14 +6095,14 @@ button.card-row {
 }
 .ecr-id.protegee {
   border-color: var(--red);
-  background: #fdf3f1;
+  background: var(--red-tint);
 }
 .ecr-id-ph {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 10px;
-  background: #e7ece6;
+  background: var(--mist);
   margin-bottom: 10px;
 }
 .ecr-id-n {
@@ -6073,7 +6122,7 @@ button.card-row {
   color: var(--body);
 }
 .ecr-id-st.ferme {
-  color: #8a3125;
+  color: var(--red-ink);
   font-weight: 600;
 }
 .ecr-id-pr {
@@ -6193,28 +6242,28 @@ button.card-row {
 /* Non confirmé et hors zone : l'ambre du reste de l'app pour « à vérifier ». */
 .deptb--defaut .deptb-main,
 .deptb--hors-zone .deptb-main {
-  border-color: #e0cfa4;
+  border-color: var(--amber-line-2);
   background: var(--amber-bg);
 }
 .deptb--defaut .deptb-blason,
 .deptb--hors-zone .deptb-blason {
   background: var(--card);
   color: var(--amber);
-  border-color: #e0cfa4;
+  border-color: var(--amber-line-2);
 }
 .deptb--defaut .deptb-titre,
 .deptb--hors-zone .deptb-titre {
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .deptb--defaut .deptb-detail,
 .deptb--hors-zone .deptb-detail {
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .deptb--defaut .deptb-cta,
 .deptb--hors-zone .deptb-cta {
-  color: #6d4d0d;
+  color: var(--amber-ink);
   font-weight: 700;
-  border-top-color: #e0cfa4;
+  border-top-color: var(--amber-line-2);
 }
 
 .deptb-list {
@@ -6389,10 +6438,10 @@ button.card-row {
 }
 .cp-warn {
   background: var(--amber-bg);
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .cp-danger {
-  background: #fbeae7;
+  background: var(--red-bg);
   color: #7d2118;
 }
 .cp-nudge {
@@ -6514,7 +6563,7 @@ button.card-row {
 .lic-nv {
   font-size: 11.5px;
   font-weight: 650;
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .lic-mention,
 .lic-reserve,
@@ -6525,7 +6574,7 @@ button.card-row {
   margin-top: 3px;
 }
 .lic-reserve {
-  color: #6d4d0d;
+  color: var(--amber-ink);
 }
 .lic-date {
   font-size: 11px;
@@ -6544,7 +6593,7 @@ button.card-row {
 .mentions-sec {
   font-size: 12.5px;
   line-height: 1.55;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 7px;
 }
 .mentions-bloc a {
@@ -6568,7 +6617,7 @@ button.card-row {
 .install-ios-corps {
   font-size: 12.5px;
   line-height: 1.55;
-  color: #5a5e52;
+  color: var(--muted-2);
   margin-top: 6px;
 }
 
