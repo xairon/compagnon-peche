@@ -901,10 +901,14 @@ export function Carte() {
           Officielle
         </button>
       </div>
+      {/* La carte « Officielle » est éditée par GEOPECHE — CREALEAD, 55 rue Saint
+          Cléophas, Montpellier : c'est le seul éditeur que contact.php nomme
+          (vérifié le 31/07/2026), et la fédération nationale n'y figure pas.
+          Voir src/data/licences-donnees.ts. */}
       <div className="carte-mode-cap">
         {mapMode === "mine"
           ? "Conditions, eau & vos spots — hors-ligne"
-          : "Parcours & réglementation (FNPF) — national, en ligne"}
+          : "Parcours & réglementation (Géopêche) — national, en ligne"}
       </div>
 
       {mapMode === "mine" && (
@@ -942,7 +946,7 @@ export function Carte() {
       {mapMode === "official" && (
         <div className="carte-official">
           <div className="official-banner">
-            <span>🎣 Carte officielle des fédérations (FNPF · Géopêche) — en ligne, lecture seule.</span>
+            <span>🎣 Carte officielle des fédérations (Géopêche) — en ligne, lecture seule.</span>
             <a href={officialUrl} target="_blank" rel="noopener noreferrer">
               Plein écran ↗
             </a>
@@ -951,7 +955,7 @@ export function Carte() {
             <iframe
               key={officialUrl}
               src={officialUrl}
-              title="Carte officielle Géopêche (FNPF)"
+              title="Carte officielle Géopêche"
               className="official-frame"
               referrerPolicy="no-referrer"
               // Sandbox a third-party origin we don't control: allow the map to run
