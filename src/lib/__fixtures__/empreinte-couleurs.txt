@@ -439,7 +439,7 @@
 .fiche-cta button|background|#0f1f16
 .fiche-cta button|box-shadow|0 16px 30px -14px rgba(15, 31, 22, 0.75)
 .fiche-cta button|color|#fbfaf7
-.fiche-cta|background|linear-gradient(rgba(251, 250, 247, 0), #fbfaf7 42%)
+.fiche-cta|background|linear-gradient(transparent, #fbfaf7 42%)
 .fiche-src|border-top|1px solid #ece8dd
 .fiche-src|color|#726e62
 .fiche-varietes|color|#6b675c
@@ -613,7 +613,7 @@
 .mentions-sec|color|#5a5e52
 .minimap-attr|background|rgba(15, 31, 22, 0.5)
 .minimap-attr|color|#ffffff
-.minimap-grad|background|linear-gradient(rgba(15, 31, 22, 0) 45%, rgba(15, 31, 22, 0.55))
+.minimap-grad|background|linear-gradient(transparent 45%, rgba(15, 31, 22, 0.55))
 .minimap-pin .dot|background|#1d6e42
 .minimap-pin .dot|border|2px solid #ffffff
 .minimap-pin .dot|box-shadow|0 1px 4px rgba(0, 0, 0, 0.4)

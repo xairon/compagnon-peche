@@ -87,6 +87,31 @@
   --red-tint: #fdf3f1;       /* fond rouge très pâle (espèces protégées, échéances) */
   --info: #2b6c8f;
   --info-ink: #5c727c;       /* texte secondaire de la tuile météo/eau (4 usages) */
+
+  /* Voiles, ombres, scrim et fondus. Seul endroit de la feuille où un
+     remplacement mécanique donnerait un résultat faux : une ombre noire à
+     4 % posée sur une surface claire disparaît purement et simplement sur
+     une surface sombre — le rôle « détacher une carte de son fond » y est
+     tenu par un liseré CLAIR, pas par une ombre plus foncée. D'où des
+     jetons qui séparent la teinte (canal RGB, ci-dessous en `-tint`) de
+     l'alpha : chaque usage garde son alpha exact — donc son rendu du thème
+     clair au pixel près — tout en gardant un seul point de bascule par
+     famille pour le thème sombre à venir. --shadow, --shadow-strong,
+     --veil, --scrim et --paper-fade sont les raccourcis pour l'alpha le
+     plus réutilisé de chaque famille ; les usages à alpha isolé retombent
+     sur rgba(var(--x-tint), alpha). */
+  --shadow-tint: 20, 30, 25;             /* ombre portée standard (encre) */
+  --shadow: rgba(var(--shadow-tint), 0.04);
+  --shadow-strong: rgba(var(--shadow-tint), 0.15);
+  /* Ombre du cadre d'accueil (onboarding) : teinte proche de --shadow-tint
+     mais distincte (22,40,30 vs 20,30,25) dans la feuille d'origine ; pas
+     fusionnée pour ne pas changer le rendu du thème clair. */
+  --onb-shadow-tint: 22, 40, 30;
+  --veil-tint: 15, 31, 22;               /* voile sapin : texte sur photo/carte sombre */
+  --veil: rgba(var(--veil-tint), 0.6);
+  --scrim: rgba(20, 26, 22, 0.42);       /* fond de la feuille modale (.ecr-sheet) */
+  --paper-tint: 251, 250, 247;           /* = --paper ; chrome flottant sur photo/carte */
+  --paper-fade: rgba(var(--paper-tint), 0.92);
 }
 
 /* Visible keyboard focus (was absent everywhere). */
@@ -166,7 +191,7 @@ a:hover {
   background: var(--paper);
   border-radius: 30px;
   overflow: hidden;
-  box-shadow: 0 24px 70px rgba(20, 30, 25, 0.3);
+  box-shadow: 0 24px 70px rgba(var(--shadow-tint), 0.3);
   border: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
@@ -489,7 +514,7 @@ a:hover {
   right: 12px;
   bottom: 14px;
   z-index: 3;
-  background: rgba(15, 31, 22, 0.72);
+  background: rgba(var(--veil-tint), 0.72);
   color: var(--paper);
   font-size: 11.5px;
   font-weight: 600;
@@ -506,7 +531,7 @@ a:hover {
   height: 40px;
   border-radius: 50%;
   border: none;
-  background: rgba(15, 31, 22, 0.42);
+  background: rgba(var(--veil-tint), 0.42);
   color: var(--on-accent);
   font-size: 22px;
   line-height: 1;
@@ -555,7 +580,7 @@ a:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(251, 250, 247, 0.92);
+  background: var(--paper-fade);
   font-size: 22px;
   padding: 0 0 2px;
 }
@@ -563,7 +588,7 @@ a:hover {
   position: absolute;
   top: 20px;
   right: 14px;
-  background: rgba(251, 250, 247, 0.92);
+  background: var(--paper-fade);
   backdrop-filter: blur(6px);
   padding: 8px 13px;
   min-height: 36px;
@@ -622,7 +647,7 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 6;
-  background: rgba(251, 250, 247, 0.95);
+  background: rgba(var(--paper-tint), 0.95);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
   display: flex;
@@ -787,7 +812,7 @@ a:hover {
   text-align: left;
   padding: 10px 12px;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(20, 30, 25, 0.32);
+  box-shadow: 0 10px 30px rgba(var(--shadow-tint), 0.32);
 }
 .tip-bubble.right {
   left: auto;
@@ -1009,7 +1034,7 @@ a:hover {
   border: 1px solid var(--line);
   border-radius: 14px;
   margin-bottom: 10px;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
   cursor: pointer;
   min-height: 60px;
 }
@@ -1077,7 +1102,7 @@ a:hover {
   height: 54px;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
-  box-shadow: 0 4px 14px rgba(20, 30, 25, 0.18);
+  box-shadow: 0 4px 14px rgba(var(--shadow-tint), 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1218,7 +1243,7 @@ a:hover {
 .recipe-hero-grad {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(15, 31, 22, 0.08), rgba(15, 31, 22, 0.62));
+  background: linear-gradient(rgba(var(--veil-tint), 0.08), rgba(var(--veil-tint), 0.62));
 }
 .recipe-hero-cap {
   position: absolute;
@@ -1254,7 +1279,7 @@ a:hover {
   border-radius: 12px;
   padding: 9px;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .recipe-stat .k { font-size: 11px; color: var(--muted, #6b675c); }
 .recipe-stat .v { font-size: 14px; font-weight: 700; margin-top: 2px; color: var(--ink-2); }
@@ -1273,7 +1298,7 @@ a:hover {
   border: 1px solid var(--line-warm);
   border-radius: 16px;
   padding: 4px 15px;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .recipe-ing-card .ing {
   border-bottom: 1px solid var(--sand);
@@ -1287,7 +1312,7 @@ a:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(251, 250, 247, 0.92);
+  background: var(--paper-fade);
   font-size: 22px;
   padding: 0 0 2px;
 }
@@ -1577,7 +1602,7 @@ a:hover {
   padding: 10px 14px;
   font-size: 12.5px;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.25);
+  box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.25);
 }
 
 /* Persistence-failure banner (IndexedDB write failed — data at risk). */
@@ -1596,7 +1621,7 @@ a:hover {
   padding: 12px 14px;
   font-size: 12.5px;
   line-height: 1.4;
-  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.35);
+  box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
 }
 .persist-warn button {
   flex: 0 0 auto;
@@ -1796,7 +1821,7 @@ a:hover {
   max-height: 62%;
   background: var(--card);
   border-radius: 18px 18px 0 0;
-  box-shadow: 0 -10px 40px rgba(20, 30, 25, 0.25);
+  box-shadow: 0 -10px 40px rgba(var(--shadow-tint), 0.25);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -1915,7 +1940,7 @@ a:hover {
   color: var(--paper);
   border-radius: 14px;
   padding: 10px 12px;
-  box-shadow: 0 6px 18px rgba(20, 30, 25, 0.3);
+  box-shadow: 0 6px 18px rgba(var(--shadow-tint), 0.3);
 }
 .carte-placing span {
   flex: 1;
@@ -2109,7 +2134,7 @@ a:hover {
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-2);
-  box-shadow: 0 2px 8px rgba(20, 30, 25, 0.15);
+  box-shadow: 0 2px 8px var(--shadow-strong);
 }
 .mc-panel {
   background: var(--card);
@@ -2117,7 +2142,7 @@ a:hover {
   border-radius: 14px;
   padding: 12px;
   width: 232px;
-  box-shadow: 0 8px 24px rgba(20, 30, 25, 0.2);
+  box-shadow: 0 8px 24px rgba(var(--shadow-tint), 0.2);
   /* Never run off-screen: cap height against the viewport and scroll inside.
      Reserves room for the toggle above + the bottom nav & legend below. */
   max-height: calc(100dvh - 230px);
@@ -2701,7 +2726,7 @@ a:hover {
   height: 40px;
   border-radius: 50%;
   border: none;
-  background: rgba(20, 30, 25, 0.72);
+  background: rgba(var(--shadow-tint), 0.72);
   color: var(--on-accent);
   font-size: 14px;
 }
@@ -2809,11 +2834,11 @@ a:hover {
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: rgba(251, 250, 247, 0.94);
+  background: rgba(var(--paper-tint), 0.94);
   font-size: 22px;
   padding: 0 0 2px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(20, 30, 25, 0.18);
+  box-shadow: 0 2px 8px rgba(var(--shadow-tint), 0.18);
 }
 .pd-tag {
   position: absolute;
@@ -2858,7 +2883,7 @@ a:hover {
   border: 1px solid var(--line-warm);
   border-radius: 16px;
   padding: 4px 16px;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .pd-r {
   display: flex;
@@ -2932,12 +2957,12 @@ a:hover {
   border-radius: 16px;
   padding: 14px;
   text-align: left;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .st-card.fir {
   background: var(--fir, #0f1f16);
   border-color: var(--fir, #0f1f16);
-  box-shadow: 0 8px 20px -14px rgba(15, 31, 22, 0.6);
+  box-shadow: 0 8px 20px -14px var(--veil);
 }
 .st-n {
   font-family: "Source Serif 4", Georgia, serif;
@@ -3114,7 +3139,7 @@ a:hover {
   padding: 28px 22px;
   max-width: 420px;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(20, 30, 25, 0.15);
+  box-shadow: 0 10px 40px var(--shadow-strong);
 }
 .eb-emoji {
   font-size: 40px;
@@ -3194,7 +3219,7 @@ a:hover {
   background: var(--paper);
   border: 1px solid var(--line-strong);
   border-radius: 5px;
-  box-shadow: 0 1px 0 var(--card) inset, 0 22px 55px -24px rgba(22, 40, 30, 0.5);
+  box-shadow: 0 1px 0 var(--card) inset, 0 22px 55px -24px rgba(var(--onb-shadow-tint), 0.5);
   padding: 30px 28px 26px;
 }
 @keyframes onbUp {
@@ -3276,7 +3301,7 @@ a:hover {
   padding: 5px;
   background: var(--card);
   border: 1px solid var(--green-dark);
-  box-shadow: 0 12px 34px -16px rgba(22, 40, 30, 0.55);
+  box-shadow: 0 12px 34px -16px rgba(var(--onb-shadow-tint), 0.55);
 }
 .onb2-frame img {
   display: block;
@@ -3425,7 +3450,7 @@ a:hover {
   font-weight: 700;
   font-size: 16.5px;
   letter-spacing: 0.01em;
-  box-shadow: 0 10px 22px -12px rgba(22, 40, 30, 0.65);
+  box-shadow: 0 10px 22px -12px rgba(var(--onb-shadow-tint), 0.65);
 }
 .onb2-install {
   width: 100%;
@@ -3454,7 +3479,7 @@ a:hover {
   color: var(--paper);
   border-radius: 100px;
   padding: 8px 10px 8px 18px;
-  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.35);
+  box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
   font-size: 13.5px;
 }
 .update-toast button {
@@ -3668,7 +3693,7 @@ a:hover {
   border-radius: 18px;
   padding: 16px;
   margin-top: 16px;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04), 0 14px 34px -22px rgba(20, 30, 25, 0.3);
+  box-shadow: 0 1px 2px var(--shadow), 0 14px 34px -22px rgba(var(--shadow-tint), 0.3);
 }
 .ac-cond-h {
   display: flex;
@@ -3775,7 +3800,7 @@ a:hover {
   padding: 16px 18px;
   margin-top: 12px;
   text-align: left;
-  box-shadow: 0 16px 30px -18px rgba(15, 31, 22, 0.7);
+  box-shadow: 0 16px 30px -18px rgba(var(--veil-tint), 0.7);
 }
 .ac-prise .disc {
   width: 38px;
@@ -3847,7 +3872,7 @@ a:hover {
   border: 1px solid var(--line);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
   text-align: left;
   padding: 0;
 }
@@ -3866,7 +3891,7 @@ a:hover {
   position: absolute;
   top: 7px;
   left: 7px;
-  background: rgba(15, 31, 22, 0.82);
+  background: rgba(var(--veil-tint), 0.82);
   color: var(--paper);
   font-size: 9.5px;
   font-weight: 650;
@@ -3925,7 +3950,7 @@ a:hover {
   left: 0;
   right: 0;
   padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(rgba(251, 250, 247, 0), var(--paper) 42%);
+  background: linear-gradient(transparent, var(--paper) 42%);
   pointer-events: none;
 }
 .fiche-cta button {
@@ -3940,7 +3965,7 @@ a:hover {
   border: none;
   border-radius: 16px;
   font-weight: 650;
-  box-shadow: 0 16px 30px -14px rgba(15, 31, 22, 0.75);
+  box-shadow: 0 16px 30px -14px rgba(var(--veil-tint), 0.75);
 }
 
 /* ============ Prise v2 — visible step progress ============ */
@@ -3983,7 +4008,7 @@ a:hover {
 .pf-seg button.on {
   background: var(--card);
   color: var(--fir);
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.08);
+  box-shadow: 0 1px 2px rgba(var(--shadow-tint), 0.08);
 }
 
 /* ---- Matériel (tacklebox) & guide ---- */
@@ -4401,7 +4426,7 @@ button.card-row {
   font-size: 15px;
   background: var(--card);
   outline: none;
-  box-shadow: 0 8px 24px -12px rgba(15, 31, 22, 0.35);
+  box-shadow: 0 8px 24px -12px rgba(var(--veil-tint), 0.35);
 }
 .carte-search .clear {
   position: absolute;
@@ -4426,7 +4451,7 @@ button.card-row {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 8px 24px -12px rgba(15, 31, 22, 0.5);
+  box-shadow: 0 8px 24px -12px rgba(var(--veil-tint), 0.5);
 }
 /* v2: drawer handle on the bottom sheets (briefing / station / spot) */
 .carte-sheet {
@@ -4452,7 +4477,7 @@ button.card-row {
   background: var(--card);
   border: 1px solid var(--line-strong);
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(20, 30, 25, 0.16);
+  box-shadow: 0 10px 30px rgba(var(--shadow-tint), 0.16);
   z-index: 20;
   overflow: hidden;
 }
@@ -4614,7 +4639,7 @@ button.card-row {
   border-radius: 18px;
   padding: 18px 18px 16px;
   margin-top: 6px;
-  box-shadow: 0 10px 24px -14px rgba(15, 31, 22, 0.7);
+  box-shadow: 0 10px 24px -14px rgba(var(--veil-tint), 0.7);
 }
 .ot-legal-h {
   display: flex;
@@ -4724,7 +4749,7 @@ button.card-row {
   font-size: 15.5px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 8px 20px -12px rgba(15, 31, 22, 0.65);
+  box-shadow: 0 8px 20px -12px rgba(var(--veil-tint), 0.65);
 }
 .mr-note { font-size: 12.5px; color: var(--muted, #6b7168); line-height: 1.5; margin: 10px 2px 14px; }
 .mr-grid {
@@ -4804,7 +4829,7 @@ button.card-row {
   margin-top: 14px;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 26px -16px rgba(20, 30, 25, 0.5);
+  box-shadow: 0 10px 26px -16px rgba(var(--shadow-tint), 0.5);
 }
 .minimap {
   display: block;
@@ -4830,7 +4855,7 @@ button.card-row {
 .minimap-grad {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(15, 31, 22, 0) 45%, rgba(15, 31, 22, 0.55));
+  background: linear-gradient(transparent 45%, rgba(var(--veil-tint), 0.55));
   pointer-events: none;
 }
 .minimap-pin {
@@ -4867,7 +4892,7 @@ button.card-row {
   top: 6px;
   font-size: 9px;
   color: var(--on-accent);
-  background: rgba(15, 31, 22, 0.5);
+  background: rgba(var(--veil-tint), 0.5);
   padding: 2px 6px;
   border-radius: 6px;
   pointer-events: none;
@@ -4898,7 +4923,7 @@ button.card-row {
   pointer-events: auto;
   flex-shrink: 0;
   border: none;
-  background: rgba(251, 250, 247, 0.92);
+  background: var(--paper-fade);
   color: var(--green-dark);
   font-size: 12.5px;
   font-weight: 650;
@@ -4914,7 +4939,7 @@ button.card-row {
   border: 1px solid var(--line-warm);
   border-radius: 20px;
   padding: 16px 16px 12px;
-  box-shadow: 0 1px 3px rgba(20, 30, 25, 0.05);
+  box-shadow: 0 1px 3px rgba(var(--shadow-tint), 0.05);
 }
 .dash-wx-off { font-size: 13px; color: var(--muted); padding: 8px 2px; }
 .dash-wx-top { display: flex; align-items: center; gap: 14px; }
@@ -4983,7 +5008,7 @@ button.card-row {
   border: 1px solid var(--line-warm);
   border-radius: 20px;
   padding: 14px 16px 16px;
-  box-shadow: 0 1px 3px rgba(20, 30, 25, 0.05);
+  box-shadow: 0 1px 3px rgba(var(--shadow-tint), 0.05);
 }
 .dash-water-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
 .dash-wtile {
@@ -5026,7 +5051,7 @@ button.card-row {
   border-radius: 20px;
   padding: 14px 16px 12px;
   color: var(--on-dark);
-  box-shadow: 0 8px 22px -14px rgba(15, 31, 22, 0.6);
+  box-shadow: 0 8px 22px -14px var(--veil);
 }
 .dash-sun svg { width: 100%; height: auto; display: block; }
 .dash-sun-lbl { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cdd9cf; margin-top: 2px; }
@@ -5198,7 +5223,7 @@ button.card-row {
   padding: 0;
   cursor: pointer;
   text-align: left;
-  box-shadow: 0 1px 2px rgba(20, 30, 25, 0.04);
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .id-grid.emphatic .id-cand { border-color: var(--id-line); box-shadow: 0 6px 16px -12px rgba(29, 110, 66, 0.5); }
 .id-cand-img { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--mist); }
@@ -5572,7 +5597,7 @@ button.card-row {
      lieu de recouvrir toute la fenêtre au-dessus du point de rupture 460 px. */
   position: absolute;
   inset: 0;
-  background: rgba(20, 26, 22, 0.42);
+  background: var(--scrim);
   display: flex;
   align-items: flex-end;
   z-index: 60;
@@ -5656,7 +5681,7 @@ button.card-row {
   color: var(--paper);
   border-radius: 100px;
   padding: 8px 10px 8px 18px;
-  box-shadow: 0 6px 20px rgba(20, 30, 25, 0.35);
+  box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
   font-size: 13.5px;
   white-space: nowrap;
 }
@@ -5858,7 +5883,7 @@ button.card-row {
   color: var(--paper);
   font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 4px 14px rgba(20, 30, 25, 0.22);
+  box-shadow: 0 4px 14px rgba(var(--shadow-tint), 0.22);
 }
 /* Clears the bottom banners (offline / storage failure: bottom 84px, ~36px tall)
    which share this corner and sit above in the stack. */
@@ -6169,7 +6194,7 @@ button.card-row {
   border-radius: 16px;
   border: 1.5px solid var(--line-strong);
   background: var(--card);
-  box-shadow: 0 6px 18px -14px rgba(20, 30, 25, 0.55);
+  box-shadow: 0 6px 18px -14px rgba(var(--shadow-tint), 0.55);
 }
 .deptb-blason {
   align-self: start;
