@@ -1010,25 +1010,6 @@
 .verdict-banner.warn|color|#7a540e
 .verdict|background|#ffffff
 .verdict|border|1px solid #e6e2d8
-:root|--amber-bg|#f7f1e2
-:root|--amber|#926511
-:root|--backdrop|#e7e4d9
-:root|--body|#3a3e36
-:root|--brass-ink|#7b6c45
-:root|--brass|#b08a3e
-:root|--faint|#726e62
-:root|--fir|#0f1f16
-:root|--green-dark|#16281e
-:root|--green-tint|#e9f2ec
-:root|--green|#1d6e42
-:root|--ink-2|#22271f
-:root|--ink|#1a201c
-:root|--line-strong|#e6e2d8
-:root|--line|#ece8dd
-:root|--muted|#6b675c
-:root|--paper|#fbfaf7
-:root|--red|#b33a2e
-:root|--sand|#f4f1e8
 :where(button, a, input, select, [role="button"], [tabindex]):focus-visible|outline|2px solid #1d6e42
 @keyframes cf-pulse >> 0%, 100%|box-shadow|0 4px 14px rgba(179, 58, 46, 0.35)
 @keyframes cf-pulse >> 50%|box-shadow|0 4px 20px rgba(179, 58, 46, 0.75)

@@ -7,6 +7,15 @@
 // Tokeniser change l'écriture, pas la couleur : l'empreinte doit rester
 // identique. Si elle bouge, c'est un bug, ou une décision à assumer par écrit.
 //
+// Les déclarations de jeton elles-mêmes (propriété commençant par `--`, telles
+// que trouvées dans :root) sont exclues du calcul : ce ne sont pas des
+// couleurs appliquées à l'écran, seulement des définitions. Leur effet est
+// déjà mesuré chez leurs consommateurs, où le var() est résolu. Les compter
+// ferait bouger l'empreinte à la simple DÉCLARATION d'un nouveau jeton, sans
+// qu'aucun pixel ne change — ce que ce script n'a pas vocation à détecter.
+// Changer la VALEUR d'un jeton reste détecté : tous ses consommateurs
+// résolvent alors vers la nouvelle valeur et bougent dans l'empreinte.
+//
 // C'est un multiensemble TRIÉ, pas une liste ordonnée : déplacer une règle ne
 // doit pas faire échouer le test, seule une valeur qui change doit le faire.
 import { readFileSync, writeFileSync } from "node:fs";
@@ -78,6 +87,9 @@ export function empreinte(cssBrut) {
       for (const decl of corps.split(";")) {
         const m = /^\s*([\w-]+)\s*:\s*([\s\S]+)$/.exec(decl);
         if (!m) continue;
+        // Une déclaration de jeton (--x: ...) n'est pas une couleur appliquée,
+        // voir le commentaire d'en-tête : on ne mesure que ses consommateurs.
+        if (m[1].startsWith("--")) continue;
         const valeur = normaliser(resoudreVars(m[2].trim(), vars));
         if (COULEUR.test(valeur)) lignes.push(`${chemin}|${m[1]}|${valeur}`);
       }
