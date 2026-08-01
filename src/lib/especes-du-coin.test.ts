@@ -1,12 +1,23 @@
+// Reste dans l'environnement node par défaut (PAS jsdom) : combiner jsdom à
+// `fileURLToPath(import.meta.url)` casse la résolution du chemin des fixtures
+// dans ce dépôt — vérifié en isolant le cas, l'ENOENT tronque le chemin bien
+// avant `__fixtures__`. Le test de bout en bout ci-dessous (loader →
+// writeCoin → readCoin) a donc besoin d'un `localStorage`, que prefs-coin.ts
+// lit et écrit mais que l'environnement node ne fournit pas : un polyfill
+// minimal, en mémoire, suffit — écrire/lire/effacer est tout ce que
+// prefs-coin.ts lui demande.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import {
   apparier,
   chargerEspecesDuCoin,
+  coinEstLoin,
   PORTEE_COIN_KM,
   STATIONS_RETENUES,
+  type CoinEspeces,
 } from "./especes-du-coin";
+import { readCoin, writeCoin } from "./prefs-coin";
 
 /**
  * Apparier un taxon relevé à une fiche, mesuré le 01/08/2026 sur les trois
@@ -69,6 +80,26 @@ const LON = 1.336;
 
 /** Les trois stations valides les plus proches de Blois, dans l'ordre. */
 const PROCHES = ["04052025", "04052800", "04052600"];
+
+/** Polyfill minimal — voir le commentaire d'en-tête sur pourquoi pas jsdom. */
+class StockageMemoire {
+  private m = new Map<string, string>();
+  getItem(k: string) {
+    return this.m.has(k) ? this.m.get(k)! : null;
+  }
+  setItem(k: string, v: string) {
+    this.m.set(k, String(v));
+  }
+  removeItem(k: string) {
+    this.m.delete(k);
+  }
+  clear() {
+    this.m.clear();
+  }
+}
+(globalThis as { localStorage?: Storage }).localStorage = new StockageMemoire() as unknown as Storage;
+
+beforeEach(() => localStorage.clear());
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -206,5 +237,74 @@ describe("chargerEspecesDuCoin", () => {
     expect(PORTEE_COIN_KM).toBe(15);
     const bbox = /bbox=([\d.-]+),([\d.-]+),([\d.-]+),([\d.-]+)/.exec(appels[0])!;
     expect(Number(bbox[3]) - Number(bbox[1])).toBeLessThan(0.6);
+  });
+
+  it("ne demande plus que nom_latin_taxon par station — c'est tout ce qu'apparier lit", async () => {
+    // Régression : le code demandait par défaut trois champs
+    // (nom_commun_taxon, nom_latin_taxon, effectif_lot), ×2,3 la facture pour
+    // une valeur (`effectif_lot`) jamais lue par apparier. Voir le commentaire
+    // de STATIONS_RETENUES pour la mesure.
+    const appels = stub();
+
+    await chargerEspecesDuCoin(LAT, LON);
+
+    const appelsStations = appels.filter((u) => u.includes("code_station="));
+    expect(appelsStations).toHaveLength(STATIONS_RETENUES);
+    for (const u of appelsStations) {
+      expect(u).toContain("fields=nom_latin_taxon");
+      expect(u).not.toContain("effectif_lot");
+    }
+  });
+});
+
+/**
+ * Le relevé écrit par le chargeur survit-il à un tour complet par
+ * localStorage ? Les tests plus haut n'assertent que sur ce que le chargeur a
+ * construit ; ceux de prefs-coin.test.ts n'assertent que sur des objets écrits
+ * à la main. Aucun des deux ne prouve que la sortie RÉELLE du chargeur passe
+ * la relecture de prefs-coin — `nom` est le point de divergence vécu (voir
+ * commit e63b080 : il a un jour été défaulté à "", qui aurait justement
+ * échappé aux deux suites séparées).
+ */
+describe("chargerEspecesDuCoin → writeCoin → readCoin", () => {
+  it("un relevé produit par le chargeur ressort identique de localStorage", async () => {
+    stub();
+
+    const c = await chargerEspecesDuCoin(LAT, LON);
+    expect(c).not.toBeNull();
+
+    writeCoin(c!);
+    const relu = readCoin();
+
+    expect(relu).toEqual(c);
+    // La station la plus proche (04052025) porte un vrai libellé Hub'Eau, pas
+    // un repli générique — c'est lui que l'écran cite comme provenance.
+    expect(relu!.stations[0].nom).toBe("MEES à CHAUSSEE-SAINT-VICTOR (LA)");
+  });
+});
+
+describe("coinEstLoin", () => {
+  const coin = (lat: number, lon: number): CoinEspeces => ({
+    ids: [],
+    ecrevisses: [],
+    inconnus: [],
+    stations: [{ code: "04052800", nom: "COSSON à CHAILLES", dist: 5.06 }],
+    lat,
+    lon,
+    releveIso: "2026-08-01",
+  });
+
+  it("faux au point même où le relevé a été fait", () => {
+    expect(coinEstLoin(coin(LAT, LON), LAT, LON)).toBe(false);
+  });
+
+  it("faux dans la portée du relevé", () => {
+    // ~5 km au nord de Blois, sous PORTEE_COIN_KM (15 km).
+    expect(coinEstLoin(coin(LAT, LON), LAT + 0.045, LON)).toBe(false);
+  });
+
+  it("vrai au-delà de la portée du relevé — le relevé n'a plus le droit de parler d'ici", () => {
+    // Tours, à ~53 km de Blois.
+    expect(coinEstLoin(coin(LAT, LON), 47.394, 0.689)).toBe(true);
   });
 });

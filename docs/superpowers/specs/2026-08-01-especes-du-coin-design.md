@@ -204,11 +204,24 @@ export function apparier(taxons: string[]): {
 export async function chargerEspecesDuCoin(
   lat: number, lon: number, signal?: AbortSignal,
 ): Promise<CoinEspeces | null>;
+
+/** Le relevé décrit-il encore l'endroit où se trouve le pêcheur ? Réutilise
+ *  PORTEE_COIN_KM : au-delà de la portée qui a choisi ses stations, le relevé
+ *  n'a plus de titre à parler du coin où l'on pêche maintenant. Fonction pure
+ *  (ajoutée en revue finale, avant fusion) : c'est l'écran qui géolocalise et
+ *  qui choisit le silence quand il ne sait pas. */
+export function coinEstLoin(coin: CoinEspeces, lat: number, lon: number): boolean;
 ```
 
 `chargerEspecesDuCoin` réutilise `stationsInBbox()` et `speciesAtStation()` de `lib/hubeau.ts` —
 aucun nouvel appel réseau n'est écrit, seulement une orchestration. Il **ne lève jamais**, sur le
 modèle exact de `chargerRivieres` : une source muette retire ses données, elle ne vide pas l'écran.
+
+`speciesAtStation()` (dans `lib/hubeau.ts`) reçoit un troisième paramètre optionnel
+`{ champs?, retries? }`, par défaut inchangé pour la Carte : `chargerEspecesDuCoin` demande
+`champs: "nom_latin_taxon"` (le seul champ qu'`apparier` lit — voir la correction post-revue du
+§2.2) et `retries: 0` (un 5xx ou 429 relancé automatiquement doublerait jusqu'à quatre requêtes
+déjà proches du seuil de débit mesuré au §2.3).
 
 Trois règles que le chargeur applique dans cet ordre, chacune adossée à une mesure du §2 :
 

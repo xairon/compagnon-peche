@@ -217,3 +217,18 @@ export async function chargerEspecesDuCoin(
 
   return { ...apparier(taxons), stations: lues, lat, lon, releveIso: isoDay() };
 }
+
+/**
+ * Le relevé décrit-il encore l'endroit où se trouve le pêcheur ?
+ *
+ * Réutilise `PORTEE_COIN_KM` plutôt qu'un nouveau seuil : au-delà de la portée
+ * que le relevé lui-même a couverte pour choisir ses stations, il n'a plus de
+ * titre à parler du coin où l'on pêche maintenant — même principe que
+ * `lib/conditionsCache.ts`, qui refuse de servir une lecture qui ne peut plus
+ * honnêtement décrire « maintenant ». Fonction pure et testable seule : c'est
+ * l'écran qui décide de la géolocalisation à comparer, et du silence à garder
+ * quand elle est refusée ou indisponible.
+ */
+export function coinEstLoin(coin: CoinEspeces, lat: number, lon: number): boolean {
+  return distKm(coin.lat, coin.lon, lat, lon) > PORTEE_COIN_KM;
+}
