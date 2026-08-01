@@ -345,6 +345,14 @@ body {
 button {
   cursor: pointer;
   font-family: inherit;
+  /* `color: inherit` manquait à côté de `font-family: inherit`, et ça se payait
+     cher : un <button> n'hérite pas la couleur du texte, il prend le noir de
+     l'agent utilisateur. Trente-deux règles de bouton posent un fond sans
+     déclarer de couleur — invisible en thème clair (du noir sur du blanc
+     ressemble à du texte normal), illisible dès que le fond s'assombrit. Les
+     boutons qui déclarent leur propre couleur ne sont pas concernés : une règle
+     de classe l'emporte sur cette règle d'élément. */
+  color: inherit;
 }
 input {
   font-family: inherit;
@@ -4066,14 +4074,9 @@ a:hover {
 .ac-carousel::-webkit-scrollbar {
   display: none;
 }
-/* `color` explicite parce que c'est un <button> : il n'hérite pas la couleur
-   du body, il prend le noir par défaut du navigateur. Invisible en thème clair
-   (noir sur blanc, personne ne l'a jamais remarqué), illisible en sombre —
-   1,28:1 sur la carte sombre. */
 .ac-spcard {
   flex-shrink: 0;
   width: 150px;
-  color: var(--ink);
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 16px;

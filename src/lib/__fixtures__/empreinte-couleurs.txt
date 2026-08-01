@@ -35,7 +35,6 @@
 .ac-spcard|background|#ffffff
 .ac-spcard|border|1px solid #ece8dd
 .ac-spcard|box-shadow|0 1px 2px rgba(20, 30, 25, 0.04)
-.ac-spcard|color|#1a201c
 .ac-tool span|color|#22271f
 .ac-tool|background|#ffffff
 .ac-tool|border|1px solid #ece8dd
