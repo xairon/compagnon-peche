@@ -1192,6 +1192,12 @@ export const SPECIES_MEDIA: Record<string, MediaEntry[]> = {
   ]
 };
 
+/**
+ * Une illustration par nœud, jamais plus. Les planches de Commons montrent
+ * déjà la suite complète des gestes dans une seule image (le palomar en cinq
+ * vignettes, l'albright en quatre) : découper une séquence par étape écrite
+ * reviendrait à télécharger la même leçon plusieurs fois.
+ */
 export const KNOT_MEDIA: Record<string, MediaEntry> = {
   "clinch": {
     "file": "assets/knots/clinch.webp",
@@ -1210,42 +1216,25 @@ export const KNOT_MEDIA: Record<string, MediaEntry> = {
     "author": "Zachary635",
     "license": "CC BY 4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Texas_Rig_Diagram.svg"
+  },
+  "sang": {
+    "file": "assets/knots/sang.webp",
+    "author": "Chris 73",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:BloodKnot_HowTo.jpg"
+  },
+  "albright": {
+    "file": "assets/knots/albright.webp",
+    "author": "LadyofHats (original) · retouché par Dfred",
+    "license": "Domaine public",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Albright_knot_diagram_retouched.png"
+  },
+  "chaise": {
+    "file": "assets/knots/chaise.webp",
+    "author": "Luis Dantas",
+    "license": "CC BY-SA 3.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
   }
-};
-
-export const KNOT_STEP_MEDIA: Record<string, MediaEntry[]> = {
-  "sang": [
-    {
-      "file": "assets/knots-steps/sang-1.webp",
-      "author": "Chris 73",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:BloodKnot_HowTo.jpg"
-    }
-  ],
-  "albright": [
-    {
-      "file": "assets/knots-steps/albright-1.webp",
-      "author": "LadyofHats (original) · retouché par Dfred",
-      "license": "Domaine public",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Albright_knot_diagram_retouched.png"
-    }
-  ],
-  "chaise": [
-    {
-      "file": "assets/knots-steps/chaise-1.webp",
-      "author": "Luis Dantas",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png"
-    }
-  ],
-  "boucle": [
-    {
-      "file": "assets/knots-steps/boucle-1.webp",
-      "author": "LadyofHats",
-      "license": "Domaine public",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Surgeon's_Loop_knot.svg"
-    }
-  ]
 };
 
 export const RECIPE_MEDIA: Record<string, MediaEntry> = {

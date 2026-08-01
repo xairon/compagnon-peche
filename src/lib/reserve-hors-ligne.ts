@@ -43,7 +43,7 @@ import {
   RECIPE_MEDIA,
   TECHNIQUE_MEDIA,
 } from "../data/media";
-import { LOCAL_KNOT_MEDIA, ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
+import { LOCAL_KNOT_MEDIA } from "../data/knot-diagrams";
 
 /** Combien de téléchargements de front. Assez pour ne pas payer 221 latences
  *  l'une après l'autre, assez peu pour ne pas monopoliser le lien de quelqu'un
@@ -119,7 +119,6 @@ export function listerReserve(): string[] {
   for (const arr of Object.values(SPECIES_MEDIA)) for (const m of arr) ajouter(thumbOf(m.file));
   for (const m of Object.values(KNOT_MEDIA)) ajouter(m.file);
   for (const m of Object.values(LOCAL_KNOT_MEDIA)) ajouter(m.file);
-  for (const arr of Object.values(ALL_KNOT_STEP_MEDIA)) for (const m of arr) ajouter(m.file);
   for (const m of Object.values(CRAYFISH_MEDIA)) ajouter(m.file);
   for (const m of Object.values(GEAR_MEDIA)) ajouter(m.file);
   for (const m of Object.values(RECIPE_MEDIA)) ajouter(m.file);

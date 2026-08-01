@@ -100,7 +100,11 @@ describe("etatReserve", () => {
     const e = await etatReserve();
 
     expect(e.presents).toBe(0);
-    expect(e.total).toBeGreaterThan(200);
+    // Le total est le catalogue réel, pas un ordre de grandeur : c'est
+    // `listerReserve` qui fait foi, et il est lui-même confronté au disque
+    // plus haut. Un seuil en dur se serait contenté de suivre le contenu.
+    expect(e.total).toBe(listerReserve().length);
+    expect(e.total).toBeGreaterThan(0);
     expect(e.complete).toBe(false);
   });
 

@@ -33,13 +33,13 @@ import {
  * disponibles hors ligne, mais elles arrivent après, sans bloquer l'activation.
  */
 describe("découpe précache / réserve", () => {
-  it("sort de l'install bloquant les sept dossiers d'illustrations", () => {
-    // Ce sont les 221 fichiers, 5 132 Kio, qui représentent 90 % des entrées et
-    // 65 % du poids — et aucun n'est nécessaire pour rendre un verdict.
+  it("sort de l'install bloquant les six dossiers d'illustrations", () => {
+    // Ce sont les fichiers qui représentent 90 % des entrées et 65 % du poids —
+    // et aucun n'est nécessaire pour rendre un verdict. (`assets/knots-steps`
+    // a été replié dans `assets/knots` : une illustration par nœud.)
     expect([...PREFIXES_RESERVE].sort()).toEqual([
       "assets/crayfish/",
       "assets/gear/",
-      "assets/knots-steps/",
       "assets/knots/",
       "assets/recipes/",
       "assets/species-sm/",

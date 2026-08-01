@@ -4,7 +4,6 @@ import { render, screen } from "@testing-library/react";
 import { StoreProvider } from "../store";
 import { Credits } from "./Credits";
 import { MEDIA_BY_KIND } from "../components/media-helpers";
-import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
 
 // The screen promises, in so many words, "Merci à leurs auteurs" — and CC BY /
 // CC BY-SA make attribution a condition of redistribution, not a courtesy.
@@ -37,9 +36,6 @@ describe("Crédits photos", () => {
     const page = document.body.textContent ?? "";
 
     for (const m of allMedia()) {
-      // Knot ids that switched to per-step sequences are deliberately excluded
-      // from the single-photo section — their steps are credited instead.
-      if (m.kind === "knot" && ALL_KNOT_STEP_MEDIA[m.id]) continue;
       expect(page, `${m.kind}/${m.id} — « ${m.author} » n'est crédité nulle part`).toContain(
         m.author,
       );

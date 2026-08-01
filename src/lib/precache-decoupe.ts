@@ -23,6 +23,9 @@
  *   assets/knots-steps   123 Kio    4 f
  *   (racine)              47 Kio    6 f
  *
+ * (`assets/knots-steps` a depuis été replié dans `assets/knots` : une seule
+ * illustration par nœud, un seul dossier — voir `data/knot-diagrams.ts`.)
+ *
  * La coupure retenue :
  *
  * - **NOYAU** (précache, bloque l'activation) — code, styles, polices, icônes,
@@ -56,7 +59,6 @@ export const PREFIXES_RESERVE: readonly string[] = [
   "assets/species-sm/",
   "assets/crayfish/",
   "assets/knots/",
-  "assets/knots-steps/",
   "assets/gear/",
   "assets/recipes/",
   "assets/techniques/",
