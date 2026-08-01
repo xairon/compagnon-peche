@@ -1,0 +1,66 @@
+{
+  "_lisezmoi": [
+    "Découpe des planches libres de Wikimedia Commons, une vignette par geste.",
+    "Les cinq entrées ont été établies en REGARDANT chaque planche, pas en déduisant",
+    "des cases de ses dimensions — c'est ce qui a révélé que le nœud de sang est en",
+    "2x2 et non 2x3, et la boucle de chirurgien en 3 cases et non 4.",
+    "`box` recadre AVANT la grille : deux planches portent un bandeau de titre en pied.",
+    "Trois planches pressenties ont été écartées et ne doivent pas revenir ici :",
+    "  · PalomarKnotSequence.jpg — cases irrégulières, et un porte-clés en paracorde",
+    "    au lieu d'un hameçon (le commit 864cb95 l'avait déjà retirée pour ce motif) ;",
+    "  · Knotless knot.svg — un seul dessin du nœud fini, pas une séquence ;",
+    "  · Uni knot.jpg et la photo du clinch — images uniques.",
+    "Ces quatre nœuds passent en photo maison ou en schéma d'assemblage."
+  ],
+  "planches": [
+    {
+      "id": "sang",
+      "filename": "BloodKnot HowTo.jpg",
+      "author": "Chris 73",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:BloodKnot_HowTo.jpg",
+      "grid": { "cols": 2, "rows": 2 }
+    },
+    {
+      "id": "chaise",
+      "filename": "Bowline in four steps.png",
+      "author": "Luis Dantas",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bowline_in_four_steps.png",
+      "grid": { "cols": 2, "rows": 2 }
+    },
+    {
+      "id": "albright",
+      "filename": "Albright knot diagram retouched.png",
+      "author": "LadyofHats (original) · retouché par Dfred",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Albright_knot_diagram_retouched.png",
+      "commentaire": "Cadre orange + bandeau « Albright Knot » en pied : recadrer avant de découper.",
+      "box": { "left": 0.0792, "top": 0.0342, "width": 0.8448, "height": 0.8656 },
+      "grid": { "cols": 1, "rows": 4 }
+    },
+    {
+      "id": "boucle",
+      "filename": "Surgeon's Loop knot.svg",
+      "author": "LadyofHats",
+      "license": "Domaine public",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Surgeon's_Loop_knot.svg",
+      "commentaire": "Cadre vert + bandeau « Surgeon's Loop Knot » en pied. Trois cases, pas quatre.",
+      "box": { "left": 0.0792, "top": 0.0351, "width": 0.8448, "height": 0.8665 },
+      "grid": { "cols": 1, "rows": 3 }
+    },
+    {
+      "id": "texan",
+      "author": "Zachary635",
+      "license": "CC BY 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Texas_Rig_Diagram.svg",
+      "commentaire": "Déjà une image par geste sur Commons : rien à découper, seulement à convertir.",
+      "files": [
+        "Texas Rig Diagram 1.svg",
+        "Texas Rig Diagram 2.svg",
+        "Texas Rig Diagram 3.svg",
+        "Texas Rig Diagram 4.svg"
+      ]
+    }
+  ]
+}
