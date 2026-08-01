@@ -635,7 +635,7 @@ export function Fiche() {
               style={{
                 border: `1px solid ${open ? "var(--green-dark)" : "var(--line-strong)"}`,
                 background: open ? "var(--green-dark)" : "var(--card)",
-                color: open ? "var(--paper)" : "var(--body)",
+                color: open ? "var(--on-accent-warm)" : "var(--body)",
               }}
               onClick={() => goSection(sec.id)}
             >

@@ -204,7 +204,7 @@ export function App() {
           style={{ background: state.bigUI ? "var(--green)" : "var(--card)" }}
           onClick={() => set((st) => ({ bigUI: !st.bigUI }))}
         >
-          <Icon d={ICONS.gloves} size={24} stroke={state.bigUI ? "var(--paper)" : "var(--icon-muted)"} width={1.6} />
+          <Icon d={ICONS.gloves} size={24} stroke={state.bigUI ? "var(--on-accent-warm)" : "var(--icon-muted)"} width={1.6} />
         </button>
       )}
 

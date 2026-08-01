@@ -15,8 +15,8 @@ import { DeptDefautWarning } from "../components/DeptDefautWarning";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
 
 function actStyle(kind: ActKind) {
-  if (kind === "primary") return { bd: "var(--green-dark)", bg: "var(--green-dark)", fg: "var(--paper)" };
-  if (kind === "danger") return { bd: "var(--red)", bg: "var(--red)", fg: "var(--paper)" };
+  if (kind === "primary") return { bd: "var(--green-dark)", bg: "var(--green-dark)", fg: "var(--on-accent-warm)" };
+  if (kind === "danger") return { bd: "var(--red)", bg: "var(--red)", fg: "var(--on-accent-warm)" };
   return { bd: "var(--line-strong)", bg: "var(--card)", fg: "var(--ink-2)" };
 }
 

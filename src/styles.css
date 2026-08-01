@@ -27,6 +27,14 @@
      presque blanc — les garder confondus rendrait le sombre impossible. */
   --card: #ffffff;
   --on-accent: #ffffff;
+  /* Seconde encre claire posée sur un accent : le blanc CHAUD. --on-accent est
+     le blanc pur ; celui-ci vaut #fbfaf7, la même valeur que --paper, ce qui
+     explique la confusion qu'il vient réparer. La distinction est invisible en
+     thème clair et vitale en sombre : --paper est une SURFACE, elle deviendra
+     presque noire ; cette encre-ci est une MARQUE posée sur un vert ou un
+     sapin plein, elle doit rester claire. Les confondre rendrait le texte des
+     boutons pleins illisible. */
+  --on-accent-warm: #fbfaf7;
   /* v2 refonte accents */
   --fir: #0f1f16; /* deep fir green — dark surfaces & CTAs */
   /* Accent décoratif SEULEMENT : 3,07:1 sur --paper, ce qui suffit pour un
@@ -344,7 +352,7 @@ a:hover {
   align-items: center;
   gap: 12px;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border: none;
   border-radius: 14px;
   padding: 14px 16px;
@@ -368,7 +376,7 @@ a:hover {
   width: 100%;
   border: none;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 14px;
   font-weight: 600;
   display: flex;
@@ -515,7 +523,7 @@ a:hover {
   bottom: 14px;
   z-index: 3;
   background: rgba(var(--veil-tint), 0.72);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 11.5px;
   font-weight: 600;
   padding: 4px 11px;
@@ -1197,7 +1205,7 @@ a:hover {
   padding: 0 16px;
   border: none;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 100px;
   font-size: 14px;
   font-weight: 600;
@@ -1361,7 +1369,7 @@ a:hover {
   height: 26px;
   border-radius: 50%;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 13px;
   font-weight: 650;
   display: flex;
@@ -1449,7 +1457,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
 }
 .cook-head {
   display: flex;
@@ -1477,7 +1485,7 @@ a:hover {
   border: 1px solid var(--cook-dark);
   background: transparent;
   border-radius: 50%;
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 18px;
   flex-shrink: 0;
   line-height: 1;
@@ -1541,7 +1549,7 @@ a:hover {
   border-radius: 18px;
   border: 1.5px solid var(--cook-dark);
   background: transparent;
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 19px;
   font-weight: 600;
 }
@@ -1551,7 +1559,7 @@ a:hover {
   border-radius: 18px;
   border: none;
   background: var(--green);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 20px;
   font-weight: 650;
   box-shadow: 0 14px 28px -12px rgba(29, 110, 66, 0.8);
@@ -1565,7 +1573,7 @@ a:hover {
   bottom: 84px;
   z-index: 30;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 12px;
   padding: 10px 14px;
   font-size: 12.5px;
@@ -1634,7 +1642,7 @@ a:hover {
   margin-left: auto;
   border: 1.5px solid var(--green-dark);
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 100px;
   padding: 9px 14px;
   font-size: 13px;
@@ -1905,7 +1913,7 @@ a:hover {
   align-items: center;
   gap: 8px;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 14px;
   padding: 10px 12px;
   box-shadow: 0 6px 18px rgba(var(--shadow-tint), 0.3);
@@ -2391,7 +2399,7 @@ a:hover {
 .dept-badge {
   display: inline-block;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 12px;
   font-weight: 650;
   border-radius: 100px;
@@ -2940,7 +2948,7 @@ a:hover {
   letter-spacing: -0.01em;
 }
 .st-card.fir .st-n {
-  color: var(--paper);
+  color: var(--on-accent-warm);
 }
 .st-n.green {
   color: var(--green);
@@ -3128,7 +3136,7 @@ a:hover {
   border-radius: 14px;
   border: none;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 15px;
   font-weight: 600;
 }
@@ -3387,7 +3395,7 @@ a:hover {
 .onb2-dept-btn[aria-pressed="true"] {
   background: var(--green-dark);
   border-color: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
 }
 .onb2-dept-btn:active {
   transform: scale(0.985);
@@ -3413,7 +3421,7 @@ a:hover {
   border: none;
   border-radius: 4px;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-family: "Source Serif 4", Georgia, serif;
   font-weight: 700;
   font-size: 16.5px;
@@ -3444,7 +3452,7 @@ a:hover {
   align-items: center;
   gap: 12px;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 100px;
   padding: 8px 10px 8px 18px;
   box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
@@ -3553,7 +3561,7 @@ a:hover {
 .stg-btn.dark {
   border: none;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   margin-top: 12px;
 }
 .stg-btn.danger {
@@ -3762,7 +3770,7 @@ a:hover {
   align-items: center;
   gap: 13px;
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border: none;
   border-radius: 16px;
   padding: 16px 18px;
@@ -3860,7 +3868,7 @@ a:hover {
   top: 7px;
   left: 7px;
   background: rgba(var(--veil-tint), 0.82);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 9.5px;
   font-weight: 650;
   padding: 3px 7px;
@@ -3929,7 +3937,7 @@ a:hover {
   justify-content: center;
   gap: 9px;
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border: none;
   border-radius: 16px;
   font-weight: 650;
@@ -4014,7 +4022,7 @@ a:hover {
   border-radius: 12px;
   border: none;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 14px;
   font-weight: 600;
 }
@@ -4338,7 +4346,7 @@ button.card-row {
   height: 26px;
   border-radius: 50%;
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 13px;
   font-weight: 650;
   display: flex;
@@ -4710,7 +4718,7 @@ button.card-row {
   width: 100%;
   margin-top: 14px;
   background: var(--fir, #0f1f16);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border: none;
   border-radius: 14px;
   padding: 15px;
@@ -5107,7 +5115,7 @@ button.card-row {
   align-items: center;
   gap: 7px;
   background: var(--fir, #0f1f16);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border: none;
   border-radius: 100px;
   padding: 7px 12px;
@@ -5207,7 +5215,7 @@ button.card-row {
   gap: 7px;
   width: 100%;
   background: var(--fir, #0f1f16);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   text-decoration: none;
   border-radius: 11px;
   padding: 11px 13px;
@@ -5454,7 +5462,7 @@ button.card-row {
 .ecr-chips button.on {
   background: var(--fir);
   border-color: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
 }
 .ecr-chip-input {
   display: inline-flex;
@@ -5502,7 +5510,7 @@ button.card-row {
   font-size: 15.5px;
   font-weight: 700;
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   margin-top: 22px;
 }
 .ecr-poseall {
@@ -5607,7 +5615,7 @@ button.card-row {
 .ecr-sheet-close {
   border: none;
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 12px;
   padding: 13px;
   font-size: 15px;
@@ -5646,7 +5654,7 @@ button.card-row {
   gap: 12px;
   max-width: calc(100% - 32px);
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 100px;
   padding: 8px 10px 8px 18px;
   box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
@@ -5656,7 +5664,7 @@ button.card-row {
 .ecr-undo-toast button {
   border: none;
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   border-radius: 100px;
   padding: 11px 16px; /* ≥44px tap target */
   min-height: 44px;
@@ -5848,7 +5856,7 @@ button.card-row {
   border-radius: 999px;
   border: 1.5px solid var(--fir);
   background: var(--fir);
-  color: var(--paper);
+  color: var(--on-accent-warm);
   font-size: 13px;
   font-weight: 600;
   box-shadow: 0 4px 14px rgba(var(--shadow-tint), 0.22);
@@ -6471,7 +6479,7 @@ button.card-row {
 .gds-cat[aria-pressed="true"] {
   border-color: var(--green-dark);
   background: var(--green-dark);
-  color: var(--paper);
+  color: var(--on-accent-warm);
 }
 .gds-list {
   display: flex;

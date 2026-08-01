@@ -42,7 +42,7 @@ export function BottomNav() {
         aria-current={priseActive ? "page" : undefined}
       >
         <span className="disc">
-          <Icon d={ICONS.fish} size={26} stroke="var(--paper)" width={1.7} />
+          <Icon d={ICONS.fish} size={26} stroke="var(--on-accent-warm)" width={1.7} />
         </span>
         <span className="lbl">Prise</span>
       </button>

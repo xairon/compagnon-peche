@@ -649,7 +649,7 @@ export function Accueil() {
 
         <button className="ac-prise" onClick={() => startPrise()}>
           <span className="disc">
-            <Icon d={FISH_ICON} size={21} stroke="var(--paper)" width={1.7} />
+            <Icon d={FISH_ICON} size={21} stroke="var(--on-accent-warm)" width={1.7} />
           </span>
           <span className="txt">
             <span className="t">J'ai une prise</span>

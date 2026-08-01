@@ -159,7 +159,7 @@ export function CarnetRecettes() {
       </div>
 
       <button className="mr-create" style={{ marginTop: 14 }} onClick={() => setEditing("new")}>
-        <Icon d="M12 5v14M5 12h14" size={20} stroke="var(--paper)" width={1.8} />
+        <Icon d="M12 5v14M5 12h14" size={20} stroke="var(--on-accent-warm)" width={1.8} />
         Créer une recette
       </button>
       <div className="mr-note">100 % local — liez-la à une espèce, avec photo, ingrédients, étapes et note.</div>
@@ -225,7 +225,7 @@ function chipStyle(active: boolean): React.CSSProperties {
   return {
     border: `1px solid ${active ? "var(--green-dark)" : "var(--line-strong)"}`,
     background: active ? "var(--green-dark)" : "var(--card)",
-    color: active ? "var(--paper)" : "var(--body)",
+    color: active ? "var(--on-accent-warm)" : "var(--body)",
   };
 }
 

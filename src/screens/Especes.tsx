@@ -152,7 +152,7 @@ export function Especes() {
                 style={{
                   border: `1px solid ${active ? "var(--green-dark)" : "var(--line-strong)"}`,
                   background: active ? "var(--green-dark)" : "var(--card)",
-                  color: active ? "var(--paper)" : "var(--body)",
+                  color: active ? "var(--on-accent-warm)" : "var(--body)",
                 }}
                 onClick={() => set({ filter: id })}
               >
