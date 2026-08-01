@@ -80,8 +80,10 @@ Les quatre échecs ne sont pas de même nature :
 |---|---|---|
 | `Cyprinidae sp.` | lot identifié à la **famille** | échec correct — on ne devine pas |
 | `Lampetra spp` | lot identifié au **genre** | échec correct |
+| `Hybride brème-gardon` | **hybride**, nommé en français dans le champ latin | échec correct |
 | `Leuciscus cephalus` | **synonyme** — le dépôt écrit `Squalius cephalus` (chevaine) | à corriger |
 | `Gymnocephalus cernua` | **synonyme** — le dépôt écrit `cernuus` (grémille) | à corriger |
+| `Procambarus clarkii`, `Faxonius limosus` | **écrevisses** — elles ONT une fiche, mais dans `data/ecrevisses.ts`, pas dans `SPECIES` | à reconnaître, jamais à compter comme « sans fiche » |
 
 Deux pièges vérifiés, qui ferment les solutions faciles :
 
@@ -94,6 +96,42 @@ Deux pièges vérifiés, qui ferment les solutions faciles :
 Décision : **table de synonymes écrite à la main**, courte et sourcée, doublée d'un test qui rejoue
 les charges utiles figées et échoue bruyamment dès qu'un taxon non apparié apparaît. On ne couvre
 que ce qu'on a vu — mais on le sait, et le test le dira quand la liste s'allongera.
+
+### 2.5 Un enregistrement de station sur quatre n'a pas de code
+
+Sur les 22 stations de la boîte, **6 n'ont ni `code_station` ni `libelle_station`** — seulement des
+coordonnées. Et `libelle_cours_eau`, pourtant demandé dans `fields`, **n'est jamais rendu** par cet
+endpoint : les quatre seules clés présentes sont `code_station`, `libelle_station`, `longitude`,
+`latitude`.
+
+C'est la station la plus proche de Blois (2,04 km) qui est un de ces enregistrements muets.
+Interrogée, elle rend `count: 0`. Conséquence directe sur le design : **on retient les trois plus
+proches _ayant un code_**, pas les trois plus proches. Sans ce tri, une requête sur trois partirait
+pour rien et le pêcheur perdrait un tiers de son relevé.
+
+> **Défaut préexistant, hors périmètre.** `stationsInBbox()` (`lib/hubeau.ts`) fait
+> `String(d.code_station)`, ce qui produit la chaîne `"null"`, et `libelle_station || libelle_cours_eau
+> || "Station de suivi"` masque l'anomalie derrière un libellé générique. La **Carte** place donc
+> aujourd'hui 6 marqueurs fantômes autour de Blois ; les toucher affiche « Aucune espèce recensée sur
+> cette station ». À corriger séparément.
+
+### 2.6 Vérité terrain, pour les tests
+
+Trois stations valides les plus proches de Blois (47,586 / 1,336) : `04052025` (3,37 km, 2 taxons —
+station à peine échantillonnée, cas réel utile), `04052800` (5,06 km, 28 taxons), `04052600`
+(7,63 km, 32 taxons).
+
+```
+union des taxons distincts                    39
+  → espèces de SPECIES appariées              34   (sur 129 fiches → 95 masquées)
+  → écrevisses (fiche dans un autre écran)     2   Procambarus clarkii, Faxonius limosus
+  → réellement sans fiche                      3   Cyprinidae sp. | Lampetra spp | Hybride brème-gardon
+```
+
+Charges utiles figées dans `src/lib/__fixtures__/` : `hubeau-piscicole-stations-blois.json`
+(22 stations, telles quelles, dont les 6 muettes) et `hubeau-piscicole-obs-<code>.json` (réduites à
+un lot par taxon distinct, plus un doublon pour que le dédoublonnage ait à travailler ; `count`
+garde la valeur réelle de l'API, qui n'est pas la taille de la page).
 
 ## 3. Architecture
 
@@ -115,9 +153,14 @@ export interface StationDuCoin {
 
 /** Ce que le coin retient. Sérialisable tel quel dans localStorage. */
 export interface CoinEspeces {
-  /** Ids de fiches, ordre stable (alphabétique) — jamais l'ordre du réseau. */
+  /** Ids de fiches SPECIES, ordre stable (alphabétique) — jamais l'ordre du réseau. */
   ids: string[];
-  /** Taxons relevés qu'aucune fiche ne reçoit. Comptés, jamais jetés en silence. */
+  /** Ids de fiches d'écrevisses relevées ici (data/ecrevisses.ts). Elles ne
+   *  filtrent pas la grille Espèces — elles ne sont pas dans SPECIES — mais
+   *  les compter comme « sans fiche » serait faux : l'app en a une. */
+  ecrevisses: string[];
+  /** Taxons relevés qu'aucune fiche ne reçoit : lots identifiés au genre ou à la
+   *  famille, hybrides. Comptés, jamais jetés en silence. */
   inconnus: string[];
   stations: StationDuCoin[];
   lat: number;
@@ -126,7 +169,11 @@ export interface CoinEspeces {
   releveIso: string;
 }
 
-export function apparier(taxons: string[]): { ids: string[]; inconnus: string[] };
+export function apparier(taxons: string[]): {
+  ids: string[];
+  ecrevisses: string[];
+  inconnus: string[];
+};
 
 export async function chargerEspecesDuCoin(
   lat: number, lon: number, signal?: AbortSignal,
@@ -136,6 +183,13 @@ export async function chargerEspecesDuCoin(
 `chargerEspecesDuCoin` réutilise `stationsInBbox()` et `speciesAtStation()` de `lib/hubeau.ts` —
 aucun nouvel appel réseau n'est écrit, seulement une orchestration. Il **ne lève jamais**, sur le
 modèle exact de `chargerRivieres` : une source muette retire ses données, elle ne vide pas l'écran.
+
+Trois règles que le chargeur applique dans cet ordre, chacune adossée à une mesure du §2 :
+
+1. **écarter les stations sans code** (§2.5) — `stationsInBbox` rend `"null"` en chaîne, il faut
+   donc tester la chaîne, pas seulement la valeur falsy ;
+2. **trier par distance et couper à `STATIONS_RETENUES`**, hors portée `PORTEE_COIN_KM` ;
+3. **lire en série** (§2.3), en accumulant ce qui répond.
 
 `apparier` s'appuie sur `binomial()` (déjà exporté par `lib/hubeau.ts`, déjà utilisé par la Carte)
 plus une table :
@@ -197,7 +251,8 @@ const list = SPECIES.filter(
 | Hors-ligne, aucun coin enregistré | « Sans réseau, la liste des relevés ne peut pas être établie. » |
 | Hors-ligne, coin enregistré | **Le filtre marche**, et la date du relevé le dit |
 | Aucune station à portée | « Aucune station de pêche scientifique à moins de 15 km d'ici. » — pas de repli sur le département |
-| Taxons sans fiche | « 4 taxons relevés n'ont pas de fiche dans l'app. » |
+| Taxons sans fiche | « 3 taxons relevés n'ont pas de fiche : lots identifiés au genre ou à la famille, hybrides. » |
+| Écrevisses relevées | « 2 écrevisses relevées ici — voir l'écran Écrevisses. » Jamais comptées comme « sans fiche » |
 
 Chaque état est distinct : un écran qui confondrait « hors-ligne » et « aucune station » affirmerait
 une absence qu'il n'a pas constatée.
@@ -210,11 +265,15 @@ une absence qu'il n'a pas constatée.
 - `apparier` retrouve le chevaine depuis `Leuciscus cephalus` et la grémille depuis
   `Gymnocephalus cernua` ;
 - `Mugil cephalus` **n'est pas** apparié au chevaine — le piège de l'épithète ;
-- `Cyprinidae sp.` et `Lampetra spp` ressortent en `inconnus`, jamais devinés ;
-- **le test de garde** : aucun taxon des fixtures ne doit rester non apparié en dehors des lots
-  genre/famille listés nommément. Il échoue quand une divergence nouvelle apparaît ;
+- `Cyprinidae sp.`, `Lampetra spp` et `Hybride brème-gardon` ressortent en `inconnus` ;
+- `Procambarus clarkii` ressort en `ecrevisses`, pas en `inconnus` ;
+- **le test de garde** : sur les fixtures, `inconnus` vaut exactement les trois taxons listés
+  ci-dessus. Il échoue dès qu'une divergence nouvelle apparaît ;
+- le chargeur écarte les 6 enregistrements sans code de la fixture stations, et retient
+  `04052025`, `04052800`, `04052600` — les trois plus proches **valides** ;
 - une station en échec ne vide pas le résultat ; les trois en échec rendent `null` ;
-- `ids` est trié — deux appels rendent le même ordre.
+- `ids` est trié — deux appels rendent le même ordre ;
+- sur les fixtures : `ids.length === 34`, `ecrevisses.length === 2`, `inconnus.length === 3`.
 
 `src/lib/prefs-coin.test.ts` : stockage absent, tronqué, JSON invalide, champs du mauvais type →
 défaut, jamais de levée. Miroir de `prefs-accueil.test.ts`.
