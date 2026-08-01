@@ -10,7 +10,7 @@ import { usePwa } from "../lib/pwa";
 import { promesseHorsLigne } from "../lib/promesse-hors-ligne";
 
 export function Outils() {
-  const { state, nav } = useStore();
+  const { state, nav, set } = useStore();
   const { reserve } = usePwa();
   const deptName = DEPARTEMENTS[state.dept].name;
 
@@ -78,6 +78,29 @@ export function Outils() {
             `beforeinstallprompt`, donc le bouton d'installation que lib/pwa.ts
             propose sur Android n'y apparaît jamais. */}
         <AideInstallIOS />
+        {/* Un thème est un réglage, pas une destination : il vit ici, au-dessus
+            des tuiles, et non dans un écran de plus. Le contrôle segmenté est
+            celui du Carnet (.pf-seg), pour ne pas inventer un second motif. */}
+        <div className="reglage-bloc">
+          <div className="reglage-l muted">Apparence</div>
+          <div className="pf-seg">
+            {([
+              ["auto", "Auto"],
+              ["light", "Clair"],
+              ["dark", "Sombre"],
+            ] as const).map(([valeur, libelle]) => (
+              <button
+                key={valeur}
+                type="button"
+                className={state.theme === valeur ? "on" : ""}
+                aria-pressed={state.theme === valeur}
+                onClick={() => set(() => ({ theme: valeur }))}
+              >
+                {libelle}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="section-list" style={{ marginTop: 16 }}>
           {rows.map((r) => (
             <button key={r.title} type="button" className="card-row" onClick={() => nav(r.to as Screen)}>

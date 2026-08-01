@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { StoreProvider } from "../store";
 import { Outils } from "./Outils";
 import { DEPARTEMENTS } from "../data/regulation";
@@ -70,5 +70,22 @@ describe("Outils — département actif", () => {
     const ligne = screen.getByText(/Département actif/).closest("button")!;
 
     expect(ligne.textContent).toMatch(/accueil/i);
+  });
+});
+
+describe("réglage d'apparence", () => {
+  it("propose les trois choix, Auto actif par défaut", () => {
+    rendre();
+    expect(screen.getByRole("button", { name: "Auto" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Clair" })).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "Sombre" })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("un choix explicite pose data-theme et survit au stockage", () => {
+    rendre();
+    fireEvent.click(screen.getByRole("button", { name: "Sombre" }));
+    expect(screen.getByRole("button", { name: "Sombre" })).toHaveAttribute("aria-pressed", "true");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+    expect(JSON.parse(localStorage.getItem("carnet:prefs")!).theme).toBe("dark");
   });
 });

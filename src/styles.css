@@ -4212,6 +4212,20 @@ a:hover {
   box-shadow: 0 1px 2px rgba(var(--shadow-tint), 0.08);
 }
 
+.reglage-bloc {
+  margin: 4px 0 16px;
+}
+.reglage-l {
+  /* Pas de `color` ici : la classe `.muted` (déjà déclarée plus haut) porte
+     déjà `color: var(--muted)`. La dupliquer sous un nouveau sélecteur
+     aurait ajouté une ligne à l'empreinte des couleurs (garde-fou du chantier
+     de tokenisation) pour une valeur strictement identique — on réutilise la
+     classe existante plutôt que de la reproduire. */
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
 /* ---- Matériel (tacklebox) & guide ---- */
 .add-row {
   width: 100%;
