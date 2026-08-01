@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES, CURATED_IDS } from "../data/species";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
@@ -8,6 +8,8 @@ import { Media } from "../components/Media";
 import { Icon } from "../components/Icon";
 import { Tip } from "../components/Tip";
 import { MiniMap } from "../components/MiniMap";
+import { Repli } from "../components/Repli";
+import { ChoixRiviere } from "../components/ChoixRiviere";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptBouton } from "../components/DeptBouton";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
@@ -23,6 +25,17 @@ import {
   type HydroReading,
   type WaterTemp,
 } from "../lib/hubeau";
+import { stationsHydro } from "../lib/hydro-riviere";
+import { surLaRiviere } from "../lib/rivieres";
+import { choisirStation } from "../lib/station";
+import { REFERENTIEL_SANDRE } from "../lib/cours-du-point";
+import {
+  readPrefsAccueil,
+  writePrefsAccueil,
+  estReplie,
+  type RiviereChoisie,
+} from "../lib/prefs-accueil";
+import { horairesPeche, MARGE_LEGALE_MIN } from "../lib/horaires-peche";
 import { sunTimes, moonIllumination, moonPhaseName, type SunTimes } from "../lib/astro";
 import { quotaToday } from "../lib/helpers";
 import { hhmm, ago } from "../lib/geo";
@@ -33,6 +46,7 @@ import { setConditions } from "../lib/conditionsCache";
 import { useNow } from "../lib/now";
 import { effectiveMaille } from "../lib/maille";
 import type { Screen } from "../store";
+import "./accueil.css";
 
 // Default "home water" until GPS refines it (Blois / Loire).
 const HOME = { lat: 47.586, lon: 1.336 };
@@ -58,20 +72,63 @@ interface Water {
   flow?: HydroReading | null;
   level?: HydroReading | null;
   temp?: WaterTemp | null;
+  /** Vrai quand tout ce qui précède a été filtré sur la rivière choisie. Sans
+   *  ce drapeau, « rien trouvé » et « rien sur VOTRE rivière » s'écriraient
+   *  pareil, et c'est justement la distinction que le choix apporte. */
+  filtree: boolean;
 }
 
-async function loadWater(lat: number, lon: number, signal?: AbortSignal): Promise<Water> {
-  const st = await nearestHydroStation(lat, lon, signal).catch(() => null);
+/**
+ * Les conditions d'eau d'un point, éventuellement bornées à UNE rivière.
+ *
+ * Sans `riviere`, rien ne change : la station la plus proche répond, comme
+ * avant. Avec, le filtre est STRICT et il s'applique AVANT le choix de station
+ * — `choisirStation(…, coursRef)` retomberait sinon sur la plus proche toutes
+ * rivières confondues quand la bonne n'a rien, ce qui est exactement l'erreur
+ * que le pêcheur cherche à corriger en désignant sa rivière.
+ */
+async function loadWater(
+  lat: number,
+  lon: number,
+  riviere: RiviereChoisie | null,
+  signal?: AbortSignal,
+): Promise<Water> {
+  const cles = riviere?.cles ?? null;
+
+  let st: { code: string; nom: string } | null = null;
+  if (cles) {
+    // Une liste complète, filtrée, puis la règle ordinaire sur ce qui reste.
+    const cands = await stationsHydro(lat, lon, signal);
+    st = choisirStation(surLaRiviere(cands, cles), "hydro");
+  } else {
+    st = await nearestHydroStation(lat, lon, signal).catch(() => null);
+  }
   let flow: HydroReading | null = null;
   let level: HydroReading | null = null;
   if (st) {
     flow = await latestHydro(st.code, "Q", signal).catch(() => null);
     if (!flow) level = await latestHydro(st.code, "H", signal).catch(() => null);
   }
+
   // Freshest real reading across both Hub'Eau networks — always shown WITH its
   // date (no French river has continuous coverage), so it's never faked as "live".
-  const temp = await waterTemp(lat, lon, signal).catch(() => null);
-  return { station: st?.nom, flow, level, temp };
+  let temp: WaterTemp | null = null;
+  if (!cles) {
+    temp = await waterTemp(lat, lon, signal).catch(() => null);
+  } else {
+    // La thermie et la physico-chimie codent dans CoursEau_Carthage2017 ; leur
+    // passer la clé CEA de l'hydrométrie ne rapprocherait rien. Sans clé
+    // Carthage, la requête serait certaine d'être rejetée ensuite : on ne la
+    // fait pas.
+    const carthage = cles.find((c) => c.startsWith(`${REFERENTIEL_SANDRE}:`));
+    if (carthage) {
+      const t = await waterTemp(lat, lon, signal, carthage).catch(() => null);
+      // Vérification APRÈS coup : waterTemp retombe elle aussi sur la plus
+      // proche quand la bonne rivière n'a rien. Ce filtre est le garde-fou.
+      temp = t && surLaRiviere([t], cles).length ? t : null;
+    }
+  }
+  return { station: st?.nom, flow, level, temp, filtree: !!cles };
 }
 
 export function Accueil() {
@@ -90,6 +147,30 @@ export function Accueil() {
   const [err, setErr] = useState(false);
   // Freshness is judged in days here, so a per-minute clock is ample.
   const now = useNow();
+
+  // Préférences de l'écran : lues SYNCHRONEMENT au premier rendu (voir
+  // lib/prefs-accueil.ts). Un `useEffect` déplierait tout le tableau de bord le
+  // temps d'une frame avant de le replier, et lancerait les requêtes d'eau sans
+  // la rivière choisie avant de les relancer avec.
+  const [replis, setReplis] = useState(() => readPrefsAccueil().replis);
+  const [riviere, setRiviere] = useState<RiviereChoisie | null>(() => readPrefsAccueil().riviere);
+  const [choixOuvert, setChoixOuvert] = useState(false);
+
+  const basculer = useCallback((id: string, defaut: boolean) => {
+    setReplis((r) => ({ ...r, [id]: !estReplie(r, id, defaut) }));
+  }, []);
+
+  const choisirRiviere = useCallback((r: RiviereChoisie | null) => {
+    setRiviere(r);
+    setChoixOuvert(false);
+  }, []);
+
+  // Un seul point d'écriture, et pas un effet de bord dans un `setState` : en
+  // mode strict React rejoue les mises à jour, et écrire depuis l'intérieur
+  // rendrait le nombre d'écritures dépendant du mode de rendu.
+  useEffect(() => {
+    writePrefsAccueil({ replis, riviere });
+  }, [replis, riviere]);
 
   useEffect(() => {
     let alive = true;
@@ -114,15 +195,20 @@ export function Accueil() {
       setLoading(false);
       setErr(!m);
     });
-    loadWater(pt.lat, pt.lon, ac.signal).then((w) => alive && setWater(w));
+    loadWater(pt.lat, pt.lon, riviere, ac.signal).then((w) => alive && setWater(w));
     return () => {
       alive = false;
       ac.abort(); // cancel in-flight weather/onde/water requests on unmount/dep change
     };
-  }, [pt.lat, pt.lon]);
+    // `riviere` en dépendance : changer de rivière doit relancer les mesures,
+    // sinon l'écran garderait celles de l'ancienne sous le nouveau nom.
+  }, [pt.lat, pt.lon, riviere]);
 
   const sun = useMemo(() => sunTimes(new Date(), pt.lat, pt.lon), [pt.lat, pt.lon]);
   const moon = useMemo(() => moonIllumination(new Date()), []);
+  // Les horaires légaux (½ h avant le lever, ½ h après le coucher, R436-13).
+  // `now` fait avancer « ouvert / fermé » sans recalculer l'éphéméride.
+  const legal = useMemo(() => horairesPeche(sun, new Date(now)), [sun, now]);
 
   // Feed the conditions cache: a catch logged from anywhere in the app picks the
   // snapshot up from here. Only what is actually known goes in — the cache has
@@ -203,6 +289,33 @@ export function Accueil() {
   const wl = meteo ? weatherLabel(meteo.now.code) : null;
   const n = meteo?.now;
 
+  // Où l'on est, en une ligne — c'est ce qui reste sous les yeux carte repliée.
+  const lieu = located
+    ? "Ma position"
+    : state.deptChosen
+      ? `${deptName} · chef-lieu`
+      : `${deptName} · défaut`;
+
+  // Ce que le détail météo montrerait : le résumé doit porter une VALEUR, pas
+  // un intitulé, sans quoi replier ressemble à une donnée manquante.
+  const resumeMeteo = n
+    ? `${mesure(n.wind)} km/h · ${mesure(n.pressure)} hPa · ${mesure(n.humidity)} %`
+    : loading
+      ? "Chargement…"
+      : "";
+
+  const REPLI_CARTE = "carte";
+  const REPLI_METEO = "meteo";
+  // Défauts : les deux blocs que l'utilisateur a nommés s'ouvrent repliés. Ils
+  // ne sont pas écrits dans les préférences tant qu'on n'y a pas touché — sans
+  // quoi changer d'avis ici ne changerait plus rien pour les installés.
+  const carteReplie = estReplie(replis, REPLI_CARTE, true);
+  const meteoReplie = estReplie(replis, REPLI_METEO, true);
+
+  // Les trois états de la rivière. `aucuneMesure` n'est PAS « chargement » :
+  // il ne vaut que lorsque la réponse est arrivée et qu'elle est vide.
+  const aucuneMesure = !!water?.filtree && !water.flow && !water.level && !water.temp;
+
   return (
     <main className="screen dash">
       <div className="pad" style={{ paddingTop: 22 }}>
@@ -241,33 +354,37 @@ export function Accueil() {
           />
         )}
 
-        {/* Minimap hero */}
-        <div className="dash-map">
-          <MiniMap lat={pt.lat} lon={pt.lon} zoom={13} onClick={() => goTab("carte")} />
-          <div className="dash-map-bar">
-            <div className="loc">
-              <span className="ping" />
-              <div style={{ minWidth: 0 }}>
-                {/* "défaut" means the app picked the department itself. Once
-                    the angler has chosen one, saying "défaut" contradicts them
-                    — it's the chef-lieu of THEIR department being shown. */}
-                <div className="place">
-                  {located
-                    ? "Ma position"
-                    : state.deptChosen
-                      ? `${deptName} · chef-lieu`
-                      : `${deptName} · défaut`}
-                </div>
-                <div className="coord">
-                  {pt.lat.toFixed(3)}, {pt.lon.toFixed(3)}
-                </div>
-              </div>
-            </div>
+        {/* Position — la mini-carte se replie, le lieu et le GPS restent.
+            « défaut » veut dire que l'app a choisi le département elle-même ;
+            une fois qu'il a choisi, le dire contredirait le pêcheur — c'est le
+            chef-lieu de SON département qui est montré. */}
+        <Repli
+          className="ac-repli-carte"
+          titre="Position"
+          resume={lieu}
+          replie={carteReplie}
+          onBascule={() => basculer(REPLI_CARTE, true)}
+          actions={
             <button className="loc-gps" onClick={useGps}>
               {gpsMsg || (located ? "Recentrer" : "📍 Me localiser")}
             </button>
+          }
+        >
+          <div className="dash-map">
+            <MiniMap lat={pt.lat} lon={pt.lon} zoom={13} onClick={() => goTab("carte")} />
+            <div className="dash-map-bar">
+              <div className="loc">
+                <span className="ping" />
+                <div style={{ minWidth: 0 }}>
+                  <div className="place">{lieu}</div>
+                  <div className="coord">
+                    {pt.lat.toFixed(3)}, {pt.lon.toFixed(3)}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Repli>
 
         {/* Weather hero + temperature curve */}
         <div className="dash-wx">
@@ -291,11 +408,67 @@ export function Accueil() {
                 </div>
               </div>
 
-              {meteo && meteo.hours.length > 1 && <TempCurve hours={meteo.hours} sun={sun} />}
+              {/* Le soleil et la lune, fondus dans la tuile qui portait déjà
+                  l'heure et la température. Ils occupaient 422 px à part —
+                  dont 199 px d'icône ⓘ étirée par `.dash-sun svg {width:100%}`,
+                  qui l'emportait sur `.tip-i {width:12px}`.
+                  Les horaires LÉGAUX passent devant le lever et le coucher :
+                  ce sont eux qui disent si l'on est en règle. La demi-heure de
+                  l'art. R436-13 n'existait jusqu'ici que dans le texte d'une
+                  infobulle — les deux seules heures affichées étaient donc
+                  celles auxquelles il n'est PAS interdit de pêcher. */}
+              <div className="ac-ciel">
+                {legal ? (
+                  <div className={`ac-legal${legal.ouvert ? " ac-legal--ouvert" : ""}`}>
+                    <span className="ac-legal-k">Pêche autorisée</span>
+                    <b className="ac-legal-v">
+                      {hhmm(legal.ouverture)} → {hhmm(legal.fermeture)}
+                    </b>
+                    <span className="ac-legal-s">
+                      <Tip
+                        text={`Horaires légaux : d'une demi-heure (${MARGE_LEGALE_MIN} min) avant le lever du soleil à une demi-heure après son coucher — art. R436-13. Éphéméride calculée localement pour ${pt.lat.toFixed(2)} / ${pt.lon.toFixed(2)}, elle fonctionne hors-ligne. Un arrêté préfectoral peut restreindre davantage.`}
+                      >
+                        ½ h avant/après le soleil
+                      </Tip>
+                    </span>
+                  </div>
+                ) : (
+                  <div className="ac-legal">
+                    <span className="ac-legal-k">Horaires légaux</span>
+                    <b className="ac-legal-v">indisponibles ici</b>
+                    <span className="ac-legal-s">le soleil ne se lève ou ne se couche pas</span>
+                  </div>
+                )}
+                <div className="ac-astro">
+                  <span className="ac-astro-i">
+                    ☀︎ Lever <b>{hhmm(sun.sunrise)}</b>
+                  </span>
+                  <span className="ac-astro-i">
+                    ☾ Coucher <b>{hhmm(sun.sunset)}</b>
+                  </span>
+                  <span className="ac-astro-i ac-astro-lune">
+                    <Tip text="Phase de la lune et part du disque éclairé. Repère traditionnel des pêcheurs (indicatif, non prouvé scientifiquement). Calcul d'éphéméride local — fonctionne hors-ligne.">
+                      <span className="ac-lune-disc" aria-hidden="true">
+                        {MOON_EMOJI[Math.round(moon.phase * 8) % 8]}
+                      </span>{" "}
+                      {moonPhaseName(moon.phase)} <b>{Math.round(moon.fraction * 100)} %</b>
+                    </Tip>
+                  </span>
+                </div>
+              </div>
 
-              {n && (
-                <div className="dash-metrics">
-                  <Metric
+              <Repli
+                className="ac-repli-meteo"
+                titre="Détail météo"
+                resume={resumeMeteo}
+                replie={meteoReplie}
+                onBascule={() => basculer(REPLI_METEO, true)}
+              >
+                {meteo && meteo.hours.length > 1 && <TempCurve hours={meteo.hours} sun={sun} />}
+
+                {n && (
+                  <div className="dash-metrics">
+                    <Metric
                     k="Vent"
                     v={`${mesure(n.wind)}`}
                     s={`km/h ${n.windCompass}`}
@@ -331,8 +504,9 @@ export function Accueil() {
                     s="mm/h"
                     tip="Précipitations sur l'heure en cours. Source : Open-Meteo."
                   />
-                </div>
-              )}
+                  </div>
+                )}
+              </Repli>
             </>
           )}
         </div>
@@ -342,8 +516,38 @@ export function Accueil() {
           <div className="dash-card-h">
             <Icon d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" size={15} stroke="#2b6c8f" width={1.6} />
             <span>Conditions de l'eau</span>
-            {water?.station && <span className="src">{water.station}</span>}
+            {water?.station && !aucuneMesure && <span className="src">{water.station}</span>}
           </div>
+
+          {/* Le choix de la rivière, et ses trois états. Il est ICI et pas dans
+              un écran de réglages : c'est la carte dont il change le contenu. */}
+          <button
+            type="button"
+            className={`ac-riv${riviere ? " ac-riv--choisie" : ""}`}
+            onClick={() => setChoixOuvert(true)}
+          >
+            <span className="ac-riv-k">{riviere ? "Votre rivière" : "Rivière"}</span>
+            <span className="ac-riv-v">{riviere ? riviere.nom : "Choisir ma rivière"}</span>
+            <span className="ac-riv-chev" aria-hidden="true">
+              ›
+            </span>
+          </button>
+          {!riviere && (
+            <p className="ac-riv-note">
+              Sans rivière choisie, les mesures viennent de la station la plus proche, quelle que
+              soit sa rivière.
+            </p>
+          )}
+          {aucuneMesure && (
+            // Le troisième état, et le plus important : dire qu'il n'y a rien
+            // plutôt que montrer la mesure d'à côté. C'est le défaut fondateur
+            // de l'audit — une mesure du Cher affichée comme celle de la Loire.
+            <p className="ac-riv-note ac-riv-note--vide">
+              Aucune station Hub&apos;Eau sur {riviere?.nom} à portée d&apos;ici. Rien n&apos;est
+              affiché plutôt qu&apos;une mesure d&apos;une autre rivière.
+            </p>
+          )}
+
           <div className="dash-water-grid">
             {(() => {
               // Hydrometry is the ONE genuinely real-time source here, so the
@@ -387,7 +591,19 @@ export function Accueil() {
                   tip="Température de l'eau. Elle règle l'activité des poissons. Source : Hub'Eau (réseau thermie + physico-chimie). La mesure est rare et par campagnes en France : souvent pas de relevé récent — on n'affiche jamais une valeur estimée."
                   when={t && !tooOld ? t.date : undefined}
                   stale={t && !tooOld ? isStaleWaterTemp(t.date) : false}
-                  sub={!water ? undefined : !t ? "pas de mesure" : tooOld ? f.texte : undefined}
+                  sub={
+                    !water
+                      ? undefined
+                      : !t
+                        ? // « pas de mesure » sans rivière choisie veut dire
+                          // « nulle part autour » ; avec, « pas sur celle-ci ».
+                          water.filtree
+                          ? "pas sur cette rivière"
+                          : "pas de mesure"
+                        : tooOld
+                          ? f.texte
+                          : undefined
+                  }
                 />
               );
             })()}
@@ -413,21 +629,9 @@ export function Accueil() {
           )}
         </div>
 
-        {/* Sun & moon */}
-        <div className="dash-astro">
-          <SunArc sun={sun} />
-          <div className="dash-moon">
-            <div className="disc">{MOON_EMOJI[Math.round(moon.phase * 8) % 8]}</div>
-            <div className="mtx">
-              <div className="ph">
-                <Tip text="Phase de la lune et part du disque éclairé. Repère traditionnel des pêcheurs (indicatif, non prouvé scientifiquement). Calcul d'éphéméride local — fonctionne hors-ligne.">
-                  {moonPhaseName(moon.phase)}
-                </Tip>
-              </div>
-              <div className="il">{Math.round(moon.fraction * 100)} % éclairée</div>
-            </div>
-          </div>
-        </div>
+        {/* Le bloc soleil/lune séparé a disparu : ses quatre chiffres sont
+            désormais dans la tuile météo, qui portait déjà l'heure et la
+            température. Il mesurait 422 px sur 375 × 812. */}
 
         {/* Quota + Prise CTA */}
         <div className="dash-quota">
@@ -496,6 +700,16 @@ export function Accueil() {
           100 % sur votre appareil — jamais transmis.
         </div>
       </div>
+
+      {choixOuvert && (
+        <ChoixRiviere
+          lat={pt.lat}
+          lon={pt.lon}
+          choisie={riviere}
+          onChoisir={choisirRiviere}
+          onFermer={() => setChoixOuvert(false)}
+        />
+      )}
     </main>
   );
 }
@@ -611,60 +825,4 @@ function TempCurve({ hours, sun }: { hours: MeteoHour[]; sun: SunTimes }) {
   );
 }
 
-// Daytime arc with the sun at its current position (or a "nuit" marker).
-function SunArc({ sun }: { sun: SunTimes }) {
-  const W = 300;
-  const H = 96;
-  const cx = W / 2;
-  const baseY = 78;
-  const rx = 130;
-  const ry = 62;
-  const now = new Date();
-  const sr = sun.sunrise;
-  const ss = sun.sunset;
-  let p: number | null = null;
-  if (sr && ss) {
-    const t = (now.getTime() - sr.getTime()) / (ss.getTime() - sr.getTime());
-    p = Math.max(0, Math.min(1, t));
-  }
-  const daytime = p != null && now >= (sr as Date) && now <= (ss as Date);
-  const ang = p != null ? Math.PI * (1 - p) : 0;
-  const sx = cx + rx * Math.cos(ang);
-  const sy = baseY - ry * Math.sin(ang);
-
-  return (
-    <div className="dash-sun">
-      <svg viewBox={`0 0 ${W} ${H}`} aria-label="Course du soleil">
-        <defs>
-          <linearGradient id="sunarc" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#e6c169" stopOpacity="0.25" />
-            <stop offset="50%" stopColor="#e6c169" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#e6c169" stopOpacity="0.25" />
-          </linearGradient>
-        </defs>
-        <line x1="6" y1={baseY} x2={W - 6} y2={baseY} stroke="#e6e2d8" strokeWidth="1" />
-        <path d={`M ${cx - rx} ${baseY} A ${rx} ${ry} 0 0 1 ${cx + rx} ${baseY}`} fill="none" stroke="url(#sunarc)" strokeWidth="2" strokeDasharray="3 3" />
-        {daytime && (
-          <>
-            <circle cx={sx} cy={sy} r="9" fill="#f2c04d" opacity="0.35" />
-            <circle cx={sx} cy={sy} r="5" fill="#efb52f" />
-          </>
-        )}
-      </svg>
-      <div className="dash-sun-lbl">
-        <div>
-          <span className="ic">☀︎</span> Lever <b>{hhmm(sun.sunrise)}</b>
-        </div>
-        <div className="mid">
-          <Tip text="Lever et coucher du soleil (éphéméride locale, hors-ligne). Pêche autorisée d'une demi-heure avant le lever à une demi-heure après le coucher.">
-            {daytime ? "Jour" : "Nuit"}
-          </Tip>
-        </div>
-        <div>
-          Coucher <b>{hhmm(sun.sunset)}</b> <span className="ic">☾</span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
