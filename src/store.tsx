@@ -20,6 +20,7 @@ import {
 import { deletePhoto } from "./lib/photos";
 import { reportReadError } from "./lib/storage";
 import { readPrefs, writePrefs } from "./lib/prefs";
+import { appliquerTheme, resoudreTheme, REQUETE_SOMBRE, type Theme } from "./lib/theme";
 import { frDate, isoDay, uid } from "./lib/helpers";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
 import { CTX_DEFAUT, contexteNettoye, ecranParent, ongletDe, versUrl } from "./lib/nav-conventions";
@@ -104,6 +105,7 @@ export interface AppState {
   open: Record<string, boolean>;
   recent: string[];
   bigUI: boolean;
+  theme: Theme;
   cookStep: number;
   listening: boolean;
   ans: IdAnswers;
@@ -158,6 +160,7 @@ const makeInitialState = (): AppState => {
     open: { regle: true },
     recent: [],
     bigUI: prefs.bigUI,
+    theme: prefs.theme,
     listening: false,
     ans: {},
     prise: { sp: null, step: null },
@@ -318,11 +321,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // with an empty array; prefs come from localStorage, which is read
   // synchronously before the first render, so there is nothing to clobber.
   useEffect(() => {
-    // Le store ne gère pas encore `theme` (Tâche 11) : on relit la valeur
-    // déjà en place plutôt que d'écrire un `theme` par défaut qui écraserait
-    // le choix de l'utilisateur à chaque changement de dept/bigUI.
-    writePrefs({ dept: state.dept, deptChosen: state.deptChosen, bigUI: state.bigUI, theme: readPrefs().theme });
-  }, [state.dept, state.deptChosen, state.bigUI]);
+    writePrefs({
+      dept: state.dept,
+      deptChosen: state.deptChosen,
+      bigUI: state.bigUI,
+      theme: state.theme,
+    });
+  }, [state.dept, state.deptChosen, state.bigUI, state.theme]);
+
+  // Le script inline d'index.html a déjà posé data-theme avant le premier
+  // paint ; cet effet reprend la main pour les changements ultérieurs. En mode
+  // auto, il écoute le réglage du téléphone — un utilisateur qui bascule son
+  // système app ouverte doit voir l'app suivre. L'écouteur est retiré dès que
+  // la préférence devient explicite : plus rien à suivre.
+  useEffect(() => {
+    const mq = window.matchMedia?.(REQUETE_SOMBRE);
+    const appliquer = () =>
+      appliquerTheme(resoudreTheme(state.theme, mq?.matches ?? false));
+    appliquer();
+    if (state.theme !== "auto" || !mq) return;
+    mq.addEventListener("change", appliquer);
+    return () => mq.removeEventListener("change", appliquer);
+  }, [state.theme]);
 
   // ── Navigation ↔ historique du navigateur ────────────────────────────────
   //

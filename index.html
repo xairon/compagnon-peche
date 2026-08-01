@@ -6,7 +6,44 @@
     <link rel="apple-touch-icon" href="./icon-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="referrer" content="no-referrer" />
+    <!-- Deux balises `media` : elles donnent la bonne barre d'état en mode auto
+         AVANT que le moindre script ne tourne. Dès que le thème est résolu, le
+         script ci-dessous (puis React) écrit la troisième, sans `media`, qui
+         l'emporte. Les valeurs sont celles de THEME_COLORS dans lib/theme.ts —
+         src/lib/theme-dom.test.ts fait échouer la suite si elles divergent. -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#16281E" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0D120F" />
     <meta name="theme-color" content="#16281E" />
+
+    <!-- Anti-flash. Sans ce script, un utilisateur en thème sombre voit un
+         flash blanc pleine page à chaque lancement, le temps que le bundle
+         React se charge — sur une PWA lancée depuis l'écran d'accueil, c'est
+         le défaut le plus visible de toute la fonctionnalité.
+
+         C'est la forme minimale de lib/theme.ts, pas une seconde
+         implémentation : même clé, même résolution, mêmes couleurs. Il ne peut
+         pas importer le module (il doit être synchrone et précéder le bundle).
+         Tout est enveloppé : un localStorage inaccessible en navigation privée
+         fait lever l'ACCÈS lui-même, et l'app ne doit pas mourir pour ça. -->
+    <script>
+      (function () {
+        var t = "auto";
+        try {
+          var p = JSON.parse(localStorage.getItem("carnet:prefs") || "{}");
+          if (p.theme === "light" || p.theme === "dark" || p.theme === "auto") t = p.theme;
+        } catch (e) {}
+        var eff =
+          t === "auto"
+            ? (window.matchMedia &&
+               window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light")
+            : t;
+        document.documentElement.setAttribute("data-theme", eff);
+        var m = document.querySelector('meta[name="theme-color"]:not([media])');
+        if (m) m.setAttribute("content", eff === "dark" ? "#0D120F" : "#16281E");
+      })();
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta
