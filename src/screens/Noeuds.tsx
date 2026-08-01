@@ -3,6 +3,7 @@ import { KNOTS } from "../data/knots";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 import "./noeuds.css";
 
 export function Noeuds() {
@@ -51,7 +52,13 @@ export function Noeuds() {
 export function KnotDetail() {
   const { state, back } = useStore();
   const knot = KNOTS.find((k) => k.id === state.knotId);
-  if (!knot) return null;
+  if (!knot)
+    return (
+      <DetailIntrouvable
+        titre="Nœud introuvable"
+        message={"Ce nœud est introuvable." + LIEN_AUTRE_VERSION}
+      />
+    );
   // Une illustration, ou rien. Les fiches que ni Commons ni un schéma maison
   // propre ne couvrent (wacky, anglaise, feeder) n'affichent aucun cadre : un
   // cadre vide se lirait comme une image cassée, et leur texte se suffit.

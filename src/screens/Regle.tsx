@@ -9,11 +9,17 @@ const PX_PER_CM = 37.795;
 
 export function Regle() {
   const { state, back } = useStore();
-  const cur = SPECIES.find((s) => s.id === state.spId) || SPECIES[0];
-  const sp = SPECIES.find((s) => s.id === state.priseSp) || cur;
   // Same resolution as the decision card that leads here: the ruler must never
   // measure a different maille from the one the flow just announced.
-  const cm = effectiveMaille(sp, state.dept).cm;
+  //
+  // Le repli était `SPECIES[0]`, et il mentait à voix haute : depuis la fiche
+  // brochet en Loir-et-Cher (maille 60 cm, écrite juste au-dessus du lien
+  // « Règle »), cet écran traçait « Maille Sandre (50 cm) ». Sans espèce, on ne
+  // trace plus rien : la règle reste une règle graduée, elle n'invente pas le
+  // trait qui décide de ce qu'on garde.
+  const cur = SPECIES.find((s) => s.id === state.spId) ?? null;
+  const sp = SPECIES.find((s) => s.id === state.priseSp) ?? cur;
+  const cm = sp ? effectiveMaille(sp, state.dept).cm : 0;
 
   // The ruler MUST keep the true 1:1 cm scale (it measures a fish laid on the
   // glass), so it can't shrink to fit. Instead we measure how many centimetres
@@ -60,7 +66,7 @@ export function Regle() {
           </div>
         ))}
 
-        {cm > 0 && cm <= maxCm && (
+        {sp && cm > 0 && cm <= maxCm && (
           <>
             {/* Couleurs volontairement laissées en dur (non tokenisées) : cette règle
                 est un instrument de mesure, son fond et ses tracés restent clairs dans
@@ -93,7 +99,7 @@ export function Regle() {
           </>
         )}
 
-        {over && (
+        {sp && over && (
           <div
             className="note"
             style={{ position: "absolute", bottom: 8, left: 16, right: 16, marginTop: 0 }}

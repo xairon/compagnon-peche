@@ -6,11 +6,18 @@ import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
 import { Media } from "../components/Media";
 import { hasMedia } from "../components/media-helpers";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 
 export function TechniqueDetail() {
   const { state, nav, back } = useStore();
   const t = TECHNIQUES.find((x) => x.id === state.techId);
-  if (!t) return null;
+  if (!t)
+    return (
+      <DetailIntrouvable
+        titre="Technique introuvable"
+        message={"Cette technique est introuvable." + LIEN_AUTRE_VERSION}
+      />
+    );
 
   // Dérivé au rendu, jamais stocké en double (même règle que « Utilisé avec »
   // côté fils dans GuideMateriel) : les recettes qui citent cette technique.

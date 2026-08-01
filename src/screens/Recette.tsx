@@ -8,13 +8,20 @@ import { TECHNIQUES } from "../data/techniques";
 import { enterCuisine } from "../lib/wakelock";
 import { Glossed } from "../components/Glossed";
 import { IngredientList, StepList } from "../components/RecipeBody";
+import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 
 const DIFF_LABEL = ["", "Facile", "Moyen", "Difficile"];
 
 export function Recette() {
   const { state, nav, back } = useStore();
   const found = findRecipe(state.recipeId);
-  if (!found) return null;
+  if (!found)
+    return (
+      <DetailIntrouvable
+        titre="Recette introuvable"
+        message={"Cette recette est introuvable." + LIEN_AUTRE_VERSION}
+      />
+    );
   const { recipe: rec } = found;
 
   const techs = (rec.techniques || [])
