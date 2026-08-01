@@ -122,6 +122,122 @@
   --paper-fade: rgba(var(--paper-tint), 0.92);
 }
 
+/* ============================================================================
+   Thème sombre.
+
+   Ce bloc ne redéfinit QUE des jetons. Aucune règle de la feuille n'est
+   dupliquée ici, et c'est la seule discipline qui empêche les deux thèmes de
+   diverger à la première retouche : une règle ajoutée demain hérite du thème
+   sombre sans que personne n'y pense.
+
+   Les valeurs de texte, sémantique et --line-control ne sont pas choisies à
+   l'œil : chaque couleur de texte a été mesurée contre les cinq surfaces
+   (--paper, --card, --backdrop, --sand, --surface-raised) — pire cas --faint
+   sur --surface-raised à 4,80:1 — et chaque couleur sémantique sur son propre
+   fond de cartouche — pire cas --green sur --green-bg à 6,67:1. contraste-
+   palette.test.ts rejoue ces paires à chaque exécution, mais seulement sur le
+   thème clair (il ne lit que le premier bloc :root) : le thème sombre se
+   vérifie à l'œil (voir task-9-report.md).
+
+   Le reste — tous les jetons que ces mesures ne nommaient pas — suit trois
+   règles : une SURFACE s'assombrit, une ENCRE s'éclaircit, un TRAIT reste un
+   trait. --on-accent et --on-accent-warm sont l'exception : ce sont des
+   marques posées sur un vert ou un sapin plein, qui restent des accents
+   soutenus dans les deux thèmes, donc ne s'inversent pas. */
+:root[data-theme="dark"] {
+  /* Surfaces, de la plus enfoncée à la plus soulevée. */
+  --paper: #141a16;
+  --backdrop: #0d120f;
+  --card: #1a211c;
+  --sand: #1d241f;
+  --sand-2: #202823;
+  --cream: #1e241d;
+  --fir: #0a120d;
+  --green-dark: #0a120d;
+  --mint: #17251c;        /* confirmations, calques actifs — teinte verte */
+  --sage: #1c231e;        /* avatar/pastille neutre */
+  --mist: #1b221d;        /* vignettes photo (fiche, matériel) */
+  --linen: #1f251f;       /* encadré chiffre-clé (tableau de bord) */
+  --oat: #262c22;         /* piste de barre de progression */
+  --photo-dark: #2a352d;  /* fond des héros et vignettes sans photo */
+  --photo-bg: #232a26;    /* fond de carte photo/carte (.img-slot) */
+  --cook-dark: #182420;   /* boutons fantômes et piste du mode cuisson */
+
+  /* Texte. --on-accent et --on-accent-warm restent clairs : voir l'en-tête. */
+  --ink: #eef2ee;
+  --ink-2: #e2e8e3;
+  --body: #ccd4ce;
+  --muted: #9aa79e;
+  --faint: #8a968d;
+  --muted-2: #9ea89b;       /* variante de --muted */
+  --on-dark: #eef2ec;       /* texte sur carte sapin/verte sombre */
+  --on-dark-muted: #a7c0b0; /* texte discret sur fond sombre ou accent */
+  --gold: #dbb877;          /* kicker/label doré sur photo ou fond sombre */
+  --chev-ink: #9aa38d;      /* chevrons et texte secondaire glosé */
+  --icon-muted: #7f9788;    /* icônes discrètes */
+  --photo-ink: #c7cec7;     /* texte/icône posé sur .photo-bg et le damier */
+  --on-accent: #f2f7f3;
+  --on-accent-warm: #fbfaf7;
+
+  /* Traits. --line-control tient 3:1 sur les trois surfaces où on pose un
+     champ de saisie (3,84 / 3,57 / 3,21) — WCAG 1.4.11. Les autres sont
+     décoratifs, sans seuil. */
+  --line: #2b332d;
+  --line-strong: #3a443c;
+  --line-control: #69796e;
+  --line-warm: #363a30;
+  --line-cream: #333a2f;
+  --green-line: #3a6b4c;
+  --id-line: #345943;
+  --amber-line: #4a3d22;
+  --amber-line-2: #4f4025;
+  --red-line: #5c3c37;
+  --handle: #3c443a;
+
+  /* Sémantique. En clair, l'accent est foncé sur fond pâle ; en sombre c'est
+     l'inverse — l'accent devient clair sur fond profond. */
+  --green: #4cc07d;
+  --green-tint: #16291e;
+  --green-ink: #8fe0ab;
+  --amber: #d9a441;
+  --amber-bg: #2a2113;
+  --amber-ink: #e8bd6a;
+  --amber-ink-2: #dcae5c;
+  --red: #f08a7d;
+  --red-bg: #2b1714;
+  --red-ink: #f3a79c;
+  --red-wash: #2d1917;
+  --red-tint: #271512;
+  --info: #6fb6dd;
+  --info-ink: #94cbe8;
+
+  /* Décor. */
+  --brass: #c9a761;
+  --brass-ink: #d8bc85;
+
+  /* Voiles. L'ombre portée disparaît sur fond sombre : du noir sur du
+     presque-noir ne se voit pas. Elle est remplacée par un liseré CLAIR, qui
+     joue le même rôle de séparation — --shadow-tint et --onb-shadow-tint
+     (une seconde famille d'ombre, cadre d'onboarding) s'inversent donc en
+     blanc, et chaque box-shadow qui les consomme avec son propre alpha suit
+     automatiquement. --shadow et --shadow-strong, les raccourcis les plus
+     réutilisés de la famille, sont mesurés à part.
+     --veil-tint n'est PAS redéfini : il assombrit une photo pour que du texte
+     s'y lise, un rôle que le thème ne change pas — les photos ne s'inversent
+     pas. --veil et --scrim, qui assombrissent une photo ou une feuille modale,
+     restent donc sombres eux aussi.
+     --paper-tint suit la nouvelle valeur de --paper ; --paper-fade en dépend
+     et n'a pas besoin d'être redéclaré : var() se résout à l'usage, pas à la
+     déclaration. */
+  --shadow-tint: 255, 255, 255;
+  --shadow: rgba(255, 255, 255, 0.05);
+  --shadow-strong: rgba(255, 255, 255, 0.12);
+  --onb-shadow-tint: 255, 255, 255;
+  --veil: rgba(0, 0, 0, 0.65);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --paper-tint: 20, 26, 22;
+}
+
 /* Visible keyboard focus (was absent everywhere). */
 :where(button, a, input, select, [role="button"], [tabindex]):focus-visible {
   outline: 2px solid var(--green);
@@ -1971,6 +2087,24 @@ a:hover {
   color: var(--body);
   white-space: pre-wrap;
 }
+/* Base pour .btn-light : plusieurs écrans (BilanEcrevisses, Ecrevisses,
+   Carnet, CatchEditor, Carte, PriseDetail, ProfileHeader, RecipeView,
+   RecipeEditor, OutilsTerrain, BalanceCard) posent cette classe sans
+   conteneur qui la stylait — .spot-actions, .ce-actions/.pd-actions et
+   .ecr-row-body ci-dessous ne couvraient que certains écrans. Sans base, le
+   bouton retombait sur le gris natif du navigateur : invisible en thème
+   clair (il se fond dans --paper), voyant et non tokenisé en thème sombre.
+   Cette règle donne à TOUS les .btn-light le même repli, que les règles plus
+   spécifiques ci-dessous peuvent toujours ajuster (elles gagnent déjà en
+   spécificité). */
+.btn-light {
+  border-radius: 12px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 600;
+}
 .spot-actions {
   display: flex;
   gap: 10px;
@@ -2575,7 +2709,7 @@ a:hover {
 .pf-stat .n {
   font-size: 22px;
   font-weight: 700;
-  color: var(--green-dark);
+  color: var(--green-ink);
 }
 .pf-stat .l {
   font-size: 11.5px;
@@ -2944,7 +3078,7 @@ a:hover {
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 26px;
   font-weight: 700;
-  color: var(--green-dark);
+  color: var(--green-ink);
   letter-spacing: -0.01em;
 }
 .st-card.fir .st-n {
@@ -3147,7 +3281,7 @@ a:hover {
   font-size: 14px;
 }
 .eb-report a {
-  color: var(--green-dark);
+  color: var(--green-ink);
   font-weight: 600;
 }
 .eb-details {
@@ -3983,7 +4117,7 @@ a:hover {
 }
 .pf-seg button.on {
   background: var(--card);
-  color: var(--fir);
+  color: var(--green-ink);
   box-shadow: 0 1px 2px rgba(var(--shadow-tint), 0.08);
 }
 
@@ -4471,7 +4605,7 @@ button.card-row {
 }
 .sheet-cat {
   font-size: 12.5px;
-  color: var(--green-dark);
+  color: var(--green-ink);
   background: var(--green-tint);
   border-radius: 8px;
   padding: 9px 11px;
@@ -4666,7 +4800,7 @@ button.card-row {
   font-size: 46px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--green-dark);
+  color: var(--green-ink);
   margin: 4px 0 10px;
   font-variant-numeric: tabular-nums;
 }
@@ -4900,7 +5034,7 @@ button.card-row {
   flex-shrink: 0;
   border: none;
   background: var(--paper-fade);
-  color: var(--green-dark);
+  color: var(--green-ink);
   font-size: 12.5px;
   font-weight: 650;
   padding: 8px 13px;
@@ -4925,7 +5059,7 @@ button.card-row {
   font-size: 62px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: var(--green-dark);
+  color: var(--green-ink);
 }
 .dash-wx-temp .unit { font-size: 20px; font-weight: 600; color: var(--muted); margin-top: 6px; }
 .dash-wx-cond { flex: 1; min-width: 0; text-align: right; }
@@ -4950,7 +5084,7 @@ button.card-row {
   padding: 9px 10px;
 }
 .dash-metric .k { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
-.dash-metric .v { font-size: 19px; font-weight: 700; color: var(--green-dark); margin-top: 2px; }
+.dash-metric .v { font-size: 19px; font-weight: 700; color: var(--green-ink); margin-top: 2px; }
 .dash-metric .s { font-size: 11px; color: var(--muted); }
 
 /* Card header shared */
@@ -5188,7 +5322,7 @@ button.card-row {
   text-transform: uppercase;
   color: var(--brass-ink);
 }
-.id-res-h .n { font-size: 13px; font-weight: 700; color: var(--green-dark); }
+.id-res-h .n { font-size: 13px; font-weight: 700; color: var(--green-ink); }
 .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .id-grid.emphatic { grid-template-columns: 1fr 1fr; }
 .id-cand {
@@ -5346,7 +5480,7 @@ button.card-row {
   background: var(--sand);
   font-size: 12px;
   font-weight: 700;
-  color: var(--fir);
+  color: var(--green-ink);
 }
 .bal-lbl {
   font-size: 12px;
@@ -5431,7 +5565,7 @@ button.card-row {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: var(--fir);
+  color: var(--green-ink);
 }
 .bal-add-plus {
   font-size: 30px;
@@ -5681,7 +5815,7 @@ button.card-row {
   border-radius: 12px;
   padding: 13px 15px;
   font-size: 14.5px;
-  color: var(--green-dark);
+  color: var(--green-ink);
   margin-bottom: 14px;
 }
 .ecr-total b {
@@ -5741,7 +5875,7 @@ button.card-row {
   border: 1.5px solid var(--line-strong);
   background: var(--sand);
   font-size: 20px;
-  color: var(--fir);
+  color: var(--green-ink);
 }
 .ecr-step span {
   min-width: 30px;
@@ -6079,7 +6213,7 @@ button.card-row {
 .ecr-tri-t {
   font-size: 13px;
   font-weight: 700;
-  color: var(--green-dark);
+  color: var(--green-ink);
   margin-bottom: 4px;
 }
 .ecr-tri-x {
@@ -6186,7 +6320,7 @@ button.card-row {
   font-weight: 700;
   letter-spacing: 0.01em;
   background: var(--green-tint);
-  color: var(--green-dark);
+  color: var(--green-ink);
   border: 1px solid var(--line-strong);
 }
 .deptb-txt {

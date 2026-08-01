@@ -9,7 +9,7 @@ export function norm(t: string): string {
 }
 
 export function ratingFg(cls: Species["ratingCls"]): string {
-  return cls === "good" ? "#1D6E42" : cls === "warn" ? "#9A6A12" : "#B33A2E";
+  return cls === "good" ? "var(--green)" : cls === "warn" ? "var(--amber)" : "var(--red)";
 }
 
 /** Everyday object whose length matches the fish, for a quick on-screen check. */

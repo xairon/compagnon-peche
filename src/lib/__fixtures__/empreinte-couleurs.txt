@@ -54,7 +54,7 @@
 .back|color|#1a201c
 .bal-add-lbl|color|#6b675c
 .bal-add|border|1.5px dashed #cfc9ba
-.bal-add|color|#0f1f16
+.bal-add|color|#14532b
 .bal-card.bal-echue|background|#fdf3f1
 .bal-card.bal-echue|border-color|#b33a2e
 .bal-card.bal-trempe|border-color|#0f1f16
@@ -63,7 +63,7 @@
 .bal-echue .bal-time|color|#b33a2e
 .bal-lbl|color|#6b675c
 .bal-n|background|#f4f1e8
-.bal-n|color|#0f1f16
+.bal-n|color|#14532b
 .bal-opt|color|#6b675c
 .bal-rel|color|#7b6c45
 .bal-rm:hover, .bal-rm:focus-visible|background|#fdf3f1
@@ -99,6 +99,9 @@
 .btn-ghost|background|#ffffff
 .btn-ghost|border|1.5px solid #e6e2d8
 .btn-ghost|color|#3a3e36
+.btn-light|background|#ffffff
+.btn-light|border|1.5px solid #e6e2d8
+.btn-light|color|#22271f
 .btn-primary|background|#16281e
 .btn-primary|color|#fbfaf7
 .bundle-card|background|#ffffff
@@ -247,7 +250,7 @@
 .dash-map|box-shadow|0 10px 26px -16px rgba(20, 30, 25, 0.5)
 .dash-metric .k|color|#6b675c
 .dash-metric .s|color|#6b675c
-.dash-metric .v|color|#16281e
+.dash-metric .v|color|#14532b
 .dash-metric|background|#faf8f2
 .dash-metric|border|1px solid #efece2
 .dash-moon .il|color|#9db4a6
@@ -278,7 +281,7 @@
 .dash-wx-cond .feels|color|#6b675c
 .dash-wx-cond .lbl|color|#3a3e36
 .dash-wx-off|color|#6b675c
-.dash-wx-temp .deg|color|#16281e
+.dash-wx-temp .deg|color|#14532b
 .dash-wx-temp .unit|color|#6b675c
 .dash-wx|background|#ffffff
 .dash-wx|border|1px solid #eceadf
@@ -298,7 +301,7 @@
 .deptb--defaut .deptb-titre, .deptb--hors-zone .deptb-titre|color|#6d4d0d
 .deptb-blason|background|#e9f2ec
 .deptb-blason|border|1px solid #e6e2d8
-.deptb-blason|color|#16281e
+.deptb-blason|color|#14532b
 .deptb-coche|color|#1d6e42
 .deptb-cta|border-top|1px solid #e6e2d8
 .deptb-cta|color|#1d6e42
@@ -323,7 +326,7 @@
 .eb-card|background|#ffffff
 .eb-card|box-shadow|0 10px 40px rgba(20, 30, 25, 0.15)
 .eb-details|color|#6b675c
-.eb-report a|color|#16281e
+.eb-report a|color|#14532b
 .eb|background|#e7e4d9
 .ecr-chip-input input|color|#3a3e36
 .ecr-chip-input|background|#ffffff
@@ -392,10 +395,10 @@
 .ecr-start, .ecr-poseall, .ecr-finish|color|#fbfaf7
 .ecr-step button|background|#f4f1e8
 .ecr-step button|border|1.5px solid #e6e2d8
-.ecr-step button|color|#0f1f16
+.ecr-step button|color|#14532b
 .ecr-total|background|#e9f2ec
-.ecr-total|color|#16281e
-.ecr-tri-t|color|#16281e
+.ecr-total|color|#14532b
+.ecr-tri-t|color|#14532b
 .ecr-tri-x|color|#3a3e36
 .ecr-tri|background|#eef2ef
 .ecr-tri|border|1.5px solid #16281e
@@ -529,7 +532,7 @@
 .id-opt|border|1.5px solid #e6e2d8
 .id-q-h .s|color|#6b675c
 .id-q-h .t|color|#1a1f18
-.id-res-h .n|color|#16281e
+.id-res-h .n|color|#14532b
 .id-res-h span:first-child|color|#7b6c45
 .id-reset|background|#ffffff
 .id-reset|border|1px solid #e6e2d8
@@ -568,7 +571,7 @@
 .link-inline|color|#1d6e42
 .li|color|#3a3e36
 .loc-gps|background|rgba(251, 250, 247, 0.92)
-.loc-gps|color|#16281e
+.loc-gps|color|#14532b
 .maplibregl-map|background|#dfe6e2
 .mc-base.on|background|#e9f2ec
 .mc-base.on|border-color|#1d6e42
@@ -692,7 +695,7 @@
 .onde-state|background|#eef2ef
 .onde-state|color|#3a3e36
 .ot-count-lbl|color|#7b6c45
-.ot-count-time|color|#16281e
+.ot-count-time|color|#14532b
 .ot-count.done|background|#e9f2ec
 .ot-count.done|border-color|#1d6e42
 .ot-count|background|#ffffff
@@ -745,14 +748,14 @@
 .pf-quick button|color|#3a3e36
 .pf-seg button.on|background|#ffffff
 .pf-seg button.on|box-shadow|0 1px 2px rgba(20, 30, 25, 0.08)
-.pf-seg button.on|color|#0f1f16
+.pf-seg button.on|color|#14532b
 .pf-seg button|color|#6b675c
 .pf-seg|background|#f4f1e8
 .pf-seg|border|1px solid #ece8dd
 .pf-sort|background|#ffffff
 .pf-sort|border|1px solid #e6e2d8
 .pf-stat .l|color|#6b675c
-.pf-stat .n|color|#16281e
+.pf-stat .n|color|#14532b
 .pf-stats|border|1px solid #ece8dd
 .pf-stat|border-right|1px solid #ece8dd
 .ph-avatar-edit|background|#16281e
@@ -860,7 +863,7 @@
 .sec-title|color|#22271f
 .sec|border-bottom|1px solid #ece8dd
 .sheet-cat|background|#e9f2ec
-.sheet-cat|color|#16281e
+.sheet-cat|color|#14532b
 .sheet-code a|color|#1d6e42
 .sheet-code|color|#6b675c
 .sheet-head|border-bottom|1px solid #ece8dd
@@ -924,7 +927,7 @@
 .st-l|color|#6b675c
 .st-n.green|color|#1d6e42
 .st-note|color|#6b675c
-.st-n|color|#16281e
+.st-n|color|#14532b
 .st-part-fill|background|#2b6c8f
 .st-part-l|color|#3a3e36
 .st-part-n|color|#6b675c
