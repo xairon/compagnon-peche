@@ -4066,9 +4066,14 @@ a:hover {
 .ac-carousel::-webkit-scrollbar {
   display: none;
 }
+/* `color` explicite parce que c'est un <button> : il n'hérite pas la couleur
+   du body, il prend le noir par défaut du navigateur. Invisible en thème clair
+   (noir sur blanc, personne ne l'a jamais remarqué), illisible en sombre —
+   1,28:1 sur la carte sombre. */
 .ac-spcard {
   flex-shrink: 0;
   width: 150px;
+  color: var(--ink);
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 16px;
