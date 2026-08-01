@@ -18,6 +18,14 @@
 //
 // C'est un multiensemble TRIÉ, pas une liste ordonnée : déplacer une règle ne
 // doit pas faire échouer le test, seule une valeur qui change doit le faire.
+//
+// Angle mort assumé : un jeton déclaré dans :root mais jamais référencé par
+// var(--x) nulle part (ni dans styles.css, ni dans les styles inline des
+// .tsx) est invisible ICI, puisque cette empreinte ne mesure que ce que var()
+// résout chez ses consommateurs — pas ce qui est déclaré. Sa valeur peut donc
+// changer sans faire bouger une seule ligne de cette empreinte. C'est le test
+// « jetons de :root » dans src/lib/empreinte-couleurs.test.ts qui couvre ce
+// trou-là, en listant nommément tout jeton sans consommateur.
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 

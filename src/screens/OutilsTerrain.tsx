@@ -162,7 +162,7 @@ export function OutilsTerrain() {
         </div>
         <button className="ot-timer" onClick={() => nav("ecrevisses")}>
           <div className="ic">
-            <Icon d={CLOCK} size={22} stroke="#b08a3e" width={1.6} />
+            <Icon d={CLOCK} size={22} stroke="var(--brass)" width={1.6} />
           </div>
           <div className="tx">
             <div className="t">Séance écrevisses</div>
@@ -174,7 +174,7 @@ export function OutilsTerrain() {
           {PRESETS.map((p) => (
             <button key={p.id} className="ot-timer" onClick={() => start(p)}>
               <div className="ic">
-                <Icon d={CLOCK} size={22} stroke="#b08a3e" width={1.6} />
+                <Icon d={CLOCK} size={22} stroke="var(--brass)" width={1.6} />
               </div>
               <div className="tx">
                 <div className="t">{p.label}</div>

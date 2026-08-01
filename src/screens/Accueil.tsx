@@ -590,7 +590,7 @@ function TempCurve({ hours, sun }: { hours: MeteoHour[]; sun: SunTimes }) {
       {sr != null && <line x1={xOf(sr)} y1={padTop} x2={xOf(sr)} y2={base} stroke="#c9a24a" strokeWidth="1" strokeDasharray="2 3" />}
       {ss != null && <line x1={xOf(ss)} y1={padTop} x2={xOf(ss)} y2={base} stroke="#8a6d2f" strokeWidth="1" strokeDasharray="2 3" />}
       <path d={area} fill="url(#tempg)" />
-      <path d={line} fill="none" stroke="#b08a3e" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={line} fill="none" stroke="var(--brass)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
       {/* min / max labels */}
       <circle cx={pts[iMax][0]} cy={pts[iMax][1]} r="2.6" fill="#b33a2e" />
       <text x={pts[iMax][0]} y={pts[iMax][1] - 6} className="dash-chart-t hi" textAnchor="middle">{Math.round(max)}°</text>
