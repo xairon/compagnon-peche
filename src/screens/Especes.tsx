@@ -84,23 +84,32 @@ export function Especes() {
   // second relevé concurrent romprait cette règle.
   const mounted = useRef(true);
   const enVol = useRef<AbortController | null>(null);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    // Réarmé au (re)montage : sous StrictMode (voir main.tsx), React monte,
+    // démonte puis remonte le MÊME composant sans recréer ses refs — sans ce
+    // réarmement, `mounted.current` reste bloqué à `false` depuis le premier
+    // démontage, et un relevé lancé après ne clôt jamais son `{k:"charge"}`.
+    mounted.current = true;
+    return () => {
       mounted.current = false;
       enVol.current?.abort();
-    },
-    [],
-  );
+    };
+  }, []);
 
-  const list = SPECIES.filter(
-    (sp) =>
-      (state.filter === "tous" || sp.group === state.filter) &&
-      matchSpecies(sp, state.q) &&
-      (!state.coin || !coin || coin.ids.includes(sp.id)),
+  // Sans le coin : sert à distinguer, quand la grille est vide, une recherche
+  // sans résultat (déjà vide ici) d'un relevé qui ne contient rien du groupe
+  // demandé (vide seulement après le filtre coin — voir plus bas).
+  const sansCoin = SPECIES.filter(
+    (sp) => (state.filter === "tous" || sp.group === state.filter) && matchSpecies(sp, state.q),
   );
+  const list = sansCoin.filter((sp) => !state.coin || !coin || coin.ids.includes(sp.id));
   // Ce que le filtre cache, compté sur le catalogue entier et non sur la vue
-  // courante : c'est le nombre que le pêcheur doit pouvoir contredire.
-  const masquees = state.coin && coin ? SPECIES.length - coin.ids.length : 0;
+  // courante : c'est le nombre que le pêcheur doit pouvoir contredire. Un
+  // `.filter` et non `SPECIES.length - coin.ids.length` : un id du relevé qui
+  // n'existe plus dans SPECIES (fiche retirée depuis) fausserait la
+  // soustraction sans qu'aucun test ne le voie.
+  const masquees =
+    state.coin && coin ? SPECIES.filter((sp) => !coin.ids.includes(sp.id)).length : 0;
 
   const micAvail = !!speechCtor();
 
