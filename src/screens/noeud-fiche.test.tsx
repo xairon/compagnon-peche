@@ -104,3 +104,31 @@ describe("fiche nœud — séquence illustrée", () => {
     expect(screen.queryAllByTestId("image-etape")).toHaveLength(0);
   });
 });
+
+describe("fiche montage — schéma d'assemblage", () => {
+  it("montre le schéma du pater-noster à la place de l'illustration unique", () => {
+    monte("paternoster");
+    expect(screen.getByTestId("schema-montage")).toBeInTheDocument();
+    expect(screen.queryByTestId("illustration-unique")).toBeNull();
+  });
+
+  it("le schéma dit à voix haute ce qu'il montre", () => {
+    monte("paternoster");
+    const svg = screen.getByTestId("schema-montage").querySelector("svg")!;
+    expect(svg).toHaveAttribute("role", "img");
+    expect(svg.querySelector("title")?.textContent).toMatch(/potence/i);
+  });
+
+  it("porte un repère numéroté par geste écrit", () => {
+    const pater = KNOTS.find((k) => k.id === "paternoster")!;
+    monte("paternoster");
+    const reperes = screen.getByTestId("schema-montage").querySelectorAll("[data-repere]");
+    expect(reperes).toHaveLength(pater.steps.length);
+  });
+
+  it("un montage sans schéma ni séquence garde son illustration unique", () => {
+    monte("carolina");
+    expect(screen.queryByTestId("schema-montage")).toBeNull();
+    expect(screen.getByTestId("illustration-unique")).toBeInTheDocument();
+  });
+});

@@ -3,6 +3,7 @@ import { KNOTS } from "../data/knots";
 import type { Knot } from "../types";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
 import { KNOT_STEPS } from "../data/knot-steps.gen";
+import { SCHEMAS } from "../components/schemas-montage";
 import { DetailIntrouvable, LIEN_AUTRE_VERSION } from "../components/DetailIntrouvable";
 import "./noeuds.css";
 
@@ -34,6 +35,7 @@ export function NoeudFiche() {
   // cassée, et son texte se suffit.
   const media = ALL_KNOT_MEDIA[knot.id];
   const sequence = KNOT_STEPS[knot.id] ?? [];
+  const Schema = SCHEMAS[knot.id];
   const liees = (knot.voirAussi ?? [])
     .map((id) => KNOTS.find((k) => k.id === id))
     .filter((k): k is Knot => !!k);
@@ -64,12 +66,19 @@ export function NoeudFiche() {
           )}
         </div>
 
+        {Schema && (
+          <div className="schema-cadre" data-testid="schema-montage">
+            <Schema />
+          </div>
+        )}
+
         {/*
-          Une séquence remplace l'illustration unique, elle ne s'y ajoute pas :
-          la planche entière et ses propres vignettes montreraient deux fois la
-          même leçon, et la planche est justement ce qu'on cherchait à quitter.
+          Un schéma ou une séquence REMPLACE l'illustration unique, il ne s'y
+          ajoute pas : la planche entière et ses propres vignettes montreraient
+          deux fois la même leçon, et la planche est justement ce qu'on
+          cherchait à quitter. Elle ne reste que là où rien ne l'a remplacée.
         */}
-        {sequence.length === 0 && media && (
+        {sequence.length === 0 && !Schema && media && (
           <div className="knot-illus" data-testid="illustration-unique">
             <img
               src={import.meta.env.BASE_URL + media.file}

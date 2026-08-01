@@ -140,6 +140,39 @@
 }
 
 /*
+ * Le schéma d'assemblage. Il ne prend pas le cadre de `.knot-geste-img` : c'est
+ * un dessin vectoriel qui porte ses propres couleurs de thème, pas une image
+ * importée qu'il faut poser sur un fond blanc.
+ */
+.schema-cadre {
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  padding: 10px;
+  margin-bottom: 18px;
+}
+.schema-svg {
+  display: block;
+  width: 100%;
+  max-height: 52vh;
+}
+/*
+ * Tailles en unités de la boîte 200 × 320, pas en pixels d'écran : à 375 px de
+ * large le SVG rend à ~317 px, soit un facteur 1,58. Une légende à 8 tomberait
+ * à 12,7 px effectifs — trop juste pour une app qui se lit en plein soleil.
+ */
+.schema-legende {
+  font-size: 9px;
+  fill: var(--muted);
+  font-weight: 550;
+}
+.schema-repere {
+  font-size: 9.5px;
+  fill: var(--paper);
+  font-weight: 700;
+}
+
+/*
  * Un geste = son image, puis son texte. L'image d'abord parce qu'on la
  * reconnaît avant de lire, et que le doigt s'arrête dessus en défilant.
  */
