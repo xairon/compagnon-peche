@@ -318,7 +318,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // with an empty array; prefs come from localStorage, which is read
   // synchronously before the first render, so there is nothing to clobber.
   useEffect(() => {
-    writePrefs({ dept: state.dept, deptChosen: state.deptChosen, bigUI: state.bigUI });
+    // Le store ne gère pas encore `theme` (Tâche 11) : on relit la valeur
+    // déjà en place plutôt que d'écrire un `theme` par défaut qui écraserait
+    // le choix de l'utilisateur à chaque changement de dept/bigUI.
+    writePrefs({ dept: state.dept, deptChosen: state.deptChosen, bigUI: state.bigUI, theme: readPrefs().theme });
   }, [state.dept, state.deptChosen, state.bigUI]);
 
   // ── Navigation ↔ historique du navigateur ────────────────────────────────

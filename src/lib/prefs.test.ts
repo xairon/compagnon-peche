@@ -20,9 +20,9 @@ describe("readPrefs", () => {
   });
 
   it("relit ce qui a été écrit", () => {
-    writePrefs({ dept: "36", deptChosen: true, bigUI: true });
+    writePrefs({ dept: "36", deptChosen: true, bigUI: true, theme: "dark" });
 
-    expect(readPrefs()).toEqual({ dept: "36", deptChosen: true, bigUI: true });
+    expect(readPrefs()).toEqual({ dept: "36", deptChosen: true, bigUI: true, theme: "dark" });
   });
 
   it("ne retient pas « choisi » pour un département rejeté", () => {
@@ -70,6 +70,23 @@ describe("writePrefs", () => {
       throw new Error("QuotaExceededError");
     });
 
-    expect(() => writePrefs({ dept: "23", deptChosen: true, bigUI: false })).not.toThrow();
+    expect(() => writePrefs({ dept: "23", deptChosen: true, bigUI: false, theme: "auto" })).not.toThrow();
+  });
+});
+
+describe("theme", () => {
+  it("vaut auto par défaut", () => {
+    expect(DEFAULT_PREFS.theme).toBe("auto");
+  });
+
+  it("retombe sur auto si la valeur stockée est inconnue", () => {
+    // Une préférence corrompue ne doit pas laisser l'app sans thème.
+    localStorage.setItem("carnet:prefs", JSON.stringify({ dept: "41", theme: "sépia" }));
+    expect(readPrefs().theme).toBe("auto");
+  });
+
+  it("relit un thème valide", () => {
+    localStorage.setItem("carnet:prefs", JSON.stringify({ dept: "41", theme: "dark" }));
+    expect(readPrefs().theme).toBe("dark");
   });
 });

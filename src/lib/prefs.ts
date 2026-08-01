@@ -1,4 +1,5 @@
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
+import { estTheme, type Theme } from "./theme";
 
 // Device preferences that must be known *before* the first paint: the
 // department decides which arrêté préfectoral every screen quotes, and bigUI
@@ -18,9 +19,11 @@ export interface Prefs {
    *  left on the default. Drives the "we never asked" warning. */
   deptChosen: boolean;
   bigUI: boolean;
+  /** Thème demandé. « auto » suit le réglage du téléphone ; voir lib/theme.ts. */
+  theme: Theme;
 }
 
-export const DEFAULT_PREFS: Prefs = { dept: "41", deptChosen: false, bigUI: false };
+export const DEFAULT_PREFS: Prefs = { dept: "41", deptChosen: false, bigUI: false, theme: "auto" };
 
 function isCoveredDept(v: unknown): v is DeptId {
   return typeof v === "string" && v in DEPARTEMENTS;
@@ -49,6 +52,9 @@ export function readPrefs(): Prefs {
       // A rejected department is not a choice, whatever the stored flag says.
       deptChosen: p.deptChosen === true && isCoveredDept(p.dept),
       bigUI: p.bigUI === true,
+      // Une préférence de thème corrompue ne doit pas laisser l'app sans
+      // thème du tout — « auto » est toujours une réponse valable.
+      theme: estTheme(p.theme) ? p.theme : DEFAULT_PREFS.theme,
     };
   } catch {
     return { ...DEFAULT_PREFS };
