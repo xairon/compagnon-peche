@@ -288,8 +288,13 @@ export function Especes() {
         <div className="coin-rang">
           <button
             type="button"
-            className={"chip" + (state.coin ? " chip-on" : "")}
-            aria-pressed={state.coin}
+            // Allumé seulement quand le filtre agit vraiment : `state.coin` à
+            // `true` avec `coin` à `null` (écriture refusée en navigation
+            // privée, stockage vidé depuis un autre onglet) ne masque rien —
+            // une puce allumée le dirait à tort, et l'échec doit rester
+            // ouvert (rien de caché) sans se prétendre actif pour autant.
+            className={"chip" + (state.coin && coin ? " chip-on" : "")}
+            aria-pressed={state.coin && !!coin}
             disabled={coinEtat.k === "charge"}
             onClick={basculerCoin}
           >
@@ -297,10 +302,14 @@ export function Especes() {
           </button>
         </div>
 
-        {coinEtat.k === "err" && <div className="coin-src">{coinEtat.msg}</div>}
+        {coinEtat.k === "err" && (
+          <div className="coin-src" aria-live="polite">
+            {coinEtat.msg}
+          </div>
+        )}
 
         {state.coin && coin && (
-          <div className="coin-src">
+          <div className="coin-src" aria-live="polite">
             D'après {coin.stations.length}{" "}
             {coin.stations.length > 1 ? "stations Hub'Eau" : "station Hub'Eau"} —{" "}
             {coin.stations
