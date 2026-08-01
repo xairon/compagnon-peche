@@ -38,7 +38,9 @@ export const PRISE_ETAPES = ["statut", "maille", "quota", "choix", "kill", "rele
  * Ne sont PAS du contexte de navigation, délibérément : `ans` (réponses de
  * l'identifieur), `q` / `filter` (recherche en cours), `carnetSeg` (onglet
  * interne du carnet), `prisePlace` (le spot d'où le parcours a été lancé, qui
- * ne dit rien de l'endroit affiché). Ils survivent aux navigations.
+ * ne dit rien de l'endroit affiché), `coin` (la bascule « dans mon coin » de
+ * l'écran Espèces — un réglage d'affichage de CET écran, pas un identifiant de
+ * ce qu'un autre écran doit ouvrir). Ils survivent aux navigations.
  */
 export const CTX_CHAMPS = [
   "spId",

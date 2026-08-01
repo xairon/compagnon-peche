@@ -99,7 +99,7 @@ enregistré reste actif.
 
 ### 2.4 L'appariement taxon → fiche fuit
 
-Sur les 38 taxons distincts des trois stations, 34 retrouvent une fiche par leur binôme latin.
+Sur les 39 taxons distincts des trois stations, 34 retrouvent une fiche par leur binôme latin.
 Les quatre échecs ne sont pas de même nature :
 
 | Taxon ASPE | Nature | Traitement |
