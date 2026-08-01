@@ -10,6 +10,14 @@
 
 **Spec :** [`docs/superpowers/specs/2026-08-01-especes-du-coin-design.md`](../specs/2026-08-01-especes-du-coin-design.md)
 
+> **⚠️ Ce plan est figé à son état d'avant exécution, et un de ses chiffres est faux.** Il annonce
+> **~237 ko** en quatre endroits. Ce chiffre a été mesuré avec `fields=nom_latin_taxon`, alors que le
+> plan fait réutiliser `speciesAtStation`, qui en demandait trois — le coût réel de l'implémentation
+> livrée était de **414 ko**. La revue de branche l'a relevé ; `speciesAtStation` a reçu un paramètre
+> `champs` optionnel et le coût mesuré après correction est de **183 ko**. Voir le § « Correction
+> post-revue » de la spec, qui fait foi. Le plan n'est pas réécrit : il documente ce qui a été
+> demandé, pas ce qui a été livré.
+
 ## Global Constraints
 
 - **Langue.** Tout le texte visible et tous les commentaires sont en **français**. Les commentaires disent **pourquoi**, pas quoi — c'est la convention du dépôt, tenue partout.

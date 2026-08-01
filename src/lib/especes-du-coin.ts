@@ -201,9 +201,20 @@ export async function chargerEspecesDuCoin(
       // rapprochée) ; une station qui échoue se retire déjà du lot sans vider
       // le résultat, un retry n'y changerait rien d'utile.
       const sp = await speciesAtStation(st.code, signal, { champs: "nom_latin_taxon", retries: 0 });
-      // `latin` peut être vide quand la source ne publie qu'un nom commun.
-      // On garde alors le nom commun : il finira en « inconnu », ce qui est
-      // honnête — le jeter en silence ne l'aurait pas été.
+      // Ne demander que `nom_latin_taxon` a une conséquence qu'il faut écrire :
+      // un lot dont ce champ serait vide est écarté DANS `speciesAtStation`,
+      // qui n'a plus de nom commun sur quoi se rabattre. Le repli ci-dessous ne
+      // peut donc plus le rattraper, et ce lot ne serait pas compté en
+      // « inconnu ».
+      //
+      // MESURÉ avant de l'accepter, le 01/08/2026, sur les trois stations
+      // retenues autour de Blois : 0 lot sur 4 548 est dans ce cas — la source
+      // écrit toujours quelque chose dans `nom_latin_taxon`, jusqu'aux lots
+      // qu'elle n'identifie pas (« Hybride brème-gardon » y figure tel quel).
+      // Demander le nom commun en plus coûterait 110 611 o au lieu de 59 898 o
+      // sur la seule station 04052800, soit près du double, pour un cas mesuré
+      // à zéro. Le repli reste néanmoins écrit : il sert si un appelant futur
+      // demande les deux champs.
       for (const x of sp) taxons.push(x.latin || x.fr);
       lues.push(st);
     } catch {

@@ -130,7 +130,7 @@ describe("Especes — filtre du coin", () => {
     fireEvent.click(screen.getByRole("button", { name: /dans mon coin/i }));
 
     await waitFor(() =>
-      expect(screen.getByText(/n'a pas pu être établie — réseau indisponible ou source muette/)).toBeTruthy(),
+      expect(screen.getByText(/n'a pas pu être établie — réseau indisponible ou source illisible/)).toBeTruthy(),
     );
     // Et surtout : la grille n'a pas été vidée.
     expect(screen.getByLabelText("Fiche Ablette")).toBeTruthy();

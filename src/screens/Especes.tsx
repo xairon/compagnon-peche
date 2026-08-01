@@ -165,7 +165,11 @@ export function Especes() {
         // les deux.
         setCoinEtat({
           k: "err",
-          msg: "La liste des relevés n'a pas pu être établie — réseau indisponible ou source muette.",
+          // « muette » aurait été figuré pour les cas que le commentaire vient
+          // d'énumérer : dans un 5xx, un rate-limit ou un corps trop grand, la
+          // source parle — c'est nous qui n'en tirons rien. « illisible »
+          // couvre le silence ET la réponse qu'on n'a pas pu exploiter.
+          msg: "La liste des relevés n'a pas pu être établie — réseau indisponible ou source illisible.",
         });
         return;
       }

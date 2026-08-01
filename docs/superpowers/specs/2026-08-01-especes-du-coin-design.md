@@ -58,7 +58,8 @@ ici (60–104 ko), pas l'identité des stations.
 dérivé de cette mesure : `speciesAtStation` demandait par défaut trois champs
 (`nom_commun_taxon,nom_latin_taxon,effectif_lot`), pas le seul `nom_latin_taxon` mesuré ci-dessus —
 `effectif_lot` n'est jamais lu par `apparier`. Écart mesuré au `curl` sur la station 04052800 :
-59 898 o pour `nom_latin_taxon` seul (la mesure ci-dessus, retrouvée à l'octet près) contre 138 084 o
+59 898 o pour `nom_latin_taxon` seul — le tableau ci-dessus écrivait 59 918 o le même jour, 20 octets
+de plus, l'API ne rendant pas deux fois exactement le même corps — contre 138 084 o
 avec les trois champs, soit ×2,3. `speciesAtStation` reçoit désormais un paramètre `champs` optionnel
 (par défaut inchangé, pour la Carte qui affiche `effectif`) ; le chargeur du coin demande
 `nom_latin_taxon` seul, ce qui referme l'écart.
