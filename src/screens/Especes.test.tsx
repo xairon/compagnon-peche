@@ -2,9 +2,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { StoreProvider } from "../store";
+import { useStore } from "../store-hooks";
 import { Especes } from "./Especes";
 import { CLE_COIN } from "../lib/prefs-coin";
-import type { CoinEspeces } from "../lib/especes-du-coin";
+import { PORTEE_COIN_KM, type CoinEspeces } from "../lib/especes-du-coin";
 
 // Le filtre masque — c'est ce qui a été demandé — mais il dit toujours combien,
 // et il se défait en un appui. Les relevés ASPE ne sont pas exhaustifs :
@@ -146,5 +147,101 @@ describe("Especes — filtre du coin", () => {
     fireEvent.click(screen.getByRole("button", { name: /dans mon coin/i }));
 
     await waitFor(() => expect(screen.getByText(/Localisation refusée/)).toBeTruthy());
+  });
+
+  it("dit qu'aucune station n'est à moins de 15 km — distinct du hors-ligne", async () => {
+    // La source A répondu ; elle dit juste qu'il n'y a rien dans la boîte.
+    // Confondre ce cas avec le hors-ligne ferait dire à l'écran une absence
+    // qu'il n'a jamais constatée.
+    vi.stubGlobal("navigator", {
+      geolocation: {
+        getCurrentPosition: (ok: PositionCallback) =>
+          ok({ coords: { latitude: 47.586, longitude: 1.336 } } as GeolocationPosition),
+      },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify({ count: 0, data: [] }), { status: 200 })),
+    );
+    poser();
+
+    fireEvent.click(screen.getByRole("button", { name: /dans mon coin/i }));
+
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          new RegExp(`Aucune station de pêche scientifique à moins de ${PORTEE_COIN_KM} km`),
+        ),
+      ).toBeTruthy(),
+    );
+    expect(screen.queryByText(/Sans réseau/)).toBeNull();
+    // La grille n'a pas été vidée pour autant.
+    expect(screen.getByLabelText("Fiche Ablette")).toBeTruthy();
+  });
+
+  it("un relevé résolu après le démontage ne casse rien et ne bascule pas le store", async () => {
+    // Le pêcheur appuie, quitte l'écran avant la réponse, et la réponse arrive
+    // quand même. Sans garde, `set({ coin: true })` toucherait le store
+    // GLOBAL — qui, lui, survit à l'écran — pour un écran déjà quitté.
+    let resoudreGeo!: PositionCallback;
+    vi.stubGlobal("navigator", {
+      geolocation: {
+        getCurrentPosition: (ok: PositionCallback) => {
+          resoudreGeo = ok;
+        },
+      },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) =>
+        String(input).includes("/stations?")
+          ? new Response(
+              JSON.stringify({
+                data: [
+                  {
+                    code_station: "04052800",
+                    libelle_station: "COSSON à CHAILLES",
+                    latitude: 47.586,
+                    longitude: 1.336,
+                  },
+                ],
+              }),
+              { status: 200 },
+            )
+          : new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      ),
+    );
+    const erreurs = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    function Sonde() {
+      const { state } = useStore();
+      return <span data-testid="coin-store">{String(state.coin)}</span>;
+    }
+
+    const { rerender } = render(
+      <StoreProvider>
+        <Sonde />
+        <Especes />
+      </StoreProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /dans mon coin/i }));
+
+    // Démonte Especes seul : la Sonde et le store restent, comme un vrai
+    // changement d'écran dans l'app.
+    rerender(
+      <StoreProvider>
+        <Sonde />
+      </StoreProvider>,
+    );
+
+    resoudreGeo({ coords: { latitude: 47.586, longitude: 1.336 } } as GeolocationPosition);
+    // Laisse la chaîne locate → chargerEspecesDuCoin → set aller à son terme.
+    await new Promise((r) => setTimeout(r, 0));
+    await new Promise((r) => setTimeout(r, 0));
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(screen.getByTestId("coin-store").textContent).toBe("false");
+    expect(erreurs).not.toHaveBeenCalled();
   });
 });

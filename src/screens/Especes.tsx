@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { DEPARTEMENTS } from "../data/regulation";
@@ -75,6 +75,23 @@ export function Especes() {
     { k: "repos" } | { k: "charge" } | { k: "err"; msg: string }
   >({ k: "repos" });
 
+  // Même garde que le GPS de l'Accueil (voir Accueil.tsx) : un relevé résolu
+  // après que le pêcheur a quitté l'écran ne doit toucher ni un état local, ni
+  // le store — celui-ci, lui, survit à l'écran. `enVol` porte en plus le
+  // contrôleur de la requête en cours : il l'abandonne au démontage, et il
+  // interdit d'en démarrer une seconde tant que la première tourne, parce que
+  // Hub'Eau lit ses stations EN SÉRIE (voir lib/especes-du-coin.ts) — un
+  // second relevé concurrent romprait cette règle.
+  const mounted = useRef(true);
+  const enVol = useRef<AbortController | null>(null);
+  useEffect(
+    () => () => {
+      mounted.current = false;
+      enVol.current?.abort();
+    },
+    [],
+  );
+
   const list = SPECIES.filter(
     (sp) =>
       (state.filter === "tous" || sp.group === state.filter) &&
@@ -108,10 +125,16 @@ export function Especes() {
     .filter(Boolean) as Species[];
 
   async function releverLeCoin() {
+    // Un relevé est déjà en vol : voir le commentaire sur `enVol` plus haut.
+    if (enVol.current) return;
+    const controleur = new AbortController();
+    enVol.current = controleur;
     setCoinEtat({ k: "charge" });
     try {
       const { lat, lon } = await locate();
-      const c = await chargerEspecesDuCoin(lat, lon);
+      if (!mounted.current) return;
+      const c = await chargerEspecesDuCoin(lat, lon, controleur.signal);
+      if (!mounted.current) return;
       if (!c) {
         // La source n'a pas répondu. Distinct de « il n'y a rien ici » : on ne
         // sait pas, et l'écran n'a pas le droit de confondre les deux.
@@ -137,9 +160,12 @@ export function Especes() {
       setCoinEtat({ k: "repos" });
       set({ coin: true });
     } catch (e) {
+      if (!mounted.current) return;
       // `locate()` rejette avec un code (`"denied"`…), pas une Error :
       // locateMessage en fait la phrase, et elle est déjà juste.
       setCoinEtat({ k: "err", msg: locateMessage(e) });
+    } finally {
+      enVol.current = null;
     }
   }
 
@@ -225,7 +251,12 @@ export function Especes() {
               .map((s) => `${s.nom} (${s.dist.toFixed(1).replace(".", ",")} km)`)
               .join(", ")}{" "}
             · relevé le {coin.releveIso.split("-").reverse().join("/")}{" "}
-            <button type="button" className="coin-maj link-inline" onClick={releverLeCoin}>
+            <button
+              type="button"
+              className="coin-maj link-inline"
+              disabled={coinEtat.k === "charge"}
+              onClick={releverLeCoin}
+            >
               actualiser
             </button>
             {coin.inconnus.length > 0 && (

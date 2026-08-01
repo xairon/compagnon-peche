@@ -17,10 +17,10 @@
   line-height: 1.5;
   color: var(--muted);
 }
+/* Tout le reste (couleur, soulignement) vient déjà de .link-inline ; seul le
+   poids diffère. */
 .coin-src .coin-maj {
-  color: var(--green);
   font-weight: 550;
-  text-decoration: underline;
 }
 
 /* L'aveu de ce que le filtre cache, en pied de grille. */
