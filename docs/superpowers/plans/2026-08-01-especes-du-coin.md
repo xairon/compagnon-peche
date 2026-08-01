@@ -1218,7 +1218,7 @@ Insérer enfin, juste **après** le `</div>` de fermeture de `.grid2` :
 npx vitest run src/screens/Especes.test.tsx
 ```
 
-Attendu : PASS, 10 tests.
+Attendu : PASS, 9 tests.
 
 - [ ] **Step 5: Vérifier que rien d'autre n'a bougé**
 
@@ -1235,10 +1235,12 @@ npm run lint
 Attendu : aucune erreur. Puis le typage :
 
 ```bash
-npx tsc -b --noEmit
+npx tsc -b
 ```
 
-Attendu : aucune erreur.
+Attendu : aucune erreur. (Et NON `tsc -b --noEmit` : la combinaison échoue en
+TS6310 sur `main` intact — `--noEmit` est incompatible avec un projet composite référencé.
+`npm run build` utilise `tsc -b` seul.)
 
 - [ ] **Step 6: Commit**
 
@@ -1308,6 +1310,6 @@ git commit -m "README — le filtre du coin existe, et ce qu'il ne prouve pas es
 
 - [ ] `npm test` — toute la suite au vert
 - [ ] `npm run lint` — aucune erreur
-- [ ] `npx tsc -b --noEmit` — aucune erreur
+- [ ] `npx tsc -b` — aucune erreur
 - [ ] `npm run build` — le bundle se construit
 - [ ] À l'écran (`npm run dev`) : la bascule apparaît au-dessus des groupes ; sans relevé et sans réseau, elle affiche un message et ne vide pas la grille ; avec relevé, la grille se réduit, la provenance est citée avec ses distances, et « les voir » restaure les 129 fiches.
