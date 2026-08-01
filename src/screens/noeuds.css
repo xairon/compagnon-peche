@@ -1,0 +1,38 @@
+/*
+ * Fiche nœud : le cadre de l'illustration.
+ *
+ * Classe à part plutôt qu'une reprise de `.knot-diagram` de `styles.css` :
+ * l'écran est chargé en morceau différé, l'ordre d'arrivée des deux feuilles
+ * n'est pas garanti, et une surcharge qui dépend de cet ordre casse un jour
+ * sur deux.
+ *
+ * Ce qui change par rapport à l'ancienne règle (`width: 100%` sec) :
+ *
+ *  · les planches de Commons ne font pas toutes la même taille — la boucle de
+ *    chirurgien fait 287 px de large, le clinch 1 000. Étirer la première à la
+ *    largeur de l'écran la rendait floue pour rien ; `max-width` sans `width`
+ *    la laisse à sa taille et centre le reste.
+ *  · les planches verticales (boucle, albright : 287 × 648) occupaient 761 px
+ *    de haut sur un écran de 780 — la fiche s'ouvrait sur une image et il
+ *    fallait faire défiler pour voir qu'il y avait un texte. Bornées à 58vh,
+ *    elles laissent voir la première étape.
+ */
+.knot-illus {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.knot-illus img {
+  display: block;
+  max-width: 100%;
+  /* Jamais au-delà de la taille réelle : agrandir une planche de 287 px la
+     rend floue sans rien montrer de plus. */
+  max-height: 58vh;
+  object-fit: contain;
+}

@@ -2,9 +2,8 @@ import { useStore } from "../store-hooks";
 import { KNOTS } from "../data/knots";
 import { Icon } from "../components/Icon";
 import { ICONS } from "../components/icons-data";
-import { Media } from "../components/Media";
 import { ALL_KNOT_MEDIA } from "../components/media-helpers";
-import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
+import "./noeuds.css";
 
 export function Noeuds() {
   const { nav, back } = useStore();
@@ -53,10 +52,10 @@ export function KnotDetail() {
   const { state, back } = useStore();
   const knot = KNOTS.find((k) => k.id === state.knotId);
   if (!knot) return null;
-  const stepMedia = ALL_KNOT_STEP_MEDIA[knot.id];
-  // Repli : une fiche sans séquence par étape garde son ancien schéma unique,
-  // s'il existe (les 7 fiches d'origine avant upgrade).
-  const hasLegacyDiagram = !stepMedia && !!ALL_KNOT_MEDIA[knot.id];
+  // Une illustration, ou rien. Les fiches que ni Commons ni un schéma maison
+  // propre ne couvrent (wacky, anglaise, feeder) n'affichent aucun cadre : un
+  // cadre vide se lirait comme une image cassée, et leur texte se suffit.
+  const media = ALL_KNOT_MEDIA[knot.id];
 
   return (
     <main className="screen">
@@ -70,30 +69,23 @@ export function KnotDetail() {
         </div>
       </div>
       <div style={{ padding: "10px 18px 24px" }}>
-        {hasLegacyDiagram && (
-          <div className="knot-diagram">
-            <Media kind="knot" id={knot.id} placeholder={knot.name} />
+        {media && (
+          <div className="knot-illus">
+            <img
+              src={import.meta.env.BASE_URL + media.file}
+              alt={`${knot.name} — ${knot.use}`}
+              decoding="async"
+            />
           </div>
         )}
-        {knot.steps.map((s, i) => {
-          const media = stepMedia?.[i];
-          return (
-            <div key={i} className="knot-step">
-              <div className="num">{i + 1}</div>
-              <div style={{ flex: 1 }}>
-                {media && (
-                  <img
-                    className="knot-step-img"
-                    src={import.meta.env.BASE_URL + media.file}
-                    alt={`${knot.name} — étape ${i + 1}`}
-                    loading="lazy"
-                  />
-                )}
-                <div className="cap">{s}</div>
-              </div>
+        {knot.steps.map((s, i) => (
+          <div key={i} className="knot-step">
+            <div className="num">{i + 1}</div>
+            <div style={{ flex: 1 }}>
+              <div className="cap">{s}</div>
             </div>
-          );
-        })}
+          </div>
+        ))}
         <div className="info">
           <b>Quand l'utiliser :</b> {knot.when}
         </div>

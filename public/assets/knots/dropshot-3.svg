@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 190" font-family="-apple-system, system-ui, Segoe UI, sans-serif">
-  <rect width="160" height="190" fill="#ffffff"/>
-  <line x1="80" y1="10" x2="80" y2="130" stroke="#1a201c" stroke-width="2"/>
-  <circle cx="80" cy="20" r="5" fill="none" stroke="#1a201c" stroke-width="1.4"/>
-  <path d="M80,60 h20 a8,8 0 0 1 8,8 v8 a11,11 0 0 1 -20,3" fill="none" stroke="#1d6e42" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M108,74 q22,-5 32,3 q-19,8 -32,2 z" fill="#e7efe9" stroke="#1d6e42" stroke-width="1.4"/>
-  <path d="M80,130 q-9,8 0,20 q9,-12 0,-20 z" fill="#3a3e36"/>
-  <text x="80" y="184" text-anchor="middle" font-size="11" fill="#3a3e36">3. Plomb en bout, leurre par la tête</text>
-</svg>

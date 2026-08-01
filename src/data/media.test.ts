@@ -4,7 +4,6 @@ import { join } from "node:path";
 import {
   SPECIES_MEDIA,
   KNOT_MEDIA,
-  KNOT_STEP_MEDIA,
   CRAYFISH_MEDIA,
   GEAR_MEDIA,
   type MediaEntry,
@@ -18,9 +17,6 @@ const pub = (f: string) => join(process.cwd(), "public", f);
 const toutes: [string, MediaEntry][] = [
   ...Object.entries(SPECIES_MEDIA).flatMap(([k, arr]): [string, MediaEntry][] =>
     arr.map((m, i) => [`SPECIES_MEDIA.${k}[${i}]`, m]),
-  ),
-  ...Object.entries(KNOT_STEP_MEDIA).flatMap(([k, arr]): [string, MediaEntry][] =>
-    arr.map((m, i) => [`KNOT_STEP_MEDIA.${k}[${i}]`, m]),
   ),
   ...Object.entries(KNOT_MEDIA).map(([k, m]): [string, MediaEntry] => [`KNOT_MEDIA.${k}`, m]),
   ...Object.entries(CRAYFISH_MEDIA).map(([k, m]): [string, MediaEntry] => [`CRAYFISH_MEDIA.${k}`, m]),
@@ -42,10 +38,9 @@ describe("médias — aucune clé ne pointe dans le vide", () => {
     expect(Object.keys(SPECIES_MEDIA).filter((k) => !ids.has(k))).toEqual([]);
   });
 
-  it("chaque clé de KNOT_MEDIA et KNOT_STEP_MEDIA vise un nœud existant", () => {
+  it("chaque clé de KNOT_MEDIA vise un nœud existant", () => {
     const ids = new Set(KNOTS.map((k) => k.id));
     expect(Object.keys(KNOT_MEDIA).filter((k) => !ids.has(k))).toEqual([]);
-    expect(Object.keys(KNOT_STEP_MEDIA).filter((k) => !ids.has(k))).toEqual([]);
   });
 
   it("chaque clé de CRAYFISH_MEDIA vise une écrevisse existante", () => {

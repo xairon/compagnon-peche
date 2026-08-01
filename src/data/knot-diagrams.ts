@@ -1,16 +1,18 @@
 import type { MediaEntry } from "./media";
-import { LOCAL_KNOT_STEPS } from "./knot-step-media";
-import { KNOT_STEP_MEDIA } from "./media";
 
-// Hand-drawn rig schematics (original SVGs, in-app) for the rigs that have no
-// free diagram on Wikimedia Commons. Merged over the fetched KNOT_MEDIA.
+/**
+ * Schémas dessinés ici, pour les montages que Wikimedia Commons ne couvre pas.
+ *
+ * Ils sont gardés parce qu'ils font le travail d'une illustration : le montage
+ * entier, légendé (corps de ligne, potence, plomb, surface, fond), lisible à
+ * 375 px. C'est le seul critère — trente autres fichiers du même dossier, qui
+ * réduisaient un nœud à un trait et une ellipse sous une légende, ont été
+ * retirés parce qu'ils ne l'étaient pas.
+ *
+ * Un id absent d'ici et absent de `KNOT_MEDIA` n'a simplement pas
+ * d'illustration : la fiche montre son texte, et aucun cadre.
+ */
 export const LOCAL_KNOT_MEDIA: Record<string, MediaEntry> = {
-  dropshot: {
-    file: "assets/knots/dropshot.svg",
-    author: "Compagnon de pêche",
-    license: "Schéma original",
-    sourceUrl: "",
-  },
   paternoster: {
     file: "assets/knots/paternoster.svg",
     author: "Compagnon de pêche",
@@ -23,12 +25,4 @@ export const LOCAL_KNOT_MEDIA: Record<string, MediaEntry> = {
     license: "Schéma original",
     sourceUrl: "",
   },
-};
-
-/** Toutes les séquences par étape, sourcées Commons + dessinées maison,
- *  fusionnées par id. `KNOT_STEP_MEDIA` (généré, Task 2) n'existe pas encore
- *  à ce stade du plan — le fournir vide temporairement le rend possible. */
-export const ALL_KNOT_STEP_MEDIA: Record<string, MediaEntry[]> = {
-  ...KNOT_STEP_MEDIA,
-  ...LOCAL_KNOT_STEPS,
 };

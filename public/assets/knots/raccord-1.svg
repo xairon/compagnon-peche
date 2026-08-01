@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 190" font-family="-apple-system, system-ui, Segoe UI, sans-serif">
-  <rect width="160" height="190" fill="#ffffff"/>
-  <path d="M20,60 h60" stroke="#4a5d52" stroke-width="2.4" fill="none"/>
-  <path d="M80,60 q30,0 30,26 q0,26 -30,26" stroke="#4a5d52" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-  <text x="80" y="184" text-anchor="middle" font-size="11" fill="#3a3e36">1. Former la boucle</text>
-</svg>

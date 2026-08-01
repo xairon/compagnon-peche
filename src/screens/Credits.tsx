@@ -12,7 +12,6 @@ import { licenceUrl } from "../lib/licences";
 import { RECIPES } from "../data/recipes";
 import { TECHNIQUES } from "../data/techniques";
 import { GEAR_CARDS } from "../data/gear-cards";
-import { ALL_KNOT_STEP_MEDIA } from "../data/knot-diagrams";
 import { NAME_TO_ID, ALL_KNOT_MEDIA } from "../components/media-helpers";
 import { crayfishById } from "../data/ecrevisses";
 
@@ -56,20 +55,11 @@ export function Credits() {
       sourceUrl: m.sourceUrl,
     })),
   );
-  // Ids with a per-step sequence (ALL_KNOT_STEP_MEDIA) now render that instead
-  // of the old single-photo overlay (see Noeuds.tsx's `hasLegacyDiagram`) — so
-  // exclude them here to only credit what's actually displayed.
-  const knotRows = Object.entries(ALL_KNOT_MEDIA)
-    .filter(([id]) => !ALL_KNOT_STEP_MEDIA[id])
-    .map(([id, m]) => ({ name: nameForKnot(id), ...m }));
-  const knotStepRows = Object.entries(ALL_KNOT_STEP_MEDIA).flatMap(([id, photos]) =>
-    photos.map((m, i) => ({
-      name: nameForKnot(id) + (photos.length > 1 ? ` (étape ${i + 1})` : ""),
-      author: m.author,
-      license: m.license,
-      sourceUrl: m.sourceUrl,
-    })),
-  );
+  // Une illustration par nœud, donc une ligne par nœud illustré.
+  const knotRows = Object.entries(ALL_KNOT_MEDIA).map(([id, m]) => ({
+    name: nameForKnot(id),
+    ...m,
+  }));
   const gearRows = Object.entries(GEAR_MEDIA).map(([id, m]) => ({ name: nameForGear(id), ...m }));
   const crayfishRows = Object.entries(CRAYFISH_MEDIA).map(([id, m]) => ({ name: nameForCrayfish(id), ...m }));
   // Recipe and technique photos ship in the app and are displayed by
@@ -135,15 +125,6 @@ export function Credits() {
           </>
         )}
 
-        {knotStepRows.length > 0 && (
-          <>
-            <div className="label" style={{ margin: "18px 0 4px" }}>
-              Nœuds & montages — étapes
-            </div>
-            {knotStepRows.map(Row)}
-          </>
-        )}
-
         {gearRows.length > 0 && (
           <>
             <div className="label" style={{ margin: "18px 0 4px" }}>
@@ -182,7 +163,6 @@ export function Credits() {
 
         {speciesRows.length === 0 &&
           knotRows.length === 0 &&
-          knotStepRows.length === 0 &&
           gearRows.length === 0 &&
           crayfishRows.length === 0 &&
           recipeRows.length === 0 &&

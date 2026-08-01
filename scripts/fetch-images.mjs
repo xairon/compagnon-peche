@@ -152,45 +152,6 @@ async function processSpecies(items) {
   return media;
 }
 
-// Séquences d'illustration par étape (nœuds/montages) : même mécanique que
-// processSpecies (plusieurs images par id), mais la sortie garde l'ORDRE du
-// tableau (chaque élément = une étape), jamais un id -> une seule image.
-async function processKnotSteps(items) {
-  const outDir = join(root, "public/assets/knots-steps");
-  await mkdir(outDir, { recursive: true });
-  const media = {};
-  for (const it of items) {
-    const entries = [];
-    for (let i = 0; i < it.steps.length; i++) {
-      const p = it.steps[i];
-      const file = `assets/knots-steps/${it.id}-${i + 1}.webp`;
-      const outPath = join(root, "public", file);
-      if (!existsSync(outPath) || p.replace) {
-        try {
-          const buf = await sourceBuffer(p, 960);
-          await sharp(buf, { density: 200 })
-            .rotate()
-            .resize({ width: 900, height: 648, fit: "inside", withoutEnlargement: true })
-            .flatten({ background: "#ffffff" })
-            .webp({ quality: 84 })
-            .toFile(outPath);
-          console.log(`✓ knotSteps/${it.id}-${i + 1}  (${p.license})`);
-          await sleep(3000);
-        } catch (e) {
-          console.error(`✗ knotSteps/${it.id}#${i + 1}: ${e.message}`);
-          continue;
-        }
-      } else {
-        console.log(`• knotSteps/${it.id}-${i + 1}  (déjà présent)`);
-      }
-      entries.push({ file, author: p.author, license: p.license, sourceUrl: p.file_page_url });
-    }
-    if (entries.length) media[it.id] = entries;
-  }
-  return media;
-}
-
-const knotStepMedia = await processKnotSteps(manifest.knotSteps || []);
 const speciesMedia = await processSpecies(manifest.species || []);
 const knotMedia = await processGroup(manifest.knots || [], "knot", "knots");
 const recipeMedia = await processGroup(manifest.recipes || [], "recipe", "recipes");
@@ -213,9 +174,9 @@ export interface MediaEntry {
 // Species carry an ARRAY of photos (adult, juvenile…) for a gallery.
 export const SPECIES_MEDIA: Record<string, MediaEntry[]> = ${JSON.stringify(speciesMedia, null, 2)};
 
+// Une illustration par nœud, jamais plus : les planches de Commons montrent
+// déjà toute la suite des gestes dans une seule image.
 export const KNOT_MEDIA: Record<string, MediaEntry> = ${JSON.stringify(knotMedia, null, 2)};
-
-export const KNOT_STEP_MEDIA: Record<string, MediaEntry[]> = ${JSON.stringify(knotStepMedia, null, 2)};
 
 export const RECIPE_MEDIA: Record<string, MediaEntry> = ${JSON.stringify(recipeMedia, null, 2)};
 
@@ -228,5 +189,5 @@ export const CRAYFISH_MEDIA: Record<string, MediaEntry> = ${JSON.stringify(crayf
 
 await writeFile(join(root, "src/data/media.ts"), body, "utf8");
 console.log(
-  `\nWrote src/data/media.ts — ${Object.keys(speciesMedia).length} species, ${Object.keys(knotMedia).length} knots, ${Object.keys(knotStepMedia).length} knot-step-sequences, ${Object.keys(recipeMedia).length} recipes, ${Object.keys(techMedia).length} techniques, ${Object.keys(gearMedia).length} gear, ${Object.keys(crayfishMedia).length} crayfish.`,
+  `\nWrote src/data/media.ts — ${Object.keys(speciesMedia).length} species, ${Object.keys(knotMedia).length} knots, ${Object.keys(recipeMedia).length} recipes, ${Object.keys(techMedia).length} techniques, ${Object.keys(gearMedia).length} gear, ${Object.keys(crayfishMedia).length} crayfish.`,
 );
