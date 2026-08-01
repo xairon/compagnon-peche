@@ -1,0 +1,124 @@
+{
+ "count": 17,
+ "data": [
+  {
+   "longitude_station": 1.69461322,
+   "latitude_station": 47.820222839,
+   "code_cours_eau": "K4414000",
+   "libelle_cours_eau": "la Mauve de la Détourbe",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4414000"
+  },
+  {
+   "longitude_station": 1.614974732,
+   "latitude_station": 47.754893277,
+   "code_cours_eau": "K4427000",
+   "libelle_cours_eau": "le Lien",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4427000"
+  },
+  {
+   "longitude_station": 1.655754727,
+   "latitude_station": 47.747510065,
+   "code_cours_eau": "K44-0300",
+   "libelle_cours_eau": "l'Ardoux",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K44-0300"
+  },
+  {
+   "longitude_station": 1.335147948,
+   "latitude_station": 47.584957074,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "longitude_station": 1.70755632,
+   "latitude_station": 47.529619622,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "longitude_station": 1.420533553,
+   "latitude_station": 47.5325123,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "longitude_station": 1.420658053,
+   "latitude_station": 47.532421511,
+   "code_cours_eau": "K4--0220",
+   "libelle_cours_eau": "le Beuvron",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0220"
+  },
+  {
+   "longitude_station": 1.309387152,
+   "latitude_station": 47.543684348,
+   "code_cours_eau": "K47-0300",
+   "libelle_cours_eau": "le Cosson",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K47-0300"
+  },
+  {
+   "longitude_station": 1.188799046,
+   "latitude_station": 47.486229382,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "longitude_station": 1.189729485,
+   "latitude_station": 47.486604008,
+   "code_cours_eau": "----0000",
+   "libelle_cours_eau": "la Loire",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/----0000"
+  },
+  {
+   "longitude_station": 1.061147506,
+   "latitude_station": 47.412057249,
+   "code_cours_eau": "K4814000",
+   "libelle_cours_eau": "l'Amasse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4814000"
+  },
+  {
+   "longitude_station": 1.235465156,
+   "latitude_station": 47.54658671,
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0150"
+  },
+  {
+   "longitude_station": 0.965964808,
+   "latitude_station": 47.434852534,
+   "code_cours_eau": "K4--0150",
+   "libelle_cours_eau": "la Cisse",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4--0150"
+  },
+  {
+   "longitude_station": 0.931092649,
+   "latitude_station": 47.556200563,
+   "code_cours_eau": "K4885000",
+   "libelle_cours_eau": "la Quintame",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K4885000"
+  },
+  {
+   "longitude_station": 1.671547667,
+   "latitude_station": 47.320917289,
+   "code_cours_eau": "K6--0250",
+   "libelle_cours_eau": "la Sauldre",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K6--0250"
+  },
+  {
+   "longitude_station": 1.186684741,
+   "latitude_station": 47.342028215,
+   "code_cours_eau": "K---0090",
+   "libelle_cours_eau": "le Cher",
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/K---0090"
+  },
+  {
+   "longitude_station": 1.060309124,
+   "latitude_station": 47.794067718,
+   "code_cours_eau": "M1--0161",
+   "libelle_cours_eau": null,
+   "uri_cours_eau": "http://id.eaufrance.fr/CEA/M1--0161"
+  }
+ ]
+}

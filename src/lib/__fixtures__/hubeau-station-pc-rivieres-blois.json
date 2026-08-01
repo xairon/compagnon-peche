@@ -1,0 +1,803 @@
+{
+ "count": 114,
+ "data": [
+  {
+   "longitude": 1.735840261,
+   "latitude": 47.849559334,
+   "code_cours_eau": "K4404500",
+   "nom_cours_eau": "la Mauve de Saint Ay",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4404500"
+  },
+  {
+   "longitude": 1.701558463,
+   "latitude": 47.823036322,
+   "code_cours_eau": "----0000",
+   "nom_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  },
+  {
+   "longitude": 1.683813097,
+   "latitude": 47.81114569,
+   "code_cours_eau": "K4414000",
+   "nom_cours_eau": "la Mauve de la Détourbe",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4414000"
+  },
+  {
+   "longitude": 1.600382441,
+   "latitude": 47.74120791,
+   "code_cours_eau": "K4427000",
+   "nom_cours_eau": "le Lien",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4427000"
+  },
+  {
+   "longitude": 1.587830248,
+   "latitude": 47.708865534,
+   "code_cours_eau": "K44-0300",
+   "nom_cours_eau": "l'Ardoux",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K44-0300"
+  },
+  {
+   "longitude": 1.655696652,
+   "latitude": 47.747463088,
+   "code_cours_eau": "K44-0300",
+   "nom_cours_eau": "l'Ardoux",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K44-0300"
+  },
+  {
+   "longitude": 1.525573461,
+   "latitude": 47.673979127,
+   "code_cours_eau": "----0000",
+   "nom_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  },
+  {
+   "longitude": 1.443063699,
+   "latitude": 47.658163038,
+   "code_cours_eau": "K4464000",
+   "nom_cours_eau": "la Tronne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4464000"
+  },
+  {
+   "longitude": 1.354979514,
+   "latitude": 47.593208147,
+   "code_cours_eau": "----0000",
+   "nom_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  },
+  {
+   "longitude": 1.364251547,
+   "latitude": 47.609572458,
+   "code_cours_eau": "K4475000",
+   "nom_cours_eau": "les Mées",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4475000"
+  },
+  {
+   "longitude": 1.710852967,
+   "latitude": 47.529061907,
+   "code_cours_eau": "K4--0220",
+   "nom_cours_eau": "le Beuvron",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0220"
+  },
+  {
+   "longitude": 1.69119356,
+   "latitude": 47.517481756,
+   "code_cours_eau": "K46-0300",
+   "nom_cours_eau": "le Néant",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K46-0300"
+  },
+  {
+   "longitude": 1.600798476,
+   "latitude": 47.561704613,
+   "code_cours_eau": "K4--0220",
+   "nom_cours_eau": "le Beuvron",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0220"
+  },
+  {
+   "longitude": 1.498339579,
+   "latitude": 47.539784157,
+   "code_cours_eau": "K4--0220",
+   "nom_cours_eau": "le Beuvron",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0220"
+  },
+  {
+   "longitude": 1.432929988,
+   "latitude": 47.51718494,
+   "code_cours_eau": "K4684000",
+   "nom_cours_eau": "le Conon",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4684000"
+  },
+  {
+   "longitude": 1.336734986,
+   "latitude": 47.500995887,
+   "code_cours_eau": "K4--0220",
+   "nom_cours_eau": "le Beuvron",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0220"
+  },
+  {
+   "longitude": 1.34456164,
+   "latitude": 47.44870593,
+   "code_cours_eau": "K4695500",
+   "nom_cours_eau": "la Bièvre",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4695500"
+  },
+  {
+   "longitude": 1.610074632,
+   "latitude": 47.537446891,
+   "code_cours_eau": "K46-0310",
+   "nom_cours_eau": "la Bonne Heure",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K46-0310"
+  },
+  {
+   "longitude": 1.298318308,
+   "latitude": 47.489064374,
+   "code_cours_eau": "K4695500",
+   "nom_cours_eau": "la Bièvre",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4695500"
+  },
+  {
+   "longitude": 1.260212323,
+   "latitude": 47.493935775,
+   "code_cours_eau": "K4--0220",
+   "nom_cours_eau": "le Beuvron",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0220"
+  },
+  {
+   "longitude": 1.668818927,
+   "latitude": 47.657477768,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.598005017,
+   "latitude": 47.636340342,
+   "code_cours_eau": "K4787400",
+   "nom_cours_eau": "le Ribou",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4787400"
+  },
+  {
+   "longitude": 1.452619768,
+   "latitude": 47.593952438,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.342275408,
+   "latitude": 47.568106923,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.309033323,
+   "latitude": 47.543436083,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.189948701,
+   "latitude": 47.485463864,
+   "code_cours_eau": "----0000",
+   "nom_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  },
+  {
+   "longitude": 1.09794716,
+   "latitude": 47.463600642,
+   "code_cours_eau": "----0000",
+   "nom_cours_eau": "la Loire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0000"
+  },
+  {
+   "longitude": 1.010572063,
+   "latitude": 47.42709807,
+   "code_cours_eau": "----0001",
+   "nom_cours_eau": null,
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/----0001"
+  },
+  {
+   "longitude": 1.082247634,
+   "latitude": 47.414261751,
+   "code_cours_eau": "K4814000",
+   "nom_cours_eau": "l'Amasse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4814000"
+  },
+  {
+   "longitude": 1.28814554,
+   "latitude": 47.70016455,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.248960757,
+   "latitude": 47.65862312,
+   "code_cours_eau": "K4837000",
+   "nom_cours_eau": "la Cisse Landaise",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4837000"
+  },
+  {
+   "longitude": 1.265332896,
+   "latitude": 47.64127291,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.237965162,
+   "latitude": 47.53373888,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.152238158,
+   "latitude": 47.491875895,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.063772315,
+   "latitude": 47.464264751,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 0.993489905,
+   "latitude": 47.441966939,
+   "code_cours_eau": "K4856000",
+   "nom_cours_eau": "la Ramberge",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4856000"
+  },
+  {
+   "longitude": 0.95458401,
+   "latitude": 47.430959527,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.684960165,
+   "latitude": 47.338122623,
+   "code_cours_eau": "K6484500",
+   "nom_cours_eau": "ruisseau la bâtarde",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6484500"
+  },
+  {
+   "longitude": 1.670795439,
+   "latitude": 47.320602517,
+   "code_cours_eau": "K6--0250",
+   "nom_cours_eau": "la Sauldre",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6--0250"
+  },
+  {
+   "longitude": 1.395279174,
+   "latitude": 47.321470442,
+   "code_cours_eau": "K6624000",
+   "nom_cours_eau": "la Rennes",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6624000"
+  },
+  {
+   "longitude": 1.367109559,
+   "latitude": 47.313596775,
+   "code_cours_eau": "K6624000",
+   "nom_cours_eau": "la Rennes",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6624000"
+  },
+  {
+   "longitude": 1.283486918,
+   "latitude": 47.341175946,
+   "code_cours_eau": "K6634200",
+   "nom_cours_eau": "le Bavet",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6634200"
+  },
+  {
+   "longitude": 1.241120449,
+   "latitude": 47.338092881,
+   "code_cours_eau": "K6644000",
+   "nom_cours_eau": "l'Ange",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6644000"
+  },
+  {
+   "longitude": 1.239563208,
+   "latitude": 47.341815873,
+   "code_cours_eau": "K---0090",
+   "nom_cours_eau": "le Cher",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K---0090"
+  },
+  {
+   "longitude": 1.188186546,
+   "latitude": 47.32042244,
+   "code_cours_eau": "K6644600",
+   "nom_cours_eau": "l'Aiguevives",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6644600"
+  },
+  {
+   "longitude": 1.130956908,
+   "latitude": 47.331266525,
+   "code_cours_eau": "K---0090",
+   "nom_cours_eau": "le Cher",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K---0090"
+  },
+  {
+   "longitude": 1.08285687,
+   "latitude": 47.326874271,
+   "code_cours_eau": "K---0090",
+   "nom_cours_eau": "le Cher",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K---0090"
+  },
+  {
+   "longitude": 0.976767605,
+   "latitude": 47.330892588,
+   "code_cours_eau": "K---0090",
+   "nom_cours_eau": "le Cher",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K---0090"
+  },
+  {
+   "longitude": 1.112954591,
+   "latitude": 47.844172924,
+   "code_cours_eau": "M1--0160",
+   "nom_cours_eau": "le Loir",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1--0160"
+  },
+  {
+   "longitude": 1.111981551,
+   "latitude": 47.829270162,
+   "code_cours_eau": "M1134500",
+   "nom_cours_eau": "le Réveillon",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1134500"
+  },
+  {
+   "longitude": 1.094849992,
+   "latitude": 47.810613643,
+   "code_cours_eau": "M1--0160",
+   "nom_cours_eau": "le Loir",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1--0160"
+  },
+  {
+   "longitude": 1.091992011,
+   "latitude": 47.800956945,
+   "code_cours_eau": "M1135500",
+   "nom_cours_eau": "la Houzé",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1135500"
+  },
+  {
+   "longitude": 1.026737019,
+   "latitude": 47.797593656,
+   "code_cours_eau": "M1--0160",
+   "nom_cours_eau": "le Loir",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1--0160"
+  },
+  {
+   "longitude": 0.958738927,
+   "latitude": 47.810752763,
+   "code_cours_eau": "M1144600",
+   "nom_cours_eau": "le Boulon",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1144600"
+  },
+  {
+   "longitude": 0.985326479,
+   "latitude": 47.776280621,
+   "code_cours_eau": "M1145000",
+   "nom_cours_eau": "la Brisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1145000"
+  },
+  {
+   "longitude": 1.72678446,
+   "latitude": 47.755451357,
+   "code_cours_eau": "K4444200",
+   "nom_cours_eau": "le Vézenne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4444200"
+  },
+  {
+   "longitude": 1.629991173,
+   "latitude": 47.780661758,
+   "code_cours_eau": "K4425000",
+   "nom_cours_eau": "le Ru",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4425000"
+  },
+  {
+   "longitude": 1.645984924,
+   "latitude": 47.740682094,
+   "code_cours_eau": "K4446500",
+   "nom_cours_eau": null,
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4446500"
+  },
+  {
+   "longitude": 1.685372929,
+   "latitude": 47.772150795,
+   "code_cours_eau": "K4439000",
+   "nom_cours_eau": "le Petit Ardoux",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4439000"
+  },
+  {
+   "longitude": 1.700123695,
+   "latitude": 47.835145116,
+   "code_cours_eau": "K4414000",
+   "nom_cours_eau": "la Mauve de la Détourbe",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4414000"
+  },
+  {
+   "longitude": 1.512889562,
+   "latitude": 47.686745869,
+   "code_cours_eau": "K4464000",
+   "nom_cours_eau": "la Tronne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4464000"
+  },
+  {
+   "longitude": 1.462905099,
+   "latitude": 47.662314815,
+   "code_cours_eau": "K4464000",
+   "nom_cours_eau": "la Tronne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4464000"
+  },
+  {
+   "longitude": 1.647775176,
+   "latitude": 47.785279179,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.662275742,
+   "latitude": 47.785985748,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.695582918,
+   "latitude": 47.821772816,
+   "code_cours_eau": "K4414000",
+   "nom_cours_eau": "la Mauve de la Détourbe",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4414000"
+  },
+  {
+   "longitude": 1.505995938,
+   "latitude": 47.69921516,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.51482683,
+   "latitude": 47.681367279,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.514319781,
+   "latitude": 47.690316461,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.508993109,
+   "latitude": 47.694712196,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.511646913,
+   "latitude": 47.689232709,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.664065695,
+   "latitude": 47.539167352,
+   "code_cours_eau": "K4634100",
+   "nom_cours_eau": "le Balletan",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4634100"
+  },
+  {
+   "longitude": 1.273404372,
+   "latitude": 47.475692244,
+   "code_cours_eau": "K4698500",
+   "nom_cours_eau": "le Valaire",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4698500"
+  },
+  {
+   "longitude": 1.629289872,
+   "latitude": 47.475958884,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.651297762,
+   "latitude": 47.646609231,
+   "code_cours_eau": "K4786200",
+   "nom_cours_eau": "les Fonds de Rotte",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4786200"
+  },
+  {
+   "longitude": 1.253528175,
+   "latitude": 47.498265631,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.623437881,
+   "latitude": 47.652144806,
+   "code_cours_eau": "K47-0300",
+   "nom_cours_eau": "le Cosson",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K47-0300"
+  },
+  {
+   "longitude": 1.120509307,
+   "latitude": 47.495565186,
+   "code_cours_eau": "K4855100",
+   "nom_cours_eau": "la Petite Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4855100"
+  },
+  {
+   "longitude": 1.334147211,
+   "latitude": 47.739116853,
+   "code_cours_eau": "K4834500",
+   "nom_cours_eau": "la Sixtre",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4834500"
+  },
+  {
+   "longitude": 1.17269578,
+   "latitude": 47.501437735,
+   "code_cours_eau": "K4854500",
+   "nom_cours_eau": "le Cissereau",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4854500"
+  },
+  {
+   "longitude": 0.990081327,
+   "latitude": 47.679845193,
+   "code_cours_eau": "K48-0310",
+   "nom_cours_eau": "la Brenne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K48-0310"
+  },
+  {
+   "longitude": 1.007608865,
+   "latitude": 47.618100102,
+   "code_cours_eau": "K4877000",
+   "nom_cours_eau": "le Gault",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4877000"
+  },
+  {
+   "longitude": 1.147782077,
+   "latitude": 47.424112152,
+   "code_cours_eau": "K4814000",
+   "nom_cours_eau": "l'Amasse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4814000"
+  },
+  {
+   "longitude": 1.300821031,
+   "latitude": 47.711935923,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.293834837,
+   "latitude": 47.678082699,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.28374565,
+   "latitude": 47.66600611,
+   "code_cours_eau": "K4836700",
+   "nom_cours_eau": null,
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4836700"
+  },
+  {
+   "longitude": 1.272455853,
+   "latitude": 47.653289551,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.116817024,
+   "latitude": 47.493002392,
+   "code_cours_eau": "K4855100",
+   "nom_cours_eau": "la Petite Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4855100"
+  },
+  {
+   "longitude": 1.295818523,
+   "latitude": 47.70777591,
+   "code_cours_eau": "K4--0150",
+   "nom_cours_eau": "la Cisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4--0150"
+  },
+  {
+   "longitude": 1.182056546,
+   "latitude": 47.437582953,
+   "code_cours_eau": "K4814000",
+   "nom_cours_eau": "l'Amasse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4814000"
+  },
+  {
+   "longitude": 1.306854575,
+   "latitude": 47.715579469,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.177882866,
+   "latitude": 47.497854351,
+   "code_cours_eau": "K4854500",
+   "nom_cours_eau": "le Cissereau",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4854500"
+  },
+  {
+   "longitude": 0.930983379,
+   "latitude": 47.556042354,
+   "code_cours_eau": "K4885000",
+   "nom_cours_eau": "la Quintame",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4885000"
+  },
+  {
+   "longitude": 0.933555676,
+   "latitude": 47.598669488,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.165156115,
+   "latitude": 47.419552146,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.171424306,
+   "latitude": 47.442305671,
+   "code_cours_eau": "K4814100",
+   "nom_cours_eau": null,
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K4814100"
+  },
+  {
+   "longitude": 1.139580402,
+   "latitude": 47.421724948,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.059840579,
+   "latitude": 47.412052993,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.087805951,
+   "latitude": 47.415970132,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 0.981655744,
+   "latitude": 47.431428456,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.12404005,
+   "latitude": 47.510550938,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.602447557,
+   "latitude": 47.400625085,
+   "code_cours_eau": "K6494000",
+   "nom_cours_eau": "la Croisne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6494000"
+  },
+  {
+   "longitude": 1.599235786,
+   "latitude": 47.394130976,
+   "code_cours_eau": "K6494000",
+   "nom_cours_eau": "la Croisne",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6494000"
+  },
+  {
+   "longitude": 1.706075684,
+   "latitude": 47.336445093,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.110523939,
+   "latitude": 47.315528488,
+   "code_cours_eau": "K6654400",
+   "nom_cours_eau": "le Chézelles",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6654400"
+  },
+  {
+   "longitude": 1.144970711,
+   "latitude": 47.326079364,
+   "code_cours_eau": "K6654000",
+   "nom_cours_eau": "le Senelles",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/K6654000"
+  },
+  {
+   "longitude": 1.191503199,
+   "latitude": 47.756805787,
+   "code_cours_eau": "M1135501",
+   "nom_cours_eau": null,
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1135501"
+  },
+  {
+   "longitude": 1.247515768,
+   "latitude": 47.812977832,
+   "code_cours_eau": "M1134500",
+   "nom_cours_eau": "le Réveillon",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1134500"
+  },
+  {
+   "longitude": 1.019108503,
+   "latitude": 47.72967981,
+   "code_cours_eau": "M1145000",
+   "nom_cours_eau": "la Brisse",
+   "uri_cours_eau": "https://id.eaufrance.fr/CoursEau_Carthage2017/M1145000"
+  },
+  {
+   "longitude": 1.737146573,
+   "latitude": 47.378136314,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.307052532,
+   "latitude": 47.585912313,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.166029252,
+   "latitude": 47.521177748,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.098784005,
+   "latitude": 47.798964922,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.214274251,
+   "latitude": 47.428249271,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  },
+  {
+   "longitude": 1.633814624,
+   "latitude": 47.385278722,
+   "code_cours_eau": null,
+   "nom_cours_eau": null,
+   "uri_cours_eau": null
+  }
+ ]
+}

@@ -1,0 +1,351 @@
+/*
+ * Écran d'accueil — replis, ciel fondu dans la météo, choix de la rivière.
+ *
+ * Fichier dédié, importé par `Accueil.tsx` : rien de ce lot n'entre dans
+ * `styles.css`, dont l'empreinte de couleurs est vérifiée par un test
+ * (`lib/empreinte-couleurs.test.ts`) et qui appartient au chantier thème sombre.
+ * Les couleurs passent donc par les variables déjà déclarées là-bas (--card,
+ * --line, --muted, --faint, --body, --green, --green-dark, --brass…), pour que
+ * la tokenisation du thème sombre les emporte sans repasser ici.
+ *
+ * Règle de taille : toute cible tactile fait au moins 44 px de haut.
+ */
+
+/* ═══════════ Sections repliables ═══════════ */
+
+.repli {
+  display: block;
+}
+
+.repli-tete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* La bascule prend toute la place restante : le geste vise la ligne entière,
+   pas le seul chevron. 44 px de haut, comme toutes les cibles de l'app. */
+.repli-bascule {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 2px;
+  border: none;
+  background: transparent;
+  color: var(--body);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.repli-titre {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* Le résumé porte la VALEUR, pas un intitulé : une section repliée qui
+   n'afficherait que son titre est indiscernable d'une section vide, et sur un
+   tableau de bord « vide » se lit « la donnée manque ». */
+.repli-resume {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.repli-chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  transition: transform 0.16s ease;
+}
+.repli--ferme .repli-chevron {
+  transform: rotate(-90deg);
+}
+
+.repli-corps {
+  display: block;
+}
+
+/* La carte : l'en-tête sert de barre de titre, le corps porte la mini-carte. */
+.ac-repli-carte {
+  margin-top: 6px;
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.ac-repli-carte .dash-map {
+  margin-top: 2px;
+}
+/* 168 px de mini-carte pour une vignette qui ne sert qu'à situer et à ouvrir la
+   carte : 132 px suffisent et rendent 36 px au reste de l'écran. */
+.ac-repli-carte .minimap {
+  height: 132px;
+}
+
+/* Le détail météo est déjà DANS la tuile blanche : pas de fond, juste un trait. */
+.ac-repli-meteo {
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.ac-repli-meteo .dash-metrics {
+  margin-top: 6px;
+}
+
+/* ═══════════ Ciel : horaires légaux, soleil, lune ═══════════ */
+
+/*
+ * Ce bloc remplace le module soleil/lune séparé, qui mesurait 422 px sur
+ * 375 × 812 — dont 199 px d'icône ⓘ étirée : `.dash-sun svg { width: 100% }`
+ * l'emportait sur `.tip-i { width: 12px }`, et l'infobulle des horaires
+ * réservait un carré de 199 px de blanc.
+ */
+.ac-ciel {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+/* Les horaires LÉGAUX d'abord, en gras : ce sont eux qui disent si l'on est en
+   règle. Le lever et le coucher nus sont, eux, les deux heures auxquelles il
+   n'est PAS interdit de pêcher — un repère, pas la règle. */
+.ac-legal {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.ac-legal-k {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.ac-legal-v {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
+}
+.ac-legal--ouvert .ac-legal-v {
+  color: var(--green);
+}
+.ac-legal-s {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ac-astro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.ac-astro-i b {
+  color: var(--body);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ac-lune-disc {
+  font-size: 15px;
+  line-height: 1;
+}
+/* Le ⓘ des infobulles reste à sa taille : c'est exactement la règle qui
+   manquait au bloc soleil, où un sélecteur de section l'étirait à 199 px. */
+.ac-ciel .tip-i {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* ═══════════ Choix de la rivière ═══════════ */
+
+.ac-riv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--body);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+/* Choisie, la rivière n'est plus une invitation : le trait devient plein. */
+.ac-riv--choisie {
+  border-style: solid;
+  border-color: var(--green);
+  background: rgba(29, 110, 66, 0.06);
+}
+.ac-riv-k {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.ac-riv-v {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ac-riv--choisie .ac-riv-v {
+  color: var(--green-dark);
+}
+.ac-riv-chev {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ac-riv-note {
+  margin: 6px 2px 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+/* « Aucune station sur votre rivière » n'est pas une note de bas de page : sans
+   elle, l'écran laisserait croire que la mesure existe ailleurs. */
+.ac-riv-note--vide {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ═══════════ Feuille du sélecteur ═══════════ */
+
+.riv-voile {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(15, 31, 22, 0.45);
+}
+
+.riv-feuille {
+  width: 100%;
+  max-width: 520px;
+  max-height: 82vh;
+  overflow-y: auto;
+  padding: 14px 16px calc(16px + env(safe-area-inset-bottom));
+  border-radius: 20px 20px 0 0;
+  background: var(--card);
+  box-shadow: 0 -12px 40px rgba(20, 30, 25, 0.35);
+}
+.riv-feuille:focus {
+  outline: none;
+}
+
+.riv-tete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.riv-titre {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--body);
+}
+.riv-fermer {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.riv-note {
+  margin: 4px 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.riv-etat {
+  padding: 14px 2px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.riv-liste {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.riv-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--body);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.riv-item--actif {
+  border-color: var(--green);
+  background: rgba(29, 110, 66, 0.08);
+}
+.riv-item--auto {
+  margin-top: 0;
+}
+.riv-nom {
+  flex: 1;
+  min-width: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.riv-item--actif .riv-nom {
+  color: var(--green-dark);
+}
+/* La distance est celle de la STATION la plus proche, pas de la rivière : c'est
+   elle qui décide qu'une mesure existera ou non. */
+.riv-dist {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
