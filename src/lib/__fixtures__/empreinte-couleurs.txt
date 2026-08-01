@@ -984,6 +984,9 @@
 .tip-bubble|background|#22271f
 .tip-bubble|box-shadow|0 10px 30px rgba(20, 30, 25, 0.32)
 .tip-bubble|color|#f4f1e8
+.update-toast button.toast-2nd:active|background|rgba(251, 250, 247, 0.14)
+.update-toast button.toast-2nd|border|1px solid rgba(251, 250, 247, 0.4)
+.update-toast button.toast-2nd|color|#fbfaf7
 .update-toast button:active|background|#21713f
 .update-toast button|background|#27864d
 .update-toast button|color|#ffffff

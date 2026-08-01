@@ -31,6 +31,7 @@ import { CrayfishBar } from "./components/CrayfishBar";
 import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { usePwa } from "./lib/pwa";
+import { UpdateToast } from "./components/UpdateToast";
 import { promesseHorsLigne } from "./lib/promesse-hors-ligne";
 import { useCrayfishAlerts } from "./lib/crayfish-alerts";
 import { requestPersist, onPersistError, onQuotaWarning, storageInfo } from "./lib/storage";
@@ -61,7 +62,7 @@ export function App() {
       return true;
     }
   });
-  const { needRefresh, applyUpdate, reserve } = usePwa();
+  const { needRefresh, applyUpdate, reportUpdate, maj, majReportable, reserve } = usePwa();
   const [persistMsg, setPersistMsg] = useState<string | null>(null);
 
   // Balance alerts live here, not in the Écrevisses screen: one tap on the nav
@@ -189,10 +190,12 @@ export function App() {
       )}
 
       {needRefresh && (
-        <div className="update-toast">
-          <span>Nouvelle version disponible</span>
-          <button onClick={() => applyUpdate()}>Mettre à jour</button>
-        </div>
+        <UpdateToast
+          maj={maj}
+          reportable={majReportable}
+          onApply={() => applyUpdate()}
+          onReport={() => reportUpdate()}
+        />
       )}
 
       {showFab && (

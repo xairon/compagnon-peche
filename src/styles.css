@@ -35,6 +35,11 @@
      sapin plein, elle doit rester claire. Les confondre rendrait le texte des
      boutons pleins illisible. */
   --on-accent-warm: #fbfaf7;
+  /* La même encre, en composantes, pour les voiles qui s'en dérivent (trait et
+     appui de « Plus tard » sur le bandeau de mise à jour). Elle ne s'inverse
+     pas plus que --on-accent-warm : le fond du bandeau est un sapin plein dans
+     les deux thèmes. Même patron que --shadow-tint / --veil-tint. */
+  --on-accent-warm-tint: 251, 250, 247;
   /* v2 refonte accents */
   --fir: #0f1f16; /* deep fir green — dark surfaces & CTAs */
   /* --fir et --green-dark portaient AUSSI un second rôle : encre de texte fort
@@ -224,6 +229,9 @@
   --green-dark-ink: #8fe0ab;
   --on-accent: #f2f7f3;
   --on-accent-warm: #fbfaf7;
+  /* Inchangé en sombre, comme l'encre dont il tient les composantes : le
+     bandeau de mise à jour reste un sapin plein dans les deux thèmes. */
+  --on-accent-warm-tint: 251, 250, 247;
 
   /* Traits. --line-control tient 3:1 sur les trois surfaces où on pose un
      champ de saisie (3,84 / 3,57 / 3,21) — WCAG 1.4.11. Les autres sont
@@ -3684,10 +3692,24 @@ a:hover {
   gap: 12px;
   background: var(--green-dark);
   color: var(--on-accent-warm);
-  border-radius: 100px;
-  padding: 8px 10px 8px 18px;
   box-shadow: 0 6px 20px rgba(var(--shadow-tint), 0.35);
   font-size: 13.5px;
+  /* Deux actions ne tiennent plus sur une seule ligne : « Nouvelle version
+     disponible » + « Plus tard » + « Mettre à jour » réclament ~400 px, et un
+     téléphone courant en fait 375. La pilule d'origine, dimensionnée par son
+     contenu, écrasait alors le texte sur 62 px de large et repliait le libellé
+     des DEUX boutons. D'où une largeur définie et un passage à la ligne
+     assumé : le message occupe sa rangée, les actions la suivante. */
+  width: calc(100vw - 24px);
+  max-width: 420px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  border-radius: 20px;
+  padding: 12px 12px 12px 16px;
+  line-height: 1.35;
+}
+.update-toast > span {
+  flex: 1 1 100%;
 }
 .update-toast button {
   border: none;
@@ -3702,11 +3724,28 @@ a:hover {
   min-height: 44px;
   font-size: 13px;
   font-weight: 600;
+  /* Un bouton ne se comprime pas et son libellé ne se replie pas. */
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .update-toast button:active {
   /* Reste plus sombre que le repos, sinon l'appui ne se voit plus (6,00:1). */
   background: #21713f;
   transform: scale(0.97);
+}
+/* « Plus tard » ne doit pas se disputer l'œil avec « Mettre à jour ». Le report
+   est un délai, pas l'issue recommandée : l'action neutre reste lisible et
+   garde ses 44 px, mais c'est la verte qu'on voit. Le fond du bandeau est
+   `--green-dark` dans les DEUX thèmes (il ne s'inverse pas), donc l'encre et le
+   trait se posent sur lui et n'ont pas à suivre le thème. */
+.update-toast button.toast-2nd {
+  background: transparent;
+  border: 1px solid rgba(var(--on-accent-warm-tint), 0.4);
+  color: var(--on-accent-warm);
+  font-weight: 500;
+}
+.update-toast button.toast-2nd:active {
+  background: rgba(var(--on-accent-warm-tint), 0.14);
 }
 
 /* ============ Storage screen ============ */
