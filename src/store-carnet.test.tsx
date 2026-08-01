@@ -184,11 +184,15 @@ describe("saisir une prise depuis « Ma prise »", () => {
   it("referme le parcours pour que le geste suivant reparte de zéro", async () => {
     await lancer();
     act(() => st.startPrise("Étang du Moulin"));
-    act(() => st.set((s) => ({ prise: { ...s.prise, sp: "sandre", step: "choix" } })));
+    act(() => st.set({ priseSp: "sandre", priseStep: "choix" }));
 
     act(() => st.addCatch(SANDRE, true, "52"));
 
-    expect(st.state.prise).toEqual({ sp: null, step: null });
+    expect(st.state.priseSp).toBeNull();
+    expect(st.state.priseStep).toBeNull();
+    // Le spot n'est pas du contexte de navigation : s'il survivait, la prise
+    // suivante hériterait de l'endroit de la précédente.
+    expect(st.state.prisePlace).toBeNull();
     expect(st.state.formOpen).toBe(false);
   });
 
