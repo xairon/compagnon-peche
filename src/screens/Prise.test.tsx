@@ -251,7 +251,10 @@ describe("Prise — le geste retour recule d'une étape", () => {
       window.history.back();
     });
 
-    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
+    // « / 3 » et non « / 5 » : le silure n'a ni maille ni quota que l'app puisse
+    // opposer, donc son parcours ne compte que statut, choix et l'issue. Le
+    // compteur suit désormais le parcours réel (lib/prise-etapes).
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 3/)).toBeInTheDocument());
   });
 
   it("un lien qui nomme une espèce inconnue ramène au choix d'espèce, jamais à une carte vide", async () => {

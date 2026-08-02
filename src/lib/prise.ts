@@ -5,6 +5,8 @@ import { QUOTA_CARNASSIERS, QUOTA_BROCHETS } from "./helpers";
 import { DEPARTEMENTS, type DeptId } from "../data/regulation";
 import { effectiveMaille } from "./maille";
 import { effectiveQuota } from "./quota";
+import { etapeSuivante, etapesSautees } from "./prise-etapes";
+import type { PriseEtape } from "./nav-conventions";
 
 export type ActKind = "primary" | "danger" | "default";
 export interface PriseAction {
@@ -32,6 +34,22 @@ const btn = (label: string, act: string, kind: ActKind = "default"): PriseAction
   act,
   kind,
 });
+
+/**
+ * Ce qu'annonce le bouton de progression, selon où il mène RÉELLEMENT.
+ *
+ * « Continuer — vérifier la maille » était écrit en dur sur l'étape statut. Sur
+ * une perche, qui n'a pas de maille, il promettait un écran que le parcours ne
+ * traverse plus.
+ */
+const LIBELLE_SUIVANT: Record<PriseEtape, string> = {
+  statut: "Continuer",
+  maille: "Continuer — vérifier la maille",
+  quota: "Continuer — vérifier le quota",
+  choix: "Continuer — garder ou relâcher ?",
+  kill: "Continuer",
+  release: "Continuer",
+};
 
 /**
  * The measured size, in centimetres, out of the free-text field — or null when
@@ -90,6 +108,17 @@ export function priseView(
   if (!sp || !step) return null;
   const seas = season(sp, now);
   const V = base();
+
+  // L'étape d'après, dérivée du parcours de CETTE espèce (lib/prise-etapes).
+  // Les boutons de progression la demandent au lieu de nommer une étape en dur :
+  // « Continuer — vérifier la maille » menait à la maille même sur une perche,
+  // qui n'en a pas. Le libellé suit la destination réelle.
+  const apres = etapeSuivante(sp, dept, step);
+  // `apres` ne vaut null que sur `kill`/`release`, qui ferment le parcours et
+  // n'appellent jamais ce bouton. Le repli sur `choix` est un garde-fou de type,
+  // pas un chemin : il vaut mieux revenir à la décision que rendre `null`.
+  const suivant = (label?: string) =>
+    btn(label ?? LIBELLE_SUIVANT[apres ?? "choix"], apres ?? "choix", "primary");
 
   if (step === "statut") {
     if (sp.protected)
@@ -169,7 +198,7 @@ export function priseView(
         ],
         note: sp.reg && sp.reg.note ? sp.reg.note : null,
         actions: [
-          btn("J'ai vérifié — continuer", "maille", "primary"),
+          suivant("J'ai vérifié — continuer"),
           btn("Gestes pour bien relâcher", "release"),
         ],
       };
@@ -177,7 +206,14 @@ export function priseView(
       sp.name +
         " : aucune interdiction nationale à cette date (" +
         seas.label.toLowerCase() +
-        "). Passons à la maille.",
+        // La phrase annonçait « Passons à la maille » quelle que soit l'espèce.
+        // Une perche n'a pas d'étape maille : la promesse était fausse d'un mot.
+        ")." +
+        (apres === "maille"
+          ? " Passons à la maille."
+          : apres === "choix"
+            ? " Rien d'autre à vérifier ici : reste à décider."
+            : ""),
     ];
     // "toujours" species are only open year-round in 2nd-category water. On a
     // 1st-category (trout) stretch, all fishing follows the trout dates — and the
@@ -201,7 +237,7 @@ export function priseView(
       kicker: "Statut légal",
       title: "Espèce autorisée, pêche ouverte",
       paras: openParas,
-      actions: [btn("Continuer — vérifier la maille", "maille", "primary")],
+      actions: [suivant()],
     };
   }
 
@@ -286,7 +322,7 @@ export function priseView(
         ],
         note: sp.reg && sp.reg.note ? sp.reg.note : null,
         actions: [
-          btn("Continuer — vérifier le quota", "quota", "primary"),
+          suivant(),
           // The angler measures better than the app: leave the door open.
           btn("Je me suis trompé — elle est sous la maille", "release"),
           btn("Mesurer — règle à l'écran", "ruler"),
@@ -315,11 +351,11 @@ export function priseView(
       note: sp.reg && sp.reg.note ? sp.reg.note : null,
       actions: has
         ? [
-            btn("Oui, elle fait la maille", "quota", "primary"),
+            suivant("Oui, elle fait la maille"),
             btn("Non — sous la maille", "release"),
             btn("Mesurer — règle à l'écran", "ruler"),
           ]
-        : [btn("Continuer", "quota", "primary")],
+        : [suivant()],
     };
   }
 
@@ -368,10 +404,10 @@ export function priseView(
         actions: atteint
           ? [
               btn("Je relâche", "release", "primary"),
-              btn("1ʳᵉ catégorie ou carnet incomplet — continuer", "choix"),
+              btn("1ʳᵉ catégorie ou carnet incomplet — continuer", apres ?? "choix"),
             ]
           : [
-              btn("Quota non atteint — je continue", "choix", "primary"),
+              suivant("Quota non atteint — je continue"),
               btn("Quota atteint — je relâche", "release"),
             ],
       };
@@ -385,7 +421,7 @@ export function priseView(
           (sp.quotaSub && sp.quotaSub !== "—" ? sp.quotaSub : "Capture à déclarer") + ".",
           "Ce n'est pas le quota des 3 carnassiers (R436-21) : vérifiez l'arrêté préfectoral et les modalités de déclaration de votre bassin.",
         ],
-        actions: [btn("Continuer", "choix", "primary")],
+        actions: [suivant()],
       };
     }
     if (otherQuota) {
@@ -402,7 +438,7 @@ export function priseView(
             ? `Fixé par l'arrêté de ${DEPARTEMENTS[dept].name}. Vérifiez le texte en vigueur.`
             : "Un arrêté préfectoral peut préciser ou restreindre ce quota.",
         ],
-        actions: [btn("Continuer", "choix", "primary")],
+        actions: [suivant()],
       };
     }
     return {
@@ -410,13 +446,19 @@ export function priseView(
       kicker,
       title: "Pas de quota national",
       paras: ["Aucun quota national pour cette espèce. Un arrêté local peut en fixer un."],
-      actions: [btn("Continuer", "choix", "primary")],
+      actions: [suivant()],
     };
   }
 
   if (step === "choix") {
+    // Ce qui a été sauté se dit ICI, sur le premier écran d'après. Sur une
+    // perche, `statut` mène directement à la décision : sans cette ligne, deux
+    // écrans auraient disparu sans que rien ne le signale, et leur absence
+    // aurait valu affirmation qu'aucune règle n'existe.
+    const sautees = etapesSautees(sp, dept);
     return {
       ...V,
+      note: sautees.length > 0 ? texteSautees(sp, sautees) : null,
       kicker: "La décision",
       title: "Garder ou relâcher ?",
       paras: [
@@ -484,6 +526,28 @@ export function priseView(
   }
 
   return null;
+}
+
+/**
+ * Ce que le parcours a sauté, dit à l'écran.
+ *
+ * L'étape maille écrivait « Aucune maille nationale pour cette espèce — un
+ * arrêté local peut en fixer une : vérifiez ». L'app refuse donc d'affirmer
+ * qu'aucune règle n'existe : elle ne connaît que le socle national et les
+ * arrêtés de trois départements. Sauter l'étape SANS RIEN DIRE ferait cette
+ * affirmation à sa place — c'est le seul risque que le raccourci introduit, et
+ * cette phrase est ce qui l'annule.
+ *
+ * Elle nomme ce qui manque à l'app, jamais ce qui manque à la loi.
+ */
+export function texteSautees(sp: Species, sautees: PriseEtape[]): string {
+  const quoi =
+    sautees.length === 2
+      ? "ni maille ni quota"
+      : sautees[0] === "maille"
+        ? "pas de maille"
+        : "pas de quota";
+  return `L'app ne connaît ${quoi} pour ${sp.name} — ni au socle national, ni dans les arrêtés qu'elle porte. Un arrêté local peut en fixer : vérifiez celui en vigueur.`;
 }
 
 export const STEP_ORDER: Record<string, number> = {

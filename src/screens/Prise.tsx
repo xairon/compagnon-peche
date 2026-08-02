@@ -7,7 +7,8 @@ import { Media } from "../components/Media";
 import { HoldButton } from "../components/HoldButton";
 import { quotaToday, norm } from "../lib/helpers";
 import { season } from "../lib/season";
-import { priseView, parseTaille, STEP_ORDER, type ActKind } from "../lib/prise";
+import { priseView, parseTaille, type ActKind } from "../lib/prise";
+import { etapesPour } from "../lib/prise-etapes";
 import { effectiveMaille } from "../lib/maille";
 import { useNow } from "../lib/now";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
@@ -56,6 +57,14 @@ export function Prise() {
     !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp, now).open);
   const step = state.priseStep;
   const isShortcutStep = shortcut && (step === "kill" || step === "release");
+
+  // Le parcours RÉEL de cette espèce, dont le compteur découle. Il annonçait
+  // « / 5 » depuis une table figée, alors qu'une perche ne traverse que quatre
+  // écrans — et le code masquait déjà le compteur sur les chemins courts plutôt
+  // que de le corriger.
+  const issue = step === "release" ? "release" : "kill";
+  const etapes = sp ? etapesPour(sp, state.dept, issue) : [];
+  const rang = step ? etapes.indexOf(step) + 1 : 0;
 
   const setPrise = (s: typeof state.priseStep) => set({ priseStep: s });
 
@@ -179,7 +188,7 @@ export function Prise() {
             </button>
             <div style={{ fontSize: 13, color: "var(--muted)" }}>
               {sp?.name}
-              {!isShortcutStep && ` · étape ${STEP_ORDER[step as string] || 1} / 5`}
+              {!isShortcutStep && rang > 0 && ` · étape ${rang} / ${etapes.length}`}
             </div>
             <button
               onClick={() => set({ priseSp: null, priseStep: null })}
@@ -196,13 +205,10 @@ export function Prise() {
             </button>
           </div>
 
-          {!isShortcutStep && (
+          {!isShortcutStep && rang > 0 && (
             <div className="prise-steps" aria-hidden="true">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <span
-                  key={n}
-                  className={"pstep" + (n <= (STEP_ORDER[step as string] || 1) ? " on" : "")}
-                />
+              {etapes.map((e, i) => (
+                <span key={e} className={"pstep" + (i < rang ? " on" : "")} />
               ))}
             </div>
           )}
