@@ -49,6 +49,8 @@ const LIBELLE_SUIVANT: Record<PriseEtape, string> = {
   choix: "Continuer — garder ou relâcher ?",
   kill: "Continuer",
   release: "Continuer",
+  consigner: "Continuer — noter la prise",
+  "consigner-rel": "Continuer — noter la prise",
 };
 
 /**
@@ -497,7 +499,7 @@ export function priseView(
         },
       ],
       note: "Geste éthique et réglementaire : ne jamais laisser un poisson mourir à l'air libre.",
-      actions: [btn("Ajouter au carnet", "tocarnet", "primary"), btn("Terminer", "done")],
+      actions: [btn("Noter la prise", "consigner", "primary"), btn("Terminer sans noter", "done")],
     };
   }
 
@@ -519,8 +521,31 @@ export function priseView(
         },
       ],
       actions: [
-        btn("Ajouter au carnet (relâché)", "tocarnet-rel", "primary"),
-        btn("Terminer", "done"),
+        btn("Noter la prise (relâchée)", "consigner-rel", "primary"),
+        btn("Terminer sans noter", "done"),
+      ],
+    };
+  }
+
+  if (step === "consigner" || step === "consigner-rel") {
+    const gardee = step === "consigner";
+    const sautees = etapesSautees(sp, dept);
+    return {
+      ...V,
+      kicker: gardee ? "Noter la prise — gardée" : "Noter la prise — relâchée",
+      title: "Ce que vous en gardez",
+      paras: [
+        gardee
+          ? `${sp.name} comptera dans votre carnet du jour, donc dans le quota.`
+          : `${sp.name} sera notée relâchée : elle ne compte pas dans le quota.`,
+        "Rien n'est obligatoire ici. Ce qui reste vide reste vide dans le carnet.",
+      ],
+      note: sautees.length > 0 ? texteSautees(sp, sautees) : null,
+      // Les champs sont rendus par l'écran (Prise.tsx) : ce sont des saisies, pas
+      // du texte. Les boutons, eux, restent décrits ici comme partout ailleurs.
+      actions: [
+        btn("Enregistrer dans le carnet", gardee ? "tocarnet" : "tocarnet-rel", "primary"),
+        btn("Terminer sans enregistrer", "done"),
       ],
     };
   }

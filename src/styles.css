@@ -7107,3 +7107,79 @@ button.card-row {
 .spot-row {
   min-height: 44px;
 }
+
+/* ------------------------------------------------------------------ *
+ * L'étape de saisie du parcours « Ma prise ».
+ *
+ * Elle reprend l'allure de l'éditeur du carnet (.ce-photo-*) sans en
+ * réutiliser les classes : le même geste au même endroit, mais deux
+ * écrans dont les contraintes diffèrent — celui-ci se remplit au bord
+ * de l'eau, poisson en main, souvent ganté.
+ * ------------------------------------------------------------------ */
+.prise-photo-add {
+  width: 100%;
+  height: 110px;
+  border: 1.5px dashed var(--line-control);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+.prise-photo {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.prise-photo img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.prise-photo button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(var(--shadow-tint), 0.72);
+  color: var(--on-accent);
+  font-size: 15px;
+  line-height: 1;
+}
+/* Cible tactile pleine largeur : l'interrupteur se touche à la main
+   mouillée, donc c'est toute la ligne qui bascule, pas la case. */
+.prise-lieu {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-control);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: left;
+}
+.prise-lieu-box {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--on-accent-warm);
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+}
+.prise-lieu-box.on {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}

@@ -226,13 +226,13 @@ describe("Prise — le geste retour recule d'une étape", () => {
     monter();
     entrer("brochet", "statut");
     act(() => flow.set({ priseStep: "maille" }));
-    expect(await screen.findByText(/étape 2 \/ 5/)).toBeInTheDocument();
+    expect(await screen.findByText(/étape 2 \/ 6/)).toBeInTheDocument();
 
     act(() => {
       window.history.back();
     });
 
-    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 6/)).toBeInTheDocument());
   });
 
   it("après un raccourci, il revient au statut et non à « garder ou relâcher »", async () => {
@@ -251,10 +251,10 @@ describe("Prise — le geste retour recule d'une étape", () => {
       window.history.back();
     });
 
-    // « / 3 » et non « / 5 » : le silure n'a ni maille ni quota que l'app puisse
-    // opposer, donc son parcours ne compte que statut, choix et l'issue. Le
-    // compteur suit désormais le parcours réel (lib/prise-etapes).
-    await waitFor(() => expect(screen.getByText(/étape 1 \/ 3/)).toBeInTheDocument());
+    // « / 4 » et non « / 5 » : le silure n'a ni maille ni quota que l'app puisse
+    // opposer, donc son parcours ne compte que statut, choix, l'issue et la
+    // saisie. Le compteur suit désormais le parcours réel (lib/prise-etapes).
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 4/)).toBeInTheDocument());
   });
 
   it("un lien qui nomme une espèce inconnue ramène au choix d'espèce, jamais à une carte vide", async () => {
@@ -272,10 +272,10 @@ describe("Prise — le geste retour recule d'une étape", () => {
     monter();
     entrer("brochet", "statut");
     act(() => flow.set({ priseStep: "maille" }));
-    await screen.findByText(/étape 2 \/ 5/);
+    await screen.findByText(/étape 2 \/ 6/);
 
     await user.click(screen.getByLabelText("Étape précédente"));
 
-    await waitFor(() => expect(screen.getByText(/étape 1 \/ 5/)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/étape 1 \/ 6/)).toBeInTheDocument());
   });
 });

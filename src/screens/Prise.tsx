@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { Icon } from "../components/Icon";
@@ -14,6 +14,10 @@ import { useNow } from "../lib/now";
 import { OutOfZoneWarning } from "../components/OutOfZoneWarning";
 import { DeptDefautWarning } from "../components/DeptDefautWarning";
 import { RegPerimeeWarning } from "../components/RegPerimeeWarning";
+import { savePhoto, downscaleImage } from "../lib/photos";
+import { locate } from "../lib/locate";
+import { isoDay, frDate, uid } from "../lib/helpers";
+import type { Catch } from "../types";
 
 function actStyle(kind: ActKind) {
   if (kind === "primary") return { bd: "var(--green-dark)", bg: "var(--green-dark)", fg: "var(--on-accent-warm)" };
@@ -22,9 +26,30 @@ function actStyle(kind: ActKind) {
 }
 
 export function Prise() {
-  const { state, set, nav, back, goTab, addCatch } = useStore();
+  const { state, set, nav, back, goTab, addCatchFull } = useStore();
   const [pq, setPq] = useState("");
   const [size, setSize] = useState("");
+  // L'étape de saisie. `photo` est le fichier choisi, pas encore écrit : il ne
+  // part en IndexedDB qu'à l'enregistrement, pour qu'un abandon ne laisse pas un
+  // blob orphelin derrière lui.
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [apercu, setApercu] = useState<string | null>(null);
+  // `null` = le pêcheur n'y a pas touché, on suit le défaut ; un booléen = son
+  // choix, qui l'emporte. Figer le défaut à l'initialisation d'un `useState` le
+  // calculait AU MONTAGE de l'écran, avant que le spot ne soit connu — l'écran
+  // vit tout le parcours, le spot peut arriver après lui.
+  //
+  // Le défaut lui-même : coché si le lieu est DÉJÀ connu (le parcours vient d'un
+  // spot, affiché depuis le début — le noter ne révèle rien de neuf), éteint
+  // sinon, car le lieu voudrait alors dire relever la position. Un coin de pêche
+  // se garde, et ne se capture pas faute d'opposition.
+  const [noterLieu, setNoterLieu] = useState<boolean | null>(null);
+  const lieuActif = noterLieu ?? !!state.prisePlace;
+  const [gps, setGps] = useState<{ lat: number; lon: number } | null>(null);
+  const [msgLieu, setMsgLieu] = useState<string | null>(null);
+  const [msgPhoto, setMsgPhoto] = useState<string | null>(null);
+  const [ecrit, setEcrit] = useState(false);
+  const photoRef = useRef<HTMLInputElement>(null);
   const qt = quotaToday(state.catches);
   const sp = SPECIES.find((s) => s.id === state.priseSp);
   // The screen owns the clock; the engine never reads it (see lib/prise.ts).
@@ -62,11 +87,98 @@ export function Prise() {
   // « / 5 » depuis une table figée, alors qu'une perche ne traverse que quatre
   // écrans — et le code masquait déjà le compteur sur les chemins courts plutôt
   // que de le corriger.
-  const issue = step === "release" ? "release" : "kill";
+  // L'issue se lit sur DEUX étapes : « relâcher » et sa saisie. Ne regarder que
+  // la première faisait sortir « consigner-rel » du parcours calculé, donc
+  // disparaître le compteur sur le dernier écran d'une prise relâchée.
+  const issue = step === "release" || step === "consigner-rel" ? "release" : "kill";
   const etapes = sp ? etapesPour(sp, state.dept, issue) : [];
   const rang = step ? etapes.indexOf(step) + 1 : 0;
 
   const setPrise = (s: typeof state.priseStep) => set({ priseStep: s });
+
+  const choisirPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (apercu) URL.revokeObjectURL(apercu);
+    setPhoto(f);
+    setApercu(URL.createObjectURL(f));
+    setMsgPhoto(null);
+  };
+
+  const retirerPhoto = () => {
+    if (apercu) URL.revokeObjectURL(apercu);
+    setPhoto(null);
+    setApercu(null);
+  };
+
+  /** L'interrupteur du lieu. Sans spot, l'allumer DEMANDE la position — c'est le
+   *  geste qui vaut consentement, pas une case cochée d'avance. */
+  const basculerLieu = () => {
+    const vers = !lieuActif;
+    setNoterLieu(vers);
+    setMsgLieu(null);
+    if (!vers || state.prisePlace || gps) return;
+    setMsgLieu("Localisation…");
+    locate()
+      .then(({ lat, lon }) => {
+        setGps({ lat, lon });
+        setMsgLieu(null);
+      })
+      .catch(() => {
+        setGps(null);
+        setNoterLieu(false);
+        setMsgLieu("Position indisponible — la prise sera notée sans lieu.");
+      });
+  };
+
+  /**
+   * Écrit la prise, avec ce que le pêcheur a bien voulu en donner.
+   *
+   * `addCatchFull` et non `addCatch` : celui-ci ne sait poser que l'espèce, la
+   * taille et le lieu du spot. Photo et position n'existaient nulle part dans le
+   * parcours — il fallait rouvrir la fiche après coup pour les ajouter.
+   */
+  const enregistrer = async (gardee: boolean) => {
+    if (!sp || ecrit) return;
+    setEcrit(true);
+    const slot = uid("p");
+    const cm = parseTaille(size);
+
+    let photoKey: string | undefined;
+    if (photo) {
+      try {
+        // Pas de clé versionnée ici, contrairement à la fiche de prise : ce
+        // `slot` vient d'être forgé, aucune photo ne peut déjà y pendre, donc
+        // rien à invalider pour `usePhotoUrl`.
+        const cle = `photo:${slot}`;
+        await savePhoto(cle, await downscaleImage(photo));
+        photoKey = cle;
+      } catch {
+        // Quota plein, navigation privée : la PRISE doit rester enregistrable.
+        // Mieux vaut une prise sans photo qu'une prise pointant vers un blob
+        // qui n'a jamais été écrit.
+        photoKey = undefined;
+        setMsgPhoto("La photo n'a pas pu être enregistrée — la prise l'est.");
+      }
+    }
+
+    const lieu = lieuActif ? (state.prisePlace ?? (gps ? "Position relevée" : "—")) : "—";
+    const entree: Catch = {
+      slot,
+      sp: sp.name,
+      spid: sp.id,
+      iso: isoDay(),
+      size: cm ? cm + " cm" : "— cm",
+      n: cm ?? 0,
+      date: frDate(),
+      place: lieu,
+      kept: gardee,
+      ...(photoKey ? { photo: photoKey } : {}),
+      ...(lieuActif && !state.prisePlace && gps ? { lat: gps.lat, lon: gps.lon } : {}),
+    };
+    addCatchFull(entree);
+    goTab("carnet", { prisePlace: null });
+  };
 
   const handleAct = (act: string) => {
     if (act === "cancel" || act === "done") {
@@ -74,9 +186,9 @@ export function Prise() {
     } else if (act === "ruler") {
       nav("regle");
     } else if (act === "tocarnet" && sp) {
-      addCatch(sp, true, size);
+      void enregistrer(true);
     } else if (act === "tocarnet-rel" && sp) {
-      addCatch(sp, false, size);
+      void enregistrer(false);
     } else {
       setPrise(act as typeof state.priseStep);
     }
@@ -255,6 +367,76 @@ export function Prise() {
                 inputMode="numeric"
                 placeholder={`≥ ${effectiveMaille(sp, state.dept).cm} cm`}
               />
+            </div>
+          )}
+
+          {(step === "consigner" || step === "consigner-rel") && sp && (
+            <div className="prise-consigner">
+              <div className="field" style={{ marginTop: 14 }}>
+                <label htmlFor="prise-taille">Taille (cm) — facultatif</label>
+                <input
+                  id="prise-taille"
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                  inputMode="numeric"
+                  placeholder="ex. 32"
+                />
+              </div>
+
+              <div style={{ marginTop: 14 }}>
+                {apercu ? (
+                  <div className="prise-photo">
+                    <img src={apercu} alt="Photo de la prise" />
+                    <button onClick={retirerPhoto} aria-label="Retirer la photo">
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <button className="prise-photo-add" onClick={() => photoRef.current?.click()}>
+                    📷 Ajouter une photo
+                  </button>
+                )}
+                <input
+                  ref={photoRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={choisirPhoto}
+                  style={{ display: "none" }}
+                />
+                {msgPhoto && (
+                  <div className="note" style={{ marginTop: 8 }} role="status">
+                    {msgPhoto}
+                  </div>
+                )}
+              </div>
+
+              <button
+                className="prise-lieu"
+                onClick={basculerLieu}
+                role="switch"
+                aria-checked={lieuActif}
+                style={{ marginTop: 14 }}
+              >
+                <span className={"prise-lieu-box" + (lieuActif ? " on" : "")} aria-hidden="true">
+                  {lieuActif ? "✓" : ""}
+                </span>
+                <span>
+                  {state.prisePlace
+                    ? `Noter le lieu : ${state.prisePlace}`
+                    : "Noter ma position GPS"}
+                </span>
+              </button>
+              {msgLieu && (
+                <div className="note" style={{ marginTop: 8 }} role="status">
+                  {msgLieu}
+                </div>
+              )}
+              {lieuActif && !state.prisePlace && gps && (
+                <div className="note" style={{ marginTop: 8 }}>
+                  Position relevée : {gps.lat.toFixed(4)}, {gps.lon.toFixed(4)}.
+                </div>
+              )}
             </div>
           )}
 

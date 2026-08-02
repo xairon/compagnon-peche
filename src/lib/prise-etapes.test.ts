@@ -20,7 +20,7 @@ const espece = (id: string) => SPECIES.find((s) => s.id === id)!;
  */
 describe("etapesPour — l'espèce sans contrainte va droit au but", () => {
   it("la perche saute maille et quota", () => {
-    expect(etapesPour(espece("perche"), "41")).toEqual(["statut", "choix", "kill"]);
+    expect(etapesPour(espece("perche"), "41")).toEqual(["statut", "choix", "kill", "consigner"]);
   });
 
   it("le brochet les traverse toutes", () => {
@@ -30,14 +30,26 @@ describe("etapesPour — l'espèce sans contrainte va droit au but", () => {
       "quota",
       "choix",
       "kill",
+      "consigner",
     ]);
   });
 
-  it("l'issue ferme toujours le parcours", () => {
+  it("la saisie ferme toujours le parcours, du bon côté", () => {
     for (const id of ["perche", "brochet", "carpe", "gardon"]) {
-      const e = etapesPour(espece(id), "41");
-      expect(["kill", "release"], id).toContain(e[e.length - 1]);
+      const g = etapesPour(espece(id), "41", "kill");
+      const r = etapesPour(espece(id), "41", "release");
+      expect(g[g.length - 1], id).toBe("consigner");
+      expect(r[r.length - 1], id).toBe("consigner-rel");
     }
+  });
+
+  it("le mot de l'étape porte l'issue — c'est ce qui la rend rechargeable", () => {
+    // Une seule étape « consigner » plus un booléen d'état aurait dû deviner, au
+    // rechargement d'un lien, si la prise est gardée. Elle aurait deviné « oui »,
+    // ce qui compte dans le quota du jour.
+    const r = etapesPour(espece("brochet"), "41", "release");
+    expect(r).toContain("consigner-rel");
+    expect(r).not.toContain("consigner");
   });
 
   it("statut ouvre toujours le parcours", () => {
@@ -92,9 +104,9 @@ describe("etapesPour — une étape ne se saute pas sur un chiffre nul", () => {
  * code admettait déjà qu'il ment sur les chemins courts.
  */
 describe("etapesPour — le compteur ne peut plus mentir", () => {
-  it("la perche annonce trois écrans, le brochet cinq", () => {
-    expect(etapesPour(espece("perche"), "41")).toHaveLength(3);
-    expect(etapesPour(espece("brochet"), "41")).toHaveLength(5);
+  it("la perche annonce quatre écrans, le brochet six", () => {
+    expect(etapesPour(espece("perche"), "41")).toHaveLength(4);
+    expect(etapesPour(espece("brochet"), "41")).toHaveLength(6);
   });
 
   it("relâcher tient la même place que garder dans le compte", () => {
@@ -120,8 +132,9 @@ describe("etapeSuivante — les boutons demandent la suivante, pas une étape no
     expect(etapeSuivante(espece("brochet"), "41", "statut")).toBe("maille");
   });
 
-  it("la dernière étape n'a pas de suivante", () => {
-    expect(etapeSuivante(espece("brochet"), "41", "kill")).toBeNull();
+  it("garder mène à la saisie, qui n'a pas de suivante", () => {
+    expect(etapeSuivante(espece("brochet"), "41", "kill")).toBe("consigner");
+    expect(etapeSuivante(espece("brochet"), "41", "consigner")).toBeNull();
   });
 
   it("une étape hors parcours renvoie à la décision plutôt qu'au vide", () => {

@@ -43,8 +43,8 @@ function aQuotaADire(sp: Species, dept: DeptId | undefined): boolean {
  * maille et quota n'ont rien à instruire et s'affichaient quand même, avec un
  * unique bouton « Continuer » — deux appuis pour ne rien apprendre.
  *
- * `statut` ouvre toujours, `kill` ou `release` ferme toujours. Entre les deux,
- * seules restent les étapes que l'app peut remplir.
+ * `statut` ouvre toujours, la saisie ferme toujours. Entre les deux, seules
+ * restent les étapes que l'app peut remplir.
  */
 export function etapesPour(
   sp: Species,
@@ -54,7 +54,7 @@ export function etapesPour(
   const etapes: PriseEtape[] = ["statut"];
   if (aMailleADire(sp, dept)) etapes.push("maille");
   if (aQuotaADire(sp, dept)) etapes.push("quota");
-  etapes.push("choix", issue);
+  etapes.push("choix", issue, issue === "release" ? "consigner-rel" : "consigner");
   return etapes;
 }
 

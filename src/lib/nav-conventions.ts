@@ -29,7 +29,21 @@ export const TABS: readonly Tab[] = ["accueil", "especes", "carte", "carnet"];
  * `PriseStep` du store en découle, et non l'inverse — sinon la validation d'un
  * lien devrait importer le store, qui importe déjà ce module.
  */
-export const PRISE_ETAPES = ["statut", "maille", "quota", "choix", "kill", "release"] as const;
+export const PRISE_ETAPES = [
+  "statut",
+  "maille",
+  "quota",
+  "choix",
+  "kill",
+  "release",
+  // Deux mots pour la même saisie, et non un seul plus un booléen d'état : la
+  // saisie vient de « garder » comme de « relâcher », et c'est ce qu'elle NOTE.
+  // Porté par l'URL, ce fait survit au rechargement ; porté par le store, un
+  // `#/prise/perche/consigner` rouvert aurait dû deviner, et il aurait deviné
+  // « gardée » — ce qui compte dans le quota du jour.
+  "consigner",
+  "consigner-rel",
+] as const;
 
 /**
  * Les champs de l'état qui désignent QUOI l'écran doit ouvrir. Onze, contre

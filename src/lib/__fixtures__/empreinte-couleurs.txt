@@ -788,6 +788,19 @@
 .prise-grid-btn|background|#ffffff
 .prise-grid-btn|border|1px solid #e6e2d8
 .prise-grid-btn|color|#22271f
+.prise-lieu-box.on|background|#16281e
+.prise-lieu-box.on|border-color|#16281e
+.prise-lieu-box|background|#fbfaf7
+.prise-lieu-box|border|1.5px solid #e6e2d8
+.prise-lieu-box|color|#fbfaf7
+.prise-lieu|background|#ffffff
+.prise-lieu|border|1.5px solid #cfc9ba
+.prise-lieu|color|#22271f
+.prise-photo button|background|rgba(20, 30, 25, 0.72)
+.prise-photo button|color|#ffffff
+.prise-photo-add|background|#fbfaf7
+.prise-photo-add|border|1.5px dashed #cfc9ba
+.prise-photo-add|color|#6b675c
 .prise-place|background|#f7f1e2
 .prise-place|border|1px solid #e6dcc0
 .prise-place|color|#7a5a12
