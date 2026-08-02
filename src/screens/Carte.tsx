@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import maplibregl from "maplibre-gl";
+// maplibre-gl 6 n'expose plus d'export par défaut (TS1192) : l'espace de noms
+// s'importe en entier. Les 16 usages `maplibregl.…` restent inchangés.
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
