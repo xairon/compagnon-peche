@@ -50,7 +50,33 @@ export interface StationSpecies {
   effectif: number;
 }
 
-/** Electrofishing stations within a lon/lat bounding box. */
+/**
+ * Ce que Hub'Eau écrit quand il n'a rien à écrire, une fois passé par `String`.
+ * `String(null)` rend "null", une chaîne VRAIE : aucun test de simple présence
+ * ne l'arrête. C'est par là que passaient les stations fantômes ci-dessous.
+ */
+const VIDES = new Set(["", "null", "undefined"]);
+
+/** Un nombre publié, ou NaN — `Number(null)` vaut 0, une position au large du Ghana. */
+function nombrePublie(v: unknown): number {
+  return v == null || v === "" ? NaN : Number(v);
+}
+
+/**
+ * Electrofishing stations within a lon/lat bounding box.
+ *
+ * LES ENREGISTREMENTS SANS IDENTITÉ SONT ÉCARTÉS. Mesuré le 01/08/2026 sur
+ * bbox=1.1,47.4,1.6,47.7 (Blois) : 6 des 22 enregistrements rendus n'ont ni
+ * `code_station` ni `libelle_station` — rien qu'un couple de coordonnées, dont
+ * un doublon exact. L'ancien filtre ne regardait que la position, et la laissait
+ * elle-même passer : `Number(null)` vaut 0, que `Number.isFinite` accepte, donc
+ * une station sans latitude atterrissait par 0°, au large du Ghana. Ces six-là
+ * devenaient des marqueurs sur la Carte, portant le code "null" et le nom
+ * inventé « Station de suivi ». Les toucher appelait `speciesAtStation("null")`,
+ * à quoi l'API répond `count: 0`, et la fiche concluait « Aucune espèce recensée
+ * sur cette station. » — une affirmation fausse sur une station qui n'existe
+ * pas. Sans code, la station est muette : on ne la dessine pas.
+ */
 export async function stationsInBbox(
   w: number,
   s: number,
@@ -65,13 +91,18 @@ export async function stationsInBbox(
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
   return (j.data || [])
-    .filter((d: Record<string, unknown>) => Number.isFinite(Number(d.latitude)) && Number.isFinite(Number(d.longitude)))
+    .filter(
+      (d: Record<string, unknown>) =>
+        !VIDES.has(String(d.code_station ?? "").trim()) &&
+        Number.isFinite(nombrePublie(d.latitude)) &&
+        Number.isFinite(nombrePublie(d.longitude)),
+    )
     .map((d: Record<string, unknown>) => ({
       code: String(d.code_station),
       nom: String(d.libelle_station || d.libelle_cours_eau || "Station de suivi"),
       cours: String(d.libelle_cours_eau || ""),
-      lat: Number(d.latitude),
-      lon: Number(d.longitude),
+      lat: nombrePublie(d.latitude),
+      lon: nombrePublie(d.longitude),
     }));
 }
 
