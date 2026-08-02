@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { StrictMode } from "react";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider } from "../store";
@@ -456,5 +457,108 @@ describe("Apparence : le téléphone qui change d'avis, app ouverte", () => {
 
     expect(await screen.findByRole("button", { name: /passer en thème sombre/i })).toBeInTheDocument();
     expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+  });
+});
+
+/**
+ * Le double montage de <StrictMode> ne doit pas condamner la chaîne GPS.
+ *
+ * `src/main.tsx` enveloppe l'app dans <StrictMode>. En développement, React
+ * monte, exécute le nettoyage, puis REMONTE — sur la même instance, et les refs
+ * ne sont pas recréées entre les deux passes. Un effet réduit à son seul
+ * nettoyage, `useEffect(() => () => { garde.current = false }, [])`, laisse donc
+ * la garde à `false` dès le premier affichage, et pour toujours.
+ *
+ * Ce que ça donnait à l'écran : « 📍 Me localiser » posait « Localisation… »,
+ * puis restait dessus, sans retour possible — la chaîne GPS était coupée par sa
+ * propre garde, à la première ligne de son propre succès. Une modification de
+ * code relançait l'effet via Fast Refresh et reproduisait le blocage.
+ *
+ * La production n'était pas touchée (le double montage est propre au
+ * développement), et c'est précisément pourquoi toute cette suite restait verte :
+ * elle monte l'écran nu, jamais sous <StrictMode>. D'où ces cas-ci, qui sont les
+ * seuls du fichier à monter comme l'application monte réellement.
+ */
+describe("StrictMode : le double montage ne condamne pas la chaîne GPS", () => {
+  /** Un GPS qui répond tout de suite : ce qu'on mesure est la garde, pas l'attente. */
+  function gpsQuiRepond(lat: number, lon: number) {
+    Object.defineProperty(navigator, "geolocation", {
+      configurable: true,
+      value: {
+        getCurrentPosition: (ok: PositionCallback) =>
+          ok({ coords: { latitude: lat, longitude: lon }, timestamp: 0 } as unknown as GeolocationPosition),
+      },
+    });
+  }
+
+  /**
+   * Le géocodeur inverse de l'IGN, seul appel qui décide du département. Le
+   * reste du réseau reste celui de `reseauNormal()`, posé par le `beforeEach`.
+   */
+  function geocodageInverse(citycode: string) {
+    const reseau = globalThis.fetch;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        if (String(input).includes("/geocodage/reverse"))
+          return new Response(JSON.stringify({ features: [{ properties: { citycode } }] }), {
+            status: 200,
+          });
+        return reseau(input, init);
+      }),
+    );
+  }
+
+  /** Comme `monter()`, mais sous <StrictMode> — donc monté deux fois, comme en vrai. */
+  function monterStrict() {
+    return render(
+      <StrictMode>
+        <StoreProvider>
+          <Accueil />
+        </StoreProvider>
+      </StrictMode>,
+    );
+  }
+
+  afterEach(() => {
+    Reflect.deleteProperty(navigator, "geolocation");
+  });
+
+  it("« Me localiser » aboutit : le bouton quitte « Localisation… »", async () => {
+    const user = userEvent.setup();
+    gpsQuiRepond(47.586, 1.336); // Blois — le département par défaut, rien ne doit bouger d'autre.
+    monterStrict();
+
+    await user.click(await screen.findByRole("button", { name: /me localiser/i }));
+
+    // Le symptôme exact : le libellé restait figé sur l'attente. « Recentrer »
+    // ne s'affiche que si `setLocated(true)` a eu lieu, donc si la garde a laissé
+    // passer le premier maillon de la chaîne.
+    expect(await screen.findByRole("button", { name: /recentrer/i })).toBeInTheDocument();
+  });
+
+  it("le département détecté est appliqué — la garde imbriquée passe aussi", async () => {
+    const user = userEvent.setup();
+    gpsQuiRepond(46.811, 1.691); // Châteauroux : couvert, et différent du 41 par défaut.
+    geocodageInverse("36044");
+    monterStrict();
+
+    await user.click(await screen.findByRole("button", { name: /me localiser/i }));
+
+    // La seconde garde, celle qui suit `deptFromCoords`, était condamnée par le
+    // même ref : le changement de département partait silencieusement à la
+    // trappe, sans même le message qui l'annonce.
+    expect(await screen.findByRole("button", { name: /Département\s*:\s*Indre/i })).toBeInTheDocument();
+    await waitFor(() => expect(JSON.parse(localStorage.getItem("carnet:prefs") || "{}").dept).toBe("36"));
+  });
+
+  it("hors StrictMode aussi, évidemment — la garde n'est pas devenue décorative", async () => {
+    const user = userEvent.setup();
+    gpsQuiRepond(47.586, 1.336);
+    monter();
+
+    await user.click(await screen.findByRole("button", { name: /me localiser/i }));
+
+    expect(await screen.findByRole("button", { name: /recentrer/i })).toBeInTheDocument();
   });
 });

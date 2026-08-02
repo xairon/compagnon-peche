@@ -247,7 +247,18 @@ export function Accueil() {
   // Guard the async GPS chain so its callbacks don't setState (or silently flip the
   // active department) after the user has left the dashboard.
   const mounted = useRef(true);
-  useEffect(() => () => void (mounted.current = false), []);
+  // Le corps qui REARME la garde n'est pas décoratif. Sous <StrictMode> (voir
+  // `main.tsx`), React monte, nettoie, puis remonte la même instance — et les
+  // refs, elles, ne sont pas recréées entre les deux passes. Réduit à son seul
+  // nettoyage, cet effet laissait `mounted` à `false` dès le premier affichage,
+  // définitivement : la chaîne GPS se coupait à la première ligne de son propre
+  // succès et « Localisation… » restait affiché sans retour possible.
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const useGps = () => {
     setGpsMsg("Localisation…");
