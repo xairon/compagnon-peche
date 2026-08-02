@@ -72,12 +72,12 @@ describe("stationsInBbox", () => {
 
     const st = await stationsInBbox(1.1, 47.4, 1.6, 47.7);
 
+    // Pas de `cours` : ce réseau ne publie pas `libelle_cours_eau`, même
+    // demandé dans `fields` (contrats-api.test.ts le vérifie sur la charge
+    // enregistrée). Le champ ne valait jamais que "", il n'existe plus.
     expect(st[0]).toEqual({
       code: "04448004",
       nom: "CISSEREAU À ONZAIN",
-      // Toujours "" sur ce réseau : `etat_piscicole/stations` ne publie pas
-      // `libelle_cours_eau`, même demandé dans `fields` (voir l'en-tête).
-      cours: "",
       lat: 47.501419924532534,
       lon: 1.1727083471909339,
     });

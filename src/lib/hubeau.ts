@@ -36,10 +36,18 @@ const QUALITE = "https://hubeau.eaufrance.fr/api/v2/qualite_rivieres";
 // tranche qui intéresse un état courant.
 const TAILLE_PC = 50;
 
+/**
+ * Une station du réseau piscicole (ASPE). Pas de `cours` ici, contrairement à
+ * `HydroStation` plus bas : `etat_piscicole/stations` ne publie PAS
+ * `libelle_cours_eau`, même demandé dans `fields` — mesuré le 01/08/2026 sur la
+ * boîte de Blois, les seules clés rendues sont code_station, libelle_station,
+ * longitude, latitude (contrats-api.test.ts le vérifie sur la charge
+ * enregistrée). Le champ ne valait donc jamais que "", et la fiche de la Carte
+ * ne l'affichait jamais.
+ */
 export interface Station {
   code: string;
   nom: string;
-  cours: string;
   lat: number;
   lon: number;
 }
@@ -86,24 +94,20 @@ export async function stationsInBbox(
 ): Promise<Station[]> {
   const url =
     `${BASE}/stations?bbox=${w.toFixed(4)},${s.toFixed(4)},${e.toFixed(4)},${n.toFixed(4)}` +
-    `&size=300&fields=code_station,libelle_station,libelle_cours_eau,latitude,longitude`;
+    `&size=300&fields=code_station,libelle_station,latitude,longitude`;
   const r = await fetchT(url, { signal, source: "hubeau" });
   if (!r.ok && r.status !== 206) throw new Error("Hub'Eau " + r.status);
   const j = (await lireJsonBorne(r, octetsMaxPour("hubeau"))) as ChargeHubeau;
+  // Convertir d'abord, filtrer ensuite : le filtre juge alors les valeurs que la
+  // station portera vraiment, et le code émis est celui qu'on a examiné.
   return (j.data || [])
-    .filter(
-      (d: Record<string, unknown>) =>
-        !VIDES.has(String(d.code_station ?? "").trim()) &&
-        Number.isFinite(nombrePublie(d.latitude)) &&
-        Number.isFinite(nombrePublie(d.longitude)),
-    )
     .map((d: Record<string, unknown>) => ({
-      code: String(d.code_station),
-      nom: String(d.libelle_station || d.libelle_cours_eau || "Station de suivi"),
-      cours: String(d.libelle_cours_eau || ""),
+      code: String(d.code_station ?? "").trim(),
+      nom: String(d.libelle_station || "Station de suivi"),
       lat: nombrePublie(d.latitude),
       lon: nombrePublie(d.longitude),
-    }));
+    }))
+    .filter((st) => !VIDES.has(st.code) && Number.isFinite(st.lat) && Number.isFinite(st.lon));
 }
 
 /** Species recorded at a station, aggregated across ALL surveys (most abundant

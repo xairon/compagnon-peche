@@ -62,7 +62,6 @@ const esc = (v: unknown): string =>
 type Sheet = {
   code: string;
   name: string;
-  cours: string;
   loading: boolean;
   species: StationSpecies[];
   error?: boolean;
@@ -399,7 +398,7 @@ export function Carte() {
         features: stations.map((st) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [st.lon, st.lat] },
-          properties: { code: st.code, nom: st.nom, cours: st.cours },
+          properties: { code: st.code, nom: st.nom },
         })),
       };
       dataRef.current.obstacles = obstacles as GeoJSON.FeatureCollection;
@@ -489,17 +488,17 @@ export function Carte() {
     set2("spots", spotsFC());
   };
 
-  const openStation = async (code: string, nom: string, cours: string) => {
+  const openStation = async (code: string, nom: string) => {
     closeAllPanels();
-    setSheet({ code, name: nom, cours, loading: true, species: [] });
+    setSheet({ code, name: nom, loading: true, species: [] });
     speciesAbort.current?.abort();
     speciesAbort.current = new AbortController();
     try {
       const species = await speciesAtStation(code, speciesAbort.current.signal);
-      setSheet({ code, name: nom, cours, loading: false, species });
+      setSheet({ code, name: nom, loading: false, species });
     } catch (e) {
       if ((e as Error).name === "AbortError") return;
-      setSheet({ code, name: nom, cours, loading: false, species: [], error: true });
+      setSheet({ code, name: nom, loading: false, species: [], error: true });
     }
   };
 
@@ -605,8 +604,8 @@ export function Carte() {
 
     m.on("click", "stations-circle", (ev) => {
       if (placingRef.current) return;
-      const p = ev.features?.[0]?.properties as { code: string; nom: string; cours: string };
-      if (p) openStation(p.code, p.nom, p.cours);
+      const p = ev.features?.[0]?.properties as { code: string; nom: string };
+      if (p) openStation(p.code, p.nom);
     });
 
     m.on("click", "obstacles-circle", (ev) => {
@@ -1035,7 +1034,6 @@ export function Carte() {
           <div className="sheet-head">
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="sheet-title">{sheet.name}</div>
-              {sheet.cours && <div className="sheet-sub">{sheet.cours}</div>}
               {sheet.code && (
                 <div className="sheet-code">
                   Station {sheet.code} ·{" "}

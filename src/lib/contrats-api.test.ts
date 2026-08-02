@@ -144,6 +144,32 @@ describe("Hub'Eau état piscicole — contrat", () => {
       expect(typeof d.effectif_lot).toBe("number");
     }
   });
+
+  describe("stations", () => {
+    const s = fixture("hubeau-piscicole-stations-blois.json");
+
+    it("ne publie PAS le cours d'eau, même demandé dans `fields`", () => {
+      // La requête l'a réclamé — l'URL figée dans `first` le montre — et aucune
+      // des 22 réponses ne le porte. C'est pourquoi `Station` n'a pas de champ
+      // `cours` : il n'aurait jamais valu que "". C'est aussi pourquoi l'app a
+      // cessé de le demander.
+      expect(s.first).toContain("libelle_cours_eau");
+      for (const d of s.data) expect(d).not.toHaveProperty("libelle_cours_eau");
+    });
+
+    it("rend des enregistrements sans code ni libellé, réduits à une position", () => {
+      // 6 sur 22 dans la boîte de Blois. Le réseau les publie, l'app les écarte
+      // (voir hubeau-stations.test.ts) : une station sans code ne peut rien dire
+      // d'elle-même, et `speciesAtStation` n'aurait rien à interroger.
+      const muettes = s.data.filter((d: { code_station: string | null }) => d.code_station === null);
+
+      expect(muettes).toHaveLength(6);
+      for (const d of muettes) {
+        expect(d.libelle_station).toBeNull();
+        expect(typeof d.latitude).toBe("number");
+      }
+    });
+  });
 });
 
 describe("Sandre CoursEau1 — contrat", () => {
