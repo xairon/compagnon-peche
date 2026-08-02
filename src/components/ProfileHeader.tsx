@@ -94,9 +94,15 @@ export function ProfileHeader() {
     setProfile({ avatar: key });
   };
 
+  // Les deux branches occupent la même place dans l'arbre : sans clés distinctes,
+  // React apparie leurs nœuds par position et recycle l'<input type="file"> de
+  // l'avatar en champ « Nom / pseudo ». Un input fichier n'a pas de `value`, donc
+  // ce champ naissait non contrôlé et le devenait dans la foulée — l'avertissement
+  // « changing an uncontrolled input to be controlled ». Les clés forcent un
+  // démontage franc : chaque champ du formulaire naît contrôlé.
   if (editing) {
     return (
-      <div className="ph-edit">
+      <div key="edit" className="ph-edit">
         <div className="field">
           <label>Nom / pseudo</label>
           <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Votre nom" />
@@ -201,7 +207,7 @@ export function ProfileHeader() {
   }
 
   return (
-    <div>
+    <div key="view">
       <div className="ph">
         <button className="ph-avatar" onClick={() => fileRef.current?.click()} aria-label="Changer l'avatar">
           {avatar ? <img src={avatar} alt="" /> : <span>🎣</span>}
