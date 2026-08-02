@@ -3,6 +3,8 @@ import { useStore } from "../store-hooks";
 import { BalanceCard } from "../components/BalanceCard";
 import { BilanEcrevisses } from "../components/BilanEcrevisses";
 import { REG_BALANCES, REG_SOURCE, MAILLE_NOTE } from "../data/ecrevisses";
+import { DEPARTEMENTS, DEPT_REG } from "../data/regulation";
+import { notesEcrevisses } from "../lib/notes-dept";
 import { CRAYFISH_RECIPES } from "../data/ecrevisses-recipes";
 import { wakeSupported } from "../lib/wakelock";
 import { askNotifyPermission, notifyPermission } from "../lib/notify";
@@ -119,7 +121,8 @@ function Preparation({
   onStart: (s: CrayfishSession) => void;
   spots: Spot[];
 }) {
-  const { nav } = useStore();
+  const { state, nav } = useStore();
+  const notesDept = useMemo(() => notesEcrevisses(DEPT_REG[state.dept].notes), [state.dept]);
   const [trempe, setTrempe] = useState(DEFAULT_INTERVAL_MIN);
   const [lieu, setLieu] = useState("");
   const [spotId, setSpotId] = useState("");
@@ -254,6 +257,21 @@ function Preparation({
             <div key={r}>· {r}</div>
           ))}
           <div className="ecr-reg-note">{MAILLE_NOTE}</div>
+          {/* Les notes de l'arrêté qui nomment une écrevisse n'ont pas d'autre
+              écran où atterrir : les fiches poisson ne montrent plus que ce qui
+              concerne leur espèce, et le catalogue écrevisses est séparé. Sans
+              ce bloc, l'interdiction de pêche des écrevisses à pattes blanches
+              de la Creuse ne serait plus nulle part dans l'app. */}
+          {notesDept.length > 0 && (
+            <>
+              <div className="dept-sub">Arrêté {DEPARTEMENTS[state.dept].name}</div>
+              {notesDept.map((n) => (
+                <div key={n} className="ecr-reg-note">
+                  {n}
+                </div>
+              ))}
+            </>
+          )}
           <div className="ecr-reg-src">{REG_SOURCE}</div>
         </div>
       </div>

@@ -244,15 +244,27 @@ export function Fiche() {
             </>
           ) : (
             <div className="note">
-              Pas de spécificité départementale connue pour cette espèce dans le {deptName} — le socle
-              national ci-dessous s'applique. Vérifiez l'arrêté préfectoral en vigueur.
+              {/* Le département est déjà en sous-titre de la section. Le répéter
+                  ici obligeait à coller un article en dur, qui rendait « dans le
+                  Indre » et « dans le Creuse » — deux départements sur trois. */}
+              Pas de spécificité départementale connue pour cette espèce —{" "}
+              {notes.generales.length > 0
+                ? "les règles générales ci-dessous et le socle national s'appliquent."
+                : "le socle national ci-dessous s'applique."}{" "}
+              Vérifiez l'arrêté préfectoral en vigueur.
             </div>
           )}
-          {notes.autres.length > 0 && (
+          {/* Seulement `generales` : les notes qui nomment un AUTRE poisson sont
+              écartées. Elles ne sont pas perdues pour autant — chacune s'affiche
+              sur la fiche du poisson qu'elle nomme, et celles qui nomment une
+              écrevisse partent vers l'écran Écrevisses. Ce bloc déversait tout :
+              six notes sur une fiche gardon dans l'Indre, dont aucune ne parlait
+              d'un gardon. */}
+          {notes.generales.length > 0 && (
             <>
-              <div className="dept-sub">Autres points de l'arrêté — {deptName}</div>
-              {notes.autres.map((n, i) => (
-                <div key={"a" + i} className="note">
+              <div className="dept-sub">Règles générales — {deptName}</div>
+              {notes.generales.map((n, i) => (
+                <div key={"g" + i} className="note">
                   {n}
                 </div>
               ))}

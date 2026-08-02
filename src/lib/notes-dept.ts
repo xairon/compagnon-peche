@@ -1,10 +1,14 @@
 import type { Species } from "../types";
+import { SPECIES } from "../data/species";
+import { ECREVISSES } from "../data/ecrevisses";
 
 export interface DeptNotesResult {
   /** Notes du département qui nomment cette espèce. */
   espece: string[];
-  /** Toutes les autres — affichées elles aussi, jamais coupées. */
-  autres: string[];
+  /** Notes qui nomment une AUTRE créature du catalogue — poisson ou écrevisse. */
+  autresEspeces: string[];
+  /** Notes qui ne nomment aucune créature : elles valent pour tout le monde. */
+  generales: string[];
 }
 
 /**
@@ -17,21 +21,48 @@ export interface DeptNotesResult {
  * Loir-et-Cher). La note black-bass de l'Indre est à l'indice 2 — elle dit
  * « Dans le doute, relâchez », et personne ne l'a jamais lue.
  *
- * L'invariant, et la seule chose qui compte vraiment ici : espece + autres
- * contient TOUJOURS l'intégralité des notes reçues. Le rattachement ne fait que
- * décider de l'ordre et du bloc. Se tromper de poisson n'a donc aucune
- * conséquence réglementaire — la note est affichée dans les deux cas — alors
- * qu'en couper une en avait une.
+ * L'INVARIANT : espece + autresEspeces + generales contient TOUJOURS
+ * l'intégralité des notes reçues. Cette fonction ne masque rien — elle range.
+ *
+ * Il a d'abord servi à autoriser les erreurs : tant que tout était affiché, se
+ * tromper de poisson n'avait aucune conséquence réglementaire. La fiche ne
+ * montre plus `autresEspeces` (une note sandre n'a rien à faire sur une fiche
+ * gardon), donc l'argument ne tient plus tel quel — et l'invariant compte
+ * désormais davantage, pas moins : il garantit que le tri seul décide, et que la
+ * décision de cacher vit à un seul endroit, dans l'écran, pas ici.
+ *
+ * Ce qui rend le masquage acceptable est la DISSYMÉTRIE des défaillances : une
+ * note dont la créature n'est pas reconnue tombe dans `generales` et s'affiche
+ * partout — bruyante, jamais silencieuse. Rien ne peut être masqué sans avoir
+ * été rattaché à une créature connue du catalogue.
  */
 export function deptNotes(notes: string[], sp: Species): DeptNotesResult {
   const termes = termesEspece(sp);
   const espece: string[] = [];
-  const autres: string[] = [];
+  const autresEspeces: string[] = [];
+  const generales: string[] = [];
   for (const n of notes) {
     const t = normalise(n);
-    (termes.some((m) => m.test(t)) ? espece : autres).push(n);
+    if (termes.some((m) => m.test(t))) espece.push(n);
+    else if (TERMES_CREATURES.some((m) => m.test(t))) autresEspeces.push(n);
+    else generales.push(n);
   }
-  return { espece, autres };
+  return { espece, autresEspeces, generales };
+}
+
+/**
+ * Les notes de l'arrêté qui nomment une écrevisse.
+ *
+ * Elles quittent les fiches poisson par `autresEspeces` et n'ont aucune autre
+ * fiche où atterrir : le catalogue écrevisses est séparé. Sans ce point de
+ * sortie vers l'écran Écrevisses, l'interdiction de pêche des écrevisses à
+ * pattes blanches disparaîtrait purement et simplement de l'application.
+ */
+export function notesEcrevisses(notes: string[]): string[] {
+  return notes.filter((n) => {
+    const t = normalise(n);
+    return TERMES_ECREVISSES.some((m) => m.test(t));
+  });
 }
 
 /** Minuscules, sans accents, séparateurs uniformisés : « Black-bass » et
@@ -106,8 +137,31 @@ const MOTS_VIDES = new Set([
  * n'est pas « brochet ».
  */
 function termesEspece(sp: Species): RegExp[] {
-  const mots = normalise(sp.name)
-    .split(" ")
-    .filter((w) => w.length >= 5 && !MOTS_VIDES.has(w));
-  return [...new Set(mots)].map((w) => new RegExp(`(^| )${w}(e?s)?( |$)`));
+  return termesDeNoms([sp.name]);
 }
+
+/** Les mots distinctifs d'un ensemble de noms, dédoublonnés puis compilés. */
+function termesDeNoms(noms: readonly string[]): RegExp[] {
+  const mots = new Set<string>();
+  for (const nom of noms) {
+    for (const w of normalise(nom).split(" ")) {
+      if (w.length >= 5 && !MOTS_VIDES.has(w)) mots.add(w);
+    }
+  }
+  return [...mots].map((w) => new RegExp(`(^| )${w}(e?s)?( |$)`));
+}
+
+/**
+ * Le vocabulaire des écrevisses, et celui de TOUTES les créatures du catalogue.
+ *
+ * Les deux catalogues sont séparés dans l'app, et c'est ce qui a produit le seul
+ * faux positif du classement : « Écrevisses à pattes blanches, rouges et grêles :
+ * pêche fermée toute l'année » ne nomme aucun poisson. Interrogé sur les 129
+ * fiches poisson seules, ce texte passait pour une règle générale — il se serait
+ * affiché sur chacune d'elles.
+ *
+ * Construits une fois au chargement : `deptNotes` est appelée à chaque rendu de
+ * fiche, recompiler deux cents expressions à chaque fois serait absurde.
+ */
+const TERMES_ECREVISSES = termesDeNoms(ECREVISSES.map((e) => e.name));
+const TERMES_CREATURES = [...termesDeNoms(SPECIES.map((s) => s.name)), ...TERMES_ECREVISSES];

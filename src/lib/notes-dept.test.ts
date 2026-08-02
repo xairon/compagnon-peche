@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
-import { deptNotes } from "./notes-dept";
+import { deptNotes, notesEcrevisses } from "./notes-dept";
 import { DEPT_REG, type DeptId } from "../data/regulation";
 import { SPECIES } from "../data/species";
 
@@ -17,12 +17,13 @@ const espece = (id: string) => SPECIES.find((s) => s.id === id)!;
  * supprimer : c'est l'invariant que ce fichier verrouille en premier.
  */
 describe("deptNotes — aucune note n'est perdue", () => {
-  it("chaque note du département ressort dans exactement un des deux groupes", () => {
+  it("chaque note du département ressort dans exactement un des trois groupes", () => {
     for (const d of DEPTS) {
       const notes = DEPT_REG[d].notes;
       for (const sp of SPECIES) {
         const r = deptNotes(notes, sp);
-        expect([...r.espece, ...r.autres].sort(), `${sp.id} en ${d}`).toEqual([...notes].sort());
+        const tous = [...r.espece, ...r.autresEspeces, ...r.generales];
+        expect(tous.sort(), `${sp.id} en ${d}`).toEqual([...notes].sort());
       }
     }
   });
@@ -31,7 +32,7 @@ describe("deptNotes — aucune note n'est perdue", () => {
     let vues = 0;
     for (const d of DEPTS) {
       const r = deptNotes(DEPT_REG[d].notes, espece("gardon"));
-      vues += r.espece.length + r.autres.length;
+      vues += r.espece.length + r.autresEspeces.length + r.generales.length;
     }
     expect(vues).toBe(13);
   });
@@ -40,7 +41,8 @@ describe("deptNotes — aucune note n'est perdue", () => {
     const notes = ["a truite", "b brochet", "c truite", "d brochet"];
     const r = deptNotes(notes, espece("truite-fario"));
     expect(r.espece).toEqual(["a truite", "c truite"]);
-    expect(r.autres).toEqual(["b brochet", "d brochet"]);
+    expect(r.autresEspeces).toEqual(["b brochet", "d brochet"]);
+    expect(r.generales).toEqual([]);
   });
 });
 
@@ -58,7 +60,7 @@ describe("deptNotes — la note qui nomme l'espèce remonte", () => {
 
   it("l'Indre : elle n'est pas noyée dans les autres notes", () => {
     const r = deptNotes(DEPT_REG["36"].notes, espece("black-bass"));
-    expect(r.autres.join(" ")).not.toMatch(/Black-bass/);
+    expect([...r.autresEspeces, ...r.generales].join(" ")).not.toMatch(/Black-bass/);
   });
 
   it("l'Indre : la note brochet va au brochet, pas au black-bass", () => {
@@ -80,17 +82,21 @@ describe("deptNotes — la note qui nomme l'espèce remonte", () => {
     expect(r.espece.join(" ")).toMatch(/Anguille jaune/);
   });
 
-  it("une espèce qu'aucune note ne nomme n'en reçoit aucune — mais les voit toutes", () => {
+  it("une espèce qu'aucune note ne nomme n'en reçoit aucune", () => {
+    // Les quatre notes du Loir-et-Cher nomment truite, brochet ou carpe : pour
+    // un gardon, elles parlent toutes d'un autre poisson. Aucune n'est générale,
+    // donc la fiche gardon n'affichera aucune note départementale.
     const r = deptNotes(DEPT_REG["41"].notes, espece("gardon"));
     expect(r.espece).toEqual([]);
-    expect(r.autres.length).toBe(4);
+    expect(r.autresEspeces.length).toBe(4);
+    expect(r.generales).toEqual([]);
   });
 
   it("une note générale n'est attribuée à personne et reste lisible", () => {
     // « Pêche interdite sur le bassin du Cher » ne nomme aucune espèce : elle
     // vaut pour toutes, donc elle appartient au bloc commun, jamais à un poisson.
     const r = deptNotes(DEPT_REG["23"].notes, espece("brochet"));
-    expect(r.autres.join(" ")).toMatch(/bassin du Cher/);
+    expect(r.generales.join(" ")).toMatch(/bassin du Cher/);
   });
 });
 
@@ -131,7 +137,7 @@ describe("deptNotes — le rattachement ne s'emballe pas", () => {
   it("une couleur ne désigne pas une espèce (poisson rouge / pattes rouges)", () => {
     const r = deptNotes(DEPT_REG["23"].notes, espece("poisson-rouge"));
     expect(r.espece).toEqual([]);
-    expect(r.autres.join(" ")).toMatch(/pattes blanches, rouges/);
+    expect(r.autresEspeces.join(" ")).toMatch(/pattes blanches, rouges/);
   });
 
   it("« argentée » ne relie pas la carpe argentée à l'anguille argentée", () => {
@@ -142,6 +148,62 @@ describe("deptNotes — le rattachement ne s'emballe pas", () => {
   it("un lieu ne désigne pas une espèce (crapet de roche / Roche-au-Moine)", () => {
     const r = deptNotes(DEPT_REG["36"].notes, espece("crapet-de-roche"));
     expect(r.espece.join(" ")).not.toMatch(/Black-bass/);
+  });
+});
+
+/**
+ * Le seul faux positif du classement, et celui qui rend le masquage possible.
+ *
+ * « Écrevisses à pattes blanches, rouges et grêles : pêche fermée toute
+ * l'année » ne nomme aucun POISSON — les écrevisses vivent dans un catalogue
+ * séparé. Tant que le vocabulaire de rattachement ignorait ce catalogue, la
+ * note était promue « générale » et se serait affichée sur les 129 fiches
+ * poisson dès qu'on a cessé de tout montrer : précisément le bruit que le
+ * masquage doit supprimer.
+ *
+ * C'est la seule des 13 notes réelles dans ce cas. Les 11 autres nomment une
+ * espèce du catalogue poisson, et « bassin du Cher » n'en nomme aucune à juste
+ * titre.
+ */
+describe("deptNotes — une créature non-poisson reste une créature", () => {
+  it("la note écrevisses de la Creuse n'est jamais une règle générale", () => {
+    for (const sp of SPECIES) {
+      const r = deptNotes(DEPT_REG["23"].notes, sp);
+      expect(r.generales.join(" "), sp.id).not.toMatch(/Écrevisses à pattes/);
+    }
+  });
+
+  it("elle est classée « autre espèce » — donc masquée sur une fiche poisson", () => {
+    const r = deptNotes(DEPT_REG["23"].notes, espece("gardon"));
+    expect(r.autresEspeces.join(" ")).toMatch(/Écrevisses à pattes/);
+  });
+
+  it("la Creuse ne garde qu'une seule règle vraiment générale", () => {
+    const r = deptNotes(DEPT_REG["23"].notes, espece("gardon"));
+    expect(r.generales.length).toBe(1);
+    expect(r.generales[0]).toMatch(/bassin du Cher/);
+  });
+});
+
+/**
+ * Ce que l'écran Écrevisses vient chercher. La note ci-dessus quitte les fiches
+ * poisson : sans ce point de sortie, une interdiction de pêche toute l'année
+ * disparaîtrait de l'application.
+ */
+describe("notesEcrevisses — la note trouve son écran", () => {
+  it("la Creuse rend la note écrevisses", () => {
+    const r = notesEcrevisses(DEPT_REG["23"].notes);
+    expect(r.length).toBe(1);
+    expect(r[0]).toMatch(/Écrevisses à pattes/);
+  });
+
+  it("l'Indre et le Loir-et-Cher n'en ont aucune", () => {
+    expect(notesEcrevisses(DEPT_REG["36"].notes)).toEqual([]);
+    expect(notesEcrevisses(DEPT_REG["41"].notes)).toEqual([]);
+  });
+
+  it("une note qui nomme un poisson n'est pas prise pour une note écrevisse", () => {
+    expect(notesEcrevisses(["Brochet no-kill du 14/03 au 24/04."])).toEqual([]);
   });
 });
 
