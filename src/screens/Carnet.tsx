@@ -11,7 +11,7 @@ import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
 import { upcomingSeasonReminders, type SeasonReminder } from "../lib/season-reminders";
 import type { Catch, CrayfishSession } from "../types";
-import { CarnetRecettes } from "../components/CarnetRecettes";
+import { CarnetRecettes } from "./CarnetRecettes";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
 type Sort = "recent" | "size" | "species";

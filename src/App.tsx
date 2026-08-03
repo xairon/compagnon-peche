@@ -3,31 +3,10 @@ import { useStore } from "./store-hooks";
 import { BottomNav } from "./components/BottomNav";
 import { Icon } from "./components/Icon";
 import { ICONS } from "./components/icons-data";
-import { Accueil } from "./screens/Accueil";
-import { Especes } from "./screens/Especes";
-import { Identify } from "./screens/Identify";
-import { Fiche } from "./screens/Fiche";
-import { Prise } from "./screens/Prise";
-import { Regle } from "./screens/Regle";
-import { Carnet } from "./screens/Carnet";
-import { PriseDetail } from "./screens/PriseDetail";
-import { Statistiques } from "./screens/Statistiques";
-import { Outils } from "./screens/Outils";
-import { OutilsTerrain } from "./screens/OutilsTerrain";
-import { Ecrevisses } from "./screens/Ecrevisses";
-import { Noeuds } from "./screens/Noeuds";
-import { NoeudFiche } from "./screens/NoeudFiche";
-import { Recette } from "./screens/Recette";
 // Import direct et non `lazy` : RECIPES est déjà dans le bundle principal via
 // Fiche et Carnet, un découpage ne gagnerait rien et poserait une question de
 // précache pour un écran qui doit marcher hors-ligne.
 import { Recettes } from "./screens/Recettes";
-import { Reglement } from "./screens/Reglement";
-import { Sources } from "./screens/Sources";
-import { Mentions } from "./screens/Mentions";
-import { Credits } from "./screens/Credits";
-import { Cuisine } from "./screens/Cuisine";
-import { Stockage } from "./screens/Stockage";
 import { CrayfishBar } from "./components/CrayfishBar";
 import { Onboarding } from "./components/Onboarding";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -37,7 +16,42 @@ import { promesseHorsLigne } from "./lib/promesse-hors-ligne";
 import { useCrayfishAlerts } from "./lib/crayfish-alerts";
 import { requestPersist, onPersistError, onQuotaWarning, storageInfo } from "./lib/storage";
 
-// Heavier / non-startup screens are code-split (Carte pulls in MapLibre GL).
+// Tous les écrans sont code-splittés (Carte pulls in MapLibre GL, etc.) : seul
+// le shell (nav, FAB, toasts) reste dans le chunk principal. Exception : Recettes
+// ci-dessus.
+const Accueil = lazy(() => import("./screens/Accueil").then((m) => ({ default: m.Accueil })));
+const Especes = lazy(() => import("./screens/Especes").then((m) => ({ default: m.Especes })));
+const Identify = lazy(() => import("./screens/Identify").then((m) => ({ default: m.Identify })));
+const Fiche = lazy(() => import("./screens/Fiche").then((m) => ({ default: m.Fiche })));
+const Prise = lazy(() => import("./screens/Prise").then((m) => ({ default: m.Prise })));
+const Regle = lazy(() => import("./screens/Regle").then((m) => ({ default: m.Regle })));
+const Carnet = lazy(() => import("./screens/Carnet").then((m) => ({ default: m.Carnet })));
+const PriseDetail = lazy(() =>
+  import("./screens/PriseDetail").then((m) => ({ default: m.PriseDetail })),
+);
+const Statistiques = lazy(() =>
+  import("./screens/Statistiques").then((m) => ({ default: m.Statistiques })),
+);
+const Outils = lazy(() => import("./screens/Outils").then((m) => ({ default: m.Outils })));
+const OutilsTerrain = lazy(() =>
+  import("./screens/OutilsTerrain").then((m) => ({ default: m.OutilsTerrain })),
+);
+const Ecrevisses = lazy(() =>
+  import("./screens/Ecrevisses").then((m) => ({ default: m.Ecrevisses })),
+);
+const Noeuds = lazy(() => import("./screens/Noeuds").then((m) => ({ default: m.Noeuds })));
+const NoeudFiche = lazy(() =>
+  import("./screens/NoeudFiche").then((m) => ({ default: m.NoeudFiche })),
+);
+const Recette = lazy(() => import("./screens/Recette").then((m) => ({ default: m.Recette })));
+const Reglement = lazy(() =>
+  import("./screens/Reglement").then((m) => ({ default: m.Reglement })),
+);
+const Sources = lazy(() => import("./screens/Sources").then((m) => ({ default: m.Sources })));
+const Mentions = lazy(() => import("./screens/Mentions").then((m) => ({ default: m.Mentions })));
+const Credits = lazy(() => import("./screens/Credits").then((m) => ({ default: m.Credits })));
+const Cuisine = lazy(() => import("./screens/Cuisine").then((m) => ({ default: m.Cuisine })));
+const Stockage = lazy(() => import("./screens/Stockage").then((m) => ({ default: m.Stockage })));
 const Carte = lazy(() => import("./screens/Carte").then((m) => ({ default: m.Carte })));
 const Materiel = lazy(() => import("./screens/Materiel").then((m) => ({ default: m.Materiel })));
 const GuideMateriel = lazy(() =>

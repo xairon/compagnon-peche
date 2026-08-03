@@ -50,7 +50,10 @@ function setupNavigator() {
     pending.push({ sentinel, resolve: resolveFn, reject: rejectFn });
     return promise;
   });
-  (globalThis as unknown as { navigator: unknown }).navigator = { wakeLock: { request } };
+  // Assigner globalThis.navigator directement échoue sur les runtimes récents
+  // (Node ≥ 21 expose un navigator getter-only) : vi.stubGlobal passe par
+  // Object.defineProperty, comme partout ailleurs dans le dépôt.
+  vi.stubGlobal("navigator", { wakeLock: { request } });
   return { request, pending };
 }
 
@@ -183,7 +186,7 @@ describe("in-flight request race", () => {
 
 describe("wakeSupported", () => {
   it("is false when navigator.wakeLock is absent", async () => {
-    (globalThis as unknown as { navigator: unknown }).navigator = {};
+    vi.stubGlobal("navigator", {});
     setupDocument();
     const { wakeSupported } = await loadModule();
 

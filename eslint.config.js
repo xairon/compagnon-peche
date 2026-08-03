@@ -33,4 +33,33 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
   },
+  {
+    files: ["src/components/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../screens/*", "../screens", "**/screens/*"],
+              message:
+                "src/components/ ne doit pas importer depuis src/screens/ (violation des frontières de couches components/screens).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // Les fichiers de test sont exemptés : les tests a11y de src/components/
+  // montent de vrais écrans (Carnet, Ecrevisses, Materiel…) — c'est leur
+  // métier. La règle protège les imports de RUNTIME, pas les tests.
+  // NB : ne PAS fusionner ce bloc avec le précédent via un pattern `!` dans
+  // `files` — une négation dans `files` fait appliquer la config à tout le
+  // dépôt (vérifié sur ESLint 9.39). Deux blocs, c'est le seul montage fiable.
+  {
+    files: ["src/components/**/*.test.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": "off",
+    },
+  },
 );

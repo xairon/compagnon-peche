@@ -17,8 +17,8 @@ import {
   spNames,
   type RecipeFilters,
 } from "../lib/recipes";
-import { RecipeView } from "../screens/RecipeView";
-import { RecipeEditor } from "../screens/RecipeEditor";
+import { RecipeView } from "./RecipeView";
+import { RecipeEditor } from "./RecipeEditor";
 import type { PersonalRecipe, Recipe } from "../types";
 
 const DIFF_LABEL = ["", "Facile", "Moyen", "Difficile"];
