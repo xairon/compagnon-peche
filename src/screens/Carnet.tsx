@@ -38,7 +38,9 @@ export function Carnet() {
 
   useEffect(() => {
     if (!state.justAdded) return;
-    const t = setTimeout(() => set({ justAdded: null }), 4000);
+    // `photoRatee` part avec le bandeau qui le porte : le garder allumé le
+    // ferait réapparaître sur la prochaine prise, dont la photo est passée.
+    const t = setTimeout(() => set({ justAdded: null, photoRatee: false }), 4000);
     return () => clearTimeout(t);
   }, [state.justAdded, set]);
 
@@ -97,6 +99,16 @@ export function Carnet() {
           <div className="added-banner">
             ✓ {added.kept ? "Prise gardée" : "Prise relâchée"} ajoutée : {added.sp}
             {added.n ? ` · ${added.size}` : ""}
+            {/* La photo, elle, a pu ne pas passer — quota plein, navigation
+                privée. L'écran de saisie ne pouvait pas le dire : le `goTab`
+                le démontait avant le paint. C'est donc dit ici, où le pêcheur
+                atterrit, et tant que le bandeau vit. */}
+            {state.photoRatee && (
+              <div className="added-banner-photo" role="status">
+                La photo n'a pas pu être enregistrée — la prise, elle, l'est. Vous pouvez la
+                rajouter depuis la fiche de la prise.
+              </div>
+            )}
           </div>
         )}
 

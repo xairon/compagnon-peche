@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useEffect } from "react";
@@ -201,6 +201,131 @@ describe("Consigner — ce qui est écrit dans le carnet", () => {
  * Ce qui a été sauté est rappelé jusqu'ici : la saisie est le dernier écran, et
  * donc la dernière occasion de dire que l'app n'a pas tout vérifié.
  */
+/**
+ * Le chemin court garde son compteur muet jusqu'au bout.
+ *
+ * `isShortcutStep` couvrait `kill` et `release` pour une raison écrite dans
+ * l'écran : sur une espèce protégée, le parcours calculé n'est pas celui qu'on
+ * traverse — `choix` n'apparaît jamais. La saisie ajoutée à la fin du parcours
+ * est tombée hors de cette garde, et le compteur revenait sur le dernier écran
+ * annoncer un total que le pêcheur n'a pas vu.
+ */
+describe("Consigner — le compteur se taît sur un chemin court", () => {
+  it("protégée : rien sur la saisie, comme sur les gestes de remise à l'eau", async () => {
+    // Apron du Rhône : le statut protégé mène DIRECTEMENT à « release ».
+    // Parcours traversé : statut → release → consigner-rel, soit 3 écrans,
+    // quand `etapesPour` en calcule 4 (il compte `choix`, jamais montré).
+    monter(auxChamps({ priseSp: "apron-du-rhone", priseStep: "consigner-rel" }));
+    await screen.findByRole("switch");
+    expect(screen.queryByText(/étape/)).toBeNull();
+  });
+
+  it("invasive : idem sur la saisie d'une prise gardée", async () => {
+    monter(auxChamps({ priseSp: "silure", priseStep: "consigner" }));
+    await screen.findByRole("switch");
+    expect(screen.queryByText(/étape/)).toBeNull();
+  });
+
+  it("mais une perche, elle, garde son compteur juste", async () => {
+    monter(auxChamps());
+    expect(await screen.findByText(/étape 4 \/ 4/)).toBeInTheDocument();
+  });
+});
+
+/**
+ * L'aperçu de la photo est une URL de blob. Elle se révoque au remplacement et
+ * au retrait — mais l'écran part aussi par l'enregistrement, par « Terminer »
+ * et par « Annuler », et il partait alors en laissant l'URL derrière lui.
+ */
+describe("Consigner — l'aperçu ne survit pas à l'écran", () => {
+  const vraiC = URL.createObjectURL;
+  const vraiR = URL.revokeObjectURL;
+  let crees: string[] = [];
+  let revoques: string[] = [];
+
+  beforeEach(() => {
+    crees = [];
+    revoques = [];
+    URL.createObjectURL = ((b: Blob) => {
+      void b;
+      const u = "blob:essai-" + crees.length;
+      crees.push(u);
+      return u;
+    }) as typeof URL.createObjectURL;
+    URL.revokeObjectURL = ((u: string) => {
+      revoques.push(u);
+    }) as typeof URL.revokeObjectURL;
+  });
+
+  afterEach(() => {
+    URL.createObjectURL = vraiC;
+    URL.revokeObjectURL = vraiR;
+  });
+
+  it("l'URL de l'aperçu est révoquée au démontage", async () => {
+    const user = userEvent.setup();
+    const vue = monter(auxChamps());
+    await screen.findByRole("switch");
+
+    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
+    expect(crees).toHaveLength(1);
+
+    vue.unmount();
+    expect(revoques).toContain(crees[0]);
+  });
+});
+
+/**
+ * Ce que le pêcheur doit apprendre, et n'apprenait pas.
+ *
+ * L'écran posait bien un message d'échec, puis appelait `goTab` dans la même
+ * continuation : React démontait l'écran avant de peindre, et le message
+ * n'existait que le temps d'un rendu que personne n'a vu. La photo disparaissait
+ * en silence. Le message doit voyager jusqu'à l'écran d'arrivée.
+ */
+describe("Consigner — une photo perdue se dit", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("l'échec d'écriture laisse la prise, sans photo, et l'annonce au carnet", async () => {
+    const photos = await import("../lib/photos");
+    vi.spyOn(photos, "downscaleImage").mockResolvedValue(new Blob(["x"]));
+    vi.spyOn(photos, "savePhoto").mockRejectedValue(new Error("quota"));
+
+    const user = userEvent.setup();
+    monter(auxChamps());
+    await screen.findByRole("switch");
+
+    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
+    await user.click(screen.getByRole("button", { name: /Enregistrer dans le carnet/ }));
+
+    await waitFor(() => expect(magasin.state.catches).toHaveLength(1));
+    // La prise vaut mieux qu'une photo : elle est écrite, sans référence morte.
+    expect(magasin.state.catches[0].photo).toBeUndefined();
+    // Et le fait voyage, pour que l'écran d'arrivée puisse le dire.
+    expect(magasin.state.photoRatee).toBe(true);
+  });
+
+  it("une photo écrite sans encombre n'annonce rien", async () => {
+    const photos = await import("../lib/photos");
+    vi.spyOn(photos, "downscaleImage").mockResolvedValue(new Blob(["x"]));
+    vi.spyOn(photos, "savePhoto").mockResolvedValue(undefined);
+
+    const user = userEvent.setup();
+    monter(auxChamps());
+    await screen.findByRole("switch");
+
+    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
+    await user.click(screen.getByRole("button", { name: /Enregistrer dans le carnet/ }));
+
+    await waitFor(() => expect(magasin.state.catches).toHaveLength(1));
+    expect(magasin.state.catches[0].photo).toMatch(/^photo:/);
+    expect(magasin.state.photoRatee).toBe(false);
+  });
+});
+
 describe("Consigner — le rappel de ce que l'app ne sait pas", () => {
   it("sur une perche, l'écran redit qu'il n'a ni maille ni quota", async () => {
     monter(auxChamps());

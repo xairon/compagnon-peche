@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { Icon } from "../components/Icon";
@@ -47,9 +47,25 @@ export function Prise() {
   const lieuActif = noterLieu ?? !!state.prisePlace;
   const [gps, setGps] = useState<{ lat: number; lon: number } | null>(null);
   const [msgLieu, setMsgLieu] = useState<string | null>(null);
-  const [msgPhoto, setMsgPhoto] = useState<string | null>(null);
   const [ecrit, setEcrit] = useState(false);
   const photoRef = useRef<HTMLInputElement>(null);
+  // L'aperçu courant, tenu dans une ref pour être révocable au démontage.
+  //
+  // L'écran ne part pas que par le bouton « Retirer » : il part par
+  // l'enregistrement, par « Terminer sans enregistrer » et par « Annuler », et
+  // il partait alors en laissant l'URL du blob vivante jusqu'au rechargement.
+  // La ref plutôt que la valeur d'état : un effet qui dépendrait de `apercu` se
+  // rejouerait sous StrictMode et révoquerait une URL encore affichée.
+  const apercuRef = useRef<string | null>(null);
+  useEffect(() => {
+    apercuRef.current = apercu;
+  }, [apercu]);
+  useEffect(
+    () => () => {
+      if (apercuRef.current) URL.revokeObjectURL(apercuRef.current);
+    },
+    [],
+  );
   const qt = quotaToday(state.catches);
   const sp = SPECIES.find((s) => s.id === state.priseSp);
   // The screen owns the clock; the engine never reads it (see lib/prise.ts).
@@ -81,7 +97,14 @@ export function Prise() {
   const shortcut =
     !!sp && (!!sp.protected || !!sp.invasive || sp.season === "special" || !season(sp, now).open);
   const step = state.priseStep;
-  const isShortcutStep = shortcut && (step === "kill" || step === "release");
+  // La saisie ferme le parcours : elle appartient au chemin court autant que
+  // les deux étapes qui la précèdent. Restée hors de cette garde, elle
+  // rallumait le compteur sur le DERNIER écran pour annoncer un total que le
+  // pêcheur n'a pas traversé — sur un apron du Rhône, « étape 4 / 4 » et
+  // quatre pastilles pour trois écrans, `choix` n'étant jamais montré.
+  const isShortcutStep =
+    shortcut &&
+    (step === "kill" || step === "release" || step === "consigner" || step === "consigner-rel");
 
   // Le parcours RÉEL de cette espèce, dont le compteur découle. Il annonçait
   // « / 5 » depuis une table figée, alors qu'une perche ne traverse que quatre
@@ -102,7 +125,6 @@ export function Prise() {
     if (apercu) URL.revokeObjectURL(apercu);
     setPhoto(f);
     setApercu(URL.createObjectURL(f));
-    setMsgPhoto(null);
   };
 
   const retirerPhoto = () => {
@@ -145,6 +167,7 @@ export function Prise() {
     const cm = parseTaille(size);
 
     let photoKey: string | undefined;
+    let photoRatee = false;
     if (photo) {
       try {
         // Pas de clé versionnée ici, contrairement à la fiche de prise : ce
@@ -157,8 +180,13 @@ export function Prise() {
         // Quota plein, navigation privée : la PRISE doit rester enregistrable.
         // Mieux vaut une prise sans photo qu'une prise pointant vers un blob
         // qui n'a jamais été écrit.
+        //
+        // L'échec part avec la navigation, il ne se dit PAS ici : cet écran est
+        // démonté avant le paint par le `goTab` qui suit, et le message n'y
+        // vivait que le temps d'un rendu que personne ne voyait. Le carnet, lui,
+        // est là où le pêcheur atterrit — voir `photoRatee` dans le store.
         photoKey = undefined;
-        setMsgPhoto("La photo n'a pas pu être enregistrée — la prise l'est.");
+        photoRatee = true;
       }
     }
 
@@ -177,7 +205,7 @@ export function Prise() {
       ...(lieuActif && !state.prisePlace && gps ? { lat: gps.lat, lon: gps.lon } : {}),
     };
     addCatchFull(entree);
-    goTab("carnet", { prisePlace: null });
+    goTab("carnet", { prisePlace: null, photoRatee });
   };
 
   const handleAct = (act: string) => {
@@ -404,11 +432,6 @@ export function Prise() {
                   onChange={choisirPhoto}
                   style={{ display: "none" }}
                 />
-                {msgPhoto && (
-                  <div className="note" style={{ marginTop: 8 }} role="status">
-                    {msgPhoto}
-                  </div>
-                )}
               </div>
 
               <button

@@ -159,6 +159,15 @@ export interface AppState {
   knotId: string | null;
   techId: string | null;
   justAdded: string | null; // slot of the catch just logged (for a brief confirmation)
+  // Whether that catch lost its photo on the way in (full quota, private
+  // browsing). Transient like `justAdded`, and cleared with it.
+  //
+  // Il faut un canal qui SURVIVE au changement d'écran : l'écran de saisie
+  // posait le message dans son propre état puis appelait `goTab` dans la même
+  // continuation. React démontait l'écran avant de peindre — le message
+  // n'existait que le temps d'un rendu que personne n'a vu, et la photo
+  // disparaissait en silence. Le carnet est là où le pêcheur atterrit.
+  photoRatee: boolean;
   focusSpot: string | null; // spot id to fly to & open when the Carte mounts (from Carnet)
   gearFocusId: string | null; // gear card id to scroll to & open when GuideMateriel mounts (from a fiche espèce or une autre carte gear)
   catchSlot: string | null; // slot of the catch shown on the prise-detail screen
@@ -211,6 +220,7 @@ const makeInitialState = (): AppState => {
     dept: prefs.dept,
     deptChosen: prefs.deptChosen,
     justAdded: null,
+    photoRatee: false,
     // Les onze champs de contexte de navigation en un seul endroit — soit ceux
     // du lien profond, soit tous à zéro. Les lister un par un ici, c'était la
     // porte ouverte à en oublier un au prochain écran ajouté.

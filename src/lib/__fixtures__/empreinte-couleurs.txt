@@ -43,6 +43,7 @@
 .add-row|background|#ffffff
 .add-row|border|1.5px dashed #cfc9ba
 .add-row|color|#1d6e42
+.added-banner-photo|border-top|1px solid #b4d6c0
 .added-banner|background|#e9f2ec
 .added-banner|border|1px solid #b4d6c0
 .added-banner|color|#14532b
