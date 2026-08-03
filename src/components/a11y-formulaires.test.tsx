@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { StoreProvider } from "../store";
 import { CatchEditor } from "./CatchEditor";
+import { ProfileHeader } from "./ProfileHeader";
 import { RecipeEditor } from "../screens/RecipeEditor";
 import { Ecrevisses } from "../screens/Ecrevisses";
 import { Materiel } from "../screens/Materiel";
@@ -21,9 +22,10 @@ import { Materiel } from "../screens/Materiel";
  * `htmlFor` (components/RegTiers.tsx). Les 4 labels d'Écrevisses enveloppent
  * déjà leur champ (association implicite, valide).
  *
- * CE QUE CE BALAYAGE NE COUVRE PAS : ProfileHeader (8 labels), Carte (5) et
- * Prise (1) appartiennent à d'autres lots de la vague — ils ne sont ni montés
- * ni corrigés ici. Voir le rapport du lot.
+ * CE QUE CE BALAYAGE NE COUVRE PAS : Carte (5) et Prise (1) appartiennent à
+ * d'autres lots de la vague — ils ne sont ni montés ni corrigés ici. Voir le
+ * rapport du lot. (ProfileHeader, 8 labels, est désormais couvert par le test
+ * ci-dessous.)
  */
 
 vi.mock("../lib/db", () => ({
@@ -114,5 +116,18 @@ describe("Formulaires — chaque libellé désigne son champ", () => {
     const { container } = dansStore(<Ecrevisses />);
     await screen.findByRole("heading", { level: 1 });
     expect(labelsOrphelins(container)).toEqual([]);
+  });
+
+  it("ProfileHeader : le formulaire d'édition n'a aucun label orphelin", async () => {
+    const user = userEvent.setup();
+    const { container } = dansStore(<ProfileHeader />);
+
+    await user.click(screen.getByRole("button", { name: /Modifier le profil/ }));
+
+    expect(labelsOrphelins(container)).toEqual([]);
+    // Et les libellés principaux atteignent bien leur champ.
+    expect(screen.getByLabelText(/Nom \/ pseudo/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/AAPPMA/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Carte de pêche — type/)).toBeInTheDocument();
   });
 });

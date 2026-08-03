@@ -1242,8 +1242,9 @@ function SpotFormPanel(props: {
       </div>
       <div className="sheet-body">
         <div className="field">
-          <label>Nom du spot *</label>
+          <label htmlFor="spot-name">Nom du spot *</label>
           <input
+            id="spot-name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="Le coude sous le pont, la fosse aux sandres…"
@@ -1252,7 +1253,7 @@ function SpotFormPanel(props: {
         </div>
 
         <div className="field">
-          <label>Espèces vues / prises ici</label>
+          <label htmlFor="spot-species">Espèces vues / prises ici</label>
           {form.species.length > 0 && (
             <div className="chips" style={{ marginBottom: 8 }}>
               {form.species.map((id) => (
@@ -1262,7 +1263,7 @@ function SpotFormPanel(props: {
               ))}
             </div>
           )}
-          <input value={spq} onChange={(e) => setSpq(e.target.value)} placeholder="Ajouter une espèce…" />
+          <input id="spot-species" value={spq} onChange={(e) => setSpq(e.target.value)} placeholder="Ajouter une espèce…" />
           {matches.length > 0 && (
             <div className="chips" style={{ marginTop: 8 }}>
               {matches.map((s) => (
@@ -1282,8 +1283,9 @@ function SpotFormPanel(props: {
         </div>
 
         <div className="field">
-          <label>Technique / leurre / appât</label>
+          <label htmlFor="spot-technique">Technique / leurre / appât</label>
           <input
+            id="spot-technique"
             value={form.technique}
             onChange={(e) => setForm({ ...form, technique: e.target.value })}
             placeholder="Leurre souple 10 cm au ras du fond, dérive lente…"
@@ -1291,8 +1293,9 @@ function SpotFormPanel(props: {
         </div>
 
         <div className="field">
-          <label>Meilleur moment</label>
+          <label htmlFor="spot-best">Meilleur moment</label>
           <input
+            id="spot-best"
             value={form.best}
             onChange={(e) => setForm({ ...form, best: e.target.value })}
             placeholder="Aube en été, après une crue, coup du soir…"
@@ -1300,8 +1303,9 @@ function SpotFormPanel(props: {
         </div>
 
         <div className="field">
-          <label>Note (accès, coin précis…)</label>
+          <label htmlFor="spot-note">Note (accès, coin précis…)</label>
           <textarea
+            id="spot-note"
             value={form.note}
             onChange={(e) => setForm({ ...form, note: e.target.value })}
             rows={2}

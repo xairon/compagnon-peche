@@ -388,8 +388,9 @@ export function Prise() {
 
           {state.priseStep === "maille" && sp && effectiveMaille(sp, state.dept).cm > 0 && (
             <div className="field" style={{ marginTop: 14 }}>
-              <label>Taille mesurée (cm) — facultatif, pré-remplira le carnet</label>
+              <label htmlFor="prise-taille-maille">Taille mesurée (cm) — facultatif, pré-remplira le carnet</label>
               <input
+                id="prise-taille-maille"
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
                 inputMode="numeric"

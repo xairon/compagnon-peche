@@ -104,20 +104,21 @@ export function ProfileHeader() {
     return (
       <div key="edit" className="ph-edit">
         <div className="field">
-          <label>Nom / pseudo</label>
-          <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Votre nom" />
+          <label htmlFor="ph-name">Nom / pseudo</label>
+          <input id="ph-name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Votre nom" />
         </div>
         <div className="field">
-          <label>Bio</label>
-          <input value={draft.bio} onChange={(e) => setDraft({ ...draft, bio: e.target.value })} placeholder="Une phrase sur vous" />
+          <label htmlFor="ph-bio">Bio</label>
+          <input id="ph-bio" value={draft.bio} onChange={(e) => setDraft({ ...draft, bio: e.target.value })} placeholder="Une phrase sur vous" />
         </div>
         <div className="field">
-          <label>Région</label>
-          <input value={draft.region} onChange={(e) => setDraft({ ...draft, region: e.target.value })} placeholder="Loir-et-Cher" />
+          <label htmlFor="ph-region">Région</label>
+          <input id="ph-region" value={draft.region} onChange={(e) => setDraft({ ...draft, region: e.target.value })} placeholder="Loir-et-Cher" />
         </div>
         <div className="field">
-          <label>AAPPMA (association de pêche)</label>
+          <label htmlFor="ph-aappma">AAPPMA (association de pêche)</label>
           <input
+            id="ph-aappma"
             value={draft.aappma ?? ""}
             onChange={(e) => setDraft({ ...draft, aappma: e.target.value })}
             placeholder="AAPPMA de…"
@@ -126,8 +127,9 @@ export function ProfileHeader() {
         {/* Le type décide de la durée réelle : une journalière ne vaut pas
             jusqu'au 31 décembre. C'est la première question, pas la dernière. */}
         <div className="field">
-          <label>Carte de pêche — type</label>
+          <label htmlFor="ph-carte-type">Carte de pêche — type</label>
           <select
+            id="ph-carte-type"
             value={draft.carte || draft.carteAnnee ? typeDraft : ""}
             onChange={(e) => {
               const v = e.target.value;
@@ -150,8 +152,9 @@ export function ProfileHeader() {
         {(draft.carte || draft.carteAnnee) &&
           (TYPES_ANNUELS.includes(typeDraft) ? (
             <div className="field">
-              <label>Année de validité</label>
+              <label htmlFor="ph-carte-annee">Année de validité</label>
               <select
+                id="ph-carte-annee"
                 value={carteDraft?.annee ?? ""}
                 onChange={(e) =>
                   majCarte({ annee: e.target.value ? Number(e.target.value) : undefined })
@@ -167,8 +170,9 @@ export function ProfileHeader() {
             </div>
           ) : (
             <div className="field">
-              <label>Premier jour de validité</label>
+              <label htmlFor="ph-carte-debut">Premier jour de validité</label>
               <input
+                id="ph-carte-debut"
                 type="date"
                 value={carteDraft?.debut ?? ""}
                 onChange={(e) => majCarte({ debut: e.target.value || undefined })}
@@ -178,8 +182,9 @@ export function ProfileHeader() {
 
         {(draft.carte || draft.carteAnnee) && (
           <div className="field">
-            <label>Réciprocité (sur votre carte)</label>
+            <label htmlFor="ph-carte-recip">Réciprocité (sur votre carte)</label>
             <select
+              id="ph-carte-recip"
               value={carteDraft?.reciprocite ?? ""}
               onChange={(e) =>
                 majCarte({ reciprocite: (e.target.value || undefined) as Reciprocite | undefined })
