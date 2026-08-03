@@ -44,23 +44,29 @@ export default defineConfig({
       // désactive le lendemain ne protège rien : celui-ci doit tenir tant que
       // personne ne retire de test, et céder dès que quelqu'un en retire un.
       //
-      // Mesuré le 31/07/2026, après ce lot :
-      //   instructions 49,72 %  ·  branches 41,48 %
-      //   fonctions    39,77 %  ·  lignes   49,73 %
+      // ILS SE REMESURENT AVEC CHAQUE LOT DE TESTS, sinon ils cessent de faire
+      // ce travail sans le dire. Posés à 48/40/38/48 sur le mesuré du
+      // 31/07/2026 (49,72 %), ils ont été retrouvés le 03/08/2026 face à un
+      // dépôt à 69 % : 20 points de mou, de quoi supprimer un tiers de la suite
+      // sans que la CI bronche. La marge doit rester d'environ 1,5 point.
       //
-      // Posés ~1,5 point en dessous. La marge absorbe ce qu'un remaniement
-      // honnête déplace (un fichier scindé, une branche morte retirée) sans
-      // absorber une perte réelle : le plus petit des fichiers de test ajoutés
-      // ici pèse à lui seul plus que cette marge.
+      // Mesuré le 03/08/2026, après ce lot (1900 tests) :
+      //   instructions 69,06 %  ·  branches 62,22 %
+      //   fonctions    60,05 %  ·  lignes   70,60 %
       //
-      // Ils ne sont PAS un objectif. 49 % veut dire que la moitié de l'app
-      // n'est toujours pas exercée — dix-huit écrans à 0 % en tête. Monter les
-      // seuils sans écrire les tests d'abord ne ferait que casser le build.
+      // La marge absorbe ce qu'un remaniement honnête déplace (un fichier
+      // scindé, une branche morte retirée) sans absorber une perte réelle : le
+      // plus petit des fichiers de test du dépôt pèse à lui seul plus que ça.
+      //
+      // Ils ne sont PAS un objectif. 69 % veut dire qu'un tiers de l'app n'est
+      // toujours pas exercé — `screens/Carte.tsx` à 0 % sur 1 306 lignes en
+      // tête. Monter les seuils sans écrire les tests d'abord ne ferait que
+      // casser le build.
       thresholds: {
-        statements: 48,
-        branches: 40,
-        functions: 38,
-        lines: 48,
+        statements: 67.5,
+        branches: 60.5,
+        functions: 58.5,
+        lines: 69,
       },
     },
   },

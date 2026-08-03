@@ -10,12 +10,40 @@ Prompt de reprise autonome. À coller tel quel dans une nouvelle conversation.
 eau douce en France. IndexedDB (`idb-keyval`) pour les données, localStorage pour les
 préférences critiques au premier rendu. Tests Vitest + Testing Library.
 
-État à la reprise : **1048 tests verts, lint 0, `tsc` 0, build OK, arbre propre**.
-Dernier commit `302e31c`. Des commits sont en avance sur le déploiement.
+État à la reprise : **1898 tests verts (+ 2 expected-fail), lint 0, `tsc` 0, build OK,
+arbre propre**. Couverture mesurée le 03/08/2026 : 68,7 % instructions · 61,9 % branches ·
+59,6 % fonctions · 70,3 % lignes. Dernier commit `3e455d6`.
 
 > **Session du 31/07/2026** — les trois demandes explicites (A1, A2, A3) et
 > **tout l'audit des sources (B1 à B6)** sont faits. 841 → 1048 tests.
-> Il reste la **v1.0 publique (section C)**, intacte.
+>
+> **⚠️ Mise à jour du 03/08/2026 — la section C n'est plus « intacte ».**
+> Elle a été écrite le 31/07/2026 et une grande partie a été livrée depuis, sans
+> que ce document soit remis à jour. Les constats ci-dessous ont été **re-mesurés
+> le 03/08/2026** et sont FAUX tels qu'ils sont écrits en section C :
+>
+> | Constat de la section C | Mesuré le 03/08/2026 |
+> |---|---|
+> | « zéro `<main>`/`<nav>` sur 26 écrans » | **55** occurrences |
+> | « 33 `<label>`, `grep htmlFor` → **0** » | **20** `htmlFor` |
+> | « `grep pushState\|popstate` → 0, le retour Android ferme l'app » | **12** — `lib/nav-historique.ts` |
+> | « mentions légales manquantes » | `screens/Mentions.tsx` + `data/mentions-legales.ts` |
+> | « couverture réelle 24,26 % » | **68,7 %**, seuils tenus en CI |
+> | « la taille n'est jamais confrontée à la maille » | corrigé — `sousLaMaille` / `faitLaMaille` dans `lib/prise.ts` |
+> | « `Fiche.tsx:180` fait `.slice(0, 2)` » | plus aucune occurrence |
+> | « manifest sans `screenshots`, `shortcuts` ni `id` ; aucune balise `og:` » | `lib/manifest.ts` porte les trois ; **12** balises `og:` dans `index.html` |
+> | « pas d'aide à l'installation iOS » | `components/InstallIOS.tsx` |
+> | « précache 7,6 Mo tout-ou-rien » | découpé — `lib/precache-decoupe.ts`, noyau 3,5 Mo |
+> | `theme-sombre` (section D) | livré — `lib/theme.ts`, `themeEffectif`, `lib/contraste-palette.ts` |
+>
+> **Ce qui reste vrai, vérifié le 03/08/2026** : `e2e-playwright-absent` (aucun
+> `playwright.config`, aucun dossier `e2e/`) et `Carte.tsx` sans aucun test de
+> rendu (0 % de couverture sur 1 306 lignes).
+>
+> **Le reste de la section C et de la section D n'a PAS été re-vérifié.** Les
+> tableaux d'effort qui suivent ne sont donc plus un plan fiable : refaire le
+> relevé avant de s'en servir, plutôt que de croire des chiffres d'il y a trois
+> jours.
 
 Trois documents portent l'analyse, à lire avant de commencer :
 
@@ -162,5 +190,10 @@ propose des endémiques corses et pyrénéennes) · `e2e-playwright-absent` (L) 
   ligne de commande ; passer par le navigateur dans ce cas.
 - Attention à la version d'API : l'app utilise `qualite_rivieres` **v2** et `hydrometrie` **v2**,
   mais `temperature`, `ecoulement` et `etat_piscicole` en **v1**.
-- `tsconfig.node.json` doit inclure tout fichier importé par `vite.config.ts`
-  (aujourd'hui `src/lib/csp.ts`), sinon le build casse.
+- `tsconfig.node.json` doit inclure tout fichier importé par `vite.config.ts`, sinon le build
+  casse. Ils sont quatre aujourd'hui (03/08/2026) : `csp.ts`, `sw-delais.ts`, `net-bornes.ts`
+  et `precache-decoupe.ts` — la liste est commentée dans le fichier lui-même.
+- `tsconfig.json` restreint `types` à une liste explicite. Une dépendance qui fournit des types
+  GLOBAUX doit y être inscrite nommément : ajouter `@types/geojson` aux `devDependencies` ne
+  suffisait pas, il a fallu `"geojson"` dans `types` pour éteindre 12 TS2503 (migration
+  maplibre-gl 6, commit `e36eb65`).

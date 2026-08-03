@@ -575,15 +575,12 @@ export function texteSautees(sp: Species, sautees: PriseEtape[]): string {
   return `L'app ne connaît ${quoi} pour ${sp.name} — ni au socle national, ni dans les arrêtés qu'elle porte. Un arrêté local peut en fixer : vérifiez celui en vigueur.`;
 }
 
-export const STEP_ORDER: Record<string, number> = {
-  statut: 1,
-  maille: 2,
-  quota: 3,
-  choix: 4,
-  kill: 5,
-  release: 5,
-};
-
-// PREV_STEP a disparu avec ce lot : le chemin de retour n'est plus déduit d'une
-// table parallèle mais dépilé de l'historique du navigateur, qui sait par où on
-// est réellement passé (y compris les raccourcis, que cette table oubliait).
+// Deux tables figées ont vécu ici, et toutes deux ont disparu pour la même
+// raison : elles décrivaient le parcours en parallèle du code qui le parcourt.
+//
+// · PREV_STEP — le chemin de retour, désormais dépilé de l'historique du
+//   navigateur, qui sait par où on est réellement passé (y compris les
+//   raccourcis, que cette table oubliait).
+// · STEP_ORDER — le rang de l'étape, d'où le compteur tirait son « / 5 ». Le
+//   parcours est calculé espèce par espèce depuis `prise-etapes.ts` : le rang
+//   est un `indexOf` dans la vraie liste, et cette table ne servait plus rien.
