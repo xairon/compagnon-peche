@@ -4441,7 +4441,17 @@ a:hover {
 }
 .cell-i,
 .season-i {
-  color: var(--muted) !important;
+  /* Sans !important : la règle plus spécifique `.verdict .cell-i`
+     (--brass-ink, AA mesuré 4,57-5,16:1) doit l'emporter dans les cellules
+     de verdict — le !important la neutralisait silencieusement, et le ⓘ
+     restait gris même en thème sombre. */
+  color: var(--muted);
+}
+/* Focus programme (navigation d'écran, cf. App.tsx) : le h1 ramené au focus
+   ne dessine pas d'anneau — c'est un repère de navigation, pas un élément
+   tabulable (tabIndex -1, jamais atteint au clavier). */
+main h1:focus {
+  outline: none;
 }
 .sheet-sp:disabled {
   opacity: 0.72;

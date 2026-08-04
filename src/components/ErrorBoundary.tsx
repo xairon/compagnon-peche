@@ -26,7 +26,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
   render() {
     if (this.state.error) {
       return (
-        <div className="eb">
+        <main className="eb">
           <div className="eb-card">
             <div className="eb-emoji">🎣</div>
             <h1>Une erreur est survenue</h1>
@@ -57,7 +57,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
               </pre>
             </details>
           </div>
-        </div>
+        </main>
       );
     }
     return this.props.children;

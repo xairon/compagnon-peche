@@ -22,7 +22,7 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
   const plate = `${import.meta.env.BASE_URL}assets/species-sm/brochet.webp`;
 
   return (
-    <div className="onb2">
+    <main className="onb2">
       <div className="onb2-sheet">
         <div className="onb2-kicker">Édition hors-ligne · Eau douce — France</div>
         <h1 className="onb2-title">Compagnon de pêche</h1>
@@ -92,6 +92,6 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
           </button>
         )}
       </div>
-    </div>
+    </main>
   );
 }

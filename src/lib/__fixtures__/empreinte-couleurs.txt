@@ -187,7 +187,7 @@
 .ce-photo-add|color|#6b675c
 .ce-photo-x|background|rgba(20, 30, 25, 0.72)
 .ce-photo-x|color|#ffffff
-.cell-i, .season-i|color|#6b675c !important
+.cell-i, .season-i|color|#6b675c
 .cf-pill.due|background|#b33a2e
 .cf-pill.due|border-color|#b33a2e
 .cf-pill|background|#0f1f16

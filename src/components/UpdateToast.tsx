@@ -46,7 +46,7 @@ export function UpdateToast({
       ? `attend depuis ${jours} jour${jours > 1 ? "s" : ""}`
       : `a déjà été reportée ${maj?.reports ?? 0} fois`;
   return (
-    <div className="update-toast">
+    <div className="update-toast" role="status">
       {reportable ? (
         <span>Nouvelle version disponible</span>
       ) : (

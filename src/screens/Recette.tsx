@@ -29,7 +29,10 @@ export function Recette() {
     .filter(Boolean);
 
   return (
-    <div className="screen" style={{ display: "block" }}>
+    <main className="screen" style={{ display: "block" }}>
+      {/* Le titre vit déjà dans le hero ; ce h1 invisible donne un repère et
+          une annonce aux lecteurs d'écran (motif de Recettes.tsx). */}
+      <h1 className="sr-only">{rec.title}</h1>
       <div className="recipe-hero recipe-hero-v2">
         {hasMedia("recipe", rec.id) ? (
           <Media kind="recipe" id={rec.id} placeholder={rec.title} />
@@ -171,6 +174,6 @@ export function Recette() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   );
 }

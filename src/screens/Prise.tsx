@@ -119,6 +119,12 @@ export function Prise() {
 
   const setPrise = (s: typeof state.priseStep) => set({ priseStep: s });
 
+  // Garde « monté » : une géolocalisation qui se résout après la sortie de
+  // l'écran ne doit pas écrire sur un composant démonté (standard du dépôt,
+  // cf. Accueil.tsx et Especes.tsx qui documentent la règle).
+  const mountedRef = useRef(true);
+  useEffect(() => () => void (mountedRef.current = false), []);
+
   const choisirPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
@@ -143,10 +149,12 @@ export function Prise() {
     setMsgLieu("Localisation…");
     locate()
       .then(({ lat, lon }) => {
+        if (!mountedRef.current) return;
         setGps({ lat, lon });
         setMsgLieu(null);
       })
       .catch(() => {
+        if (!mountedRef.current) return;
         setGps(null);
         setNoterLieu(false);
         setMsgLieu("Position indisponible — la prise sera notée sans lieu.");
@@ -223,9 +231,9 @@ export function Prise() {
   };
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div style={{ padding: "22px 18px 8px" }}>
-        <div className="h1">Ma prise</div>
+        <h1 className="h1">Ma prise</h1>
         <div className="h-sub">Garder ou relâcher — le bon geste, tout de suite</div>
       </div>
 
@@ -354,7 +362,7 @@ export function Prise() {
           )}
 
           {pv.banner && (
-            <div className={"verdict-banner " + (pv.tone || "")}>
+            <div role="status" className={"verdict-banner " + (pv.tone || "")}>
               {pv.tone === "bad" && (
                 <Icon d={ICONS.alert} size={22} stroke="currentColor" width={1.8} />
               )}
@@ -495,6 +503,6 @@ export function Prise() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

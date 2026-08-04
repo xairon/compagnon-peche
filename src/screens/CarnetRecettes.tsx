@@ -111,6 +111,7 @@ export function CarnetRecettes() {
         <button
           className="chip"
           style={chipStyle(!filters.especeId)}
+          aria-pressed={!filters.especeId}
           onClick={() => setFilters((f) => ({ ...f, especeId: undefined }))}
         >
           Toutes espèces
@@ -120,6 +121,7 @@ export function CarnetRecettes() {
             key={id}
             className="chip"
             style={chipStyle(filters.especeId === id)}
+            aria-pressed={filters.especeId === id}
             onClick={() => setFilters((f) => ({ ...f, especeId: id }))}
           >
             {resolveSpeciesRef(id).name}
@@ -131,6 +133,7 @@ export function CarnetRecettes() {
         <button
           className="chip"
           style={chipStyle(!filters.maxMinutes)}
+          aria-pressed={!filters.maxMinutes}
           onClick={() => setFilters((f) => ({ ...f, maxMinutes: undefined }))}
         >
           Toutes durées
@@ -138,6 +141,7 @@ export function CarnetRecettes() {
         <button
           className="chip"
           style={chipStyle(filters.maxMinutes === 20)}
+          aria-pressed={filters.maxMinutes === 20}
           onClick={() => setFilters((f) => ({ ...f, maxMinutes: 20 }))}
         >
           ≤ 20 min
@@ -145,6 +149,7 @@ export function CarnetRecettes() {
         <button
           className="chip"
           style={chipStyle(filters.maxMinutes === 45)}
+          aria-pressed={filters.maxMinutes === 45}
           onClick={() => setFilters((f) => ({ ...f, maxMinutes: 45 }))}
         >
           ≤ 45 min
@@ -152,6 +157,7 @@ export function CarnetRecettes() {
         <button
           className="chip"
           style={chipStyle(filters.bivouacOnly === true)}
+          aria-pressed={filters.bivouacOnly === true}
           onClick={() => setFilters((f) => ({ ...f, bivouacOnly: !f.bivouacOnly }))}
         >
           🏕️ Bivouac

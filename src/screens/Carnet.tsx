@@ -7,6 +7,7 @@ import { ProfileHeader } from "../components/ProfileHeader";
 import { CatchEditor } from "../components/CatchEditor";
 import { usePhotoUrl } from "../lib/photos";
 import { uid, frDate } from "../lib/helpers";
+import { useNow } from "../lib/now";
 import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
 import { upcomingSeasonReminders, type SeasonReminder } from "../lib/season-reminders";
@@ -31,7 +32,9 @@ export function Carnet() {
   const added = catches.find((c) => c.slot === state.justAdded);
   // No scheduled notifications (unreliable in a PWA, see lib/notify.ts) — the
   // reminder simply shows up whenever the carnet is opened.
-  const seasonReminders = upcomingSeasonReminders(new Date());
+  // L'horloge vient de useNow (cadence minute), jamais de new Date() dans le
+  // rendu : le calcul reste pur et se rafraîchit au passage d'une date.
+  const seasonReminders = upcomingSeasonReminders(new Date(useNow()));
   const total = catches.length;
   const speciesCount = new Set(catches.map((c) => c.spid)).size;
   const record = catches.reduce((m, c) => (c.n > m ? c.n : m), 0);

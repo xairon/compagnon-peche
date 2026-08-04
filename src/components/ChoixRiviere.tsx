@@ -79,6 +79,7 @@ export function ChoixRiviere({
         <button
           type="button"
           className={`riv-item riv-item--auto${choisie ? "" : " riv-item--actif"}`}
+          aria-pressed={!choisie}
           onClick={() => onChoisir(null)}
         >
           <span className="riv-nom">Automatique — la station la plus proche</span>
@@ -105,6 +106,7 @@ export function ChoixRiviere({
                   <button
                     type="button"
                     className={`riv-item${actif ? " riv-item--actif" : ""}`}
+                    aria-pressed={actif}
                     onClick={() => onChoisir({ nom: r.nom, cles: r.cles })}
                   >
                     <span className="riv-nom">{r.nom}</span>

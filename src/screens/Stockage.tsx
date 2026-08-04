@@ -111,12 +111,12 @@ export function Stockage() {
   });
 
   return (
-    <div className="screen">
+    <main className="screen">
       <div className="topbar">
         <button className="back" onClick={back} aria-label="Retour">
           ‹
         </button>
-        <div className="topbar-title">Stockage & données</div>
+        <h1 className="topbar-title">Stockage & données</h1>
       </div>
 
       <div className="pad">
@@ -260,6 +260,6 @@ export function Stockage() {
           sauvegarde de temps en temps.
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -712,6 +712,7 @@ export function Fiche() {
               key={v.k}
               type="button"
               className={"cell" + (explain === v.k ? " cell-active" : "")}
+              aria-expanded={explain === v.k}
               onClick={() => toggleExplain(v.k)}
             >
               <div className="k">

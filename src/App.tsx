@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useStore } from "./store-hooks";
 import { BottomNav } from "./components/BottomNav";
 import { Icon } from "./components/Icon";
@@ -103,6 +103,25 @@ export function App() {
     storageInfo().catch(() => {});
   }, []);
 
+  // Le focus suit le changement d'écran : sans rien, il restait sur l'élément
+  // démonté ou retombait sur <body> — et le passage en lazy()/Suspense rendait
+  // un fallback « Chargement… » sans repère. On ramène le focus au titre de
+  // l'écran (rendu focusable une fois, anneau masqué par CSS : c'est une
+  // navigation programme, pas un tab). Les écrans d'accueil (Onboarding) et
+  // d'erreur sont exclus : ils ne passent pas par state.screen.
+  const screenRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!onboarded) return;
+    const t = window.setTimeout(() => {
+      const el = screenRef.current?.querySelector<HTMLElement>("main h1");
+      if (el) {
+        el.tabIndex = -1;
+        el.focus({ preventScroll: true });
+      }
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, [state.screen, onboarded]);
+
   useEffect(() => {
     const on = () => setOffline(false);
     const off = () => setOffline(true);
@@ -145,6 +164,7 @@ export function App() {
 
   return (
     <div className="app-frame" data-big={state.bigUI ? "1" : undefined}>
+      <div ref={screenRef}>
       {/* Per-screen boundary (keyed by screen so it resets on navigation): a
           render error in one screen shows recovery there while nav/chrome survive. */}
       <ErrorBoundary key={s}>
@@ -179,6 +199,7 @@ export function App() {
         {s === "technique" && <TechniqueDetail />}
       </Suspense>
       </ErrorBoundary>
+      </div>
 
       {/* La phrase suit l'état RÉEL de la réserve. Depuis que le précache est
           découpé (29 entrées au lieu de 250), « toutes les fiches restent
