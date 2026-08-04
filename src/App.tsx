@@ -163,8 +163,12 @@ export function App() {
   const showCrayfishPill = showNav && s !== "ecrevisses";
 
   return (
-    <div className="app-frame" data-big={state.bigUI ? "1" : undefined}>
-      <div ref={screenRef}>
+    <div className="app-frame" data-big={state.bigUI ? "1" : undefined} ref={screenRef}>
+      {/* NB : PAS de wrapper autour des écrans — le ref sert au focus, pas au
+          layout : .screen (flex: 1, overflow-y: auto) doit rester un ENFANT
+          DIRECT de .app-frame (flex column à hauteur fixe, overflow: hidden).
+          Un wrapper intercalé tuait le flex de l'écran et poussait BottomNav
+          hors du cadre (régression ea4edbb, verrouillée par src/App.test.tsx). */}
       {/* Per-screen boundary (keyed by screen so it resets on navigation): a
           render error in one screen shows recovery there while nav/chrome survive. */}
       <ErrorBoundary key={s}>
@@ -199,7 +203,6 @@ export function App() {
         {s === "technique" && <TechniqueDetail />}
       </Suspense>
       </ErrorBoundary>
-      </div>
 
       {/* La phrase suit l'état RÉEL de la réserve. Depuis que le précache est
           découpé (29 entrées au lieu de 250), « toutes les fiches restent

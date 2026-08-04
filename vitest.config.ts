@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
 
 // Test config kept out of vite.config.ts on purpose: adding a `test` block there
 // forces Vite's plugin types through vitest's bundled copy of them, and the two
@@ -8,6 +9,16 @@ import { defineConfig } from "vitest/config";
 // Logic tests run in plain node (vitest's default). Screen tests opt into jsdom
 // with a `// @vitest-environment jsdom` docblock, so the fast majority stays fast.
 export default defineConfig({
+  // vite-plugin-pwa n'existe pas dans cette config (volontairement) : son
+  // module virtuel `virtual:pwa-register` doit pointer vers un stub, sinon
+  // importer App (qui passe par lib/pwa) fait échouer la transform.
+  resolve: {
+    alias: {
+      "virtual:pwa-register": fileURLToPath(
+        new URL("./src/test-utils/virtual-pwa-register.ts", import.meta.url),
+      ),
+    },
+  },
   test: {
     setupFiles: ["./src/test-setup.ts"],
     // Only the real sources. Agent worktrees under .claude/ are full copies of
