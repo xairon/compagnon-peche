@@ -4,6 +4,7 @@ import { StoreProvider } from "./store";
 import { App } from "./App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { initPwa } from "./lib/pwa";
+import { prefetchHeavyScreens } from "./lib/prefetch";
 import { installGlobalErrorHandlers } from "./lib/global-errors";
 import "./fonts.css";
 import "./styles.css";
@@ -25,3 +26,8 @@ createRoot(document.getElementById("root")!).render(
 
 // Register the service worker (prompt mode) + capture the install prompt.
 initPwa();
+
+// L'écran Carte (MapLibre ≈ 970 Ko) se précharge pendant l'inactivité du
+// démarrage : le premier passage sur l'onglet Carte ne paie plus le
+// téléchargement. Voir lib/prefetch.ts.
+prefetchHeavyScreens();
