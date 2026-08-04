@@ -139,6 +139,30 @@ export function priseView(
         ],
         actions: [btn("Gestes pour bien relâcher", "release", "primary")],
       };
+    // Exception L432-10, même garde que speciesStatus (lib/statut.ts) : pour
+    // les gobies ponto-caspiens et la tête-de-boule, la base légale interdit
+    // d'INTRODUIRE l'espèce ailleurs, pas de la relâcher sur place (elle y est
+    // déjà établie). « NE PAS RELÂCHER VIVANT » dirait au pêcheur de faire la
+    // seule chose que la loi ne lui interdit pas — et les deux surfaces
+    // (verdict et pastille) se contrediraient pour la même espèce.
+    if (sp.invasive && sp.invasiveBasis?.includes("L432-10"))
+      return {
+        ...V,
+        bd: "#B8860B",
+        kickFg: "#8A6D0B",
+        titleFg: "#5C4708",
+        tone: "warn",
+        banner: "NE PAS DÉPLACER",
+        kicker: "Statut légal — " + sp.invasiveBasis,
+        title: "Interdit de l'introduire ailleurs — relâcher sur place est légal",
+        paras: [
+          sp.name +
+            " est une espèce exotique envahissante réglementée (" +
+            sp.invasiveBasis +
+            ") : l'article L432-10 du code de l'environnement interdit de l'introduire dans le milieu naturel — pas de la relâcher là où elle a été capturée. Ne la transportez pas vers un autre plan d'eau ; la relâcher sur place est légal.",
+        ],
+        actions: [btn("Gestes pour bien relâcher", "release", "primary")],
+      };
     if (sp.invasive)
       return {
         ...V,

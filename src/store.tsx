@@ -28,7 +28,8 @@ import {
   type Theme,
   type ThemeEffectif,
 } from "./lib/theme";
-import { frDate, isoDay, uid } from "./lib/helpers";
+import { frDate, isoDay, nowHM, uid } from "./lib/helpers";
+import { getFreshConditions } from "./lib/conditionsCache";
 import { addSession, reconcileSessions } from "./lib/ecrevisses";
 import {
   CTX_DEFAUT,
@@ -582,9 +583,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           sp: sp.name,
           spid: sp.id,
           iso: isoDay(),
+          time: nowHM(),
           size: cm ? cm + " cm" : "— cm",
           n: cm || 0,
           date: frDate(),
+          // L'instantané de conditions le plus frais : le geste unique a
+          // l'horloge et la météo sous la main, comme le formulaire complet.
+          // Sans lui, ces prises manquaient à « Par moment de la journée »
+          // (dayPart) et à l'analyse des conditions (analysePrises) — les
+          // deux tests de store-carnet.test.tsx verrouillent le comportement.
+          conditions: getFreshConditions() ?? undefined,
           place: s.prisePlace || "—", // pre-filled when the flow started from a spot
           kept,
           slot: uid("p"),

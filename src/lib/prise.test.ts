@@ -41,6 +41,26 @@ describe("priseView — statut (verdict keep/release)", () => {
     expect(v?.tone).toBe("bad");
   });
 
+  it("invasive L432-10 (gobie ponto-caspien) → NE PAS DÉPLACER, tone warn — jamais 'NE PAS RELÂCHER VIVANT'", () => {
+    // Miroir de statut.test.ts : L432-10 interdit d'introduire l'espèce
+    // ailleurs, pas de la relâcher sur place. Le verdict ne doit pas être
+    // plus sévère que la loi.
+    const v = priseView(
+      sp({
+        season: "invasive-year",
+        invasive: true,
+        invasiveBasis: "L432-10 code de l'environnement · arrêté du 17 déc. 1985",
+      }),
+      "statut",
+      Q,
+      undefined,
+      NOW,
+    );
+    expect(v?.banner).toBe("NE PAS DÉPLACER");
+    expect(v?.tone).toBe("warn");
+    expect(v?.banner).not.toBe("NE PAS RELÂCHER VIVANT");
+  });
+
   it("espèce ordinaire ouverte → PÊCHE OUVERTE, tone good", () => {
     const v = priseView(sp({ season: "toujours" }), "statut", Q, undefined, NOW);
     expect(v?.banner).toBe("PÊCHE OUVERTE");

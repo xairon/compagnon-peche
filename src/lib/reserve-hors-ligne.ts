@@ -44,6 +44,7 @@ import {
   TECHNIQUE_MEDIA,
 } from "../data/media";
 import { LOCAL_KNOT_MEDIA } from "../data/knot-diagrams";
+import { fetchT } from "./net";
 
 /** Combien de téléchargements de front. Assez pour ne pas payer 221 latences
  *  l'une après l'autre, assez peu pour ne pas monopoliser le lien de quelqu'un
@@ -247,7 +248,15 @@ async function executer(opts: OptionsPreparation): Promise<EtatReserve> {
           poser({ presents });
           continue;
         }
-        const res = await fetch(new Request(url, perime ? { cache: "no-cache" } : {}));
+        const res = await fetchT(new Request(url, perime ? { cache: "no-cache" } : {}), {
+          // Un fetch nu pendait indéfiniment sur une liaison flaky : un des
+          // quatre workers restait bloqué, Promise.all ne résolvait jamais et
+          // l'UI promettait « photos en cours de téléchargement » pour
+          // toujours. fetchT porte timeout + signal (même budget que le
+          // réseau de l'app).
+          signal: opts.signal,
+          timeout: 30_000,
+        });
         // Un 404 mis en cache serait servi hors ligne à la place de l'image :
         // pire que l'absence, parce qu'il ne se rattrape plus.
         if (!res.ok) throw new Error(String(res.status));
@@ -255,6 +264,9 @@ async function executer(opts: OptionsPreparation): Promise<EtatReserve> {
         presents++;
         poser({ presents });
       } catch {
+        // Un arrêt demandé (signal) n'est pas un échec : on s'arrête
+        // proprement, sans compter le fichier comme perdu.
+        if (opts.signal?.aborted) return;
         echecs++;
         poser({ echecs });
       }

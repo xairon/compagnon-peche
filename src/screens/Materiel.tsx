@@ -3,6 +3,7 @@ import { get, set as idbSet } from "idb-keyval";
 import { useStore } from "../store-hooks";
 import { uid } from "../lib/helpers";
 import { STORES } from "../lib/stores";
+import { reportPersistError } from "../lib/storage";
 import { GEAR_CATEGORIES, CAT_LABEL, GEAR_GUIDE, type GearCategory } from "../data/gear";
 import { GEAR_CARDS } from "../data/gear-cards";
 import { Media } from "../components/Media";
@@ -46,7 +47,13 @@ export function Materiel() {
   const saveGear = (next: GearItem[]) => setGear(next); // store action persists
   const saveBundles = (next: Bundle[]) => {
     setBundles(next);
-    idbSet(STORES.bundles, next);
+    idbSet(STORES.bundles, next).catch((e) => {
+      // L'état reste optimiste en mémoire (comme db.ts), mais l'utilisateur
+      // doit savoir que l'ensemble ne survivra pas au rechargement : sans ce
+      // rapport, un quota plein ou le mode privé faisait « créer » un ensemble
+      // qui disparaissait au lancement suivant, en silence.
+      reportPersistError(e);
+    });
   };
 
   const addGear = () => {

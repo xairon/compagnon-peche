@@ -220,30 +220,13 @@ describe("saisir une prise depuis « Ma prise »", () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ⚠  DÉFAUT CONNU, NON CORRIGÉ ICI  ⚠
-//
-// Les deux tests ci-dessous sont déclarés `it.fails` : ils décrivent ce que
-// l'app devrait faire, et le code actuel ne le fait PAS. Ils sont verts tant que
-// le défaut est là, et deviennent ROUGES le jour où quelqu'un le corrige — ce
-// qui est le signal pour les repasser en `it` normal.
-//
-// Le défaut : `addCatch` — le geste unique de « Ma prise », de loin le chemin le
-// plus emprunté — n'écrit ni `time` ni `conditions`. `CatchEditor` (le
-// formulaire complet du carnet, bien plus lent à remplir) écrit les deux.
-// Conséquences visibles pour l'utilisateur :
-//   · Statistiques.tsx compte les prises par moment de la journée via
-//     `dayPart(c.time)` : les prises du geste unique n'y apparaissent jamais,
-//     alors que l'horloge était sous la main au moment de la saisie ;
-//   · lib/analysePrises ne raisonne que sur les prises portant un instantané de
-//     conditions. Un pêcheur qui n'utilise que le geste unique lira
-//     indéfiniment « Aucune prise documentée avec ses conditions », sans jamais
-//     comprendre ce qu'il faudrait faire pour que ça change.
-//
-// Non corrigé volontairement : `src/store.tsx` appartient à d'autres lots en
-// cours, et une correction ici entrerait en conflit avec eux.
+// ✅ CORRIGÉ — `addCatch` (le geste unique de « Ma prise ») écrit désormais
+// `time` et `conditions`. Ces deux tests étaient déclarés `it.fails` (défaut
+// documenté) ; la correction dans store.tsx les repasse en `it` normal — s'ils
+// redeviennent rouges, c'est une régression, pas un état attendu.
 // ─────────────────────────────────────────────────────────────────────────────
-describe("DÉFAUT CONNU — le geste unique n'enregistre ni l'heure ni les conditions", () => {
-  it.fails("devrait horodater la prise, comme le fait le formulaire du carnet", async () => {
+describe("le geste unique enregistre l'heure et les conditions", () => {
+  it("horodate la prise, comme le fait le formulaire du carnet", async () => {
     await lancer();
 
     act(() => st.addCatch(SANDRE, true, "52"));
@@ -251,7 +234,7 @@ describe("DÉFAUT CONNU — le geste unique n'enregistre ni l'heure ni les condi
     expect(st.state.catches[0].time).toMatch(/^\d{2}:\d{2}$/);
   });
 
-  it.fails("devrait joindre l'instantané de conditions quand il y en a un de frais", async () => {
+  it("joint l'instantané de conditions quand il y en a un de frais", async () => {
     // Un instantané frais est en cache : l'Accueil vient de charger la météo et
     // l'hydrométrie, et le pêcheur enchaîne sur « Ma prise ».
     setConditions({ pressure: 1018, pressureTrend: "rising", waterTemp: 21.4 });

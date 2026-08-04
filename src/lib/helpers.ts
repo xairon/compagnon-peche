@@ -68,6 +68,11 @@ export function frDate(d: Date = new Date()): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 }
 
+/** Local "HH:MM" time — used by the catch editor and the quick "Ma prise" gesture. */
+export function nowHM(d: Date = new Date()): string {
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
 /** Part of the day for a "HH:MM" time — used by the catch detail and insights. */
 export const DAY_PARTS = ["Nuit", "Aube", "Matin", "Midi", "Après-midi", "Soir"] as const;
 export type DayPart = (typeof DAY_PARTS)[number];

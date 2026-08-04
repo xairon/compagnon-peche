@@ -143,6 +143,10 @@ export function Carte() {
   // Refs mirroring state, for use inside once-registered map code.
   const layersRef = useRef(layers);
   const spotsRef = useRef(spots);
+  // Bbox de la DERNIÈRE charge réelle : le debounce de moveend ne suffit pas —
+  // un pan de quelques pixels retéléchargeait les cinq classes Sandre (1,32 Mo)
+  // + plans d'eau + stations + access + GBIF à chaque geste.
+  const lastBboxRef = useRef<{ w: number; s: number; e: number; n: number } | null>(null);
   useEffect(() => {
     layersRef.current = layers;
   }, [layers]);
@@ -358,6 +362,7 @@ export function Carte() {
     }
     const b = m.getBounds();
     const [w, s, e, n] = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
+    lastBboxRef.current = { w, s, e, n };
     dataAbort.current = new AbortController();
     const signal = dataAbort.current.signal;
     const L = layersRef.current;
@@ -370,22 +375,48 @@ export function Carte() {
       // pêche la truite. Les classes sont demandées selon le zoom (1,32 Mo pour
       // les cinq, reteléchargés à chaque déplacement).
       const classes = classesAuZoom(m.getZoom());
+      // « L'app ment sur le réseau » : chaque échec individuel était avalé en
+      // `.catch(() => [])` et rendu comme « 0 station(s) » — indistinguable
+      // d'une vraie absence, et le catch global devenait quasi-mort. On
+      // remonte maintenant la DÉFAILLANCE par source pour l'afficher comme
+      // telle (les trois états oui/non/inconnu de la maison).
+      const defaillances = new Set<string>();
       const [couches, bodies, stations, obstacles, access, gbif] = await Promise.all([
         Promise.all(
           CLASSES_HYDRO.map((c) =>
             classes.includes(c)
-              ? fetchCoursEau(c, w, s, e, n, signal).catch(() => null)
+              ? fetchCoursEau(c, w, s, e, n, signal).catch(() => {
+                  defaillances.add("cours");
+                  return null;
+                })
               : Promise.resolve(null),
           ),
         ),
-        fetchWaterBodies(w, s, e, n, signal).catch(() => empty()),
-        stationsInBbox(w, s, e, n, signal).catch(() => []),
-        L.obstacles ? fetchObstacles(w, s, e, n, signal).catch(() => empty()) : Promise.resolve(empty()),
+        fetchWaterBodies(w, s, e, n, signal).catch(() => {
+          defaillances.add("plans");
+          return empty();
+        }),
+        stationsInBbox(w, s, e, n, signal).catch(() => {
+          defaillances.add("stations");
+          return [];
+        }),
+        L.obstacles
+          ? fetchObstacles(w, s, e, n, signal).catch(() => {
+              defaillances.add("obstacles");
+              return empty();
+            })
+          : Promise.resolve(empty()),
         L.access && m.getZoom() >= ACCESS_MINZOOM
-          ? fetchAccess(w, s, e, n, signal).catch(() => [])
+          ? fetchAccess(w, s, e, n, signal).catch(() => {
+              defaillances.add("access");
+              return [];
+            })
           : Promise.resolve([]),
         L.gbif && m.getZoom() >= GBIF_MINZOOM
-          ? occurrencesInBbox(w, s, e, n, false, signal).catch(() => [])
+          ? occurrencesInBbox(w, s, e, n, false, signal).catch(() => {
+              defaillances.add("gbif");
+              return [];
+            })
           : Promise.resolve([]),
       ]);
       if (signal.aborted) return; // a newer view superseded this one — don't write stale data
@@ -459,15 +490,32 @@ export function Carte() {
       ].filter(Boolean) as string[];
       setTroncatures(coupes);
       const bits = [
-        `${rivers.features.length} cours d'eau`,
-        `${bodies.features.length} plan(s) d'eau`,
-        `${stations.length} station(s)`,
+        defaillances.has("cours")
+          ? "cours d'eau : indisponible"
+          : `${rivers.features.length} cours d'eau`,
+        defaillances.has("plans")
+          ? "plans d'eau : indisponible"
+          : `${bodies.features.length} plan(s) d'eau`,
+        defaillances.has("stations")
+          ? "stations : indisponible"
+          : stations.length >= 300
+            ? "300+ station(s) (échantillon)"
+            : `${stations.length} station(s)`,
       ];
-      if (L.obstacles) bits.push(`${obstacles.features.length} obstacle(s)`);
-      if (L.access) bits.push(`${(access as unknown[]).length} accès`);
+      if (L.obstacles)
+        bits.push(
+          defaillances.has("obstacles") ? "ouvrages : indisponible" : `${obstacles.features.length} obstacle(s)`,
+        );
+      if (L.access)
+        bits.push(
+          defaillances.has("access") ? "accès : indisponible" : `${(access as unknown[]).length} accès`,
+        );
       if (L.gbif) {
-        const g = (gbif as unknown[]).length;
-        bits.push(g >= 300 ? "300+ obs. GBIF (échantillon)" : `${g} obs. GBIF`);
+        if (defaillances.has("gbif")) bits.push("observations : indisponible");
+        else {
+          const g = (gbif as unknown[]).length;
+          bits.push(g >= 300 ? "300+ obs. GBIF (échantillon)" : `${g} obs. GBIF`);
+        }
       }
       setStatus(bits.join(" · "));
     } catch (err) {
@@ -691,14 +739,26 @@ export function Carte() {
     popup.current = new maplibregl.Popup({ closeButton: false, offset: 8 });
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
     m.addControl(
-      new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: false }),
+      new maplibregl.GeolocateControl({
+        // locate() (lib/locate.ts) a un timeout de 10 s — le contrôle natif
+        // de MapLibre restait, lui, en attente indéfiniment sur certains
+        // appareils.
+        positionOptions: { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+        trackUserLocation: false,
+      }),
       "top-left",
     );
     m.addControl(
       new maplibregl.AttributionControl({ compact: true, customAttribution: "Sandre · Hub'Eau/OFB · IGN · OSM · Open-Meteo · GBIF.org · Pilote41 (41) · Féd. pêche 23/36" }),
       "bottom-right",
     );
-    m.on("error", () => setStatus("Fond de carte indisponible (hors-ligne ?)."));
+    m.on("error", () => {
+      // Seule une erreur AVANT le premier chargement (style/fond) mérite ce
+      // message : une fois la carte prête, une tuile 404 ou une source en
+      // échec ne doit pas écraser le statut des données — l'app annonçait
+      // « hors-ligne ? » pour n'importe quelle erreur MapLibre.
+      if (!ready.current) setStatus("Fond de carte indisponible (hors-ligne ?).");
+    });
 
     m.on("load", () => {
       addOverlays(m);
@@ -707,6 +767,25 @@ export function Carte() {
       setMapReady(true);
       m.on("moveend", () => {
         clearTimeout(moveTimer);
+        const b = m.getBounds();
+        const p = lastBboxRef.current;
+        if (p) {
+          // Rien de nouveau à charger tant que la vue reste dans la bbox déjà
+          // téléchargée : l'union n'a pas grossi de plus de 25 % et le centre
+          // n'a pas dérivé de plus de 20 % de la diagonale.
+          const unionW = Math.min(b.getWest(), p.w);
+          const unionS = Math.min(b.getSouth(), p.s);
+          const unionE = Math.max(b.getEast(), p.e);
+          const unionN = Math.max(b.getNorth(), p.n);
+          const aChange =
+            (unionE - unionW) * (unionN - unionS) > (p.e - p.w) * (p.n - p.s) * 1.25 ||
+            Math.hypot(
+              (b.getWest() + b.getEast() - p.w - p.e) / 2,
+              (b.getSouth() + b.getNorth() - p.s - p.n) / 2,
+            ) >
+              Math.hypot(p.e - p.w, p.n - p.s) * 0.2;
+          if (!aChange) return;
+        }
         moveTimer = setTimeout(loadData, 450);
       });
       loadData();
@@ -822,7 +901,6 @@ export function Carte() {
   const cancelPlacing = () => {
     placingRef.current = false;
     setPlacing(false);
-    loadData();
   };
   const useGps = () => {
     setStatus("Localisation en cours…");
@@ -855,7 +933,6 @@ export function Carte() {
     if (form.id) updateSpot(form.id, fields);
     else addSpot({ id: uid("s"), lat: form.lat, lon: form.lon, created: isoDay(), ...fields });
     setForm(null);
-    loadData();
   };
   const editSpot = (sp: Spot) => {
     setViewId(null);
@@ -1062,7 +1139,12 @@ export function Carte() {
           </div>
           <div className="sheet-body">
             {sheet.loading && <div className="sheet-note">Chargement des espèces…</div>}
-            {sheet.error && <div className="sheet-note">Impossible de charger les espèces (réseau).</div>}
+            {sheet.error && (
+              <div className="sheet-note">
+                Impossible de charger les espèces de cette station — source de données
+                indisponible. Réessayez plus tard.
+              </div>
+            )}
             {!sheet.loading && !sheet.error && sheet.species.length === 0 && (
               <div className="sheet-note">Aucune espèce recensée sur cette station.</div>
             )}

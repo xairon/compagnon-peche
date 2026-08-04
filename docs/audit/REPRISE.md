@@ -45,6 +45,57 @@ arbre propre**. Couverture mesurée le 03/08/2026 : 68,7 % instructions · 61,9 
 > relevé avant de s'en servir, plutôt que de croire des chiffres d'il y a trois
 > jours.
 
+> **Session du 04/08/2026 — passe de vérification « nickel pour demain »**
+> (branche `fix/audit-corrections`, 3 auditeurs indépendants en parallèle).
+> Mesuré au départ : lint 0, 1907 tests verts + 2 expected-fail, build OK.
+> À l'arrivée : **lint 0, 1911 tests verts (plus aucun expected-fail), tsc 0,
+> build OK, couverture 68,4/62,2/58,7/70,2 — seuils tenus (exit 0)**.
+>
+> Corrigé dans cette session (chaque point vérifié par tests ou gates) :
+> - `addCatch` (le geste unique « Ma prise ») écrit désormais `time` et
+>   `conditions` — les deux `it.fails` de `store-carnet.test.tsx` sont repassés
+>   en `it` normal (plus aucun expected-fail dans la suite).
+> - Verdict L432-10 : les gobies ponto-caspiens et la tête-de-boule ne reçoivent
+>   plus « NE PAS RELÂCHER VIVANT » (mise à mort imposée) — branche miroir de
+>   `statut.ts` (« NE PAS DÉPLACER », warn). Test miroir ajouté.
+> - `Materiel.tsx` : l'écriture `idbSet(STORES.bundles)` signale ses échecs via
+>   `reportPersistError` (une création d'ensemble ne disparaît plus en silence).
+> - A11y : 14 labels orphelins associés (ProfileHeader 8, Carte 5, Prise 1) avec
+>   test de balayage élargi ; `<main>`/`<h1>` ajoutés à Prise, Stockage, Recette,
+>   Onboarding, ErrorBoundary ; verdict de prise annoncé (`role="status"`) ;
+>   `aria-pressed` sur les chips de CarnetRecettes et le sélecteur ChoixRiviere ;
+>   `aria-expanded` sur les cellules verdict de Fiche ; focus ramené au h1 de
+>   l'écran à chaque navigation (App.tsx, y compris avec lazy/Suspense) ; gardes
+>   « monté » sur les géolocalisations de Prise et CatchEditor ; `!important`
+>   retiré de `.cell-i` (le laiton AA documenté redevient la source de vérité,
+>   fixture d'empreinte mise à jour) ; `UpdateToast` en `role="status"` ;
+>   `Carnet.tsx` lit l'horloge via `useNow` (pas de `new Date()` dans le rendu).
+> - Carte/réseau : les échecs de couche s'affichent « indisponible » au lieu de
+>   « 0 station(s) » (trois états oui/non/inconnu, plus aucun catch avalé en
+>   silence) ; refetch borné par la bbox (union ≤ 25 % et centre ≤ 20 % de la
+>   diagonale → rien ne se retélécharge pour un pan de pixels) ; plus de refetch
+>   à la sauvegarde/annulation d'un spot ; `GeolocateControl` avec timeout 10 s ;
+>   l'erreur MapLibre ne dit plus « hors-ligne ? » après le premier chargement ;
+>   stations plafonnées affichées « 300+ (échantillon) » ; la réserve hors-ligne
+>   passe par `fetchT` (timeout 30 s, arrêt propre sur signal — plus de
+>   « en cours » éternel) ; message de la fiche station ne blâme plus le réseau
+>   du pêcheur pour un refus serveur.
+> - Infra de test : `wakelock.test.ts` passe par `vi.stubGlobal` (Node ≥ 21
+>   expose un `navigator` getter-only) ; la règle eslint `no-restricted-imports`
+>   des frontières components/screens est montée en deux blocs (une négation
+>   dans `files` fait appliquer la config à tout le dépôt sur ESLint 9.39 —
+>   vérifié), les fichiers de test étant exemptés.
+>
+> Laissé ouvert, explicitement (aucun correctif ce soir) : durcissement du
+> moratoire (« Je relâche » en action primaire — choix produit, documenté dans
+> `prise.ts`), extension de `csp.test.ts` aux origines API non-carte (les
+> constantes URL ne sont pas exportées), caches du Briefing non bornés (LRU),
+> `e2e-playwright-absent` et `Carte.tsx` sans test de rendu (limites connues).
+> Vérifié au passage : `npm audit --omit=dev` → 0 vulnérabilité ; zéro secret
+> en dur ; zéro TODO/console.log ; CSP de prod complète (geo-ide inclus, testé
+> sur le build servi) ; les vulns dev (esbuild/postcss via vite) sont du
+> tooling serveur de dev, sans fix non-cassant (vite 8 requis).
+
 Trois documents portent l'analyse, à lire avant de commencer :
 
 - `docs/audit/2026-07-30-audit-produit.md` — l'audit produit en 12 dimensions

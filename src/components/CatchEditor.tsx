@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useStore } from "../store-hooks";
 import { SPECIES } from "../data/species";
 import { CAT_LABEL } from "../data/gear";
-import { norm, uid, isoDay } from "../lib/helpers";
+import { norm, uid, isoDay, nowHM } from "../lib/helpers";
 import { savePhoto, deletePhoto, downscaleImage, usePhotoUrl } from "../lib/photos";
 import { locate, locateMessage } from "../lib/locate";
 import { isQuotaError, getLastExportAt, storageInfo } from "../lib/storage";
@@ -13,11 +13,6 @@ import { ICONS } from "./icons-data";
 import type { Catch } from "../types";
 
 const SP_NAME = new Map(SPECIES.map((s) => [s.id, s.name]));
-
-function nowHM(): string {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
 
 function frLongDate(iso: string): string {
   const d = new Date(iso + "T12:00:00");
@@ -145,14 +140,23 @@ export function CatchEditor({
     up({ photoFile: null, photoPreview: null, removePhoto: true });
   };
 
+  // Garde « monté » : la géolocalisation peut se résoudre après la fermeture
+  // du formulaire — elle ne doit pas écrire sur un composant démonté.
+  const mountedRef = useRef(true);
+  useEffect(() => () => void (mountedRef.current = false), []);
+
   const useGps = () => {
     setGpsMsg("Localisation…");
     locate()
       .then(({ lat, lon }) => {
+        if (!mountedRef.current) return;
         up({ lat, lon });
         setGpsMsg(null);
       })
-      .catch((err) => setGpsMsg(locateMessage(err)));
+      .catch((err) => {
+        if (!mountedRef.current) return;
+        setGpsMsg(locateMessage(err));
+      });
   };
 
   const submit = async () => {
