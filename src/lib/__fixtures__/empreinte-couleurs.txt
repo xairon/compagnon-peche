@@ -185,6 +185,9 @@
 .ce-photo-add|background|#fbfaf7
 .ce-photo-add|border|1.5px dashed #cfc9ba
 .ce-photo-add|color|#6b675c
+.ce-photo-gallery|background|#ffffff
+.ce-photo-gallery|border|1px solid #cfc9ba
+.ce-photo-gallery|color|#22271f
 .ce-photo-x|background|rgba(20, 30, 25, 0.72)
 .ce-photo-x|color|#ffffff
 .cell-i, .season-i|color|#6b675c
@@ -802,6 +805,9 @@
 .prise-photo-add|background|#fbfaf7
 .prise-photo-add|border|1.5px dashed #cfc9ba
 .prise-photo-add|color|#6b675c
+.prise-photo-gallery|background|#ffffff
+.prise-photo-gallery|border|1px solid #cfc9ba
+.prise-photo-gallery|color|#22271f
 .prise-place|background|#f7f1e2
 .prise-place|border|1px solid #e6dcc0
 .prise-place|color|#7a5a12

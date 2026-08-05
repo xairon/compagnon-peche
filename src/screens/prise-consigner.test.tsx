@@ -51,6 +51,17 @@ const auxChamps = (over: Partial<AppState> = {}) => ({
   ...over,
 });
 
+// Deux inputs file vivent sur cet écran depuis l'arrivée de la galerie :
+// l'appareil photo (capture forcée) et la galerie (picker natif). Les helpers
+// ci-dessous nomment ce que les tests ciblent, au lieu d'un querySelector
+// muet qui prendrait « le premier » sans le dire.
+/** L'entrée « appareil photo » — la première des deux. */
+const inputAppareil = () =>
+  document.querySelectorAll<HTMLInputElement>('input[type="file"]')[0];
+/** L'entrée « galerie » — la seconde, sans capture. */
+const inputGalerie = () =>
+  document.querySelectorAll<HTMLInputElement>('input[type="file"]')[1];
+
 // Réassigner le hash fait NAVIGUER jsdom : le `popstate` est mis en file et
 // n'arrive qu'au premier `await` du test. Sans ce tick, il tombe APRÈS que
 // l'étape a été posée et la remet à zéro — l'écran rend alors le choix
@@ -67,7 +78,8 @@ describe("Consigner — les champs que le parcours n'offrait pas", () => {
     monter(auxChamps());
 
     expect(await screen.findByLabelText(/Taille \(cm\)/)).toBeInTheDocument();
-    expect(screen.getByText(/Ajouter une photo/)).toBeInTheDocument();
+    expect(screen.getByText(/Prendre une photo/)).toBeInTheDocument();
+    expect(screen.getByText(/Choisir dans la galerie/)).toBeInTheDocument();
     expect(screen.getByRole("switch")).toBeInTheDocument();
   });
 
@@ -267,7 +279,7 @@ describe("Consigner — l'aperçu ne survit pas à l'écran", () => {
     const vue = monter(auxChamps());
     await screen.findByRole("switch");
 
-    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fichier = inputAppareil();
     await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
     expect(crees).toHaveLength(1);
 
@@ -296,7 +308,7 @@ describe("Consigner — une photo perdue se dit", () => {
     monter(auxChamps());
     await screen.findByRole("switch");
 
-    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fichier = inputAppareil();
     await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
     await user.click(screen.getByRole("button", { name: /Enregistrer dans le carnet/ }));
 
@@ -316,7 +328,7 @@ describe("Consigner — une photo perdue se dit", () => {
     monter(auxChamps());
     await screen.findByRole("switch");
 
-    const fichier = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fichier = inputAppareil();
     await user.upload(fichier, new File(["abc"], "p.jpg", { type: "image/jpeg" }));
     await user.click(screen.getByRole("button", { name: /Enregistrer dans le carnet/ }));
 
@@ -336,5 +348,68 @@ describe("Consigner — le rappel de ce que l'app ne sait pas", () => {
     monter(auxChamps({ priseSp: "brochet" }));
     await screen.findByRole("switch");
     expect(screen.queryByText(/ne connaît ni maille/)).not.toBeInTheDocument();
+  });
+});
+
+/**
+ * La galerie, en plus de l'appareil photo.
+ *
+ * `capture="environment"` force l'ouverture de l'appareil photo sur mobile :
+ * impossible de choisir un cliché déjà pris. Deux inputs vivent désormais
+ * côte à côte — l'appareil (capture) et la galerie (sans capture, le picker
+ * natif s'ouvre) — branchés sur le même handler, donc le même chemin de
+ * compression et d'écriture IndexedDB.
+ */
+describe("Consigner — la galerie en plus de l'appareil photo", () => {
+  it("propose les deux sources : appareil photo et galerie", async () => {
+    monter(auxChamps());
+
+    expect(await screen.findByText(/Prendre une photo/)).toBeInTheDocument();
+    expect(screen.getByText(/Choisir dans la galerie/)).toBeInTheDocument();
+  });
+
+  it("seule l'entrée appareil force la capture — la galerie garde le picker ouvert", async () => {
+    monter(auxChamps());
+    await screen.findByText(/Prendre une photo/);
+
+    expect(inputAppareil()).toHaveAttribute("capture", "environment");
+    expect(inputGalerie()).not.toHaveAttribute("capture");
+  });
+
+  it("un fichier choisi dans la galerie alimente l'aperçu", async () => {
+    const user = userEvent.setup();
+    monter(auxChamps());
+    await screen.findByText(/Prendre une photo/);
+
+    await user.upload(inputGalerie(), new File(["abc"], "souvenir.jpg", { type: "image/jpeg" }));
+
+    expect(screen.getByRole("img", { name: "Photo de la prise" })).toBeInTheDocument();
+  });
+
+  it("une photo de la galerie s'enregistre comme une photo d'appareil", async () => {
+    const photos = await import("../lib/photos");
+    vi.spyOn(photos, "downscaleImage").mockResolvedValue(new Blob(["x"]));
+    vi.spyOn(photos, "savePhoto").mockResolvedValue(undefined);
+
+    const user = userEvent.setup();
+    monter(auxChamps());
+    await screen.findByText(/Prendre une photo/);
+
+    await user.upload(inputGalerie(), new File(["abc"], "souvenir.jpg", { type: "image/jpeg" }));
+    await user.click(screen.getByRole("button", { name: /Enregistrer dans le carnet/ }));
+
+    await waitFor(() => expect(magasin.state.catches).toHaveLength(1));
+    expect(magasin.state.catches[0].photo).toMatch(/^photo:/);
+  });
+
+  it("l'input est vidé après sélection : reprendre le même cliché le re-déclenche", async () => {
+    const user = userEvent.setup();
+    monter(auxChamps());
+    await screen.findByText(/Prendre une photo/);
+
+    await user.upload(inputGalerie(), new File(["abc"], "souvenir.jpg", { type: "image/jpeg" }));
+    // Le fichier ne doit pas rester « en attente » dans l'input : sinon,
+    // re-choisir le même cliché (après l'avoir retiré) ne déclencherait rien.
+    expect(inputGalerie().value).toBe("");
   });
 });

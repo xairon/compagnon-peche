@@ -49,6 +49,11 @@ export function Prise() {
   const [msgLieu, setMsgLieu] = useState<string | null>(null);
   const [ecrit, setEcrit] = useState(false);
   const photoRef = useRef<HTMLInputElement>(null);
+  // La galerie : même geste « ajouter une photo », mais sans `capture` — le
+  // picker natif s'ouvre au lieu de l'appareil photo. Deux inputs plutôt
+  // qu'un seul sans capture : au bord de l'eau, prendre la photo DOIT rester
+  // un seul appui, et un input sans capture en réclame deux.
+  const galerieRef = useRef<HTMLInputElement>(null);
   // L'aperçu courant, tenu dans une ref pour être révocable au démontage.
   //
   // L'écran ne part pas que par le bouton « Retirer » : il part par
@@ -131,6 +136,10 @@ export function Prise() {
     if (apercu) URL.revokeObjectURL(apercu);
     setPhoto(f);
     setApercu(URL.createObjectURL(f));
+    // L'input file ne se vide jamais tout seul : sans ce reset, re-choisir le
+    // MÊME cliché (après l'avoir retiré, par exemple) ne déclencherait pas
+    // l'événement change — le navigateur considère la sélection inchangée.
+    e.target.value = "";
   };
 
   const retirerPhoto = () => {
@@ -429,15 +438,28 @@ export function Prise() {
                     </button>
                   </div>
                 ) : (
-                  <button className="prise-photo-add" onClick={() => photoRef.current?.click()}>
-                    📷 Ajouter une photo
-                  </button>
+                  <>
+                    <button className="prise-photo-add" onClick={() => photoRef.current?.click()}>
+                      📷 Prendre une photo
+                    </button>
+                    <button className="prise-photo-gallery" onClick={() => galerieRef.current?.click()}>
+                      🖼️ Choisir dans la galerie
+                    </button>
+                  </>
                 )}
                 <input
                   ref={photoRef}
                   type="file"
                   accept="image/*"
                   capture="environment"
+                  onChange={choisirPhoto}
+                  style={{ display: "none" }}
+                />
+                {/* Sans `capture` : le picker natif (galerie) s'ouvre sur mobile. */}
+                <input
+                  ref={galerieRef}
+                  type="file"
+                  accept="image/*"
                   onChange={choisirPhoto}
                   style={{ display: "none" }}
                 />

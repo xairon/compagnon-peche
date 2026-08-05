@@ -2914,6 +2914,20 @@ a:hover {
   font-size: 14px;
   font-weight: 600;
 }
+/* La galerie : geste secondaire, le picker natif s'ouvre — pas de capture,
+   sinon ce serait encore l'appareil photo. Plus discret que le grand bloc
+   pointillé : la prise d'image directe reste le geste principal. */
+.ce-photo-gallery {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid var(--line-control);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 12px;
+}
 .ce-photo-has {
   position: relative;
   border-radius: 14px;
@@ -7145,6 +7159,20 @@ button.card-row {
   color: var(--muted);
   font-size: 14px;
   font-weight: 600;
+}
+/* La galerie : geste secondaire, le picker natif s'ouvre — pas de capture,
+   sinon ce serait encore l'appareil photo. Plus discret que le grand bloc
+   pointillé : la prise d'image directe reste le geste principal. */
+.prise-photo-gallery {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid var(--line-control);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 12px;
 }
 .prise-photo {
   position: relative;

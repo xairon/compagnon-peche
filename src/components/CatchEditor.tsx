@@ -54,6 +54,11 @@ export function CatchEditor({
   const gear = state.gear;
   const spots = state.spots;
   const fileRef = useRef<HTMLInputElement>(null);
+  // La galerie : même geste « ajouter une photo », mais sans `capture` — le
+  // picker natif s'ouvre au lieu de l'appareil photo. Deux inputs plutôt
+  // qu'un seul sans capture : au bord de l'eau, prendre la photo DOIT rester
+  // un seul appui, et un input sans capture en réclame deux.
+  const galerieRef = useRef<HTMLInputElement>(null);
   // Préfixe d'identifiants pour lier chaque <label> à son champ. useId, et non
   // un compteur : cet éditeur est monté deux fois dans l'app (ajout depuis le
   // carnet, correction depuis le détail d'une prise), et deux `id` identiques
@@ -134,6 +139,10 @@ export function CatchEditor({
     if (!file) return;
     if (f.photoPreview) URL.revokeObjectURL(f.photoPreview);
     up({ photoFile: file, photoPreview: URL.createObjectURL(file), removePhoto: false });
+    // L'input file ne se vide jamais tout seul : sans ce reset, re-choisir le
+    // MÊME cliché (après l'avoir retiré, par exemple) ne déclencherait pas
+    // l'événement change — le navigateur considère la sélection inchangée.
+    e.target.value = "";
   };
   const clearPhoto = () => {
     if (f.photoPreview) URL.revokeObjectURL(f.photoPreview);
@@ -252,15 +261,28 @@ export function CatchEditor({
             </button>
           </div>
         ) : (
-          <button className="ce-photo-add" onClick={() => fileRef.current?.click()}>
-            📷 Ajouter une photo
-          </button>
+          <>
+            <button className="ce-photo-add" onClick={() => fileRef.current?.click()}>
+              📷 Prendre une photo
+            </button>
+            <button className="ce-photo-gallery" onClick={() => galerieRef.current?.click()}>
+              🖼️ Choisir dans la galerie
+            </button>
+          </>
         )}
         <input
           ref={fileRef}
           type="file"
           accept="image/*"
           capture="environment"
+          onChange={pickPhoto}
+          style={{ display: "none" }}
+        />
+        {/* Sans `capture` : le picker natif (galerie) s'ouvre sur mobile. */}
+        <input
+          ref={galerieRef}
+          type="file"
+          accept="image/*"
           onChange={pickPhoto}
           style={{ display: "none" }}
         />
