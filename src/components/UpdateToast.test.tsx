@@ -1,8 +1,11 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { UpdateToast } from "./UpdateToast";
+import { valeurDeclaree } from "../lib/contraste-palette";
 import { JOUR_MS, type DossierMaj } from "../lib/maj-sw";
 
 /**
@@ -140,5 +143,43 @@ describe("UpdateToast", () => {
     await userEvent.click(screen.getByRole("button", { name: /mettre à jour/i }));
 
     expect(appliquer).toHaveBeenCalledTimes(1);
+  });
+});
+
+/**
+ * Garde-fou de non-régression sur le layout du bandeau.
+ *
+ * Le 01/08/2026, le bandeau dimensionné par son contenu (~400 px) débordait
+ * d'un téléphone de 375 px : « Plus tard » et « Mettre à jour » se repliaient
+ * sur 62 px. Le passage à la ligne (flex-wrap) a réglé le contenu, mais le
+ * centrage par `left: 50% + translateX + width: 100vw` dépendait de `100vw` —
+ * fragile dès qu'un moteur rend un viewport plus étroit que 100vw (barres
+ * système, zoom, WebView). Le pattern borné (left/right) du bandeau d'échec
+ * d'écriture (.persist-warn) ne dépend, lui, d'aucune unité de viewport : le
+ * bouton ne peut pas sortir de la fenêtre, il n'y a tout simplement plus de
+ * place pour lui en dehors.
+ *
+ * La feuille est relue à chaque exécution, comme les autres garde-fous CSS du
+ * dépôt (contraste-palette.test.ts) : si quelqu'un re-étire le bandeau ou
+ * re-introduit une largeur en 100vw, le test le dit.
+ */
+describe("UpdateToast — le bandeau ne sort pas de la fenêtre", () => {
+  const CSS = readFileSync(join(__dirname, "..", "styles.css"), "utf8");
+
+  it("le bandeau est borné par les bords de l'écran (left/right), pas par 100vw", () => {
+    expect(valeurDeclaree(CSS, ".update-toast", "left")).toBe("12px");
+    expect(valeurDeclaree(CSS, ".update-toast", "right")).toBe("12px");
+  });
+
+  it("le contenu passe à la ligne plutôt que de déborder (flex-wrap)", () => {
+    // Verte dès son écriture : elle ne pilote rien, elle verrouille — le
+    // passage à la ligne est déjà en place, il ne doit pas s'en aller.
+    expect(valeurDeclaree(CSS, ".update-toast", "flex-wrap")).toBe("wrap");
+  });
+
+  it("le message occupe sa rangée, les boutons gardent leur libellé", () => {
+    expect(valeurDeclaree(CSS, ".update-toast > span", "flex")).toBe("1 1 100%");
+    expect(valeurDeclaree(CSS, ".update-toast button", "flex")).toBe("0 0 auto");
+    expect(valeurDeclaree(CSS, ".update-toast button", "white-space")).toBe("nowrap");
   });
 });

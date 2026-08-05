@@ -3696,8 +3696,16 @@ a:hover {
 /* ============ Update toast ============ */
 .update-toast {
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Borné par les bords, comme .persist-warn : le bouton ne peut pas sortir
+     de la fenêtre, il n'y a tout simplement plus de place pour lui en
+     dehors. Le centrage par `left: 50% + translateX + width: 100vw` qu'il
+     remplace dépendait de `100vw` — fragile dès qu'un moteur rend un
+     viewport plus étroit (barres système, zoom, WebView). `margin: 0 auto`
+     recentre le bandeau quand l'écran dépasse `max-width`. */
+  left: 12px;
+  right: 12px;
+  margin: 0 auto;
+  max-width: 420px;
   /* Sit clear of the bottom nav AND the phone's gesture inset (Android). */
   bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   z-index: 2200; /* above the persistence-warning banner (2100) */
@@ -3713,9 +3721,7 @@ a:hover {
      téléphone courant en fait 375. La pilule d'origine, dimensionnée par son
      contenu, écrasait alors le texte sur 62 px de large et repliait le libellé
      des DEUX boutons. D'où une largeur définie et un passage à la ligne
-     assumé : le message occupe sa rangée, les actions la suivante. */
-  width: calc(100vw - 24px);
-  max-width: 420px;
+     assumé : le message occupe sa rangée, les actions la suivent. */
   flex-wrap: wrap;
   justify-content: flex-end;
   border-radius: 20px;
