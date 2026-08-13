@@ -22,5 +22,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      - run: npx tsc --noEmit
+      # `tsc -b` (build mode) et non `tsc --noEmit` : le projet utilise des
+      # project references (tsconfig.node.json, composite). --noEmit échoue
+      # systématiquement sur runner frais (TS6305 : outputs composite absents).
+      - run: npx tsc -b
       - run: npm test
