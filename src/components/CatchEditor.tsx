@@ -8,6 +8,7 @@ import { locate, locateMessage } from "../lib/locate";
 import { isQuotaError, getLastExportAt, storageInfo } from "../lib/storage";
 import { shouldSuggestBackup } from "../lib/backup-reminder";
 import { getFreshConditions } from "../lib/conditionsCache";
+import { parsePoids, parseTaille } from "../lib/prise-mesures";
 import { Icon } from "./Icon";
 import { ICONS } from "./icons-data";
 import type { Catch } from "../types";
@@ -94,6 +95,9 @@ export function CatchEditor({
   // onSave, so the parent doesn't unmount this screen (and the message with
   // it) before they've had a chance to read why the photo is missing.
   const [photoError, setPhotoError] = useState<string | null>(null);
+  // Erreur de validation des mesures (taille/poids) : blocage à la soumission,
+  // message d'erreur affiché près des champs. BUG-01/BUG-02 du rapport QA 2026-08-11.
+  const [valError, setValError] = useState<string | null>(null);
   const pendingEntryRef = useRef<Catch | null>(null);
 
   // Revoke the preview object URL on change/unmount (avoid leaking blobs).
@@ -124,7 +128,12 @@ export function CatchEditor({
   })();
   const showBackupReminder = shouldSuggestBackup({ lastExportAtMs, oldestDataAtMs, now: nowMs });
 
-  const up = (patch: Partial<FormState>) => setF((s) => ({ ...s, ...patch }));
+  const up = (patch: Partial<FormState>) => {
+    setF((s) => ({ ...s, ...patch }));
+    // Dès qu'on retouche une mesure, l'erreur de validation n'a plus lieu
+    // d'être (le message disparaît, la prochaine soumission revalide).
+    if ("taille" in patch || "poids" in patch) setValError(null);
+  };
 
   const nq = norm(spq);
   const spMatches = nq
@@ -171,8 +180,17 @@ export function CatchEditor({
   const submit = async () => {
     const sp = SPECIES.find((s) => s.id === f.spid);
     if (!sp) return;
+    // Validation des mesures AVANT tout travail (photo, écriture) : une taille
+    // négative ou une valeur extrême ne doit jamais entrer dans le carnet.
+    const tailleP = parseTaille(f.taille);
+    const poidsP = parsePoids(f.poids);
+    if (tailleP.erreur || poidsP.erreur) {
+      setValError([tailleP.erreur, poidsP.erreur].filter(Boolean).join(" "));
+      return;
+    }
     setSaving(true);
     setPhotoError(null);
+    setValError(null);
     const slot = initial?.slot ?? uid("u");
 
     let photoKey = f.photoKey;
@@ -204,8 +222,8 @@ export function CatchEditor({
       photoKey = undefined;
     }
 
-    const cm = parseInt(f.taille) || 0;
-    const kg = parseFloat(f.poids.replace(",", "."));
+    const cm = tailleP.value ?? 0;
+    const kg = poidsP.value;
     const validSpot = f.spotId && spots.some((s) => s.id === f.spotId) ? f.spotId : undefined;
     const spotName = validSpot ? spots.find((s) => s.id === validSpot)?.name : undefined;
 
@@ -217,7 +235,7 @@ export function CatchEditor({
       time: f.heure || undefined,
       size: cm ? cm + " cm" : "— cm",
       n: cm,
-      weight: !isNaN(kg) && kg > 0 ? kg : undefined,
+      weight: kg ?? undefined,
       date: frLongDate(f.date || isoDay()),
       place: f.place.trim() || spotName || "—",
       spotId: validSpot,
@@ -317,13 +335,19 @@ export function CatchEditor({
       <div className="ce-row">
         <div className="field">
           <label htmlFor={`${fid}-taille`}>Taille (cm)</label>
-          <input id={`${fid}-taille`} value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" />
+          <input id={`${fid}-taille`} value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" aria-invalid={valError?.includes("taille") || undefined} />
         </div>
         <div className="field">
           <label htmlFor={`${fid}-poids`}>Poids (kg)</label>
-          <input id={`${fid}-poids`} value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" />
+          <input id={`${fid}-poids`} value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" aria-invalid={valError?.includes("poids") || undefined} />
         </div>
       </div>
+      {valError && (
+        <div className="alert" role="alert" style={{ marginTop: 8 }}>
+          <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
+          <div className="txt">{valError}</div>
+        </div>
+      )}
 
       {/* Date + time */}
       <div className="ce-row">

@@ -11,6 +11,7 @@ import { useNow } from "../lib/now";
 import { tallyTotal, fmtElapsed } from "../lib/ecrevisses";
 import { crayfishById } from "../data/ecrevisses";
 import { upcomingSeasonReminders, type SeasonReminder } from "../lib/season-reminders";
+import { tailleRecordValide } from "../lib/prise-mesures";
 import type { Catch, CrayfishSession } from "../types";
 import { CarnetRecettes } from "./CarnetRecettes";
 
@@ -37,7 +38,10 @@ export function Carnet() {
   const seasonReminders = upcomingSeasonReminders(new Date(useNow()));
   const total = catches.length;
   const speciesCount = new Set(catches.map((c) => c.spid)).size;
-  const record = catches.reduce((m, c) => (c.n > m ? c.n : m), 0);
+  const record = catches.reduce(
+    (m, c) => (tailleRecordValide(c.n) && c.n > m ? c.n : m),
+    0,
+  );
 
   useEffect(() => {
     if (!state.justAdded) return;
