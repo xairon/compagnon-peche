@@ -57,7 +57,7 @@ describe("parsePoids", () => {
   it("rejette les valeurs extrêmes (BUG-02 : 999999)", () => {
     const r = parsePoids("999999");
     expect(r.value).toBeNull();
-    expect(r.erreur).toMatch(/entre 0 et/);
+    expect(r.erreur).toMatch(/strictement positif/);
   });
 
   it("rejette les poids négatifs", () => {

@@ -104,4 +104,15 @@ describe("CatchEditor — validation des mesures (QA 2026-08-11)", () => {
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave.mock.calls[0][0].weight).toBe(1.8);
   });
+
+  it("marque le champ fautif aria-invalid — pas l'autre (fix finding review)", async () => {
+    const user = userEvent.setup();
+    dansStore(<CatchEditor onSave={() => {}} onCancel={() => {}} />);
+
+    await user.type(screen.getByLabelText("Taille (cm)"), "-10");
+    await user.click(screen.getByRole("button", { name: "Ajouter la prise" }));
+
+    expect(screen.getByLabelText("Taille (cm)")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Poids (kg)")).not.toHaveAttribute("aria-invalid");
+  });
 });

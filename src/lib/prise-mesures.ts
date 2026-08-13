@@ -21,7 +21,7 @@ export const MAX_POIDS_KG = 150;
 export type MesureResult<T> = { value: T | null; erreur: string | null };
 
 const ERREUR_TAILLE = `La taille doit être un nombre entier entre 1 et ${MAX_TAILLE_CM} cm.`;
-const ERREUR_POIDS = `Le poids doit être un nombre entre 0 et ${MAX_POIDS_KG} kg (ex. 1,8).`;
+const ERREUR_POIDS = `Le poids doit être un nombre strictement positif, jusqu'à ${MAX_POIDS_KG} kg (ex. 1,8).`;
 
 export function parseTaille(texte: string): MesureResult<number> {
   const t = texte.trim();
