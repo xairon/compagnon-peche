@@ -97,7 +97,9 @@ export function CatchEditor({
   const [photoError, setPhotoError] = useState<string | null>(null);
   // Erreur de validation des mesures (taille/poids) : blocage à la soumission,
   // message d'erreur affiché près des champs. BUG-01/BUG-02 du rapport QA 2026-08-11.
-  const [valError, setValError] = useState<string | null>(null);
+  // Deux états séparés (et non un message joint) : chaque champ sait précisément
+  // s'il est en erreur (aria-invalid fiable).
+  const [erreursMesures, setErreursMesures] = useState<{ taille?: string; poids?: string }>({});
   const pendingEntryRef = useRef<Catch | null>(null);
 
   // Revoke the preview object URL on change/unmount (avoid leaking blobs).
@@ -130,9 +132,11 @@ export function CatchEditor({
 
   const up = (patch: Partial<FormState>) => {
     setF((s) => ({ ...s, ...patch }));
-    // Dès qu'on retouche une mesure, l'erreur de validation n'a plus lieu
-    // d'être (le message disparaît, la prochaine soumission revalide).
-    if ("taille" in patch || "poids" in patch) setValError(null);
+    // Dès qu'on retouche une mesure, son erreur de validation n'a plus lieu
+    // d'être — on n'efface QUE le champ modifié (l'erreur de l'autre champ
+    // reste affichée tant qu'il n'est pas corrigé).
+    if ("taille" in patch) setErreursMesures((e) => ({ ...e, taille: undefined }));
+    if ("poids" in patch) setErreursMesures((e) => ({ ...e, poids: undefined }));
   };
 
   const nq = norm(spq);
@@ -185,12 +189,12 @@ export function CatchEditor({
     const tailleP = parseTaille(f.taille);
     const poidsP = parsePoids(f.poids);
     if (tailleP.erreur || poidsP.erreur) {
-      setValError([tailleP.erreur, poidsP.erreur].filter(Boolean).join(" "));
+      setErreursMesures({ taille: tailleP.erreur ?? undefined, poids: poidsP.erreur ?? undefined });
       return;
     }
     setSaving(true);
     setPhotoError(null);
-    setValError(null);
+    setErreursMesures({});
     const slot = initial?.slot ?? uid("u");
 
     let photoKey = f.photoKey;
@@ -335,17 +339,17 @@ export function CatchEditor({
       <div className="ce-row">
         <div className="field">
           <label htmlFor={`${fid}-taille`}>Taille (cm)</label>
-          <input id={`${fid}-taille`} value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" aria-invalid={valError?.includes("taille") || undefined} />
+          <input id={`${fid}-taille`} value={f.taille} onChange={(e) => up({ taille: e.target.value })} inputMode="numeric" placeholder="52" aria-invalid={erreursMesures.taille ? true : undefined} />
         </div>
         <div className="field">
           <label htmlFor={`${fid}-poids`}>Poids (kg)</label>
-          <input id={`${fid}-poids`} value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" aria-invalid={valError?.includes("poids") || undefined} />
+          <input id={`${fid}-poids`} value={f.poids} onChange={(e) => up({ poids: e.target.value })} inputMode="decimal" placeholder="1,8" aria-invalid={erreursMesures.poids ? true : undefined} />
         </div>
       </div>
-      {valError && (
+      {(erreursMesures.taille || erreursMesures.poids) && (
         <div className="alert" role="alert" style={{ marginTop: 8 }}>
           <Icon d={ICONS.alert} size={18} stroke="var(--red)" width={1.7} style={{ marginTop: 1 }} />
-          <div className="txt">{valError}</div>
+          <div className="txt">{[erreursMesures.taille, erreursMesures.poids].filter(Boolean).join(" ")}</div>
         </div>
       )}
 

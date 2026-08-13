@@ -57,7 +57,12 @@ export function Carnet() {
   const openSpotOnMap = (id: string) => goTab("carte", { focusSpot: id });
 
   const sorted = [...catches].sort((a, b) => {
-    if (sort === "size") return b.n - a.n;
+    if (sort === "size") {
+      // Les captures hors bornes (corrompues avant la validation) descendent en
+      // bas du tri au lieu de le fausser (ex. 999999 en tête).
+      const n = (c: Catch) => (tailleRecordValide(c.n) ? c.n : 0);
+      return n(b) - n(a);
+    }
     if (sort === "species") return a.sp.localeCompare(b.sp);
     // recent: by day, then by capture time so same-day catches keep real order
     return b.iso.localeCompare(a.iso) || (b.time || "").localeCompare(a.time || "");

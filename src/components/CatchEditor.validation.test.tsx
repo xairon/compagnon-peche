@@ -104,4 +104,38 @@ describe("CatchEditor — validation des mesures (QA 2026-08-11)", () => {
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave.mock.calls[0][0].weight).toBe(1.8);
   });
+
+  it("marque le champ fautif aria-invalid — pas l'autre (fix finding review)", async () => {
+    const user = userEvent.setup();
+    dansStore(<CatchEditor onSave={() => {}} onCancel={() => {}} />);
+
+    await user.type(screen.getByLabelText("Taille (cm)"), "-10");
+    await user.click(screen.getByRole("button", { name: "Ajouter la prise" }));
+
+    expect(screen.getByLabelText("Taille (cm)")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Poids (kg)")).not.toHaveAttribute("aria-invalid");
+  });
+
+  it("corriger un seul champ ne masque pas l'erreur de l'autre (fix finding review)", async () => {
+    const user = userEvent.setup();
+    dansStore(<CatchEditor onSave={() => {}} onCancel={() => {}} />);
+
+    // Les deux champs invalides
+    await user.type(screen.getByLabelText("Taille (cm)"), "-10");
+    await user.type(screen.getByLabelText("Poids (kg)"), "999999");
+    await user.click(screen.getByRole("button", { name: "Ajouter la prise" }));
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+
+    // Correction de la taille uniquement : l'erreur du poids doit rester
+    await user.clear(screen.getByLabelText("Taille (cm)"));
+    await user.type(screen.getByLabelText("Taille (cm)"), "52");
+    expect(screen.getByLabelText("Poids (kg)")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+
+    // Correction du poids : tout est valide, plus d'erreur
+    await user.clear(screen.getByLabelText("Poids (kg)"));
+    await user.type(screen.getByLabelText("Poids (kg)"), "1,8");
+    await user.click(screen.getByRole("button", { name: "Ajouter la prise" }));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
 });
